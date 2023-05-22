@@ -1,0 +1,94 @@
+{
+	"hash": "d41d8cd98f00b204e9800998ecf8427e",
+	"updated": "2023-05-22T18:05:47.997704-03:00",
+	"installedModules": {
+		"github.com/dliocode/horse-utils-clientip": {
+			"name": "horse-utils-clientip",
+			"version": "0.0.8",
+			"hash": "83125fa6038e2377749e27e23b8f3aee",
+			"artifacts": {},
+			"failed": false,
+			"changed": false
+		},
+		"github.com/hashload/handle-exception": {
+			"name": "handle-exception",
+			"version": "0.1.8",
+			"hash": "362736186bc6293dd9a716d7f7413455",
+			"artifacts": {},
+			"failed": false,
+			"changed": false
+		},
+		"github.com/hashload/horse": {
+			"name": "horse",
+			"version": "3.1.3",
+			"hash": "752c3b943782e4910cd0a3ac3beeb4ee",
+			"artifacts": {},
+			"failed": false,
+			"changed": false
+		},
+		"github.com/hashload/horse-compression": {
+			"name": "horse-compression",
+			"version": "1.1.9",
+			"hash": "c75d819f89b968f28013be1f60850ae6",
+			"artifacts": {},
+			"failed": false,
+			"changed": false
+		},
+		"github.com/hashload/horse-logger": {
+			"name": "horse-logger",
+			"version": "2.0.7",
+			"hash": "2ad42f03f1d4b940c24768b9b6b943cc",
+			"artifacts": {},
+			"failed": false,
+			"changed": false
+		},
+		"github.com/hashload/horse-logger-provider-console": {
+			"name": "horse-logger-provider-console",
+			"version": "1.0.6",
+			"hash": "5a32eabdcbc4e9299739693871554432",
+			"artifacts": {},
+			"failed": false,
+			"changed": false
+		},
+		"github.com/hashload/horse-logger-provider-logfile": {
+			"name": "horse-logger-provider-logfile",
+			"version": "1.0.9",
+			"hash": "2797ab20e89c90499e28ec352b534ed0",
+			"artifacts": {},
+			"failed": false,
+			"changed": false
+		},
+		"github.com/hashload/horse-octet-stream": {
+			"name": "horse-octet-stream",
+			"version": "1.9.9",
+			"hash": "c7b52b334f166edea1313c94b2ac170c",
+			"artifacts": {},
+			"failed": false,
+			"changed": false
+		},
+		"github.com/hashload/jhonson": {
+			"name": "jhonson",
+			"version": "1.1.6",
+			"hash": "6408c0964998a945994d4bf29d2c88c5",
+			"artifacts": {},
+			"failed": false,
+			"changed": false
+		},
+		"https://github.com/gabrielbaltazar/gbswagger": {
+			"name": "gbswagger",
+			"version": "3.0.7",
+			"hash": "0dfdc9b52765603ec81732f75513f384",
+			"artifacts": {},
+			"failed": false,
+			"changed": false
+		},
+		"https://github.com/iagoocesaar/horse-jsoninterceptor": {
+			"name": "horse-jsoninterceptor",
+			"version": "0.0.6",
+			"hash": "03298741ff77f442103fb40346b542a2",
+			"artifacts": {},
+			"failed": false,
+			"changed": false
+		}
+	}
+}
