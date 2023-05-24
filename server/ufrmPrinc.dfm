@@ -35,9 +35,8 @@ object frmPrinc: TfrmPrinc
     Width = 98
     Height = 29
     Cursor = crHandPoint
-    Caption = 'Iniciar'
+    Action = acIniciarAPI
     TabOrder = 1
-    OnClick = btnIniciarClick
   end
   object btnParar: TButton
     Left = 239
@@ -45,8 +44,26 @@ object frmPrinc: TfrmPrinc
     Width = 98
     Height = 29
     Cursor = crHandPoint
-    Caption = 'Parar'
+    Action = acPararAPI
     TabOrder = 2
-    OnClick = btnPararClick
+  end
+  object aclPrinc: TActionList
+    Left = 24
+    Top = 88
+    object acIniciarAPI: TAction
+      Category = 'API'
+      Caption = 'Iniciar'
+      OnExecute = acIniciarAPIExecute
+    end
+    object acPararAPI: TAction
+      Category = 'API'
+      Caption = 'Parar'
+      OnExecute = acPararAPIExecute
+    end
+  end
+  object ApplicationEvents1: TApplicationEvents
+    OnIdle = ApplicationEvents1Idle
+    Left = 304
+    Top = 224
   end
 end

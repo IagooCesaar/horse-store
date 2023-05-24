@@ -20,6 +20,7 @@ type
     procedure LoadBossConfig;
     function GetVersion: string;
     function GetDescription: string;
+    function GetEmExecucao: Boolean;
 
   public
     constructor Create;
@@ -32,6 +33,7 @@ type
     property BaseURL: string read GetBaseURL;
     property Version: string read GetVersion;
     property Description: string read GetDescription;
+    property EmExecucao: Boolean read GetEmExecucao;
 
 end;
 
@@ -154,6 +156,11 @@ end;
 function TApp.GetDescription: string;
 begin
   Result := FBossConfig.GetValue<string>('description');
+end;
+
+function TApp.GetEmExecucao: Boolean;
+begin
+  Result := THorse.IsRunning;
 end;
 
 function TApp.GetVersion: string;
