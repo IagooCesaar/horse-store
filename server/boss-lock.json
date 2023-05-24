@@ -74,6 +74,14 @@
 			"failed": false,
 			"changed": false
 		},
+		"github.com/viniciussanchez/dataset-serialize": {
+			"name": "dataset-serialize",
+			"version": "v2.4.9",
+			"hash": "0df5fa71a508ce66a50ef649231af9c9",
+			"artifacts": {},
+			"failed": false,
+			"changed": false
+		},
 		"https://github.com/gabrielbaltazar/gbswagger": {
 			"name": "gbswagger",
 			"version": "3.0.7",

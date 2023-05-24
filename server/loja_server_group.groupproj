@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{A81D3C1C-B57C-4355-A11E-9302D49B5B6F}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="loja_server_console.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="loja_server_vcl.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="loja_server_console">
+        <MSBuild Projects="loja_server_console.dproj"/>
+    </Target>
+    <Target Name="loja_server_console:Clean">
+        <MSBuild Projects="loja_server_console.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="loja_server_console:Make">
+        <MSBuild Projects="loja_server_console.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="loja_server_vcl">
+        <MSBuild Projects="loja_server_vcl.dproj"/>
+    </Target>
+    <Target Name="loja_server_vcl:Clean">
+        <MSBuild Projects="loja_server_vcl.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="loja_server_vcl:Make">
+        <MSBuild Projects="loja_server_vcl.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="loja_server_console;loja_server_vcl"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="loja_server_console:Clean;loja_server_vcl:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="loja_server_console:Make;loja_server_vcl:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

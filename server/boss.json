@@ -14,6 +14,7 @@
 		"github.com/hashload/horse-logger-provider-logfile": "^1.0.9",
 		"github.com/hashload/horse-octet-stream": "^1.9.9",
 		"github.com/hashload/jhonson": "^1.1.6",
+		"github.com/viniciussanchez/dataset-serialize": "^v2.4.9",
 		"https://github.com/gabrielbaltazar/gbswagger": "^3.0.7",
 		"https://github.com/iagoocesaar/horse-jsoninterceptor": "^0.0.6"
 	}

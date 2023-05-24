@@ -11,8 +11,10 @@ type
     FCreatedAt: TDateTime;
     FStartedAt: TDateTime;
     FBossConfig: TJSONObject;
+
     procedure ConfigSwagger;
     procedure ConfigLogger;
+    procedure ConfigDatabase;
     function GetBaseURL: string;
 
     procedure LoadBossConfig;
@@ -46,7 +48,11 @@ uses
   Horse.HandleException,
   Horse.GBSwagger,
   Horse.OctetStream,
-  Horse.Compression;
+  Horse.Compression,
+  DataSet.Serialize,
+
+  Database.Factory,
+  Database.Tipos;
 
 { TApp }
 
@@ -55,6 +61,35 @@ uses
 procedure TApp.ConfigSwagger();
 begin
   
+end;
+
+procedure TApp.ConfigDatabase;
+var
+  LDBDriverParams: TConnectionDefDriverParams;
+  LDBParams: TConnectionDefParams;
+  LDBPoolParams: TConnectionDefPoolParams;
+begin
+  LDBDriverParams.DriverDefName := 'FB_DRIVER';
+  LDBDriverParams.VendorLib := ''; // Path para fbclient.dll
+
+  LDBParams.ConnectionDefName := 'loja_prod';
+  LDBParams.Server := 'localhost';
+  LDBParams.Database := 'C:\#DEV\#Projetos\loja\server\database\loja-bd.fbd';
+  LDBParams.UserName := 'SYSDBA';
+  LDBParams.Password := 'masterkey';
+  LDBParams.LocalConnection := True;
+
+  LDBPoolParams.Pooled := True;
+  LDBPoolParams.PoolMaximumItems := 50;
+  LDBPoolParams.PoolCleanupTimeout := 30000;
+  LDBPoolParams.PoolExpireTimeout := 60000;
+
+  TDatabaseFactory.New
+    .Conexao
+    .SetConnectionDefDriverParams(LDBDriverParams)
+    .SetConnectionDefParams(LDBParams)
+    .SetConnectionDefPoolParams(LDBPoolParams)
+    .IniciaPoolConexoes;
 end;
 
 procedure TApp.ConfigLogger();
@@ -89,7 +124,16 @@ begin
         .Use(HandleException);
 
   //Registro de Rotas
-
+  THorse.Get('/ping',
+    procedure (AReq: THorseRequest; AResp: THorseResponse)
+    begin
+      AResp.Send(TDatabaseFactory.New.SQL
+        .SQL('SELECT * FROM MON$ATTACHMENTS')
+        .Open
+        .ToJSONArray
+      );
+    end
+  );
 end;
 
 destructor TApp.Destroy;
@@ -136,6 +180,8 @@ end;
 
 procedure TApp.Start(APort: Integer);
 begin
+  ConfigDatabase;
+
   FStartedAt := Now;
   THorse.Listen(APort,
     procedure begin

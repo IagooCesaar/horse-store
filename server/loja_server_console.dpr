@@ -8,7 +8,8 @@ program loja_server_console;
 
 uses
   System.SysUtils,
-  App in 'src\App.pas';
+  App in 'src\App.pas',
+  FDManagerConfig in 'src\infra\FDManagerConfig.pas';
 
 begin
   var App := TApp.Create;
