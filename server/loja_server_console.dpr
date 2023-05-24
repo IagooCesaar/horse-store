@@ -9,7 +9,11 @@ program loja_server_console;
 uses
   System.SysUtils,
   App in 'src\App.pas',
-  FDManagerConfig in 'src\infra\FDManagerConfig.pas';
+  Database.Conexao in 'src\infra\database\Database.Conexao.pas',
+  Database.Factory in 'src\infra\database\Database.Factory.pas',
+  Database.Interfaces in 'src\infra\database\Database.Interfaces.pas',
+  Database.SQL in 'src\infra\database\Database.SQL.pas',
+  Database.Tipos in 'src\infra\database\Database.Tipos.pas';
 
 begin
   var App := TApp.Create;
