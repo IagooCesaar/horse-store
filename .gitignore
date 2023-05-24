@@ -82,3 +82,6 @@ __recovery/
 #Exe Folder
 */win32
 */win64
+
+# Firebird databases
+*.FBD
