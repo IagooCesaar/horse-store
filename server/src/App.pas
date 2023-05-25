@@ -54,7 +54,9 @@ uses
   DataSet.Serialize,
 
   Database.Factory,
-  Database.Tipos;
+  Database.Tipos,
+
+  Loja.Controller.Registry;
 
 { TApp }
 
@@ -109,7 +111,7 @@ begin
   ReportMemoryLeaksOnShutdown := True;
   {$ENDIF}
 
-  FContext := '/loja-api';
+  FContext := '/loja';
   FCreatedAt := Now;
 
   LoadBossConfig();
@@ -126,6 +128,8 @@ begin
         .Use(HandleException);
 
   //Registro de Rotas
+  Loja.Controller.Registry.DoRegistry(FContext);
+
   THorse.Get('/ping',
     procedure (AReq: THorseRequest; AResp: THorseResponse)
     begin

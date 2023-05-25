@@ -122,6 +122,19 @@
         <DCCReference Include="src\infra\database\Database.Interfaces.pas"/>
         <DCCReference Include="src\infra\database\Database.SQL.pas"/>
         <DCCReference Include="src\infra\database\Database.Tipos.pas"/>
+        <DCCReference Include="src\model\Loja.Model.Factory.pas"/>
+        <DCCReference Include="src\model\Loja.Model.Interfaces.pas"/>
+        <DCCReference Include="src\model\Loja.Model.Itens.pas"/>
+        <DCCReference Include="src\model\dao\Loja.Model.Dao.Factory.pas"/>
+        <DCCReference Include="src\model\dao\Loja.Model.Dao.Interfaces.pas"/>
+        <DCCReference Include="src\model\dao\Loja.Model.Dao.Itens.Interfaces.pas"/>
+        <DCCReference Include="src\model\dao\in-memory\itens\Loja.Model.Dao.Itens.Factory.InMemory.pas"/>
+        <DCCReference Include="src\model\dao\in-memory\itens\Loja.Model.Dao.Itens.Item.InMemory.pas"/>
+        <DCCReference Include="src\model\dao\oficial\itens\Loja.Model.Dao.Itens.Factory.pas"/>
+        <DCCReference Include="src\model\dao\oficial\itens\Loja.Model.Dao.Itens.Item.pas"/>
+        <DCCReference Include="src\model\entity\itens\Loja.Model.Entity.Itens.Item.pas"/>
+        <DCCReference Include="src\controllers\Loja.Controller.Itens.pas"/>
+        <DCCReference Include="src\controllers\Loja.Controller.Registry.pas"/>
         <RcItem Include="boss.json">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>RCDATA</ResourceType>

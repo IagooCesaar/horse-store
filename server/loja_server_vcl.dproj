@@ -73,7 +73,7 @@
         <DCC_Define>HORSE_VCL;$(DCC_Define)</DCC_Define>
         <VerInfo_Locale>1046</VerInfo_Locale>
         <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
-        <DCC_UnitSearchPath>$(DCC_UnitSearchPath);modules\.dcp;modules\.dcu;modules;modules\dataset-serialize\src;modules\gbswagger\Source\Core;modules\gbswagger\Source\Datasnap;modules\gbswagger\Source\Horse;modules\gbswagger\Source\Validator;modules\handle-exception\src;modules\horse\src;modules\horse-compression\src;modules\horse-jsoninterceptor\src;modules\horse-logger\src;modules\horse-logger-provider-console\src;modules\horse-logger-provider-logfile\src;modules\horse-octet-stream\src;modules\horse-utils-clientip\src;modules\jhonson\src</DCC_UnitSearchPath>
+        <DCC_UnitSearchPath>modules\.dcp;modules\.dcu;modules;modules\dataset-serialize\src;modules\gbswagger\Source\Core;modules\gbswagger\Source\Datasnap;modules\gbswagger\Source\Horse;modules\gbswagger\Source\Validator;modules\handle-exception\src;modules\horse\src;modules\horse-compression\src;modules\horse-jsoninterceptor\src;modules\horse-logger\src;modules\horse-logger-provider-console\src;modules\horse-logger-provider-logfile\src;modules\horse-octet-stream\src;modules\horse-utils-clientip\src;modules\jhonson\src;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_UsePackage>vclwinx;DataSnapServer;ACBr_BPeDabpeESCPOS;ACBr_PAF;ACBr_TCP;ACBr_ONE;ACBr_NF3e;ACBr_OpenDelivery;ACBr_SPEDImportar;ACBr_MDFeDamdfeFR;fmx;emshosting;vclie;DbxCommonDriver;bindengine;IndyIPCommon;VCLRESTComponents;DBXMSSQLDriver;FireDACCommonODBC;emsclient;FireDACCommonDriver;ACBr_OpenSSL;appanalytics;IndyProtocols;vclx;ACBr_ADRCST;frxe28;IndyIPClient;dbxcds;vcledge;ACBr_MTER;bindcompvclwinx;ACBr_Convenio115;frxFD28;ACBr_NFSeDanfseFR;emsedge;bindcompfmx;DBXFirebirdDriver;ACBr_CTeDacteFR;fsDB28;inetdb;ACBr_NFCeECFVirtual;frxADO28;FireDACSqliteDriver;DbxClientDriver;FireDACASADriver;ACBr_LFD;soapmidas;ACBr_NF3eDANF3eESCPOS;vclactnband;frxIntIO28;ACBr_PagFor;fmxFireDAC;dbexpress;FireDACInfxDriver;frxDBX28;ACBr_Reinf;DBXMySQLDriver;VclSmp;inet;DataSnapCommon;ACBr_Ponto;vcltouch;fmxase;frx28;DBXOdbcDriver;fsFD28;dbrtl;FireDACDBXDriver;FireDACOracleDriver;fmxdae;ACBr_NFSe;ACBre_Social;FireDACMSAccDriver;CustomIPTransport;FireDACMSSQLDriver;ACBr_NFSeX;DataSnapIndy10ServerTransport;ACBr_NFe;DataSnapConnectors;ACBr_ANe;vcldsnap;DBXInterBaseDriver;frxDB28;FireDACMongoDBDriver;IndySystem;ACBr_Diversos;ACBR_DeSTDA;ACBr_GNRE;ACBr_EDI;FireDACTDataDriver;ACBr_SAT;vcldb;ACBr_Integrador;frxIntIOIndy28;ACBr_PIXCD;ACBr_CIOT;ACBr_TEFD;vclFireDAC;fs28;ACBr_SPED;bindcomp;FireDACCommon;DataSnapServerMidas;FireDACODBCDriver;emsserverresource;ACBr_SEF2;ACBr_LCDPR;IndyCore;RESTBackendComponents;ACBr_CTe;ACBr_SATWS;ACBr_BoletoFR;bindcompdbx;rtl;FireDACMySQLDriver;ACBr_NFeDanfeFR;FireDACADSDriver;ACBr_BPe;RESTComponents;ACBr_NFSeXDANFSeFR;DBXSqliteDriver;vcl;IndyIPServer;dsnapxml;dsnapcon;DataSnapClient;DataSnapProviderClient;adortl;ACBr_Sintegra;DBXSybaseASEDriver;ACBr_Serial;DBXDb2Driver;ACBr_Comum;frxcs28;ACBr_NFeDanfeESCPOS;ACBr_MDFe;vclimg;DataSnapFireDAC;emsclientfiredac;FireDACPgDriver;FireDAC;FireDACDSDriver;inetdbxpress;xmlrtl;tethering;ACBr_Boleto;ACBr_SATExtratoESCPOS;ACBr_BlocoX;bindcompvcl;dsnap;ACBr_GTIN;fsADO28;CloudService;DBXSybaseASADriver;DBXOracleDriver;FireDACDb2Driver;DBXInformixDriver;ACBr_OFX;ACBr_SATECFVirtual;fmxobj;bindcompvclsmp;DataSnapNativeClient;ACBr_SATExtratoFR;ACBr_PAFNFCe;ACBr_GNREGuiaFR;DatasnapConnectorsFreePascal;soaprtl;soapserver;FireDACIBDriver;$(DCC_UsePackage)</DCC_UsePackage>
@@ -137,6 +137,19 @@
         <DCCReference Include="src\infra\database\Database.Conexao.pas"/>
         <DCCReference Include="src\infra\database\Database.Factory.pas"/>
         <DCCReference Include="src\infra\database\Database.SQL.pas"/>
+        <DCCReference Include="src\model\entity\itens\Loja.Model.Entity.Itens.Item.pas"/>
+        <DCCReference Include="src\model\dao\Loja.Model.Dao.Interfaces.pas"/>
+        <DCCReference Include="src\model\dao\Loja.Model.Dao.Factory.pas"/>
+        <DCCReference Include="src\model\dao\Loja.Model.Dao.Itens.Interfaces.pas"/>
+        <DCCReference Include="src\model\dao\oficial\itens\Loja.Model.Dao.Itens.Item.pas"/>
+        <DCCReference Include="src\model\dao\oficial\itens\Loja.Model.Dao.Itens.Factory.pas"/>
+        <DCCReference Include="src\model\dao\in-memory\itens\Loja.Model.Dao.Itens.Factory.InMemory.pas"/>
+        <DCCReference Include="src\model\dao\in-memory\itens\Loja.Model.Dao.Itens.Item.InMemory.pas"/>
+        <DCCReference Include="src\model\Loja.Model.Interfaces.pas"/>
+        <DCCReference Include="src\model\Loja.Model.Itens.pas"/>
+        <DCCReference Include="src\model\Loja.Model.Factory.pas"/>
+        <DCCReference Include="src\controllers\Loja.Controller.Itens.pas"/>
+        <DCCReference Include="src\controllers\Loja.Controller.Registry.pas"/>
         <RcItem Include="boss.json">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>RCDATA</ResourceType>
