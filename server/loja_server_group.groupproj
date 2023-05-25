@@ -9,6 +9,9 @@
         <Projects Include="loja_server_vcl.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="loja_server_test.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -35,14 +38,23 @@
     <Target Name="loja_server_vcl:Make">
         <MSBuild Projects="loja_server_vcl.dproj" Targets="Make"/>
     </Target>
+    <Target Name="loja_server_test">
+        <MSBuild Projects="loja_server_test.dproj"/>
+    </Target>
+    <Target Name="loja_server_test:Clean">
+        <MSBuild Projects="loja_server_test.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="loja_server_test:Make">
+        <MSBuild Projects="loja_server_test.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="loja_server_console;loja_server_vcl"/>
+        <CallTarget Targets="loja_server_console;loja_server_vcl;loja_server_test"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="loja_server_console:Clean;loja_server_vcl:Clean"/>
+        <CallTarget Targets="loja_server_console:Clean;loja_server_vcl:Clean;loja_server_test:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="loja_server_console:Make;loja_server_vcl:Make"/>
+        <CallTarget Targets="loja_server_console:Make;loja_server_vcl:Make;loja_server_test:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
