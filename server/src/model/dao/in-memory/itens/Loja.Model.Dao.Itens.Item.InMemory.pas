@@ -8,10 +8,11 @@ uses
   System.SysUtils,
 
   Loja.Model.Dao.Itens.Interfaces,
-  Loja.Model.Entity.Itens.Item;
+  Loja.Model.Entity.Itens.Item,
+  Loja.Model.Dto.Req.Itens.CriarItem;
 
 type
-  TLojaModelDaoItensItemInMemory = class(TInterfacedObject, ILojaModelDaoItensItem)
+  TLojaModelDaoItensItemInMemory = class(TNoRefCountObject, ILojaModelDaoItensItem)
   private
     FRepository: TObjectList<TLojaModelEntityItensItem>;
 
@@ -25,6 +26,7 @@ type
     { ILojaModelDaoItensItem }
     function ObterPorCodigo(ACodItem: Integer): TLojaModelEntityItensItem;
     function ObterPorNumCodBarr(ANumCodBarr: string): TLojaModelEntityItensItem;
+    function CriarItem(ANovoItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
   end;
 
 implementation
@@ -36,6 +38,22 @@ implementation
 constructor TLojaModelDaoItensItemInMemory.Create;
 begin
   FRepository := TObjectList<TLojaModelEntityItensItem>.Create;
+end;
+
+function TLojaModelDaoItensItemInMemory.CriarItem(
+  ANovoItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
+var LId: Integer;
+begin
+  if FRepository.Count > 0
+  then Lid := FRepository.Last.CodItem + 1
+  else LId := 1;
+
+  FRepository.Add(TLojaModelEntityItensItem.Create);
+  FRepository.Last.CodItem := Lid;
+  FRepository.Last.NomItem := ANovoItem.NomItem;
+  FRepository.Last.NumCodBarr := ANovoItem.NumCodBarr;
+
+  Result := FRepository.Last;
 end;
 
 destructor TLojaModelDaoItensItemInMemory.Destroy;

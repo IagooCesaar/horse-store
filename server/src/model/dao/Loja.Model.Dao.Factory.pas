@@ -11,12 +11,14 @@ uses
 type
   TLojaModelDaoFactory = class(TNoRefCountObject, ILojaModelDaoFactory)
   private
-    FInMemory: Boolean;
     class var FFactory: TLojaModelDaoFactory;
+
   public
-    constructor Create(AInMemory: Boolean);
+    constructor Create;
 	  destructor Destroy; override;
-	  class function New(AInMemory: Boolean = false): ILojaModelDaoFactory;
+
+    class var InMemory: Boolean;
+	  class function New: ILojaModelDaoFactory;
     class destructor UnInitialize;
 
     { ILojaModelDaoFactory }
@@ -32,9 +34,9 @@ uses
 
 { TLojaModelDaoFactory }
 
-constructor TLojaModelDaoFactory.Create(AInMemory: Boolean);
+constructor TLojaModelDaoFactory.Create;
 begin
-  FInMemory := AInMemory;
+
 end;
 
 destructor TLojaModelDaoFactory.Destroy;
@@ -45,15 +47,16 @@ end;
 
 function TLojaModelDaoFactory.Itens: ILojaModelDaoItensItemFactory;
 begin
-  if not FInMemory
+  if not InMemory
   then Result := TLojaModelDaoItensFactory.New
   else Result := TLojaModelDaoItensFactoryInMemory.GetInstance;
 end;
 
-class function TLojaModelDaoFactory.New(AInMemory: Boolean): ILojaModelDaoFactory;
+class function TLojaModelDaoFactory.New: ILojaModelDaoFactory;
 begin
   if not Assigned(FFactory)
-  then FFactory := TLojaModelDaoFactory.Create(AInMemory);
+  then FFactory := TLojaModelDaoFactory.Create;
+
   Result := FFactory;
 end;
 
@@ -63,4 +66,9 @@ begin
   then FreeAndNil(FFactory);
 end;
 
+initialization
+  TLojaModelDaoFactory.InMemory := False;
+
 end.
+
+

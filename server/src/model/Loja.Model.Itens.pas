@@ -8,7 +8,8 @@ uses
   System.Generics.Collections,
 
   Loja.Model.Interfaces,
-  Loja.Model.Entity.Itens.Item;
+  Loja.Model.Entity.Itens.Item,
+  Loja.Model.Dto.Req.Itens.CriarItem;
 
 type
   TLojaModelItens = class(TInterfacedObject, ILojaModelItens)
@@ -21,6 +22,7 @@ type
     { ILojaModelItens }
     function ObterPorCodigo(ACodItem: Integer): TLojaModelEntityItensItem;
     function ObterPorNumCodBarr(ANumCodBarr: string): TLojaModelEntityItensItem;
+    function CriarItem(ANovoItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
   end;
 
 implementation
@@ -38,6 +40,20 @@ begin
 
 end;
 
+function TLojaModelItens.CriarItem(
+  ANovoItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
+begin
+  if Length(ANovoItem.NomItem) <= 8
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('O nome do item deverá ter no mínimo 8 caracteres');
+
+  Result := TLojaModelDaoFactory.New.Itens
+    .Item
+    .CriarItem(ANovoItem);
+end;
+
 destructor TLojaModelItens.Destroy;
 begin
 
@@ -51,12 +67,13 @@ end;
 
 function TLojaModelItens.ObterPorCodigo(
   ACodItem: Integer): TLojaModelEntityItensItem;
+var LItem : TLojaModelEntityItensItem;
 begin
-  var LItem := TLojaModelDaoFactory.New.Itens
+  LItem := TLojaModelDaoFactory.New.Itens
     .Item
     .ObterPorCodigo(ACodItem);
 
-  if not Assigned(LItem)
+  if LItem = nil
   then raise EHorseException.New
       .Status(THTTPStatus.BadRequest)
       .&Unit(Self.UnitName)

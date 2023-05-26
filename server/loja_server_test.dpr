@@ -32,7 +32,8 @@ uses
   Database.Factory in 'src\infra\database\Database.Factory.pas',
   Database.Interfaces in 'src\infra\database\Database.Interfaces.pas',
   Database.SQL in 'src\infra\database\Database.SQL.pas',
-  Database.Tipos in 'src\infra\database\Database.Tipos.pas';
+  Database.Tipos in 'src\infra\database\Database.Tipos.pas',
+  Loja.Model.Dto.Req.Itens.CriarItem in 'src\model\dto\Loja.Model.Dto.Req.Itens.CriarItem.pas';
 
 {$IFNDEF TESTINSIGHT}
 var

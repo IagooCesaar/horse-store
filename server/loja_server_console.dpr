@@ -26,7 +26,8 @@ uses
   Loja.Model.Dao.Itens.Item in 'src\model\dao\oficial\itens\Loja.Model.Dao.Itens.Item.pas',
   Loja.Model.Entity.Itens.Item in 'src\model\entity\itens\Loja.Model.Entity.Itens.Item.pas',
   Loja.Controller.Itens in 'src\controllers\Loja.Controller.Itens.pas',
-  Loja.Controller.Registry in 'src\controllers\Loja.Controller.Registry.pas';
+  Loja.Controller.Registry in 'src\controllers\Loja.Controller.Registry.pas',
+  Loja.Model.Dto.Req.Itens.CriarItem in 'src\model\dto\Loja.Model.Dto.Req.Itens.CriarItem.pas';
 
 begin
   var App := TApp.Create;

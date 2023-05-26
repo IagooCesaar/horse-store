@@ -6,13 +6,16 @@ uses
   System.Classes,
   System.Generics.Collections,
 
-  Loja.Model.Entity.Itens.Item;
+  Loja.Model.Entity.Itens.Item,
+  Loja.Model.Dto.Req.Itens.CriarItem;
 
 type
   ILojaModelDaoItensItem = interface
     ['{29C88626-7650-4C9C-9825-205184EA9F35}']
     function ObterPorCodigo(ACodItem: Integer): TLojaModelEntityItensItem;
     function ObterPorNumCodBarr(ANumCodBarr: string): TLojaModelEntityItensItem;
+    function CriarItem(ANovoItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
+
   end;
 
   ILojaModelDaoItensItemFactory = interface

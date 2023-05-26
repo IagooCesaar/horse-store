@@ -4,11 +4,13 @@ interface
 
 uses
   System.Classes,
+  System.Variants,
   System.Generics.Collections,
   Data.DB,
 
   Loja.Model.Dao.Itens.Interfaces,
-  Loja.Model.Entity.Itens.Item;
+  Loja.Model.Entity.Itens.Item,
+  Loja.Model.Dto.Req.Itens.CriarItem;
 
 type
   TLojaModelDaoItensItem = class(TInterfacedObject, ILojaModelDaoItensItem)
@@ -22,6 +24,7 @@ type
     { ILojaModelDaoItensItem }
     function ObterPorCodigo(ACodItem: Integer): TLojaModelEntityItensItem;
     function ObterPorNumCodBarr(ANumCodBarr: string): TLojaModelEntityItensItem;
+    function CriarItem(ANovoItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
   end;
 
 implementation
@@ -43,6 +46,27 @@ end;
 constructor TLojaModelDaoItensItem.Create;
 begin
 
+end;
+
+function TLojaModelDaoItensItem.CriarItem(
+  ANovoItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
+begin
+  Result := nil;
+  var Lid := TDatabaseFactory.New.SQL
+    .GeraProximoCodigo('GEN_ITEM_ID');
+
+  TDatabaseFactory.New.SQL
+    .SQL(
+      'insert into item (cod_item, nom_item, num_cod_barr) '+
+      'values (:cod_item, :nom_item, :num_cod_barr) ')
+    .ParamList
+      .AddInteger('cod_item', Lid)
+      .AddString('nom_item', ANovoItem.NomItem)
+      .AddString('num_cod_barr', Variant(ANovoItem.NumCodBarr))
+      .&End
+    .ExecSQL();
+
+  Result := ObterPorCodigo(LId);
 end;
 
 destructor TLojaModelDaoItensItem.Destroy;
