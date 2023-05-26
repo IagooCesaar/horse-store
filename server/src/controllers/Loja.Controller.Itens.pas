@@ -36,7 +36,7 @@ begin
       .Itens
       .CriarItem(LDto);
 
-    Resp.Send(TJSON.ObjectToClearJsonObject(LItem));
+    Resp.Status(THTTPStatus.Created).Send(TJSON.ObjectToClearJsonObject(LItem));
     LItem.Free;
   finally
     if Assigned(LDto)

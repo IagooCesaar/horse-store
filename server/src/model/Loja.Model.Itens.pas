@@ -43,11 +43,11 @@ end;
 function TLojaModelItens.CriarItem(
   ANovoItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
 begin
-  if Length(ANovoItem.NomItem) <= 8
+  if Length(ANovoItem.NomItem) < 4
   then raise EHorseException.New
     .Status(THTTPStatus.BadRequest)
     .&Unit(Self.UnitName)
-    .Error('O nome do item deverá ter no mínimo 8 caracteres');
+    .Error('O nome do item deverá ter no mínimo 4 caracteres');
 
   Result := TLojaModelDaoFactory.New.Itens
     .Item
