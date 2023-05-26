@@ -24,6 +24,12 @@ type
 
     [Test]
     procedure Test_NaoObterItemInexistente;
+
+    [Test]
+    procedure Test_CriarUmNovoItem;
+
+    [Test]
+    procedure Test_NaoCriarItemComDescricaoPequena;
   end;
 
 implementation
@@ -57,6 +63,45 @@ begin
   TLojaModelDaoFactory.InMemory := False;
 end;
 
+
+procedure TLojaModelItensTest.Test_CriarUmNovoItem;
+var LNovoItem : TLojaModelDtoReqItensCriarItem;
+begin
+  LNovoItem := TLojaModelDtoReqItensCriarItem.Create;
+  try
+    LNovoItem.NomItem := 'Novo Item';
+    LNovoItem.NumCodBarr := '123456789';
+
+    var LItem := TLojaModelItens.New
+      .CriarItem(LNovoItem);
+
+    Assert.IsTrue(LItem <> nil);
+    Assert.AreEqual(LNovoItem.NomItem, LItem.NomItem, 'O nome não coincide');
+    Assert.AreEqual(LNovoItem.NumCodBarr, Litem.NumCodBarr, 'O código de barras não coincide');
+  finally
+    LNovoItem.Free;
+  end;
+end;
+
+procedure TLojaModelItensTest.Test_NaoCriarItemComDescricaoPequena;
+var LNovoItem : TLojaModelDtoReqItensCriarItem;
+begin
+  LNovoItem := TLojaModelDtoReqItensCriarItem.Create;
+  try
+    LNovoItem.NomItem := 'abc';
+    Assert.WillRaiseWithMessageRegex(
+      procedure begin
+        TLojaModelItens.New
+          .CriarItem(LNovoItem);
+      end,
+      EHorseException,
+      'O nome do item deverá ter no mínimo'
+    );
+
+  finally
+    LNovoItem.Free;
+  end;
+end;
 
 procedure TLojaModelItensTest.Test_NaoObterItemInexistente;
 begin
