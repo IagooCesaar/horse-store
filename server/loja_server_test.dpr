@@ -4,6 +4,8 @@ program loja_server_test;
 {$APPTYPE CONSOLE}
 {$ENDIF}
 {$STRONGLINKTYPES ON}
+{$R *.dres}
+
 uses
   System.SysUtils,
   {$IFDEF TESTINSIGHT}
@@ -33,7 +35,9 @@ uses
   Database.Interfaces in 'src\infra\database\Database.Interfaces.pas',
   Database.SQL in 'src\infra\database\Database.SQL.pas',
   Database.Tipos in 'src\infra\database\Database.Tipos.pas',
-  Loja.Model.Dto.Req.Itens.CriarItem in 'src\model\dto\Loja.Model.Dto.Req.Itens.CriarItem.pas';
+  Loja.Model.Dto.Req.Itens.CriarItem in 'src\model\dto\Loja.Model.Dto.Req.Itens.CriarItem.pas',
+  Loja.Controller.Itens.Test in 'src\test\controller\Loja.Controller.Itens.Test.pas',
+  Loja.Controller.Api.Test in 'src\test\controller\Loja.Controller.Api.Test.pas';
 
 {$IFNDEF TESTINSIGHT}
 var

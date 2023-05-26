@@ -82,6 +82,14 @@
 			"failed": false,
 			"changed": false
 		},
+		"github.com/viniciussanchez/restrequest4delphi": {
+			"name": "restrequest4delphi",
+			"version": "v3.1.0",
+			"hash": "069c7aa4eca1494f0b657911c10b5c0c",
+			"artifacts": {},
+			"failed": false,
+			"changed": false
+		},
 		"https://github.com/gabrielbaltazar/gbswagger": {
 			"name": "gbswagger",
 			"version": "3.0.7",
