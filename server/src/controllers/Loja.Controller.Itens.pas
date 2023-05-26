@@ -50,6 +50,7 @@ begin
   LCodItem := Req.Params.Field('cod_item')
     .Required
     .RequiredMessage('O código do item é obrigatório')
+    .InvalidFormatMessage('O valor fornecido não é um inteiro válido')
     .AsInteger;
 
   if LCodItem <= 0 then
