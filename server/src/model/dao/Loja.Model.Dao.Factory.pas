@@ -12,7 +12,6 @@ type
   TLojaModelDaoFactory = class(TNoRefCountObject, ILojaModelDaoFactory)
   private
     class var FFactory: TLojaModelDaoFactory;
-
   public
     constructor Create;
 	  destructor Destroy; override;
