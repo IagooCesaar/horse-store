@@ -33,6 +33,9 @@ type
 
     [Test]
     procedure Test_NaoCriarItemComDescricaoGrande;
+
+    [Test]
+    procedure Test_NaoCriarItemComCodigoBarrasGrande;
   end;
 
 implementation
@@ -86,6 +89,26 @@ begin
   end;
 end;
 
+procedure TLojaModelItensTest.Test_NaoCriarItemComCodigoBarrasGrande;
+var LNovoItem : TLojaModelDtoReqItensCriarItem;
+begin
+  LNovoItem := TLojaModelDtoReqItensCriarItem.Create;
+  try
+    LNovoItem.NomItem := 'abc123';
+    LNovoItem.NumCodBarr := '0123456789012345';
+    Assert.WillRaiseWithMessageRegex(
+      procedure begin
+        TLojaModelItens.New
+          .CriarItem(LNovoItem);
+      end,
+      EHorseException,
+      'O código de barras deverá ter no máximo'
+    );
+  finally
+    LNovoItem.Free;
+  end;
+end;
+
 procedure TLojaModelItensTest.Test_NaoCriarItemComDescricaoGrande;
 var LNovoItem : TLojaModelDtoReqItensCriarItem;
 begin
@@ -101,7 +124,6 @@ begin
       EHorseException,
       'O nome do item deverá ter no máximo'
     );
-
   finally
     LNovoItem.Free;
   end;
@@ -121,7 +143,6 @@ begin
       EHorseException,
       'O nome do item deverá ter no mínimo'
     );
-
   finally
     LNovoItem.Free;
   end;
