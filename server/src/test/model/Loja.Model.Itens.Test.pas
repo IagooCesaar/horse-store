@@ -30,6 +30,9 @@ type
 
     [Test]
     procedure Test_NaoCriarItemComDescricaoPequena;
+
+    [Test]
+    procedure Test_NaoCriarItemComDescricaoGrande;
   end;
 
 implementation
@@ -78,6 +81,27 @@ begin
     Assert.IsTrue(LItem <> nil);
     Assert.AreEqual(LNovoItem.NomItem, LItem.NomItem, 'O nome não coincide');
     Assert.AreEqual(LNovoItem.NumCodBarr, Litem.NumCodBarr, 'O código de barras não coincide');
+  finally
+    LNovoItem.Free;
+  end;
+end;
+
+procedure TLojaModelItensTest.Test_NaoCriarItemComDescricaoGrande;
+var LNovoItem : TLojaModelDtoReqItensCriarItem;
+begin
+  LNovoItem := TLojaModelDtoReqItensCriarItem.Create;
+  try
+    LNovoItem.NomItem := '01234567890123456789012345678901234567890123456789'+
+      '01234567890123456789012345678901234567890123456789AAAAAA';
+    Assert.WillRaiseWithMessageRegex(
+      procedure begin
+        TLojaModelItens.New
+          .CriarItem(LNovoItem);
+      end,
+      EHorseException,
+      'O nome do item deverá ter no máximo'
+    );
+
   finally
     LNovoItem.Free;
   end;

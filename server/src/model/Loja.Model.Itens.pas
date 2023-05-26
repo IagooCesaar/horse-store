@@ -42,13 +42,19 @@ end;
 
 function TLojaModelItens.CriarItem(
   ANovoItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
-const C_NOM_MIN = 4;
+const C_NOM_MIN = 4; C_NOM_MAX = 100;
 begin
   if Length(ANovoItem.NomItem) < C_NOM_MIN
   then raise EHorseException.New
     .Status(THTTPStatus.BadRequest)
     .&Unit(Self.UnitName)
     .Error(Format('O nome do item deverá ter no mínimo %d caracteres', [ C_NOM_MIN ]));
+
+  if Length(ANovoItem.NomItem) > C_NOM_MAX
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error(Format('O nome do item deverá ter no máximo %d caracteres', [ C_NOM_MAX ]));
 
   Result := TLojaModelDaoFactory.New.Itens
     .Item
