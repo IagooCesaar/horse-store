@@ -59,6 +59,7 @@ type
     procedure StartTransaction;
     procedure Commit;
     procedure Rollback;
+    function VarVoidToNull(pValor: Variant): Variant;
 
     { IDataBaseParamList }
     function AddString(pNome: string; pValor: string): IDataBaseParamList; overload;
@@ -69,6 +70,7 @@ type
     function AddFloat(pNome: string; pValor: variant): IDataBaseParamList; overload;
     function AddDateTime(pNome: string; pValor: tdatetime): IDataBaseParamList; overload;
     function AddDateTime(pNome: string; pValor: variant): IDataBaseParamList; overload;
+
     function &End: IDataBaseSQL;
   end;
 
@@ -94,7 +96,9 @@ function TDatabaseSQL.AddDateTime(pNome: string;
   pValor: variant): IDataBaseParamList;
 begin
   Result := Self;
-  if pValor > 0 then
+  pValor := VarVoidToNull(pValor);
+
+  if not(pValor = null) then
     AddFloat(pNome, TDateTime(pValor))
   else
     AddNull(ftDateTime, pNome, pValor);
@@ -104,7 +108,12 @@ function TDatabaseSQL.AddFloat(pNome: string;
   pValor: variant): IDataBaseParamList;
 begin
   Result := Self;
-  FQuery.ParamByName(pNome).AsFloat := pValor;
+  pValor := VarVoidToNull(pValor);
+
+  if not(pValor = null) then
+    AddFloat(pNome, pValor)
+  else
+    AddNull(ftFloat, pNome, pValor);
 end;
 
 function TDatabaseSQL.AddFloat(pNome: string;
@@ -128,7 +137,9 @@ function TDatabaseSQL.AddInteger(pNome: string;
   pValor: variant): IDataBaseParamList;
 begin
   Result := Self;
-  if pValor > 0 then
+  pValor := VarVoidToNull(pValor);
+
+  if not(pValor = null) then
     AddFloat(pNome, Integer(pValor))
   else
     AddNull(ftInteger, pNome, pValor);
@@ -148,6 +159,7 @@ end;
 function TDatabaseSQL.AddString(pNome, pValor: string): IDataBaseParamList;
 begin
   Result := Self;
+  FQuery.ParamByName(pNome).DataType := ftString;
   FQuery.ParamByName(pNome).AsString := pValor;
 end;
 
@@ -155,8 +167,10 @@ function TDatabaseSQL.AddString(pNome: string;
   pValor: variant): IDataBaseParamList;
 begin
   Result := Self;
+  pValor := VarVoidToNull(pValor);
+
   if not(pValor = null)  then
-    AddFloat(pNome, String(pValor))
+    AddString(pNome, String(pValor))
   else
     AddNull(ftString, pNome, pValor);
 end;
@@ -374,6 +388,27 @@ begin
     raise EHorseException.New
       .Error('Script SQL não informado!')
       .&Unit(Self.UnitName);
+  end;
+end;
+
+function TDatabaseSQL.VarVoidToNull(pValor: Variant): Variant;
+var i: integer;
+begin
+  i := VarType(pValor);
+
+  case VarType(pValor) of
+    varString, varUString:
+      if pValor = ''
+      then Result := null
+      else Result := pValor;
+
+   varDate, varInteger:
+     if pValor = 0
+     then Result := null
+     else Result := pValor;
+
+  else
+    Result := pValor;
   end;
 end;
 
