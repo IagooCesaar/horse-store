@@ -27,7 +27,8 @@ uses
   Loja.Model.Entity.Itens.Item in 'src\model\entity\itens\Loja.Model.Entity.Itens.Item.pas',
   Loja.Controller.Itens in 'src\controllers\Loja.Controller.Itens.pas',
   Loja.Controller.Registry in 'src\controllers\Loja.Controller.Registry.pas',
-  Loja.Model.Dto.Req.Itens.CriarItem in 'src\model\dto\Loja.Model.Dto.Req.Itens.CriarItem.pas';
+  Loja.Model.Dto.Req.Itens.CriarItem in 'src\model\dto\Loja.Model.Dto.Req.Itens.CriarItem.pas',
+  Loja.Model.Dto.Req.Itens.FiltroItens in 'src\model\dto\Loja.Model.Dto.Req.Itens.FiltroItens.pas';
 
 begin
   var App := TApp.Create;

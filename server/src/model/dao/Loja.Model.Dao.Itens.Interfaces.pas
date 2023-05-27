@@ -7,7 +7,8 @@ uses
   System.Generics.Collections,
 
   Loja.Model.Entity.Itens.Item,
-  Loja.Model.Dto.Req.Itens.CriarItem;
+  Loja.Model.Dto.Req.Itens.CriarItem,
+  Loja.Model.Dto.Req.Itens.FiltroItens;
 
 type
   ILojaModelDaoItensItem = interface
@@ -15,6 +16,7 @@ type
     function ObterPorCodigo(ACodItem: Integer): TLojaModelEntityItensItem;
     function ObterPorNumCodBarr(ANumCodBarr: string): TLojaModelEntityItensItem;
     function CriarItem(ANovoItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
+    function ObterItens(AFiltro: TLojaModelDtoReqItensFiltroItens): TLojaModelEntityItensItemLista;
 
   end;
 

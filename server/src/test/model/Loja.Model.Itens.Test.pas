@@ -36,6 +36,9 @@ type
 
     [Test]
     procedure Test_NaoCriarItemComCodigoBarrasGrande;
+
+    [Test]
+    procedure Test_ObterItensCadastrados;
   end;
 
 implementation
@@ -48,7 +51,8 @@ uses
   Loja.Model.Dao.Factory,
 
   Loja.Model.Itens,
-  Loja.Model.Dto.Req.Itens.CriarItem;
+  Loja.Model.Dto.Req.Itens.CriarItem,
+  Loja.Model.Dto.Req.Itens.FiltroItens;
 
 procedure TLojaModelItensTest.Setup;
 begin
@@ -180,6 +184,37 @@ begin
     Assert.AreEqual(LNovoItem.NomItem, LItem.NomItem);
   finally
     LNovoItem.Free;
+  end;
+end;
+
+procedure TLojaModelItensTest.Test_ObterItensCadastrados;
+var LNovoItem : TLojaModelDtoReqItensCriarItem; LFiltro: TLojaModelDtoReqItensFiltroItens;
+begin
+  LNovoItem := TLojaModelDtoReqItensCriarItem.Create;
+  try
+    LNovoItem.NomItem := 'Pesquisar Item';
+    LNovoItem.NumCodBarr := '1919191919';
+
+    TLojaModelDaoFactory.New.Itens
+      .Item
+      .CriarItem(LNovoItem);
+
+  finally
+    LNovoItem.Free;
+  end;
+  LFiltro := TLojaModelDtoReqItensFiltroItens.Create;
+  try
+    LFiltro.NomItem := 'Pesq';
+
+    var LItens := TLojaModelItens.New
+      .ObterItens(LFiltro);
+
+    Assert.IsTrue(Assigned(LItens), 'Não foi possível encontrar itens que contenham a descriação "Item"');
+    Assert.AreEqual(1, LItens.Count, 'Há mais do que 1 item');
+
+    LItens.Free;
+  finally
+    LFiltro.Free;
   end;
 end;
 

@@ -9,7 +9,8 @@ uses
 
   Loja.Model.Dao.Itens.Interfaces,
   Loja.Model.Entity.Itens.Item,
-  Loja.Model.Dto.Req.Itens.CriarItem;
+  Loja.Model.Dto.Req.Itens.CriarItem,
+  Loja.Model.Dto.Req.Itens.FiltroItens;
 
 type
   TLojaModelDaoItensItemInMemory = class(TNoRefCountObject, ILojaModelDaoItensItem)
@@ -27,6 +28,7 @@ type
     function ObterPorCodigo(ACodItem: Integer): TLojaModelEntityItensItem;
     function ObterPorNumCodBarr(ANumCodBarr: string): TLojaModelEntityItensItem;
     function CriarItem(ANovoItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
+    function ObterItens(AFiltro: TLojaModelDtoReqItensFiltroItens): TLojaModelEntityItensItemLista;
   end;
 
 implementation
@@ -67,6 +69,39 @@ begin
   if not Assigned(FDao)
   then FDao := Self.Create;
   Result := FDao;
+end;
+
+function TLojaModelDaoItensItemInMemory.ObterItens(
+  AFiltro: TLojaModelDtoReqItensFiltroItens): TLojaModelEntityItensItemLista;
+var LValido: Boolean;
+begin
+  Result := TLojaModelEntityItensItemLista.Create;
+  for var i := 0 to Pred(FRepository.Count) do
+  begin
+    LValido := True;
+    if (AFiltro.NomItem <> '')
+    then if (Pos(AFiltro.NomItem, FRepository[i].NomItem)>0)
+         then LValido := True and LValido
+         else LValido := False;
+
+    if (AFiltro.NumCodBarr<> '')
+    then if (Pos(AFiltro.NomItem, FRepository[i].NumCodBarr)>0)
+         then LValido := True and LValido
+         else LValido := False;
+
+    if AFiltro.CodItem > 0
+    then if AFiltro.CodItem = FRepository[i].CodItem
+         then LValido := True and LValido
+         else LValido := False;
+
+    if LValido then
+    begin
+      Result.Add(TLojaModelEntityItensItem.Create);
+      Result.Last.CodItem := FRepository[i].CodItem;
+      Result.Last.NomItem := FRepository[i].NomItem;
+      Result.Last.NumCodBarr := FRepository[i].NumCodBarr;
+    end;
+  end;
 end;
 
 function TLojaModelDaoItensItemInMemory.ObterPorCodigo(

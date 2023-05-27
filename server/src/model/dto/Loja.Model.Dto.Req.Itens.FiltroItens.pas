@@ -1,25 +1,21 @@
-unit Loja.Model.Entity.Itens.Item;
+unit Loja.Model.Dto.Req.Itens.FiltroItens;
 
 interface
 
 uses
-  System.Classes,
-  System.Generics.Collections;
+  System.Classes;
 
 type
-  TLojaModelEntityItensItem = class
+  TLojaModelDtoReqItensFiltroItens = class
   private
-    FCodItem: Integer;
     FNomItem: String;
+    FCodItem: Integer;
     FNumCodBarr: string;
   public
     property CodItem: Integer read FCodItem write FCodItem;
     property NomItem: String read FNomItem write FNomItem;
     property NumCodBarr: string read FNumCodBarr write FNumCodBarr;
   end;
-
-  TLojaModelEntityItensItemLista = TObjectList<TLojaModelEntityItensItem>;
-
 
 implementation
 

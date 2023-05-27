@@ -10,7 +10,8 @@ uses
 
   Loja.Model.Dao.Itens.Interfaces,
   Loja.Model.Entity.Itens.Item,
-  Loja.Model.Dto.Req.Itens.CriarItem;
+  Loja.Model.Dto.Req.Itens.CriarItem,
+  Loja.Model.Dto.Req.Itens.FiltroItens;
 
 type
   TLojaModelDaoItensItem = class(TInterfacedObject, ILojaModelDaoItensItem)
@@ -25,6 +26,7 @@ type
     function ObterPorCodigo(ACodItem: Integer): TLojaModelEntityItensItem;
     function ObterPorNumCodBarr(ANumCodBarr: string): TLojaModelEntityItensItem;
     function CriarItem(ANovoItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
+    function ObterItens(AFiltro: TLojaModelDtoReqItensFiltroItens): TLojaModelEntityItensItemLista;
   end;
 
 implementation
@@ -78,6 +80,41 @@ end;
 class function TLojaModelDaoItensItem.New: ILojaModelDaoItensItem;
 begin
   Result := Self.Create;
+end;
+
+function TLojaModelDaoItensItem.ObterItens(
+  AFiltro: TLojaModelDtoReqItensFiltroItens): TLojaModelEntityItensItemLista;
+begin
+  var LSql := #13#10
+  + 'select * from ITEM i '
+  + 'where 1=1 ';
+
+  if AFiltro.NomItem <> ''
+  then LSql := LSql
+  +'  and i.nom_item like :nom_item ';
+
+  if AFiltro.NumCodBarr <> ''
+  then LSql := LSql
+  + '  and i.num_cod_barr like :num_cod_bar ';
+
+  if AFiltro.CodItem <> 0
+  then LSql := LSql
+  + '  and i.cod_item = :cod_item ';
+
+  var ds := TDatabaseFactory.New.SQL
+    .SQL(LSql)
+    .ParamList
+      .AddInteger('cod_item', AFiltro.CodItem)
+      .AddString('nom_item', AFiltro.NomItem)
+      .AddString('num_cod_barr', AFiltro.NumCodBarr)
+      .&End
+    .Open;
+
+  Result := TLojaModelEntityItensItemLista.Create;
+  while not ds.Eof do begin
+    Result.Add(AtribuiCampos(ds));
+    ds.Next;
+  end;
 end;
 
 function TLojaModelDaoItensItem.ObterPorCodigo(

@@ -136,6 +136,7 @@
         <DCCReference Include="src\model\dto\Loja.Model.Dto.Req.Itens.CriarItem.pas"/>
         <DCCReference Include="src\test\controller\Loja.Controller.Itens.Test.pas"/>
         <DCCReference Include="src\test\controller\Loja.Controller.Api.Test.pas"/>
+        <DCCReference Include="src\model\dto\Loja.Model.Dto.Req.Itens.FiltroItens.pas"/>
         <RcItem Include="boss.json">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>RCDATA</ResourceType>

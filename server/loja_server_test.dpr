@@ -37,7 +37,8 @@ uses
   Database.Tipos in 'src\infra\database\Database.Tipos.pas',
   Loja.Model.Dto.Req.Itens.CriarItem in 'src\model\dto\Loja.Model.Dto.Req.Itens.CriarItem.pas',
   Loja.Controller.Itens.Test in 'src\test\controller\Loja.Controller.Itens.Test.pas',
-  Loja.Controller.Api.Test in 'src\test\controller\Loja.Controller.Api.Test.pas';
+  Loja.Controller.Api.Test in 'src\test\controller\Loja.Controller.Api.Test.pas',
+  Loja.Model.Dto.Req.Itens.FiltroItens in 'src\model\dto\Loja.Model.Dto.Req.Itens.FiltroItens.pas';
 
 {$IFNDEF TESTINSIGHT}
 var

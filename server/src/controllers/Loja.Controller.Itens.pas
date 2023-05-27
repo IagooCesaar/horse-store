@@ -16,7 +16,32 @@ implementation
 uses
   System.SysUtils,
   Loja.Model.Factory,
-  Loja.Model.Dto.Req.Itens.CriarItem;
+  Loja.Model.Entity.Itens.Item,
+  Loja.Model.Dto.Req.Itens.CriarItem,
+  Loja.Model.Dto.Req.Itens.FiltroItens;
+
+procedure ObterItens(Req: THorseRequest; Resp: THorseResponse);
+var LFiltros: TLojaModelDtoReqItensFiltroItens; LItens : TLojaModelEntityItensItemLista;
+begin
+  try
+    LFiltros := TLojaModelDtoReqItensFiltroItens.Create;
+    LFiltros.NomItem := Req.Query.Field('nom_item').AsString;
+    LFiltros.NumCodBarr := Req.Query.Field('num_cod_barr').AsString;
+    LFiltros.CodItem := Req.Query.Field('cod_item').AsInteger;
+
+    LItens := TLojaModelFactory.New
+      .Itens
+      .ObterItens(LFiltros);
+
+    if LItens.Count = 0
+    then Resp.Status(THTTPStatus.NoContent)
+    else Resp.Status(THTTPStatus.Ok).Send(TJSON.ObjectToClearJsonValue(LItens));
+
+    LItens.Free;
+  finally
+    FreeAndNil(LFiltros);
+  end;
+end;
 
 procedure CriarItem(Req: THorseRequest; Resp: THorseResponse);
 var LDto: TLojaModelDtoReqItensCriarItem;
@@ -71,6 +96,7 @@ procedure Registry(const AContext: string);
 begin
   THorse.Group.Prefix(AContext+'/itens')
     .Post('/', CriarItem)
+    .Get('/', ObterItens)
     .Get('/:cod_item', GetItemPorCodigo)
 end;
 

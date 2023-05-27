@@ -8,13 +8,15 @@ uses
   System.Generics.Collections,
 
   Loja.Model.Entity.Itens.Item,
-  Loja.Model.Dto.Req.Itens.CriarItem;
+  Loja.Model.Dto.Req.Itens.CriarItem,
+  Loja.Model.Dto.Req.Itens.FiltroItens;
 
 type
   ILojaModelItens = interface
     ['{C4B5FD33-A52B-47D3-8DA8-709CAEC9CC4D}']
     function ObterPorCodigo(ACodItem: Integer): TLojaModelEntityItensItem;
     function ObterPorNumCodBarr(ANumCodBarr: string): TLojaModelEntityItensItem;
+    function ObterItens(AFiltro: TLojaModelDtoReqItensFiltroItens): TObjectList<TLojaModelEntityItensItem>;
     function CriarItem(ANovoItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
   end;
 

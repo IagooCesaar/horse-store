@@ -9,7 +9,8 @@ uses
 
   Loja.Model.Interfaces,
   Loja.Model.Entity.Itens.Item,
-  Loja.Model.Dto.Req.Itens.CriarItem;
+  Loja.Model.Dto.Req.Itens.CriarItem,
+  Loja.Model.Dto.Req.Itens.FiltroItens;
 
 type
   TLojaModelItens = class(TInterfacedObject, ILojaModelItens)
@@ -22,6 +23,7 @@ type
     { ILojaModelItens }
     function ObterPorCodigo(ACodItem: Integer): TLojaModelEntityItensItem;
     function ObterPorNumCodBarr(ANumCodBarr: string): TLojaModelEntityItensItem;
+    function ObterItens(AFiltro: TLojaModelDtoReqItensFiltroItens): TObjectList<TLojaModelEntityItensItem>;
     function CriarItem(ANovoItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
   end;
 
@@ -76,6 +78,23 @@ end;
 class function TLojaModelItens.New: ILojaModelItens;
 begin
   Result := Self.Create;
+end;
+
+function TLojaModelItens.ObterItens(
+  AFiltro: TLojaModelDtoReqItensFiltroItens): TObjectList<TLojaModelEntityItensItem>;
+begin
+  Result := nil;
+  if  (AFiltro.CodItem = 0)
+  and (Length(AFiltro.NomItem) = 0)
+  and (Length(AFiltro.NumCodBarr) = 0)
+  then raise EHorseException.New
+      .Status(THTTPStatus.PreconditionRequired)
+      .&Unit(Self.UnitName)
+      .Error('Você deve informar um critério para filtro');
+
+  Result := TLojaModelDaoFactory.New.Itens
+    .Item
+    .ObterItens(AFiltro);
 end;
 
 function TLojaModelItens.ObterPorCodigo(

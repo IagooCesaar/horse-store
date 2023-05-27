@@ -24,7 +24,8 @@ uses
   Loja.Model.Factory in 'src\model\Loja.Model.Factory.pas',
   Loja.Controller.Itens in 'src\controllers\Loja.Controller.Itens.pas',
   Loja.Controller.Registry in 'src\controllers\Loja.Controller.Registry.pas',
-  Loja.Model.Dto.Req.Itens.CriarItem in 'src\model\dto\Loja.Model.Dto.Req.Itens.CriarItem.pas';
+  Loja.Model.Dto.Req.Itens.CriarItem in 'src\model\dto\Loja.Model.Dto.Req.Itens.CriarItem.pas',
+  Loja.Model.Dto.Req.Itens.FiltroItens in 'src\model\dto\Loja.Model.Dto.Req.Itens.FiltroItens.pas';
 
 {$R *.res}
 
