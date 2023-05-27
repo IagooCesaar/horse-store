@@ -4,6 +4,7 @@ interface
 
 uses
   Horse,
+  Horse.Commons,
   Horse.JsonInterceptor.Helpers;
 
 procedure Registry(const AContext: string);
@@ -15,19 +16,36 @@ implementation
 
 uses
   System.SysUtils,
+  System.NetEncoding,
   Loja.Model.Factory,
   Loja.Model.Entity.Itens.Item,
   Loja.Model.Dto.Req.Itens.CriarItem,
   Loja.Model.Dto.Req.Itens.FiltroItens;
 
 procedure ObterItens(Req: THorseRequest; Resp: THorseResponse);
-var LFiltros: TLojaModelDtoReqItensFiltroItens; LItens : TLojaModelEntityItensItemLista;
+var
+  LLhsBracketType: TLhsBracketsType;
+  LFiltros: TLojaModelDtoReqItensFiltroItens;
+  LItens : TLojaModelEntityItensItemLista;
 begin
+  THorseCoreParamConfig.GetInstance.CheckLhsBrackets(True);
+
   try
     LFiltros := TLojaModelDtoReqItensFiltroItens.Create;
-    LFiltros.NomItem := Req.Query.Field('nom_item').AsString;
-    LFiltros.NumCodBarr := Req.Query.Field('num_cod_barr').AsString;
     LFiltros.CodItem := Req.Query.Field('cod_item').AsInteger;
+
+    //nom_item[like]=nome
+    for LLhsBracketType in Req.Query.Field('nom_item').LhsBrackets.Types do
+    begin
+      LFiltros.NomItem := Req.Query.Field('nom_item').LhsBrackets.GetValue(LLhsBracketType);
+      LFiltros.NomItemLhsBracketsType := LLhsBracketType;
+    end;
+
+    for LLhsBracketType in Req.Query.Field('num_cod_barr').LhsBrackets.Types do
+    begin
+      LFiltros.NumCodBarr := Req.Query.Field('num_cod_barr').LhsBrackets.GetValue(LLhsBracketType);
+      LFiltros.NumCodBarrLhsBracketsType := LLhsBracketType;
+    end;
 
     LItens := TLojaModelFactory.New
       .Itens

@@ -32,7 +32,8 @@ type
 implementation
 
 uses
-  Database.Factory;
+  Database.Factory,
+  Horse.Commons;
 
 { TLojaModelDaoItensItem }
 
@@ -90,12 +91,34 @@ begin
   + 'where 1=1 ';
 
   if AFiltro.NomItem <> ''
-  then LSql := LSql
-  +'  and i.nom_item like :nom_item ';
+  then begin
+    LSql := LSql +'  and i.nom_item like :nom_item ';
+    case AFiltro.NomItemLhsBracketsType of
+      TLhsBracketsType.Contains:
+        AFiltro.NomItem := '%'+AFiltro.NomItem+'%';
+      TLhsBracketsType.StartsWith:
+        AFiltro.NomItem := AFiltro.NomItem+'%';
+      TLhsBracketsType.EndsWith:
+        AFiltro.NomItem := '%'+AFiltro.NomItem;
+    else
+      AFiltro.NomItem := AFiltro.NomItem;
+    end;
+  end;
 
   if AFiltro.NumCodBarr <> ''
-  then LSql := LSql
-  + '  and i.num_cod_barr like :num_cod_bar ';
+  then begin
+    LSql := LSql + '  and i.num_cod_barr like :num_cod_bar ';
+    case AFiltro.NumCodBarrLhsBracketsType of
+      TLhsBracketsType.Contains:
+        AFiltro.NumCodBarr := '%'+AFiltro.NumCodBarr+'%';
+      TLhsBracketsType.StartsWith:
+        AFiltro.NumCodBarr := AFiltro.NumCodBarr+'%';
+      TLhsBracketsType.EndsWith:
+        AFiltro.NumCodBarr := '%'+AFiltro.NumCodBarr;
+    else
+      AFiltro.NumCodBarr := AFiltro.NumCodBarr;
+    end;
+  end;
 
   if AFiltro.CodItem <> 0
   then LSql := LSql
