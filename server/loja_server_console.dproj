@@ -137,6 +137,9 @@
         <DCCReference Include="src\controllers\Loja.Controller.Registry.pas"/>
         <DCCReference Include="src\model\dto\Loja.Model.Dto.Req.Itens.CriarItem.pas"/>
         <DCCReference Include="src\model\dto\Loja.Model.Dto.Req.Itens.FiltroItens.pas"/>
+        <DCCReference Include="src\model\entity\estoque\Loja.Model.Entity.Estoque.Saldo.pas"/>
+        <DCCReference Include="src\model\entity\estoque\Loja.Model.Entity.Estoque.Movimento.pas"/>
+        <DCCReference Include="src\model\entity\estoque\Loja.Model.Entity.Estoque.Types.pas"/>
         <RcItem Include="boss.json">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>RCDATA</ResourceType>

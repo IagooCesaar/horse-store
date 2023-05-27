@@ -9,7 +9,10 @@ uses
 
   Loja.Model.Entity.Itens.Item,
   Loja.Model.Dto.Req.Itens.CriarItem,
-  Loja.Model.Dto.Req.Itens.FiltroItens;
+  Loja.Model.Dto.Req.Itens.FiltroItens,
+
+  Loja.Model.Entity.Estoque.Movimento,
+  Loja.Model.Entity.Estoque.Saldo;
 
 type
   ILojaModelItens = interface
@@ -20,9 +23,15 @@ type
     function CriarItem(ANovoItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
   end;
 
+  ILojaModelEstoque = interface
+    ['{AC91CEDC-1BAD-465B-B72A-CAFE30A03906}']
+    //function CriarNovoMovimento();
+  end;
+
   ILojaModelFactory = interface
     ['{FBA02FC1-F0C9-4969-BF2A-AA7662040FC8}']
     function Itens: ILojaModelItens;
+    //function Estoque: ILojaModelEstoque;
   end;
 
 implementation
