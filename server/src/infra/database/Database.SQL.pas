@@ -89,6 +89,7 @@ function TDatabaseSQL.AddDateTime(pNome: string;
   pValor: tdatetime): IDataBaseParamList;
 begin
   Result := Self;
+  if FQuery.FindParam(pNome) = nil then Exit;
   FQuery.ParamByName(pNome).AsDateTime := pValor;
 end;
 
@@ -96,6 +97,7 @@ function TDatabaseSQL.AddDateTime(pNome: string;
   pValor: variant): IDataBaseParamList;
 begin
   Result := Self;
+  if FQuery.FindParam(pNome) = nil then Exit;
   pValor := VarVoidToNull(pValor);
 
   if not(pValor = null) then
@@ -108,6 +110,7 @@ function TDatabaseSQL.AddFloat(pNome: string;
   pValor: variant): IDataBaseParamList;
 begin
   Result := Self;
+  if FQuery.FindParam(pNome) = nil then Exit;
   pValor := VarVoidToNull(pValor);
 
   if not(pValor = null) then
@@ -120,6 +123,7 @@ function TDatabaseSQL.AddFloat(pNome: string;
   pValor: Double): IDataBaseParamList;
 begin
   Result := Self;
+  if FQuery.FindParam(pNome) = nil then Exit;
   if pValor > 0 then
     AddFloat(pNome, Double(pValor))
   else
@@ -130,6 +134,7 @@ function TDatabaseSQL.AddInteger(pNome: string;
   pValor: Integer): IDataBaseParamList;
 begin
   Result := Self;
+  if FQuery.FindParam(pNome) = nil then Exit;
   FQuery.ParamByName(pNome).AsInteger := pValor;
 end;
 
@@ -137,6 +142,7 @@ function TDatabaseSQL.AddInteger(pNome: string;
   pValor: variant): IDataBaseParamList;
 begin
   Result := Self;
+  if FQuery.FindParam(pNome) = nil then Exit;
   pValor := VarVoidToNull(pValor);
 
   if not(pValor = null) then
@@ -159,6 +165,8 @@ end;
 function TDatabaseSQL.AddString(pNome, pValor: string): IDataBaseParamList;
 begin
   Result := Self;
+  if FQuery.FindParam(pNome) = nil then Exit;
+
   FQuery.ParamByName(pNome).DataType := ftString;
   FQuery.ParamByName(pNome).AsString := pValor;
 end;
@@ -167,6 +175,7 @@ function TDatabaseSQL.AddString(pNome: string;
   pValor: variant): IDataBaseParamList;
 begin
   Result := Self;
+  if FQuery.FindParam(pNome) = nil then Exit;
   pValor := VarVoidToNull(pValor);
 
   if not(pValor = null)  then
