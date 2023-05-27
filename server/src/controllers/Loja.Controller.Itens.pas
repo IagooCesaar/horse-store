@@ -34,7 +34,6 @@ begin
     LFiltros := TLojaModelDtoReqItensFiltroItens.Create;
     LFiltros.CodItem := Req.Query.Field('cod_item').AsInteger;
 
-    //nom_item[like]=nome
     for LLhsBracketType in Req.Query.Field('nom_item').LhsBrackets.Types do
     begin
       LFiltros.NomItem := Req.Query.Field('nom_item').LhsBrackets.GetValue(LLhsBracketType);

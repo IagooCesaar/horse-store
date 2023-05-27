@@ -19,6 +19,12 @@ type
     procedure Test_ObterUmItem;
 
     [Test]
+    procedure Test_ObterVariosItens;
+
+    [Test]
+    procedure Test_NaoObtemItens;
+
+    [Test]
     procedure Test_CriarNovoItem;
   end;
 
@@ -60,6 +66,17 @@ begin
   end;
 end;
 
+procedure TLojaControllerItensTest.Test_NaoObtemItens;
+begin
+  var LResponse := TRequest.New
+    .BaseURL(FBaseURL)
+    .Resource('/itens')
+    .AddParam('nom_item[contains]', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
+    .Get();
+
+  Assert.AreEqual(204, LResponse.StatusCode);
+end;
+
 procedure TLojaControllerItensTest.Test_ObterUmItem;
 var LItem : TLojaModelEntityItensItem;
 begin
@@ -77,6 +94,26 @@ begin
   finally
     if LItem <> nil
     then FreeAndNil(LItem);
+  end;
+end;
+
+procedure TLojaControllerItensTest.Test_ObterVariosItens;
+var LItens : TLojaModelEntityItensItemLista;
+begin
+  var LResponse := TRequest.New
+    .BaseURL(FBaseURL)
+    .Resource('/itens')
+    .AddParam('nom_item[contains]', 'Cab')
+    .Get();
+
+  Assert.AreEqual(200, LResponse.StatusCode);
+  try
+    LItens := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItemLista>
+      (LResponse.Content);
+    Assert.IsTrue(LItens.Count>0);
+  finally
+    if LItens <> nil
+    then FreeAndNil(LItens);
   end;
 end;
 
