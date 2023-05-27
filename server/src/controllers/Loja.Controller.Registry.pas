@@ -4,7 +4,11 @@ interface
 
 uses
   Horse,
-  Horse.GBSwagger;
+  Horse.Commons,
+  Horse.GBSwagger,
+  System.Classes,
+  System.SysUtils,
+  System.JSON;
 
 procedure DoRegistry(const AContext: string);
 
@@ -18,14 +22,39 @@ begin
   Resp.Status(THTTPStatus.OK).Send('{"healthcheck": "Ok"}');
 end;
 
+procedure GetLhsBracketsTest(Req: THorseRequest; Res: THorseResponse);
+var
+  LLhsBracketType: TLhsBracketsType;
+  LValues: TStringList;
+begin
+  THorseCoreParamConfig.GetInstance.CheckLhsBrackets(True);
+
+  LValues := TStringList.Create;
+
+  for LLhsBracketType in Req.Query.Field('test').LhsBrackets.Types do
+  begin
+
+    LValues.Add(
+      Format('test %s = %s', [
+        LLhsBracketType.ToString,
+        Req.Query.Field('test').LhsBrackets.GetValue(LLhsBracketType)
+    ]));
+  end;
+  LValues.Add('*'+Req.Query.Field('test').AsString);
+
+  Res.Send(LValues.Text);
+  LValues.Free;
+end;
+
 procedure DoRegistry(const AContext: string);
 begin
   var LContext := AContext + '/api';
   Loja.Controller.Itens.Registry(LContext);
 
-
   THorse
-    .Get(LContext+'/healthcheck', HealtCheck);
+    .Get(LContext+'/healthcheck', HealtCheck)
+    .Get(LContext+'/lhs-brackets-test', GetLhsBracketsTest);
+
 
   Swagger
     .Path(LContext+'/healthcheck')
