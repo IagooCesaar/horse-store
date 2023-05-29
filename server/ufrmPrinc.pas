@@ -18,11 +18,19 @@ type
     acIniciarAPI: TAction;
     acPararAPI: TAction;
     ApplicationEvents1: TApplicationEvents;
+    acDefinirSenha: TAction;
+    grpAutenticacao: TGroupBox;
+    edtUsuario: TEdit;
+    Label2: TLabel;
+    edtSenha: TEdit;
+    Label3: TLabel;
+    btnDefinirSenha: TButton;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure acIniciarAPIExecute(Sender: TObject);
     procedure acPararAPIExecute(Sender: TObject);
     procedure ApplicationEvents1Idle(Sender: TObject; var Done: Boolean);
+    procedure acDefinirSenhaExecute(Sender: TObject);
   private
     FApp: TApp;
   public
@@ -35,6 +43,12 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TfrmPrinc.acDefinirSenhaExecute(Sender: TObject);
+begin
+  FApp.Usuario := edtUsuario.Text;
+  FApp.Senha := edtSenha.Text;
+end;
 
 procedure TfrmPrinc.acIniciarAPIExecute(Sender: TObject);
 begin
@@ -52,9 +66,11 @@ begin
   then begin
     acIniciarAPI.Enabled := False;
     acPararAPI.Enabled := False;
+    acDefinirSenha.Enabled := False;
   end else begin
     acIniciarAPI.Enabled := not FApp.EmExecucao;
     acPararAPI.Enabled := FApp.EmExecucao;
+    acDefinirSenha.Enabled := not FApp.EmExecucao;
   end;
 end;
 

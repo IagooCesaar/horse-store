@@ -62,7 +62,7 @@
         <UsingDelphiRTL>true</UsingDelphiRTL>
         <Icon_MainIcon>$(BDS)\bin\delphi_PROJECTICON.ico</Icon_MainIcon>
         <Icns_MainIcns>$(BDS)\bin\delphi_PROJECTICNS.icns</Icns_MainIcns>
-        <DCC_UnitSearchPath>$(DUnitX);modules\.dcp;modules\.dcu;modules;modules\dataset-serialize\src;modules\gbswagger\Source\Core;modules\gbswagger\Source\Datasnap;modules\gbswagger\Source\Horse;modules\gbswagger\Source\Validator;modules\handle-exception\src;modules\horse\src;modules\horse-compression\src;modules\horse-jsoninterceptor\src;modules\horse-logger\src;modules\horse-logger-provider-console\src;modules\horse-logger-provider-logfile\src;modules\horse-octet-stream\src;modules\horse-utils-clientip\src;modules\jhonson\src;modules\restrequest4delphi\src;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <DCC_UnitSearchPath>$(DUnitX);$(DCC_UnitSearchPath);modules\.dcp;modules\.dcu;modules;modules\dataset-serialize\src;modules\gbswagger\Source\Core;modules\gbswagger\Source\Datasnap;modules\gbswagger\Source\Horse;modules\gbswagger\Source\Validator;modules\handle-exception\src;modules\horse\src;modules\horse-basic-auth\src;modules\horse-compression\src;modules\horse-jsoninterceptor\src;modules\horse-logger\src;modules\horse-logger-provider-console\src;modules\horse-logger-provider-logfile\src;modules\horse-octet-stream\src;modules\horse-utils-clientip\src;modules\jhonson\src;modules\restrequest4delphi\src</DCC_UnitSearchPath>
         <SanitizedProjectName>loja_server_test</SanitizedProjectName>
         <DCC_Define>TEST;$(DCC_Define)</DCC_Define>
         <VerInfo_Locale>1046</VerInfo_Locale>

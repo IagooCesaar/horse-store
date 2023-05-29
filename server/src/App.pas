@@ -11,6 +11,8 @@ type
     FCreatedAt: TDateTime;
     FStartedAt: TDateTime;
     FBossConfig: TJSONObject;
+    FUsuario: string;
+    FSenha: string;
 
     procedure ConfigSwagger;
     procedure ConfigLogger;
@@ -21,7 +23,7 @@ type
     function GetVersion: string;
     function GetDescription: string;
     function GetEmExecucao: Boolean;
-
+    function ValidarLogin(const AUsername, APassword: string): Boolean;
   public
     constructor Create;
     destructor Destroy; override;
@@ -34,6 +36,8 @@ type
     property Version: string read GetVersion;
     property Description: string read GetDescription;
     property EmExecucao: Boolean read GetEmExecucao;
+    property Usuario: string read FUsuario write FUsuario;
+    property Senha: string read FSenha write FSenha;
 
 end;
 
@@ -43,6 +47,7 @@ uses
   System.SyncObjs,
   System.SysUtils,
   System.DateUtils,
+  System.StrUtils,
   System.Types,
 
   Horse,
@@ -52,6 +57,7 @@ uses
   Horse.OctetStream,
   Horse.Compression,
   DataSet.Serialize,
+  Horse.BasicAuthentication,
 
   Database.Factory,
   Database.Tipos,
@@ -111,6 +117,8 @@ begin
   ReportMemoryLeaksOnShutdown := True;
   {$ENDIF}
 
+  FSenha := 'admin';
+  FUsuario := 'admin';
   FContext := '/loja';
   FCreatedAt := Now;
 
@@ -125,6 +133,11 @@ begin
         .Use(Compression())
         .Use(OctetStream)
         .Use(HorseSwagger('/swagger-ui', FContext+'/api-docs'))
+        .Use(HorseBasicAuthentication(ValidarLogin,
+          THorseBasicAuthenticationConfig.New.SkipRoutes([
+            FContext+'/api/healthcheck/'
+          ])
+        ))
         .Use(HandleException);
 
   //Registro de Rotas
@@ -208,6 +221,13 @@ end;
 procedure TApp.Stop;
 begin
   THorse.StopListen;
+end;
+
+function TApp.ValidarLogin(const AUsername, APassword: string): Boolean;
+begin
+  if Length(FUsuario) * Length(FSenha) = 0
+  then Result := True
+  else Result := AUsername.Equals(FUsuario) and APassword.Equals(FSenha);
 end;
 
 initialization
