@@ -10,7 +10,7 @@ type
   [TestFixture]
   TLojaControllerItensTest = class
   private
-    FBaseURL: String;
+    FBaseURL, FUsarname, FPassword: String;
   public
     [SetupFixture]
     procedure SetupFixture;
@@ -44,6 +44,8 @@ uses
 procedure TLojaControllerItensTest.SetupFixture;
 begin
   FBaseURL := TLojaControllerApiTest.GetInstance.BaseURL;
+  FUsarname := TLojaControllerApiTest.GetInstance.UserName;
+  FPassword := TLojaControllerApiTest.GetInstance.Password;
 end;
 
 procedure TLojaControllerItensTest.Test_CriarNovoItem;
@@ -55,6 +57,7 @@ begin
     LNovoItem.NumCodBarr := '0123456789';
 
     var LResponse := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
       .BaseURL(FBaseURL)
       .Resource('/itens')
       .AddBody(TJson.ObjectToClearJsonString(LNovoItem))
@@ -69,6 +72,7 @@ end;
 procedure TLojaControllerItensTest.Test_NaoObtemItens;
 begin
   var LResponse := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
     .BaseURL(FBaseURL)
     .Resource('/itens')
     .AddParam('nom_item[contains]', 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
@@ -81,6 +85,7 @@ procedure TLojaControllerItensTest.Test_ObterUmItem;
 var LItem : TLojaModelEntityItensItem;
 begin
   var LResponse := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
     .BaseURL(FBaseURL)
     .Resource('/itens/{cod_item}')
     .AddUrlSegment('cod_item', '1')
@@ -101,6 +106,7 @@ procedure TLojaControllerItensTest.Test_ObterVariosItens;
 var LItens : TLojaModelEntityItensItemLista;
 begin
   var LResponse := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
     .BaseURL(FBaseURL)
     .Resource('/itens')
     .AddParam('nom_item[contains]', 'Cab')

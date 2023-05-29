@@ -14,11 +14,15 @@ type
 
     class var FApiTest: TLojaControllerApiTest;
     function getBaseUrl: string;
+    function getUsername: string;
+    function getPassword: string;
   public
     constructor Create;
 	  destructor Destroy; override;
 
     property BaseURL: string read getBaseUrl;
+    property UserName: string read getUsername;
+    property Password: string read getPassword;
 
     class destructor UnInitialize;
     class function GetInstance: TLojaControllerApiTest;
@@ -58,6 +62,16 @@ begin
   if not Assigned(FApiTest)
   then FApiTest := TLojaControllerApiTest.Create;
   Result := FApiTest;
+end;
+
+function TLojaControllerApiTest.getPassword: string;
+begin
+  Result := FApp.Senha;
+end;
+
+function TLojaControllerApiTest.getUsername: string;
+begin
+  Result := FApp.Usuario;
 end;
 
 class destructor TLojaControllerApiTest.UnInitialize;
