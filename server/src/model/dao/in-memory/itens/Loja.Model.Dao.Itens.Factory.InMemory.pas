@@ -8,13 +8,13 @@ uses
   Loja.Model.Dao.Itens.Interfaces;
 
 type
-  TLojaModelDaoItensFactoryInMemory = class(TNoRefCountObject, ILojaModelDaoItensItemFactory)
+  TLojaModelDaoItensFactoryInMemory = class(TNoRefCountObject, ILojaModelDaoItensFactory)
   private
     class var FFactory: TLojaModelDaoItensFactoryInMemory;
   public
     constructor Create;
 	  destructor Destroy; override;
-	  class function GetInstance: ILojaModelDaoItensItemFactory;
+	  class function GetInstance: ILojaModelDaoItensFactory;
     class destructor UnInitialize;
 
     { ILojaModelDaoItensItemFactory }
@@ -50,7 +50,7 @@ begin
   then FreeAndNil(FFactory);
 end;
 
-class function TLojaModelDaoItensFactoryInMemory.GetInstance: ILojaModelDaoItensItemFactory;
+class function TLojaModelDaoItensFactoryInMemory.GetInstance: ILojaModelDaoItensFactory;
 begin
   if not Assigned(FFactory)
   then FFactory := Self.Create;

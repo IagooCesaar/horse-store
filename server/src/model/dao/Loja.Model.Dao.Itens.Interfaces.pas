@@ -20,7 +20,7 @@ type
 
   end;
 
-  ILojaModelDaoItensItemFactory = interface
+  ILojaModelDaoItensFactory = interface
     ['{66D6B9AE-A7E6-40B0-9A8D-9055325AEFE8}']
     function Item: ILojaModelDaoItensItem;
   end;

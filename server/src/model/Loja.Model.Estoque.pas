@@ -47,18 +47,18 @@ end;
 
 function TLojaModelEstoque.CriarAcertoEstoque(
   AAcertoEstoque: TLojaModelDtoReqEstoqueAcertoEstoque): TLojaModelEntityEstoqueMovimento;
-const C_MOT_MIN = 4;
+const C_MOT_MIN = 4; C_MOT_MAX = 40;
 var
   LItem: TLojaModelEntityItensItem;
   LSaldo: Integer;
   LMovimento: TLojaModelDtoReqEstoqueCriarMovimento;
 begin
   Result := nil;
-  if Length(AAcertoEstoque.DscMotivo) < C_MOT_MIN
+  if AAcertoEstoque.DscMot = ''
   then raise EHorseException.New
     .Status(THTTPStatus.BadRequest)
     .&Unit(Self.UnitName)
-    .Error(Format('O motivo para realização do acerto deverá ter no mínimo %d caracteres', [ C_MOT_MIN ]));
+    .Error('A descrição do motivo é obrigatória para acerto de estoque');
 
   LItem := TLojaModelDaoFactory.New.Itens.Item.ObterPorCodigo(AAcertoEstoque.CodItem);
   if LItem = nil
@@ -83,7 +83,7 @@ begin
     then LMovimento.CodTipoMov := TLojaModelEntityEstoqueTipoMovimento.movSaida
     else LMovimento.CodTipoMov := TLojaModelEntityEstoqueTipoMovimento.movEntrada;
     LMovimento.CodOrigMov := TLojaModelEntityEstoqueOrigemMovimento.orgAcerto;
-    LMovimento.DscMot := AAcertoEstoque.DscMotivo;
+    LMovimento.DscMot := AAcertoEstoque.DscMot;
 
     Result := CriarNovoMovimento(LMovimento);
   finally
@@ -93,8 +93,40 @@ end;
 
 function TLojaModelEstoque.CriarNovoMovimento(
   ANovoMovimento: TLojaModelDtoReqEstoqueCriarMovimento): TLojaModelEntityEstoqueMovimento;
+const C_MOT_MIN = 4; C_MOT_MAX = 40;
+var
+  LItem: TLojaModelEntityItensItem;
+  LSaldo: Integer;
+  LMovimento: TLojaModelDtoReqEstoqueCriarMovimento;
 begin
   Result := nil;
+
+  if ANovoMovimento.DscMot <> ''
+  then begin
+    if Length(ANovoMovimento.DscMot) < C_MOT_MIN
+    then raise EHorseException.New
+      .Status(THTTPStatus.BadRequest)
+      .&Unit(Self.UnitName)
+      .Error(Format('A descrição do motivo para realização do acerto deverá ter no mínimo %d caracteres', [ C_MOT_MIN ]));
+
+    if Length(ANovoMovimento.DscMot) > C_MOT_MAX
+    then raise EHorseException.New
+      .Status(THTTPStatus.BadRequest)
+      .&Unit(Self.UnitName)
+      .Error(Format('A descrição do motivo para realização do acerto deverá ter no máximo %d caracteres', [ C_MOT_MAX ]));
+  end;
+
+  LItem := TLojaModelDaoFactory.New.Itens.Item.ObterPorCodigo(ANovoMovimento.CodItem);
+  if LItem = nil
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('O item informado não existe');
+  LItem.Free;
+
+  Result := TLojaModelDaoFactory.New.Estoque
+    .Movimento
+    .CriarNovoMovimento(ANovoMovimento);
 end;
 
 destructor TLojaModelEstoque.Destroy;

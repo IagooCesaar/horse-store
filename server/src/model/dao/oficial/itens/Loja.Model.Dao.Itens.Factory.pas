@@ -6,14 +6,14 @@ uses
   Loja.Model.Dao.Itens.Interfaces;
 
 type
-  TLojaModelDaoItensFactory = class(TInterfacedObject, ILojaModelDaoItensItemFactory)
+  TLojaModelDaoItensFactory = class(TInterfacedObject, ILojaModelDaoItensFactory)
   private
   public
     constructor Create;
 	  destructor Destroy; override;
-	  class function New: ILojaModelDaoItensItemFactory;
+	  class function New: ILojaModelDaoItensFactory;
 
-    { ILojaModelDaoItensItemFactory }
+    { ILojaModelDaoItensFactory }
     function Item: ILojaModelDaoItensItem;
   end;
 
@@ -40,7 +40,7 @@ begin
   Result := TLojaModelDaoItensItem.New;
 end;
 
-class function TLojaModelDaoItensFactory.New: ILojaModelDaoItensItemFactory;
+class function TLojaModelDaoItensFactory.New: ILojaModelDaoItensFactory;
 begin
   Result := Self.Create;
 end;

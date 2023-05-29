@@ -13,7 +13,7 @@ type
 
   ILojaModelDaoFactory = interface
     ['{0EE57E31-3E31-49E9-9A76-9D20DF15C419}']
-    function Itens: ILojaModelDaoItensItemFactory;
+    function Itens: ILojaModelDaoItensFactory;
     function Estoque: ILojaModelDaoEstoqueFactory;
   end;
 

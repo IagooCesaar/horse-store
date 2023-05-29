@@ -10,11 +10,11 @@ type
   private
     FCodItem: integer;
     FQtdSaldoReal: Integer;
-    FDscMotivo: string;
+    FDscMot: string;
   public
     property CodItem: integer read FCodItem write FCodItem;
     property QtdSaldoReal: Integer read FQtdSaldoReal write FQtdSaldoReal;
-    property DscMotivo: string read FDscMotivo write FDscMotivo;
+    property DscMot: string read FDscMot write FDscMot;
   end;
 
 implementation

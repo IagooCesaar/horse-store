@@ -22,7 +22,7 @@ type
     class destructor UnInitialize;
 
     { ILojaModelDaoFactory }
-    function Itens: ILojaModelDaoItensItemFactory;
+    function Itens: ILojaModelDaoItensFactory;
     function Estoque: ILojaModelDaoEstoqueFactory;
   end;
 
@@ -31,7 +31,9 @@ implementation
 
 uses
   Loja.Model.Dao.Itens.Factory,
-  Loja.Model.Dao.Itens.Factory.InMemory;
+  Loja.Model.Dao.Itens.Factory.InMemory,
+  Loja.Model.Dao.Estoque.Factory,
+  Loja.Model.Dao.Estoque.Factory.InMemory;
 
 { TLojaModelDaoFactory }
 
@@ -48,10 +50,12 @@ end;
 
 function TLojaModelDaoFactory.Estoque: ILojaModelDaoEstoqueFactory;
 begin
-
+  if not InMemory
+  then Result := TLojaModelDaoEstoqueFactory.New
+  else Result := TLojaModelDaoEstoqueFactoryInMemory.GetInstance;
 end;
 
-function TLojaModelDaoFactory.Itens: ILojaModelDaoItensItemFactory;
+function TLojaModelDaoFactory.Itens: ILojaModelDaoItensFactory;
 begin
   if not InMemory
   then Result := TLojaModelDaoItensFactory.New
