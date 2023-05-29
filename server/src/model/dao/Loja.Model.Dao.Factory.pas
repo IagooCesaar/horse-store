@@ -6,7 +6,8 @@ uses
   System.Classes,
   System.SysUtils,
   Loja.Model.Dao.Interfaces,
-  Loja.Model.Dao.Itens.Interfaces;
+  Loja.Model.Dao.Itens.Interfaces,
+  Loja.Model.Dao.Estoque.Interfaces;
 
 type
   TLojaModelDaoFactory = class(TNoRefCountObject, ILojaModelDaoFactory)
@@ -22,6 +23,7 @@ type
 
     { ILojaModelDaoFactory }
     function Itens: ILojaModelDaoItensItemFactory;
+    function Estoque: ILojaModelDaoEstoqueFactory;
   end;
 
 
@@ -42,6 +44,11 @@ destructor TLojaModelDaoFactory.Destroy;
 begin
 
   inherited;
+end;
+
+function TLojaModelDaoFactory.Estoque: ILojaModelDaoEstoqueFactory;
+begin
+
 end;
 
 function TLojaModelDaoFactory.Itens: ILojaModelDaoItensItemFactory;

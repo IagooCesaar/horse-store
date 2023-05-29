@@ -1,4 +1,4 @@
-unit Loja.Model.Entity.Estoque.Movimento;
+unit Loja.Model.Dto.Req.Estoque.CriarMovimento;
 
 interface
 
@@ -9,14 +9,13 @@ uses
   Loja.Model.Entity.Estoque.Types;
 
 type
-  TLojaModelEntityEstoqueMovimento = class
+  TLojaModelDtoReqEstoqueCriarMovimento = class
   private
     FCodItem: Integer;
     FQtdMov: Integer;
     FCodTipoMov: TLojaModelEntityEstoqueTipoMovimento;
     FCodOrigMov: TLojaModelEntityEstoqueOrigemMovimento;
     FDatMov: TDateTime;
-    FCodMov: Integer;
     FDscMot: string;
     function GetDscTipoMov: string;
     function GetDscTipoOrig: string;
@@ -25,7 +24,6 @@ type
   public
     constructor Create;
 
-    property CodMov: Integer read FCodMov write FCodMov;
     property CodItem: Integer read FCodItem write FCodItem;
     property QtdMov: Integer read FQtdMov write FQtdMov;
     property DatMov: TDateTime read FDatMov write FDatMov;
@@ -37,40 +35,37 @@ type
 
   end;
 
-  TLojaModelEntityEstoqueMovimentoLista = TObjectList<TLojaModelEntityEstoqueMovimento>;
-
 
 implementation
 
-{ TLojaModelEntityEstoqueMovimento }
+{ TLojaModelDtoReqEstoqueCriarMovimento }
 
-constructor TLojaModelEntityEstoqueMovimento.Create;
+constructor TLojaModelDtoReqEstoqueCriarMovimento.Create;
 begin
-  FCodOrigMOv := orgVenda;
+  FCodOrigMov := orgVenda;
   FCodTipoMov := movSaida;
 end;
 
-function TLojaModelEntityEstoqueMovimento.GetDscTipoMov: string;
+function TLojaModelDtoReqEstoqueCriarMovimento.GetDscTipoMov: string;
 begin
   Result := ESTOQUE_TIPO_MOVIMENTO[FCodTipoMov];
 end;
 
-function TLojaModelEntityEstoqueMovimento.GetDscTipoOrig: string;
+function TLojaModelDtoReqEstoqueCriarMovimento.GetDscTipoOrig: string;
 begin
-  Result := ESTOQUE_ORIGEM_MOVIMENTO[FCodOrigMOv];
+  Result := ESTOQUE_ORIGEM_MOVIMENTO[FCodOrigMov];
 end;
 
-procedure TLojaModelEntityEstoqueMovimento.SetDscTipoMov(AValue: string);
+procedure TLojaModelDtoReqEstoqueCriarMovimento.SetDscTipoMov(AValue: string);
 begin
   FCodTipoMov := TLojaModelEntityEstoqueTipoMovimento(AnsiIndexStr(
     AValue,ESTOQUE_TIPO_MOVIMENTO));
 end;
 
-procedure TLojaModelEntityEstoqueMovimento.SetDscTipoOrig(AValue: string);
+procedure TLojaModelDtoReqEstoqueCriarMovimento.SetDscTipoOrig(AValue: string);
 begin
-  FCodOrigMOv := TLojaModelEntityEstoqueOrigemMovimento(AnsiIndexStr(
+  FCodOrigMov := TLojaModelEntityEstoqueOrigemMovimento(AnsiIndexStr(
     AValue,ESTOQUE_ORIGEM_MOVIMENTO));
 end;
-
 
 end.

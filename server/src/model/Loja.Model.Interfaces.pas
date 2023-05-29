@@ -12,7 +12,9 @@ uses
   Loja.Model.Dto.Req.Itens.FiltroItens,
 
   Loja.Model.Entity.Estoque.Movimento,
-  Loja.Model.Entity.Estoque.Saldo;
+  Loja.Model.Entity.Estoque.Saldo,
+  Loja.Model.Dto.Req.Estoque.CriarMovimento,
+  Loja.Model.Dto.Req.Estoque.AcertoEstoque;
 
 type
   ILojaModelItens = interface
@@ -25,13 +27,15 @@ type
 
   ILojaModelEstoque = interface
     ['{AC91CEDC-1BAD-465B-B72A-CAFE30A03906}']
-    //function CriarNovoMovimento();
+    function CriarNovoMovimento(ANovoMovimento: TLojaModelDtoReqEstoqueCriarMovimento): TLojaModelEntityEstoqueMovimento;
+    function CriarAcertoEstoque(AAcertoEstoque: TLojaModelDtoReqEstoqueAcertoEstoque): TLojaModelEntityEstoqueMovimento;
+    function ObterHistoricoMovimento(ACodItem: Integer; ADatIni, ADatFim: TDateTime): TLojaModelEntityEstoqueMovimentoLista;
   end;
 
   ILojaModelFactory = interface
     ['{FBA02FC1-F0C9-4969-BF2A-AA7662040FC8}']
     function Itens: ILojaModelItens;
-    //function Estoque: ILojaModelEstoque;
+    function Estoque: ILojaModelEstoque;
   end;
 
 implementation

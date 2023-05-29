@@ -25,6 +25,8 @@ type
     function Item: ILojaModelDaoItensItem;
   end;
 
+
+
 implementation
 
 end.

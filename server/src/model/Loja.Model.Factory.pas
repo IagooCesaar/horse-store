@@ -20,12 +20,14 @@ type
 
     { ILojaModelFactory }
     function Itens: ILojaModelItens;
+    function Estoque: ILojaModelEstoque;
   end;
 
 implementation
 
 uses
-  Loja.Model.Itens;
+  Loja.Model.Itens,
+  Loja.Model.Estoque;
 
 { TLojaModelFactory }
 
@@ -38,6 +40,11 @@ destructor TLojaModelFactory.Destroy;
 begin
 
   inherited;
+end;
+
+function TLojaModelFactory.Estoque: ILojaModelEstoque;
+begin
+  Result := TLojaModelEstoque.New;
 end;
 
 function TLojaModelFactory.Itens: ILojaModelItens;
