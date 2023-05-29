@@ -51,7 +51,9 @@ uses
   Loja.Model.Dao.Estoque.Interfaces in 'src\model\dao\Loja.Model.Dao.Estoque.Interfaces.pas',
   Loja.Model.Dao.Factory in 'src\model\dao\Loja.Model.Dao.Factory.pas',
   Loja.Model.Dao.Interfaces in 'src\model\dao\Loja.Model.Dao.Interfaces.pas',
-  Loja.Model.Dao.Itens.Interfaces in 'src\model\dao\Loja.Model.Dao.Itens.Interfaces.pas';
+  Loja.Model.Dao.Itens.Interfaces in 'src\model\dao\Loja.Model.Dao.Itens.Interfaces.pas',
+  Loja.Model.Estoque.Test in 'src\test\model\Loja.Model.Estoque.Test.pas',
+  Loja.Controller.Estoque.Test in 'src\test\controller\Loja.Controller.Estoque.Test.pas';
 
 {$IFNDEF TESTINSIGHT}
 var
