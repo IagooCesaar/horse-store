@@ -116,6 +116,28 @@ begin
       .Error(Format('A descrição do motivo para realização do acerto deverá ter no máximo %d caracteres', [ C_MOT_MAX ]));
   end;
 
+  case ANovoMovimento.CodTipoMov of
+    movEntrada:
+      if not(ANovoMovimento.CodOrigMov in ESTOQUE_MOVIMENTOS_ENTRADA)
+      then raise EHorseException.New
+        .Status(THTTPStatus.BadRequest)
+        .&Unit(Self.UnitName)
+        .Error('A origem do movimento de estoque não é do tipo de movimento de Entrada');
+
+    movSaida:
+      if not(ANovoMovimento.CodOrigMov in ESTOQUE_MOVIMENTOS_SAIDA)
+      then raise EHorseException.New
+        .Status(THTTPStatus.BadRequest)
+        .&Unit(Self.UnitName)
+        .Error('A origem do movimento de estoque não é do tipo de movimento de Saída');
+
+  else
+    raise EHorseException.New
+      .Status(THTTPStatus.BadRequest)
+      .&Unit(Self.UnitName)
+      .Error('Não foi possível reconhecer o tipo de movimento de estoque');
+  end;
+
   LItem := TLojaModelDaoFactory.New.Itens.Item.ObterPorCodigo(ANovoMovimento.CodItem);
   if LItem = nil
   then raise EHorseException.New
