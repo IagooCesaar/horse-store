@@ -16,6 +16,7 @@ type
   TLojaModelDaoItensItemInMemory = class(TNoRefCountObject, ILojaModelDaoItensItem)
   private
     FRepository: TObjectList<TLojaModelEntityItensItem>;
+    function Clone(ASource: TLojaModelEntityItensItem): TLojaModelEntityItensItem;
 
     class var FDao: TLojaModelDaoItensItemInMemory;
   public
@@ -37,6 +38,15 @@ implementation
 
 
 
+function TLojaModelDaoItensItemInMemory.Clone(
+  ASource: TLojaModelEntityItensItem): TLojaModelEntityItensItem;
+begin
+  Result := TLojaModelEntityItensItem.Create;
+  Result.CodItem := ASource.CodItem;
+  Result.NomItem := ASource.NomItem;
+  Result.NumCodBarr := ASource.NumCodBarr;
+end;
+
 constructor TLojaModelDaoItensItemInMemory.Create;
 begin
   FRepository := TObjectList<TLojaModelEntityItensItem>.Create;
@@ -55,7 +65,7 @@ begin
   FRepository.Last.NomItem := ANovoItem.NomItem;
   FRepository.Last.NumCodBarr := ANovoItem.NumCodBarr;
 
-  Result := FRepository.Last;
+  Result := Clone(FRepository.Last);
 end;
 
 destructor TLojaModelDaoItensItemInMemory.Destroy;
@@ -94,13 +104,8 @@ begin
          then LValido := True and LValido
          else LValido := False;
 
-    if LValido then
-    begin
-      Result.Add(TLojaModelEntityItensItem.Create);
-      Result.Last.CodItem := FRepository[i].CodItem;
-      Result.Last.NomItem := FRepository[i].NomItem;
-      Result.Last.NumCodBarr := FRepository[i].NumCodBarr;
-    end;
+    if LValido
+    then Result.Add(Clone(FRepository[i]));
   end;
 end;
 
@@ -110,7 +115,7 @@ begin
   Result := nil;
   for var i := 0 to Pred(FRepository.Count)
   do if FRepository[i].CodItem = ACodItem then begin
-    Result := FRepository[i];
+    Result := Clone(FRepository[i]);
     Break;
   end;
 end;
@@ -121,7 +126,7 @@ begin
   Result := nil;
   for var i := 0 to Pred(FRepository.Count)
   do if FRepository[i].NumCodBarr = ANumCodBarr then begin
-    Result := FRepository[i];
+    Result := Clone(FRepository[i]);
     Break;
   end;
 end;

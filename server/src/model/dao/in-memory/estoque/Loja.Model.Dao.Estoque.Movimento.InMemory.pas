@@ -15,6 +15,7 @@ type
   TLojaModelDaoEstoqueMovimentoInMemory = class(TNoRefCountObject, ILojaModelDaoEstoqueMovimento)
   private
     FRepository: TLojaModelEntityEstoqueMovimentoLista;
+    function Clone(ASource: TLojaModelEntityEstoqueMovimento): TLojaModelEntityEstoqueMovimento;
 
     class var FDao: TLojaModelDaoEstoqueMovimentoInMemory;
   public
@@ -33,6 +34,19 @@ implementation
 
 { TLojaModelDaoEstoqueMovimentoInMemory }
 
+function TLojaModelDaoEstoqueMovimentoInMemory.Clone(
+  ASource: TLojaModelEntityEstoqueMovimento): TLojaModelEntityEstoqueMovimento;
+begin
+  Result := TLojaModelEntityEstoqueMovimento.Create;
+  Result.CodMov := ASource.CodMov;
+  Result.CodItem := ASource.CodItem;
+  Result.QtdMov := ASource.QtdMov;
+  Result.DatMov := ASource.DatMov;
+  Result.DscTipoOrig := Result.DscTipoOrig;
+  Result.DscTipoMov := Result.DscTipoMov;
+  Result.DscMot := Result.DscMot;
+end;
+
 constructor TLojaModelDaoEstoqueMovimentoInMemory.Create;
 begin
   FRepository := TLojaModelEntityEstoqueMovimentoLista.Create;
@@ -42,6 +56,7 @@ function TLojaModelDaoEstoqueMovimentoInMemory.CriarNovoMovimento(
   ANovoMovimento: TLojaModelDtoReqEstoqueCriarMovimento): TLojaModelEntityEstoqueMovimento;
 var LId: Integer;
 begin
+  Result := nil;
   if FRepository.Count > 0
   then Lid := FRepository.Last.CodItem + 1
   else LId := 1;
@@ -54,6 +69,8 @@ begin
   FRepository.Last.CodTipoMov := ANovoMovimento.CodTipoMov;
   FRepository.Last.CodOrigMov := ANovoMovimento.CodOrigMov;
   FRepository.Last.DscMot := ANovoMovimento.DscMot;
+
+  Result := Clone(FRepository.Last);
 end;
 
 destructor TLojaModelDaoEstoqueMovimentoInMemory.Destroy;
@@ -75,7 +92,7 @@ begin
   Result := nil;
   for var i := 0 to Pred(FRepository.Count)
   do if FRepository[i].CodMov = ACodMov then begin
-    Result := FRepository[i];
+    Result := Clone(FRepository[i]);
     Break;
   end;
 end;
