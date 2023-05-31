@@ -52,15 +52,23 @@ begin
 end;
 
 procedure TLojaModelEstoqueTest.Test_CriarNovoMovimentoEstoque;
-var LNovoMovimento : TLojaModelDtoReqEstoqueCriarMovimento;
+var
+  LNovoMovimento : TLojaModelDtoReqEstoqueCriarMovimento;
+  LNovoItem: TLojaModelDtoReqItensCriarItem;
 begin
+  LNovoItem := TLojaModelDtoReqItensCriarItem.Create;
+  LNovoItem.NomItem := 'Criar movimento';
+
+  var LItem := TLojaModelDaoFactory.New.Itens.Item.CriarItem(LnovoItem);
+  LNovoItem.Free;
+
   LNovoMovimento := TLojaModelDtoReqEstoqueCriarMovimento.Create;
   try
-    LNovoMovimento.CodItem := 100;
+    LNovoMovimento.CodItem := LItem.CodItem;
     LNovoMovimento.QtdMov := 10;
     LNovoMovimento.DatMov := Now;
     LNovoMovimento.CodTipoMov := TLojaModelEntityEstoqueTipoMovimento.movEntrada;
-    LNovoMovimento.CodOrigMov := TLojaModelEntityEstoqueOrigemMovimento.orgVenda;
+    LNovoMovimento.CodOrigMov := TLojaModelEntityEstoqueOrigemMovimento.orgAcerto;
     LNovoMovimento.DscMot := '';
 
     var LMovimento := TLojaModelFactory.New

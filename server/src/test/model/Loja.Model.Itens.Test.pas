@@ -172,13 +172,12 @@ begin
     LNovoItem.NomItem := 'Novo Item';
     LNovoItem.NumCodBarr := '1919191919';
 
-    TLojaModelDaoFactory.New.Itens
+    var LItemCriado := TLojaModelDaoFactory.New.Itens
       .Item
       .CriarItem(LNovoItem);
 
-
     var LItem := TLojaModelItens.New
-      .ObterPorCodigo(1);
+      .ObterPorCodigo(LItemCriado.CodItem);
 
     Assert.IsTrue(Assigned(LItem), 'Não foi possível encontrar o item código 1');
     Assert.AreEqual(LNovoItem.NomItem, LItem.NomItem);
