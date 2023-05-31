@@ -75,80 +75,82 @@ end;
 
 
 procedure TLojaModelItensTest.Test_CriarUmNovoItem;
-var LNovoItem : TLojaModelDtoReqItensCriarItem;
+var LDTONovoItem : TLojaModelDtoReqItensCriarItem;
 begin
-  LNovoItem := TLojaModelDtoReqItensCriarItem.Create;
+  LDTONovoItem := TLojaModelDtoReqItensCriarItem.Create;
   try
-    LNovoItem.NomItem := 'Novo Item';
-    LNovoItem.NumCodBarr := '123456789';
+    LDTONovoItem.NomItem := 'Novo Item';
+    LDTONovoItem.NumCodBarr := '123456789';
 
     var LItem := TLojaModelItens.New
-      .CriarItem(LNovoItem);
+      .CriarItem(LDTONovoItem);
 
     Assert.IsTrue(LItem <> nil);
-    Assert.AreEqual(LNovoItem.NomItem, LItem.NomItem, 'O nome não coincide');
-    Assert.AreEqual(LNovoItem.NumCodBarr, Litem.NumCodBarr, 'O código de barras não coincide');
+    Assert.AreEqual(LDTONovoItem.NomItem, LItem.NomItem, 'O nome não coincide');
+    Assert.AreEqual(LDTONovoItem.NumCodBarr, Litem.NumCodBarr, 'O código de barras não coincide');
+
+    LItem.Free;
   finally
-    LNovoItem.Free;
+    LDTONovoItem.Free;
   end;
 end;
 
 procedure TLojaModelItensTest.Test_NaoCriarItemComCodigoBarrasGrande;
-var LNovoItem : TLojaModelDtoReqItensCriarItem;
+var LDTONovoItem : TLojaModelDtoReqItensCriarItem;
 begin
-  LNovoItem := TLojaModelDtoReqItensCriarItem.Create;
+  LDTONovoItem := TLojaModelDtoReqItensCriarItem.Create;
   try
-    LNovoItem.NomItem := 'abc123';
-    LNovoItem.NumCodBarr := '0123456789012345';
+    LDTONovoItem.NomItem := 'abc123';
+    LDTONovoItem.NumCodBarr := '0123456789012345';
     Assert.WillRaiseWithMessageRegex(
       procedure begin
         TLojaModelItens.New
-          .CriarItem(LNovoItem);
+          .CriarItem(LDTONovoItem);
       end,
       EHorseException,
       'O código de barras deverá ter no máximo'
     );
   finally
-    LNovoItem.Free;
+    LDTONovoItem.Free;
   end;
 end;
 
 procedure TLojaModelItensTest.Test_NaoCriarItemComDescricaoGrande;
-var LNovoItem : TLojaModelDtoReqItensCriarItem;
+var LDTONovoItem : TLojaModelDtoReqItensCriarItem;
 begin
-  LNovoItem := TLojaModelDtoReqItensCriarItem.Create;
+  LDTONovoItem := TLojaModelDtoReqItensCriarItem.Create;
   try
-    LNovoItem.NomItem := '01234567890123456789012345678901234567890123456789'+
+    LDTONovoItem.NomItem := '01234567890123456789012345678901234567890123456789'+
       '01234567890123456789012345678901234567890123456789AAAAAA';
     Assert.WillRaiseWithMessageRegex(
       procedure begin
         TLojaModelItens.New
-          .CriarItem(LNovoItem);
+          .CriarItem(LDTONovoItem);
       end,
       EHorseException,
       'O nome do item deverá ter no máximo'
     );
   finally
-    LNovoItem.Free;
+    LDTONovoItem.Free;
   end;
 end;
 
 procedure TLojaModelItensTest.Test_NaoCriarItemComDescricaoPequena;
-var LNovoItem : TLojaModelDtoReqItensCriarItem;
+var LDTONovoItem : TLojaModelDtoReqItensCriarItem;
 begin
-  LNovoItem := TLojaModelDtoReqItensCriarItem.Create;
+  LDTONovoItem := TLojaModelDtoReqItensCriarItem.Create;
   try
-    LNovoItem.NomItem := 'abc';
+    LDTONovoItem.NomItem := 'abc';
     Assert.WillRaiseWithMessageRegex(
       procedure begin
         TLojaModelItens.New
-          .CriarItem(LNovoItem);
+          .CriarItem(LDTONovoItem);
       end,
       EHorseException,
       'O nome do item deverá ter no mínimo'
     );
   finally
-    LNovoItem.Free;
+    LDTONovoItem.Free;
   end;
 end;
 
@@ -165,55 +167,61 @@ begin
 end;
 
 procedure TLojaModelItensTest.Test_ObterItemPorCodigo;
-var LNovoItem : TLojaModelDtoReqItensCriarItem;
+var LDTONovoItem : TLojaModelDtoReqItensCriarItem;
 begin
-  LNovoItem := TLojaModelDtoReqItensCriarItem.Create;
+  LDTONovoItem := TLojaModelDtoReqItensCriarItem.Create;
   try
-    LNovoItem.NomItem := 'Novo Item';
-    LNovoItem.NumCodBarr := '1919191919';
+    LDTONovoItem.NomItem := 'Novo Item';
+    LDTONovoItem.NumCodBarr := '1919191919';
 
     var LItemCriado := TLojaModelDaoFactory.New.Itens
       .Item
-      .CriarItem(LNovoItem);
+      .CriarItem(LDTONovoItem);
 
     var LItem := TLojaModelItens.New
       .ObterPorCodigo(LItemCriado.CodItem);
 
     Assert.IsTrue(Assigned(LItem), 'Não foi possível encontrar o item código 1');
-    Assert.AreEqual(LNovoItem.NomItem, LItem.NomItem);
+    Assert.AreEqual(LDTONovoItem.NomItem, LItem.NomItem);
+
+    LItemCriado.Free;
+    LItem.Free;
   finally
-    LNovoItem.Free;
+    LDTONovoItem.Free;
   end;
 end;
 
 procedure TLojaModelItensTest.Test_ObterItensCadastrados;
-var LNovoItem : TLojaModelDtoReqItensCriarItem; LFiltro: TLojaModelDtoReqItensFiltroItens;
+var
+  LDTONovoItem : TLojaModelDtoReqItensCriarItem;
+  LDTOFiltro: TLojaModelDtoReqItensFiltroItens;
 begin
-  LNovoItem := TLojaModelDtoReqItensCriarItem.Create;
+  LDTONovoItem := TLojaModelDtoReqItensCriarItem.Create;
   try
-    LNovoItem.NomItem := 'Pesquisar Item';
-    LNovoItem.NumCodBarr := '1919191919';
+    LDTONovoItem.NomItem := 'Pesquisar Item';
+    LDTONovoItem.NumCodBarr := '1919191919';
 
-    TLojaModelDaoFactory.New.Itens
+    var LItemCriado := TLojaModelDaoFactory.New.Itens
       .Item
-      .CriarItem(LNovoItem);
-
+      .CriarItem(LDTONovoItem);
+    LItemCriado.Free;
   finally
-    LNovoItem.Free;
+    LDTONovoItem.Free;
   end;
-  LFiltro := TLojaModelDtoReqItensFiltroItens.Create;
+
+  LDTOFiltro := TLojaModelDtoReqItensFiltroItens.Create;
   try
-    LFiltro.NomItem := 'Pesq';
+    LDTOFiltro.NomItem := 'Pesq';
 
     var LItens := TLojaModelItens.New
-      .ObterItens(LFiltro);
+      .ObterItens(LDTOFiltro);
 
     Assert.IsTrue(Assigned(LItens), 'Não foi possível encontrar itens que contenham a descriação "Item"');
     Assert.AreEqual(1, LItens.Count, 'Há mais do que 1 item');
 
     LItens.Free;
   finally
-    LFiltro.Free;
+    LDTOFiltro.Free;
   end;
 end;
 
