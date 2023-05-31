@@ -19,9 +19,9 @@ type
     FCodMov: Integer;
     FDscMot: string;
     function GetDscTipoMov: string;
-    function GetDscTipoOrig: string;
+    function GetDscOrigMov: string;
     procedure SetDscTipoMov(AValue: string);
-    procedure SetDscTipoOrig(AValue: string);
+    procedure SetDscOrigMov(AValue: string);
   public
     constructor Create;
 
@@ -32,7 +32,7 @@ type
     property CodTipoMov: TLojaModelEntityEstoqueTipoMovimento read FCodTipoMov write FCodTipoMov;
     property DscTipoMov: string read GetDscTipoMov write SetDscTipoMov;
     property CodOrigMov: TLojaModelEntityEstoqueOrigemMovimento read FCodOrigMov write FCodOrigMov;
-    property DscTipoOrig: string read GetDscTipoOrig write SetDscTipoOrig;
+    property DscOrigMov: string read GetDscOrigMov write SetDscOrigMov;
     property DscMot: string read FDscMot write FDscMot;
 
   end;
@@ -55,7 +55,7 @@ begin
   Result := ESTOQUE_TIPO_MOVIMENTO[FCodTipoMov];
 end;
 
-function TLojaModelEntityEstoqueMovimento.GetDscTipoOrig: string;
+function TLojaModelEntityEstoqueMovimento.GetDscOrigMov: string;
 begin
   Result := ESTOQUE_ORIGEM_MOVIMENTO[FCodOrigMOv];
 end;
@@ -66,7 +66,7 @@ begin
     AValue,ESTOQUE_TIPO_MOVIMENTO));
 end;
 
-procedure TLojaModelEntityEstoqueMovimento.SetDscTipoOrig(AValue: string);
+procedure TLojaModelEntityEstoqueMovimento.SetDscOrigMov(AValue: string);
 begin
   FCodOrigMOv := TLojaModelEntityEstoqueOrigemMovimento(AnsiIndexStr(
     AValue,ESTOQUE_ORIGEM_MOVIMENTO));

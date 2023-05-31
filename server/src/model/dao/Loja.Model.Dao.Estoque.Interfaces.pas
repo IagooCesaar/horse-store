@@ -12,6 +12,7 @@ type
   ILojaModelDaoEstoqueMovimento = interface
     ['{F9A0B70C-5320-48FB-85AA-A2D56B0A73B0}']
     function ObterPorCodigo(ACodMov: Integer): TLojaModelEntityEstoqueMovimento;
+    function ObterMovimentoItemEntreDatas(ACodItem: Integer; ADatIni, ADatFim: TDateTime): TLojaModelEntityEstoqueMovimentoLista;
     function CriarNovoMovimento(ANovoMovimento: TLojaModelDtoReqEstoqueCriarMovimento): TLojaModelEntityEstoqueMovimento;
   end;
 

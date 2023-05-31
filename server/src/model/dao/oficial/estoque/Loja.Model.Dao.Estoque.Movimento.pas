@@ -23,6 +23,7 @@ type
 
     { ILojaModelDaoEstoqueMovimento }
     function ObterPorCodigo(ACodMov: Integer): TLojaModelEntityEstoqueMovimento;
+    function ObterMovimentoItemEntreDatas(ACodItem: Integer; ADatIni, ADatFim: TDateTime): TLojaModelEntityEstoqueMovimentoLista;
     function CriarNovoMovimento(ANovoMovimento: TLojaModelDtoReqEstoqueCriarMovimento): TLojaModelEntityEstoqueMovimento;
   end;
 
@@ -43,8 +44,8 @@ begin
   Result.CodItem := ds.FieldByName('cod_item').AsInteger;
   Result.QtdMov := ds.FieldByName('qtd_mov').AsInteger;
   Result.DatMov := ds.FieldByName('dat_mov').AsDateTime;
-  Result.CodOrigMov := TLojaModelEntityEstoqueOrigemMovimento(ds.FieldByName('cod_orig_mov').AsInteger);
-  Result.CodTipoMov := TLojaModelEntityEstoqueTipoMovimento(ds.FieldByName('cod_tipo_mov').AsInteger);
+  Result.DscOrigMov := ds.FieldByName('cod_orig_mov').AsString;
+  Result.DscTipoMov := ds.FieldByName('cod_tipo_mov').AsString;
   Result.DscMot := ds.FieldByName('dsc_mot').AsString;
 end;
 
@@ -72,7 +73,7 @@ begin
       .AddDateTime('dat_mov', ANovoMovimento.DatMov)
       .AddString('cod_tipo_mov', ANovoMovimento.DscTipoMov)
       .AddString('cod_orig_mov', ANovoMovimento.DscTipoOrig)
-      .AddString('num_cod_barr', Variant(ANovoMovimento.DscMot))
+      .AddString('dsc_mot', Variant(ANovoMovimento.DscMot))
       .&End
     .ExecSQL();
 
@@ -88,6 +89,33 @@ end;
 class function TLojaModelDaoEstoqueMovimento.New: ILojaModelDaoEstoqueMovimento;
 begin
   Result := Self.Create;
+end;
+
+function TLojaModelDaoEstoqueMovimento.ObterMovimentoItemEntreDatas(
+  ACodItem: Integer; ADatIni,
+  ADatFim: TDateTime): TLojaModelEntityEstoqueMovimentoLista;
+begin
+  Result := nil;
+
+  var LSql := #13#10
+  + 'select * from estoque_movimento where cod_item = :cod_item '
+  + 'and cast(dat_mov as date) between cast(:dat_ini as date) and cast(:dat_fim as date) '
+  ;
+
+  var ds := TDatabaseFactory.New.SQL
+    .SQL(LSql)
+    .ParamList
+      .AddInteger('cod_item', ACodItem)
+      .AddDateTime('dat_ini', ADatIni)
+      .AddDateTime('dat_fim', ADatFim)
+      .&End
+    .Open;
+
+  Result := TLojaModelEntityEstoqueMovimentoLista.Create;
+  while not ds.Eof do begin
+    Result.Add(AtribuiCampos(ds));
+    ds.Next;
+  end;
 end;
 
 function TLojaModelDaoEstoqueMovimento.ObterPorCodigo(

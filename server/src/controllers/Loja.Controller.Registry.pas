@@ -15,7 +15,8 @@ procedure DoRegistry(const AContext: string);
 implementation
 
 uses
-  Loja.Controller.Itens;
+  Loja.Controller.Itens,
+  Loja.Controller.Estoque;
 
 procedure HealtCheck(Req: THorseRequest; Resp: THorseResponse);
 begin
@@ -50,6 +51,7 @@ procedure DoRegistry(const AContext: string);
 begin
   var LContext := AContext + '/api';
   Loja.Controller.Itens.Registry(LContext);
+  Loja.Controller.Estoque.Registry(LContext);
 
   THorse
     .Get(LContext+'/healthcheck', HealtCheck)

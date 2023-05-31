@@ -26,6 +26,7 @@ type
 
     { ILojaModelDaoEstoqueMovimento }
     function ObterPorCodigo(ACodMov: Integer): TLojaModelEntityEstoqueMovimento;
+    function ObterMovimentoItemEntreDatas(ACodItem: Integer; ADatIni, ADatFim: TDateTime): TLojaModelEntityEstoqueMovimentoLista;
     function CriarNovoMovimento(ANovoMovimento: TLojaModelDtoReqEstoqueCriarMovimento): TLojaModelEntityEstoqueMovimento;
 
   end;
@@ -42,7 +43,7 @@ begin
   Result.CodItem := ASource.CodItem;
   Result.QtdMov := ASource.QtdMov;
   Result.DatMov := ASource.DatMov;
-  Result.DscTipoOrig := Result.DscTipoOrig;
+  Result.DscOrigMov := Result.DscOrigMov;
   Result.DscTipoMov := Result.DscTipoMov;
   Result.DscMot := Result.DscMot;
 end;
@@ -84,6 +85,13 @@ begin
   if not Assigned(FDao)
   then FDao := Self.Create;
   Result := FDao;
+end;
+
+function TLojaModelDaoEstoqueMovimentoInMemory.ObterMovimentoItemEntreDatas(
+  ACodItem: Integer; ADatIni,
+  ADatFim: TDateTime): TLojaModelEntityEstoqueMovimentoLista;
+begin
+
 end;
 
 function TLojaModelDaoEstoqueMovimentoInMemory.ObterPorCodigo(

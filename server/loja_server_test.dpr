@@ -53,7 +53,8 @@ uses
   Loja.Model.Dao.Interfaces in 'src\model\dao\Loja.Model.Dao.Interfaces.pas',
   Loja.Model.Dao.Itens.Interfaces in 'src\model\dao\Loja.Model.Dao.Itens.Interfaces.pas',
   Loja.Model.Estoque.Test in 'src\test\model\Loja.Model.Estoque.Test.pas',
-  Loja.Controller.Estoque.Test in 'src\test\controller\Loja.Controller.Estoque.Test.pas';
+  Loja.Controller.Estoque.Test in 'src\test\controller\Loja.Controller.Estoque.Test.pas',
+  Loja.Controller.Estoque in 'src\controllers\Loja.Controller.Estoque.pas';
 
 {$IFNDEF TESTINSIGHT}
 var
