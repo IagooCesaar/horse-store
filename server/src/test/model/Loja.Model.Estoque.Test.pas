@@ -53,30 +53,32 @@ end;
 
 procedure TLojaModelEstoqueTest.Test_CriarNovoMovimentoEstoque;
 var
-  LNovoMovimento : TLojaModelDtoReqEstoqueCriarMovimento;
-  LNovoItem: TLojaModelDtoReqItensCriarItem;
+  LDTONovoMovimento : TLojaModelDtoReqEstoqueCriarMovimento;
+  LDTONovoItem: TLojaModelDtoReqItensCriarItem;
 begin
-  LNovoItem := TLojaModelDtoReqItensCriarItem.Create;
-  LNovoItem.NomItem := 'Criar movimento';
+  LDTONovoItem := TLojaModelDtoReqItensCriarItem.Create;
+  LDTONovoItem.NomItem := 'Criar movimento';
 
-  var LItem := TLojaModelDaoFactory.New.Itens.Item.CriarItem(LnovoItem);
-  LNovoItem.Free;
+  var LItem := TLojaModelDaoFactory.New.Itens.Item.CriarItem(LDTONovoItem);
+  LDTONovoItem.Free;
 
-  LNovoMovimento := TLojaModelDtoReqEstoqueCriarMovimento.Create;
+  LDTONovoMovimento := TLojaModelDtoReqEstoqueCriarMovimento.Create;
   try
-    LNovoMovimento.CodItem := LItem.CodItem;
-    LNovoMovimento.QtdMov := 10;
-    LNovoMovimento.DatMov := Now;
-    LNovoMovimento.CodTipoMov := TLojaModelEntityEstoqueTipoMovimento.movEntrada;
-    LNovoMovimento.CodOrigMov := TLojaModelEntityEstoqueOrigemMovimento.orgAcerto;
-    LNovoMovimento.DscMot := '';
+    LDTONovoMovimento.CodItem := LItem.CodItem;
+    LDTONovoMovimento.QtdMov := 10;
+    LDTONovoMovimento.DatMov := Now;
+    LDTONovoMovimento.CodTipoMov := TLojaModelEntityEstoqueTipoMovimento.movEntrada;
+    LDTONovoMovimento.CodOrigMov := TLojaModelEntityEstoqueOrigemMovimento.orgAcerto;
+    LDTONovoMovimento.DscMot := '';
 
     var LMovimento := TLojaModelFactory.New
       .Estoque
-      .CriarNovoMovimento(LNovoMovimento);
+      .CriarNovoMovimento(LDTONovoMovimento);
 
+    LItem.Free;
+    LMovimento.Free;
   finally
-    LNovoMovimento.Free;
+    LDTONovoMovimento.Free;
   end;
 end;
 
