@@ -24,6 +24,9 @@ type
     class destructor UnInitialize;
 
     { ILojaModelDaoEstoqueSaldo }
+    function ObterUltimoFechamentoItem(ACodItem: Integer): TLojaModelEntityEstoqueSaldo;
+    function ObterFechamentoItem(ACodItem: Integer; ADatSaldo: TDateTime): TLojaModelEntityEstoqueSaldo;
+    function CriarFechamentoSaldoItem(ACodItem: Integer; ADatSaldo: TDateTime; AQtdSaldo: Integer):TLojaModelEntityEstoqueSaldo;
 
   end;
 
@@ -45,6 +48,13 @@ begin
   FRepository := TLojaModelEntityEstoqueSaldoLista.Create;
 end;
 
+function TLojaModelDaoEstoqueSaldoInMemory.CriarFechamentoSaldoItem(
+  ACodItem: Integer; ADatSaldo: TDateTime;
+  AQtdSaldo: Integer): TLojaModelEntityEstoqueSaldo;
+begin
+
+end;
+
 destructor TLojaModelDaoEstoqueSaldoInMemory.Destroy;
 begin
   FreeAndNil(FRepository);
@@ -58,6 +68,18 @@ begin
   Result := FDao;
 end;
 
+
+function TLojaModelDaoEstoqueSaldoInMemory.ObterFechamentoItem(
+  ACodItem: Integer; ADatSaldo: TDateTime): TLojaModelEntityEstoqueSaldo;
+begin
+
+end;
+
+function TLojaModelDaoEstoqueSaldoInMemory.ObterUltimoFechamentoItem(
+  ACodItem: Integer): TLojaModelEntityEstoqueSaldo;
+begin
+
+end;
 
 class destructor TLojaModelDaoEstoqueSaldoInMemory.UnInitialize;
 begin

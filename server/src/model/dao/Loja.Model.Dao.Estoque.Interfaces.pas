@@ -4,7 +4,8 @@ interface
 
 uses
   Loja.Model.Dto.Req.Estoque.CriarMovimento,
-  Loja.Model.Entity.Estoque.Movimento;
+  Loja.Model.Entity.Estoque.Movimento,
+  Loja.Model.Entity.Estoque.Saldo;
 
 type
 
@@ -16,7 +17,9 @@ type
 
   ILojaModelDaoEstoqueSaldo = interface
     ['{2C7EAF9D-BDA3-44A8-B8AF-B9FFFF23F59D}']
-
+    function ObterUltimoFechamentoItem(ACodItem: Integer): TLojaModelEntityEstoqueSaldo;
+    function ObterFechamentoItem(ACodItem: Integer; ADatSaldo: TDateTime): TLojaModelEntityEstoqueSaldo;
+    function CriarFechamentoSaldoItem(ACodItem: Integer; ADatSaldo: TDateTime; AQtdSaldo: Integer):TLojaModelEntityEstoqueSaldo;
   end;
 
   ILojaModelDaoEstoqueFactory = interface
