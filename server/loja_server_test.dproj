@@ -153,6 +153,9 @@
         <DCCReference Include="src\test\model\Loja.Model.Estoque.Test.pas"/>
         <DCCReference Include="src\test\controller\Loja.Controller.Estoque.Test.pas"/>
         <DCCReference Include="src\controllers\Loja.Controller.Estoque.pas"/>
+        <DCCReference Include="src\model\bo\Loja.Model.Bo.Factory.pas"/>
+        <DCCReference Include="src\model\bo\Loja.Model.Bo.Interfaces.pas"/>
+        <DCCReference Include="src\model\bo\Loja.Model.Bo.Estoque.FechamentoSaldo.pas"/>
         <RcItem Include="boss.json">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>RCDATA</ResourceType>

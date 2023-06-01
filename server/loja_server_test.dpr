@@ -54,7 +54,10 @@ uses
   Loja.Model.Dao.Itens.Interfaces in 'src\model\dao\Loja.Model.Dao.Itens.Interfaces.pas',
   Loja.Model.Estoque.Test in 'src\test\model\Loja.Model.Estoque.Test.pas',
   Loja.Controller.Estoque.Test in 'src\test\controller\Loja.Controller.Estoque.Test.pas',
-  Loja.Controller.Estoque in 'src\controllers\Loja.Controller.Estoque.pas';
+  Loja.Controller.Estoque in 'src\controllers\Loja.Controller.Estoque.pas',
+  Loja.Model.Bo.Factory in 'src\model\bo\Loja.Model.Bo.Factory.pas',
+  Loja.Model.Bo.Interfaces in 'src\model\bo\Loja.Model.Bo.Interfaces.pas',
+  Loja.Model.Bo.Estoque.FechamentoSaldo in 'src\model\bo\Loja.Model.Bo.Estoque.FechamentoSaldo.pas';
 
 {$IFNDEF TESTINSIGHT}
 var
