@@ -30,18 +30,10 @@ type
 implementation
 
 uses
-  Horse,
-  Horse.Exception,
-
   Loja.Model.Dao.Factory,
-  Loja.Model.Entity.Itens.Item,
   Loja.Model.Entity.Estoque.Types,
-
-  Loja.Model.Interfaces,
   Loja.Model.Entity.Estoque.Movimento,
-  Loja.Model.Entity.Estoque.Saldo,
-  Loja.Model.Dto.Req.Estoque.CriarMovimento,
-  Loja.Model.Dto.Req.Estoque.AcertoEstoque;
+  Loja.Model.Entity.Estoque.Saldo;
 
 { TLojaModelBoEstoque }
 
