@@ -45,7 +45,7 @@ uses
   Loja.Controller.Estoque in 'src\controllers\Loja.Controller.Estoque.pas',
   Loja.Model.Bo.Interfaces in 'src\model\bo\Loja.Model.Bo.Interfaces.pas',
   Loja.Model.Bo.Factory in 'src\model\bo\Loja.Model.Bo.Factory.pas',
-  Loja.Model.Bo.Estoque.FechamentoSaldo in 'src\model\bo\Loja.Model.Bo.Estoque.FechamentoSaldo.pas';
+  Loja.Model.Bo.Estoque in 'src\model\bo\Loja.Model.Bo.Estoque.pas';
 
 begin
   var App := TApp.Create;
