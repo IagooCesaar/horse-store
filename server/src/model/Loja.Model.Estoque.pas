@@ -18,6 +18,9 @@ uses
 type
   TLojaModelEstoque = class(TinterfacedObject, ILojaModelEstoque)
   private
+    procedure RealizarFechamentoSaldoDiario(ACodItem: Integer);
+    //procedure RealizarFechamentoSaldoMensal(ACodItem: Integer);
+    procedure RealizarFechamentoSaldo(ACodItem: Integer);
     function SaldoAtualItem(ACodItem: Integer): Integer;
   public
     constructor Create;
@@ -184,14 +187,19 @@ begin
   Result := nil;
 end;
 
-function TLojaModelEstoque.SaldoAtualItem(ACodItem: Integer): Integer;
+procedure TLojaModelEstoque.RealizarFechamentoSaldo(ACodItem: Integer);
+begin
+  RealizarFechamentoSaldoDiario(ACodItem);
+end;
+
+procedure TLojaModelEstoque.RealizarFechamentoSaldoDiario(ACodItem: Integer);
 var
   LUltSaldo: Integer;
   LDatIni, LDatFim : TDateTime;
   LUltFechamento: TLojaModelEntityEstoqueSaldo;
   LMovimentos: TLojaModelEntityEstoqueMovimentoLista;
 begin
-  Result := 0;
+// Realiza fechamento de saldo diário até "ontem"
   try
     LUltFechamento := TLojaModelDaoFactory.New.Estoque
       .Saldo
@@ -214,91 +222,144 @@ begin
       LMovimentos := TLojaModelDaoFactory.New.Estoque
         .Movimento
         .ObterMovimentoItemEntreDatas(ACodItem, LDatIni, LDatFim);
-      if (LMovimentos <> nil) and (LMovimentos.Count > 0)
-      then begin
-        //Ordenar pela data de movimentação
-        LMovimentos.Sort(
-          TComparer<TLojaModelEntityEstoqueMovimento>.Construct(
-          function (const L, R: TLojaModelEntityEstoqueMovimento): Integer
-          begin
-            if Trunc(L.DatMov) > Trunc(R.DatMov)
-            then Result := 1
-            else
-            if Trunc(L.DatMov) < Trunc(R.DatMov)
-            then Result := -1
-            else Result := 0;
-          end)
-        );
-
-        LDatIni := LMovimentos.First.DatMov;
-
-        for var LMovimento in LMovimentos do
-        begin
-          if LDatIni <> LMovimento.DatMov
-          then begin
-            var LFecha := TLojaModelDaoFactory.New.Estoque
-              .Saldo
-              .CriarFechamentoSaldoItem(ACodItem, LDatIni, LUltSaldo);
-            LFecha.Free;
-          end;
-
-          while LDatIni < (LMovimento.DatMov-1)
-          do begin
-            LDatIni := LDatIni + 1;
-            var LFecha := TLojaModelDaoFactory.New.Estoque
-              .Saldo
-              .CriarFechamentoSaldoItem(ACodItem, LDatIni, LUltSaldo);
-            LFecha.Free;
-          end;
-
-          LDatIni := LMovimento.DatMov;
-
-          case LMovimento.CodTipoMov of
-            movEntrada:
-              Inc(LUltSaldo, LMovimento.QtdMov);
-            movSaida:
-              Dec(LUltSaldo, LMovimento.QtdMov);
-          end;
-        end;
-
-        var LFecha := TLojaModelDaoFactory.New.Estoque
-          .Saldo
-          .CriarFechamentoSaldoItem(ACodItem, LDatIni, LUltSaldo);
-        LFecha.Free;
-
-        LDatIni := LDatIni +1;
-        while LDatIni <= LDatFim
-        do begin
-
-          LFecha := TLojaModelDaoFactory.New.Estoque
-            .Saldo
-            .CriarFechamentoSaldoItem(ACodItem, LDatIni, LUltSaldo);
-          LFecha.Free;
-          LDatIni := LDatIni + 1;
-        end;
-
-      end
-      else
-      begin
-        if LDatIni = EncodeDate(1900,01,01)
+      try
+        if (LMovimentos <> nil) and (LMovimentos.Count > 0)
         then begin
-          // Se não houve movimentos, criar um fechamento com saldo zero "ontem"
-          var LFecha := TLojaModelDaoFactory.New.Estoque
-            .Saldo
-            .CriarFechamentoSaldoItem(ACodItem, LDatFim, LUltSaldo);
-          LFecha.Free;
-        end else
-        while LDatIni <= LDatFim
-        do begin
+          //Ordenar pela data de movimentação
+          LMovimentos.Sort(
+            TComparer<TLojaModelEntityEstoqueMovimento>.Construct(
+            function (const L, R: TLojaModelEntityEstoqueMovimento): Integer
+            begin
+              if Trunc(L.DatMov) > Trunc(R.DatMov)
+              then Result := 1
+              else
+              if Trunc(L.DatMov) < Trunc(R.DatMov)
+              then Result := -1
+              else Result := 0;
+            end)
+          );
+
+          LDatIni := LMovimentos.First.DatMov;
+
+          for var LMovimento in LMovimentos do
+          begin
+            if LDatIni <> LMovimento.DatMov
+            then begin
+              var LFecha := TLojaModelDaoFactory.New.Estoque
+                .Saldo
+                .CriarFechamentoSaldoItem(ACodItem, LDatIni, LUltSaldo);
+              LFecha.Free;
+            end;
+
+            while LDatIni < (LMovimento.DatMov-1)
+            do begin
+              LDatIni := LDatIni + 1;
+              var LFecha := TLojaModelDaoFactory.New.Estoque
+                .Saldo
+                .CriarFechamentoSaldoItem(ACodItem, LDatIni, LUltSaldo);
+              LFecha.Free;
+            end;
+
+            LDatIni := LMovimento.DatMov;
+
+            case LMovimento.CodTipoMov of
+              movEntrada:
+                Inc(LUltSaldo, LMovimento.QtdMov);
+              movSaida:
+                Dec(LUltSaldo, LMovimento.QtdMov);
+            end;
+          end;
+
           var LFecha := TLojaModelDaoFactory.New.Estoque
             .Saldo
             .CriarFechamentoSaldoItem(ACodItem, LDatIni, LUltSaldo);
           LFecha.Free;
-          LDatIni := LDatIni + 1;
+
+          LDatIni := LDatIni +1;
+          while LDatIni <= LDatFim
+          do begin
+
+            LFecha := TLojaModelDaoFactory.New.Estoque
+              .Saldo
+              .CriarFechamentoSaldoItem(ACodItem, LDatIni, LUltSaldo);
+            LFecha.Free;
+            LDatIni := LDatIni + 1;
+          end;
+
+        end
+        else
+        begin
+          if LDatIni = EncodeDate(1900,01,01)
+          then begin
+            // Se não houve movimentos, criar um fechamento com saldo zero "ontem"
+            var LFecha := TLojaModelDaoFactory.New.Estoque
+              .Saldo
+              .CriarFechamentoSaldoItem(ACodItem, LDatFim, LUltSaldo);
+            LFecha.Free;
+          end else
+          while LDatIni <= LDatFim
+          do begin
+            var LFecha := TLojaModelDaoFactory.New.Estoque
+              .Saldo
+              .CriarFechamentoSaldoItem(ACodItem, LDatIni, LUltSaldo);
+            LFecha.Free;
+            LDatIni := LDatIni + 1;
+          end;
+        end;
+      finally
+        if LMovimentos <> nil
+        then FreeAndNil(LMovimentos);
+      end;
+    end;
+  finally
+    if LUltFechamento <> nil
+    then FreeAndNil(LUltFechamento);
+  end;
+end;
+
+function TLojaModelEstoque.SaldoAtualItem(ACodItem: Integer): Integer;
+var
+  LUltSaldo: Integer;
+  LDatIni, LDatFim : TDateTime;
+  LUltFechamento: TLojaModelEntityEstoqueSaldo;
+  LMovimentos: TLojaModelEntityEstoqueMovimentoLista;
+begin
+  Result := 0;
+  RealizarFechamentoSaldo(ACodItem);
+  try
+    LUltFechamento := TLojaModelDaoFactory.New.Estoque
+      .Saldo
+      .ObterUltimoFechamentoItem(ACodItem);
+
+    if LUltFechamento <> nil
+    then begin
+      LDatIni := Trunc(LUltFechamento.DatSaldo)+1;
+      LUltSaldo := LUltFechamento.QtdSaldo;
+    end else
+    begin
+      LDatIni := EncodeDate(1900,01,01);
+      LUltSaldo := 0;
+    end;
+
+    LDatFim := Trunc(Now);
+
+    LMovimentos := TLojaModelDaoFactory.New.Estoque
+      .Movimento
+      .ObterMovimentoItemEntreDatas(ACodItem, LDatIni, LDatFim);
+    if (LMovimentos <> nil) and (LMovimentos.Count > 0)
+    then begin
+      for var LMovimento in LMovimentos do
+      begin
+        case LMovimento.CodTipoMov of
+          movEntrada:
+            Inc(LUltSaldo, LMovimento.QtdMov);
+          movSaida:
+            Dec(LUltSaldo, LMovimento.QtdMov);
         end;
       end;
     end;
 
+    Result := LUltSaldo;
   finally
     if LUltFechamento <> nil
     then FreeAndNil(LUltFechamento);
@@ -306,26 +367,6 @@ begin
     if LMovimentos <> nil
     then FreeAndNil(LMovimentos);
   end;
-  // neste ponto, LUltSaldo tem o Saldo de Ontem
-  try
-    LMovimentos := TLojaModelDaoFactory.New.Estoque
-      .Movimento
-      .ObterMovimentoItemEntreDatas(ACodItem, Now, Now);
-    if (LMovimentos <> nil) and (LMovimentos.Count > 0)
-    then begin
-      for var LMovimento in LMovimentos do
-        case LMovimento.CodTipoMov of
-          movEntrada:
-            Inc(LUltSaldo, LMovimento.QtdMov);
-          movSaida:
-            Dec(LUltSaldo, LMovimento.QtdMov);
-        end;
-    end;
-  finally
-    if LMovimentos <> nil
-    then FreeAndNil(LMovimentos);
-  end;
-  Result := LUltSaldo;
 end;
 
 end.
