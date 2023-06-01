@@ -11,8 +11,11 @@ type
 
   ILojaModelBoEstoqueFechamentoSaldo = interface
     ['{3A4731D1-8360-46BA-BF4D-92057DA7F375}']
-    function FechamentoSaldoMensalItem(ACodItem: Integer): ILojaModelBoEstoqueFechamentoSaldo;
     function EndFechamentoSaldo: ILojaModelBoEstoque;
+
+    function FecharSaldoMensalItem(ACodItem: Integer): ILojaModelBoEstoqueFechamentoSaldo;
+    function CriarNovoFechamento(ACodItem: Integer; ADatRef: TDateTime;
+      ASaldo: Integer): ILojaModelBoEstoqueFechamentoSaldo;
   end;
 
   ILojaModelBoEstoque = interface

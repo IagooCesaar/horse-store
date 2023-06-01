@@ -22,14 +22,20 @@ type
     function FechamentoSaldo: ILojaModelBoEstoqueFechamentoSaldo;
 
     { ILojaModelBoEstoqueFechamentoSaldo }
-    function FechamentoSaldoMensalItem(ACodItem: Integer): ILojaModelBoEstoqueFechamentoSaldo;
     function EndFechamentoSaldo: ILojaModelBoEstoque;
+
+    function FecharSaldoMensalItem(ACodItem: Integer): ILojaModelBoEstoqueFechamentoSaldo;
+    function CriarNovoFechamento(ACodItem: Integer; ADatRef: TDateTime;
+      ASaldo: Integer): ILojaModelBoEstoqueFechamentoSaldo;
   end;
 
 
 implementation
 
 uses
+  Horse,
+  Horse.Exception,
+
   Loja.Model.Dao.Factory,
   Loja.Model.Entity.Estoque.Types,
   Loja.Model.Entity.Estoque.Movimento,
@@ -40,6 +46,33 @@ uses
 constructor TLojaModelBoEstoque.Create;
 begin
 
+end;
+
+function TLojaModelBoEstoque.CriarNovoFechamento(ACodItem: Integer;
+  ADatRef: TDateTime; ASaldo: Integer): ILojaModelBoEstoqueFechamentoSaldo;
+var LFechamento: TLojaModelEntityEstoqueSaldo;
+begin
+  Result := Self;
+  LFechamento := TLojaModelDaoFactory.New.Estoque
+    .Saldo
+    .ObterFechamentoItem(ACodItem, ADatRef);
+  if LFechamento <> nil
+  then try
+    raise EHorseException.New
+      .Status(THTTPStatus.BadRequest)
+      .&Unit(Self.UnitName)
+      .Error(Format(
+        'Já existe um fechamento de saldo para o item %d na data %s',
+        [ACodItem, FormatDateTime('dddddd', LFechamento.DatSaldo)]
+      ));
+  finally
+    FreeAndNil(LFechamento);
+  end;
+
+  LFechamento := TLojaModelDaoFactory.New.Estoque
+    .Saldo
+    .CriarFechamentoSaldoItem(ACodItem, ADatRef, ASaldo);
+  LFechamento.Free;
 end;
 
 destructor TLojaModelBoEstoque.Destroy;
@@ -58,7 +91,7 @@ begin
   Result := Self;
 end;
 
-function TLojaModelBoEstoque.FechamentoSaldoMensalItem(
+function TLojaModelBoEstoque.FecharSaldoMensalItem(
   ACodItem: Integer): ILojaModelBoEstoqueFechamentoSaldo;
 var
   LHaFechamento: Boolean;
@@ -113,20 +146,20 @@ begin
             end)
           );
 
-          // Último dia do mês tendo como referência a data do movimento
-          LDatIni := EndOfTheMonth(LMovimentos.First.DatMov);
+          // Último dia do mês anterior à data do 1º movimento
+          LDatIni := EndOfTheMonth(StartOfTheMonth(LMovimentos.First.DatMov)-1);
 
-          // Se há intervalo maior que 1 mês entre último fechamento e o esperado
+          // Se não houve fechamentos entre o 1º Fechamento e o ùltimo dia do mês anterior ao fechamento
           if LHaFechamento then
-            while SameDate(StartOfTheMonth(LDatUltFech), StartOfTheMonth(LDatIni))
+            while not(SameDate(StartOfTheMonth(LDatUltFech), StartOfTheMonth(LDatIni)))
             do begin
               // último dia do próximo mês
               LDatUltFech := EndOfTheMonth(LDatUltFech+1);
-              var LFecha := TLojaModelDaoFactory.New.Estoque
-                .Saldo
-                .CriarFechamentoSaldoItem(ACodItem, LDatUltFech, LUltSaldo);
-              LFecha.Free;
+              CriarNovoFechamento(ACodItem, LDatUltFech, LUltSaldo);
             end;
+
+          // Último dia do mês tendo como referência a data do movimento
+          LDatIni := EndOfTheMonth(LMovimentos.First.DatMov);
 
           for var LMovimento in LMovimentos do
           begin
@@ -134,10 +167,7 @@ begin
             while not(SameDate(StartOfTheMonth(LMovimento.DatMov), StartOfTheMonth(LDatIni)))
             do begin
               LDatUltFech := LDatIni;
-              var LFecha := TLojaModelDaoFactory.New.Estoque
-                .Saldo
-                .CriarFechamentoSaldoItem(ACodItem, LDatUltFech, LUltSaldo);
-              LFecha.Free;
+              CriarNovoFechamento(ACodItem, LDatUltFech, LUltSaldo);
               LDatIni := EndOfTheMonth(LDatUltFech+1);
             end;
 
@@ -151,10 +181,7 @@ begin
 
           repeat
             LDatUltFech := LDatIni;
-            var LFecha := TLojaModelDaoFactory.New.Estoque
-              .Saldo
-              .CriarFechamentoSaldoItem(ACodItem, LDatUltFech, LUltSaldo);
-            LFecha.Free;
+            CriarNovoFechamento(ACodItem, LDatUltFech, LUltSaldo);
             LDatIni := EndOfTheMonth(LDatUltFech+1);
           until (SameDate(StartOfTheMonth(LDatIni), StartOfTheMonth(LDatFim+1)));
         end
@@ -163,20 +190,14 @@ begin
           // Se não houve fechamentos e nem movimentos
           if not LHaFechamento
           then begin
-            var LFecha := TLojaModelDaoFactory.New.Estoque
-              .Saldo
-              .CriarFechamentoSaldoItem(ACodItem, LDatFim, LUltSaldo);
-            LFecha.Free;
+            CriarNovoFechamento(ACodItem, LDatFim, LUltSaldo);
           end else
           // houve fechamento, mas não houve movimentos
           begin
             LDatIni := EndOfTheMonth(LDatIni);
             repeat
               LDatUltFech := LDatIni;
-              var LFecha := TLojaModelDaoFactory.New.Estoque
-                .Saldo
-                .CriarFechamentoSaldoItem(ACodItem, LDatUltFech, LUltSaldo);
-              LFecha.Free;
+              CriarNovoFechamento(ACodItem, LDatUltFech, LUltSaldo);
               LDatIni := EndOfTheMonth(LDatUltFech+1);
             until (SameDate(StartOfTheMonth(LDatIni), StartOfTheMonth(LDatFim+1)));
           end;

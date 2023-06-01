@@ -190,7 +190,7 @@ procedure TLojaModelEstoque.RealizarFechamentoSaldo(ACodItem: Integer);
 begin
   TLojaModelBoFactory.New.Estoque
     .FechamentoSaldo
-    .FechamentoSaldoMensalItem(ACodItem);
+    .FecharSaldoMensalItem(ACodItem);
 end;
 
 function TLojaModelEstoque.SaldoAtualItem(ACodItem: Integer): Integer;
