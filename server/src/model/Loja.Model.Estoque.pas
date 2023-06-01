@@ -192,11 +192,6 @@ var
   LMovimentos: TLojaModelEntityEstoqueMovimentoLista;
 begin
   Result := 0;
-  (*
-    - Obter último fechamento de saldo do item
-    - Realizar fechamento de saldo até "ontem"
-    - Somar saldo de "ontem" o as movimentações do dia
-  *)
   try
     LUltFechamento := TLojaModelDaoFactory.New.Estoque
       .Saldo
@@ -213,8 +208,6 @@ begin
     end;
 
     LDatFim := Trunc(Now)-1;
-
-    // Ajustar para loop incrementando datas pois nem todo dia tem movimento
 
     if LDatIni <= LDatFim then
     begin
@@ -249,6 +242,15 @@ begin
             LFecha.Free;
           end;
 
+          while LDatIni < (LMovimento.DatMov-1)
+          do begin
+            LDatIni := LDatIni + 1;
+            var LFecha := TLojaModelDaoFactory.New.Estoque
+              .Saldo
+              .CriarFechamentoSaldoItem(ACodItem, LDatIni, LUltSaldo);
+            LFecha.Free;
+          end;
+
           LDatIni := LMovimento.DatMov;
 
           case LMovimento.CodTipoMov of
@@ -258,19 +260,42 @@ begin
               Dec(LUltSaldo, LMovimento.QtdMov);
           end;
         end;
+
         var LFecha := TLojaModelDaoFactory.New.Estoque
           .Saldo
           .CriarFechamentoSaldoItem(ACodItem, LDatIni, LUltSaldo);
         LFecha.Free;
 
+        LDatIni := LDatIni +1;
+        while LDatIni <= LDatFim
+        do begin
+
+          LFecha := TLojaModelDaoFactory.New.Estoque
+            .Saldo
+            .CriarFechamentoSaldoItem(ACodItem, LDatIni, LUltSaldo);
+          LFecha.Free;
+          LDatIni := LDatIni + 1;
+        end;
+
       end
       else
       begin
-        // Se não houve movimentos, criar um fechamento com saldo zero "ontem"
-        var LFecha := TLojaModelDaoFactory.New.Estoque
-          .Saldo
-          .CriarFechamentoSaldoItem(ACodItem, LDatFim, LUltSaldo);
-        LFecha.Free;
+        if LDatIni = EncodeDate(1900,01,01)
+        then begin
+          // Se não houve movimentos, criar um fechamento com saldo zero "ontem"
+          var LFecha := TLojaModelDaoFactory.New.Estoque
+            .Saldo
+            .CriarFechamentoSaldoItem(ACodItem, LDatFim, LUltSaldo);
+          LFecha.Free;
+        end else
+        while LDatIni <= LDatFim
+        do begin
+          var LFecha := TLojaModelDaoFactory.New.Estoque
+            .Saldo
+            .CriarFechamentoSaldoItem(ACodItem, LDatIni, LUltSaldo);
+          LFecha.Free;
+          LDatIni := LDatIni + 1;
+        end;
       end;
     end;
 
