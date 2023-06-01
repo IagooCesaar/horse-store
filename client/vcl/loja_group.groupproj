@@ -1,0 +1,72 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{91B4018E-2AFF-48B0-ABC1-8C4B9E52B430}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="loja.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\..\server\loja_server_console.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\..\server\loja_server_test.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\..\server\loja_server_vcl.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="loja">
+        <MSBuild Projects="loja.dproj"/>
+    </Target>
+    <Target Name="loja:Clean">
+        <MSBuild Projects="loja.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="loja:Make">
+        <MSBuild Projects="loja.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="loja_server_console">
+        <MSBuild Projects="..\..\server\loja_server_console.dproj"/>
+    </Target>
+    <Target Name="loja_server_console:Clean">
+        <MSBuild Projects="..\..\server\loja_server_console.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="loja_server_console:Make">
+        <MSBuild Projects="..\..\server\loja_server_console.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="loja_server_test">
+        <MSBuild Projects="..\..\server\loja_server_test.dproj"/>
+    </Target>
+    <Target Name="loja_server_test:Clean">
+        <MSBuild Projects="..\..\server\loja_server_test.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="loja_server_test:Make">
+        <MSBuild Projects="..\..\server\loja_server_test.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="loja_server_vcl">
+        <MSBuild Projects="..\..\server\loja_server_vcl.dproj"/>
+    </Target>
+    <Target Name="loja_server_vcl:Clean">
+        <MSBuild Projects="..\..\server\loja_server_vcl.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="loja_server_vcl:Make">
+        <MSBuild Projects="..\..\server\loja_server_vcl.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="loja;loja_server_console;loja_server_test;loja_server_vcl"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="loja:Clean;loja_server_console:Clean;loja_server_test:Clean;loja_server_vcl:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="loja:Make;loja_server_console:Make;loja_server_test:Make;loja_server_vcl:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
