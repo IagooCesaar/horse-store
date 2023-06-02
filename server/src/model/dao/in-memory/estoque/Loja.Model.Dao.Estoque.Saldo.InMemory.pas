@@ -51,8 +51,19 @@ end;
 function TLojaModelDaoEstoqueSaldoInMemory.CriarFechamentoSaldoItem(
   ACodItem: Integer; ADatSaldo: TDateTime;
   AQtdSaldo: Integer): TLojaModelEntityEstoqueSaldo;
+var LId: Integer;
 begin
+  if FRepository.Count > 0
+  then Lid := FRepository.Last.CodFechSaldo + 1
+  else LId := 1;
 
+  FRepository.Add(TLojaModelEntityEstoqueSaldo.Create);
+  FRepository.Last.CodFechSaldo := LId;
+  FRepository.Last.CodItem := ACodItem;
+  FRepository.Last.DatSaldo := ADatSaldo;
+  FRepository.Last.QtdSaldo := AQtdSaldo;
+
+  Result := Clone(FRepository.Last);
 end;
 
 destructor TLojaModelDaoEstoqueSaldoInMemory.Destroy;
@@ -68,17 +79,41 @@ begin
   Result := FDao;
 end;
 
-
 function TLojaModelDaoEstoqueSaldoInMemory.ObterFechamentoItem(
   ACodItem: Integer; ADatSaldo: TDateTime): TLojaModelEntityEstoqueSaldo;
 begin
-
+  Result := nil;
+  for var i := 0 to Pred(FRepository.Count)
+  do begin
+    if  (FRepository[i].CodItem = ACodItem)
+    and (FRepository[i].DatSaldo = ADatSaldo)
+    then begin
+      Result := Clone(FRepository[i]);
+      Break;
+    end;
+  end;
 end;
 
 function TLojaModelDaoEstoqueSaldoInMemory.ObterUltimoFechamentoItem(
   ACodItem: Integer): TLojaModelEntityEstoqueSaldo;
+var idx: Integer;
 begin
+  Result := nil;
+  idx := -1;
+  for var i := 0 to Pred(FRepository.Count)
+  do begin
+    if  (FRepository[i].CodItem = ACodItem)
+    then begin
+      if idx = -1
+      then idx := i;
 
+      if FRepository[i].DatSaldo >= FRepository[idx].DatSaldo
+      then idx := i;
+    end;
+  end;
+
+  if idx > -1
+  then Result := Clone(FRepository[idx]);
 end;
 
 class destructor TLojaModelDaoEstoqueSaldoInMemory.UnInitialize;

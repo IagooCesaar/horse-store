@@ -31,6 +31,13 @@ begin
     try
       LDto := TJson.ClearJsonAndConvertToObject
         <TLojaModelDtoReqEstoqueAcertoEstoque>(Req.Body);
+
+      LDto.CodItem := Req.Params.Field('cod_item')
+        .Required
+        .RequiredMessage('O código do item é obrigatório')
+        .InvalidFormatMessage('O valor fornecido não é um inteiro válido')
+        .AsInteger;
+
     except
       raise EHorseException.New
         .Status(THTTPStatus.BadRequest)
@@ -50,73 +57,8 @@ begin
   end;
 end;
 
-(*
-procedure ObterItens(Req: THorseRequest; Resp: THorseResponse);
-var
-  LLhsBracketType: TLhsBracketsType;
-  LFiltros: TLojaModelDtoReqItensFiltroItens;
-  LItens : TLojaModelEntityItensItemLista;
-begin
-  THorseCoreParamConfig.GetInstance.CheckLhsBrackets(True);
-
-  try
-    LFiltros := TLojaModelDtoReqItensFiltroItens.Create;
-    LFiltros.CodItem := Req.Query.Field('cod_item').AsInteger;
-
-    for LLhsBracketType in Req.Query.Field('nom_item').LhsBrackets.Types do
-    begin
-      LFiltros.NomItem := Req.Query.Field('nom_item').LhsBrackets.GetValue(LLhsBracketType);
-      LFiltros.NomItemLhsBracketsType := LLhsBracketType;
-    end;
-
-    for LLhsBracketType in Req.Query.Field('num_cod_barr').LhsBrackets.Types do
-    begin
-      LFiltros.NumCodBarr := Req.Query.Field('num_cod_barr').LhsBrackets.GetValue(LLhsBracketType);
-      LFiltros.NumCodBarrLhsBracketsType := LLhsBracketType;
-    end;
-
-    LItens := TLojaModelFactory.New
-      .Itens
-      .ObterItens(LFiltros);
-
-    if LItens.Count = 0
-    then Resp.Status(THTTPStatus.NoContent)
-    else Resp.Status(THTTPStatus.Ok).Send(TJSON.ObjectToClearJsonValue(LItens));
-
-    LItens.Free;
-  finally
-    FreeAndNil(LFiltros);
-  end;
-end;
-
-procedure CriarItem(Req: THorseRequest; Resp: THorseResponse);
-var LDto: TLojaModelDtoReqItensCriarItem;
-begin
-  try
-    try
-      LDto := TJson.ClearJsonAndConvertToObject
-        <TLojaModelDtoReqItensCriarItem>(Req.Body);
-    except
-      raise EHorseException.New
-        .Status(THTTPStatus.BadRequest)
-        .&Unit(C_UnitName)
-        .Error('O body não estava no formato esperado');
-    end;
-
-    var LItem := TLojaModelFactory.New
-      .Itens
-      .CriarItem(LDto);
-
-    Resp.Status(THTTPStatus.Created).Send(TJSON.ObjectToClearJsonObject(LItem));
-    LItem.Free;
-  finally
-    if Assigned(LDto)
-    then FreeAndNil(LDto);
-  end;
-end;
-
-procedure GetItemPorCodigo(Req: THorseRequest; Resp: THorseResponse);
-var LCodItem : Integer;
+procedure ObterHistoricoMovimento(Req: THorseRequest; Resp: THorseResponse);
+var LCodItem : Integer; LDatIni, LDatFim: TDateTime;
 begin
   LCodItem := Req.Params.Field('cod_item')
     .Required
@@ -124,26 +66,31 @@ begin
     .InvalidFormatMessage('O valor fornecido não é um inteiro válido')
     .AsInteger;
 
-  if LCodItem <= 0 then
-    raise EHorseException.New
-      .Status(THTTPStatus.BadRequest)
-      .&Unit(C_UnitName)
-      .Error('O código do item deve ser superior a zero');
+  LDatIni := Req.Query.Field('dat_ini')
+    .Required
+    .RequiredMessage('É obrigatório informar data inicial')
+    .InvalidFormatMessage('O valor fornecido não é uma data válida')
+    .AsDate;
 
-  var LItem := TLojaModelFactory.New
-    .Itens
-    .ObterPorCodigo(LCodItem);
+  LDatFim := Req.Query.Field('dat_fim')
+    .Required
+    .RequiredMessage('É obrigatório informar data final')
+    .InvalidFormatMessage('O valor fornecido não é uma data válida')
+    .AsDate;
 
-  Resp.Send(TJSON.ObjectToClearJsonObject(LItem));
-  LItem.Free;
+  var LMovimentos := TLojaModelFactory.New
+    .Estoque
+    .ObterHistoricoMovimento(LCodItem, LDatIni, LDatFim);
+
+  Resp.Status(THTTPStatus.Ok).Send(TJSON.ObjectToClearJsonObject(LMovimentos));
+    LMovimentos.Free;
 end;
-*)
-
 
 procedure Registry(const AContext: string);
 begin
   THorse.Group.Prefix(AContext+'/estoque')
-    .Post('/acerto-estoque', CriarAcertoEstoque)
+    .Post('/:cod_item/acerto-de-estoque', CriarAcertoEstoque)
+    .Get('/:cod_item/historico-movimento', ObterHistoricoMovimento)
 end;
 
 procedure ConfigSwagger(const AContext: string);

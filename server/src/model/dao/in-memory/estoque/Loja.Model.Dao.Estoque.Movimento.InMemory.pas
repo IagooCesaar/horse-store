@@ -91,7 +91,13 @@ function TLojaModelDaoEstoqueMovimentoInMemory.ObterMovimentoItemEntreDatas(
   ACodItem: Integer; ADatIni,
   ADatFim: TDateTime): TLojaModelEntityEstoqueMovimentoLista;
 begin
-
+  Result := TLojaModelEntityEstoqueMovimentoLista.Create;
+  for var LMovimento in FRepository
+  do begin
+    if  (LMovimento.DatMov >= ADatIni)
+    and (LMovimento.DatMov <= ADatFim)
+    then Result.Add(Clone(LMovimento));
+  end;
 end;
 
 function TLojaModelDaoEstoqueMovimentoInMemory.ObterPorCodigo(
