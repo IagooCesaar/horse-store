@@ -76,7 +76,8 @@ __recovery/
 # Castalia statistics file (since XE7 Castalia is distributed with Delphi)
 *.stat
 /*.skincfg
-*/modules
+**/modules
+
 #/lib liberada para registrar alterações (temporárias) nas units do ACBr ou Fortes
 
 #Exe Folder
