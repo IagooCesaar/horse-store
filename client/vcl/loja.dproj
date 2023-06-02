@@ -123,7 +123,24 @@
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="view\Loja.View.Principal.pas">
-            <Form>Form1</Form>
+            <Form>ViewPrincipal</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="view\infra\Loja.DM.Imagens.pas">
+            <Form>dmImagens</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
+        <DCCReference Include="view\infra\Loja.View.ModeloModal.pas">
+            <Form>ViewModeloModal</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="view\infra\Loja.View.Modelo.pas">
+            <Form>ViewModelo</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="view\infra\Loja.View.ModeloMdi.pas">
+            <Form>ViewModeloMdi</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Base">
@@ -151,6 +168,18 @@
                 <DeployFile LocalName="Win32\Debug\loja.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>loja.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Win64\Debug\loja.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win64">
+                        <RemoteName>loja.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Win64\Debug\loja.rsm" Configuration="Debug" Class="DebugSymbols">
+                    <Platform Name="Win64">
+                        <RemoteName>loja.rsm</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

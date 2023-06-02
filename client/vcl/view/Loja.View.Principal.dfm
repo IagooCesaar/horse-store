@@ -1,4 +1,4 @@
-object Form1: TForm1
+object ViewPrincipal: TViewPrincipal
   Left = 0
   Top = 0
   Caption = 'Loja'
@@ -10,33 +10,92 @@ object Form1: TForm1
   Font.Height = -16
   Font.Name = 'Segoe UI'
   Font.Style = []
+  Menu = MainMenu1
   WindowState = wsMaximized
   TextHeight = 21
   object ToolBar1: TToolBar
     Left = 0
     Top = 0
-    Width = 90
+    Width = 129
     Height = 441
     Align = alLeft
-    AutoSize = True
-    ButtonHeight = 90
-    ButtonWidth = 90
+    BorderWidth = 2
+    ButtonHeight = 54
+    ButtonWidth = 121
     Caption = 'ToolBar1'
+    DrawingStyle = dsGradient
+    Flat = False
+    Images = DataModule1.imgIco48
     List = True
-    AllowTextButtons = True
+    ShowCaptions = True
     TabOrder = 0
     object btnVender: TToolButton
       Left = 0
       Top = 0
       Action = acVender
     end
+    object btnItens: TToolButton
+      Left = 121
+      Top = 0
+      Action = acItens
+    end
+    object btnComprar: TToolButton
+      Left = 242
+      Top = 0
+      Action = acComprar
+    end
   end
-  object aclPrinc: TActionList
-    Left = 368
-    Top = 328
+  object acmAcoes: TActionManager
+    ActionBars = <
+      item
+        Items.CaptionOptions = coAll
+        Items = <
+          item
+            Action = acVender
+            ImageIndex = 1
+          end>
+      end
+      item
+      end>
+    Images = DataModule1.imgIco48
+    Left = 520
+    Top = 360
+    StyleName = 'Platform Default'
     object acVender: TAction
+      Category = 'ToolBar'
       Caption = 'Vender'
+      ImageIndex = 1
       OnExecute = acVenderExecute
+    end
+    object acSair: TAction
+      Category = 'Menu'
+      Caption = 'Sair'
+      OnExecute = acSairExecute
+    end
+    object acItens: TAction
+      Category = 'ToolBar'
+      Caption = 'Itens'
+      OnExecute = acItensExecute
+    end
+    object acComprar: TAction
+      Category = 'ToolBar'
+      Caption = 'Comprar'
+      OnExecute = acComprarExecute
+    end
+    object acConfiguracoes: TAction
+      Category = 'Menu'
+      Caption = 'Configura'#231#245'es'
+      OnExecute = acConfiguracoesExecute
+    end
+  end
+  object MainMenu1: TMainMenu
+    Left = 408
+    Top = 360
+    object mniSair: TMenuItem
+      Action = acSair
+    end
+    object mniConfiguracoes: TMenuItem
+      Action = acConfiguracoes
     end
   end
 end
