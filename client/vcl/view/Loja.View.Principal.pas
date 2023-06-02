@@ -30,6 +30,7 @@ type
     procedure acConfiguracoesExecute(Sender: TObject);
   private
     { Private declarations }
+    procedure OpenChild(sClassName: string);
   public
     { Public declarations }
   end;
@@ -74,6 +75,30 @@ end;
 procedure TViewPrincipal.acVenderExecute(Sender: TObject);
 begin
   ShowMessage('Vender');
+  OpenChild('TViewVender');
+end;
+
+procedure TViewPrincipal.OpenChild(sClassName: string);
+var
+  i:integer;
+  CRef : TPersistentClass;
+begin
+  for i := 0 to Application.MainForm.MDIChildCount-1 do
+  begin
+    if Application.MainForm.MDIChildren[i].ClassName = sClassName then
+    begin
+      if Application.MainForm.MDIChildren[i].Windowstate = wsMinimized
+      then Application.MainForm.MDIChildren[i].Windowstate := wsNormal
+      else Application.MainForm.MDIChildren[i].BringToFront;
+      exit;
+    end;
+  end;
+  CRef := GetClass(sClassName);
+
+  if (not Assigned(CRef))
+  then raise exception.create('Tela não registrada.:'+sClassName);
+
+  TFormClass(CRef).Create(Application.MainForm);
 end;
 
 end.

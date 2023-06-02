@@ -8,6 +8,7 @@ uses
 
 type
   TViewModeloMdi = class(TViewModelo)
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     { Private declarations }
   public
@@ -18,5 +19,11 @@ type
 implementation
 
 {$R *.dfm}
+
+procedure TViewModeloMdi.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  inherited;
+  Action := caFree;
+end;
 
 end.

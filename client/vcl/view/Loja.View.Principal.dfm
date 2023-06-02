@@ -10,6 +10,7 @@ object ViewPrincipal: TViewPrincipal
   Font.Height = -16
   Font.Name = 'Segoe UI'
   Font.Style = []
+  FormStyle = fsMDIForm
   Menu = MainMenu1
   WindowState = wsMaximized
   TextHeight = 21
@@ -25,23 +26,26 @@ object ViewPrincipal: TViewPrincipal
     Caption = 'ToolBar1'
     DrawingStyle = dsGradient
     Flat = False
-    Images = DataModule1.imgIco48
+    Images = dmImagens.imgIco48
     List = True
     ShowCaptions = True
     TabOrder = 0
+    ExplicitHeight = 440
     object btnVender: TToolButton
       Left = 0
       Top = 0
       Action = acVender
+      Wrap = True
     end
     object btnItens: TToolButton
-      Left = 121
-      Top = 0
+      Left = 0
+      Top = 54
       Action = acItens
+      Wrap = True
     end
     object btnComprar: TToolButton
-      Left = 242
-      Top = 0
+      Left = 0
+      Top = 108
       Action = acComprar
     end
   end
@@ -57,7 +61,7 @@ object ViewPrincipal: TViewPrincipal
       end
       item
       end>
-    Images = DataModule1.imgIco48
+    Images = dmImagens.imgIco48
     Left = 520
     Top = 360
     StyleName = 'Platform Default'
@@ -89,6 +93,7 @@ object ViewPrincipal: TViewPrincipal
     end
   end
   object MainMenu1: TMainMenu
+    Images = dmImagens.imgIco16
     Left = 408
     Top = 360
     object mniSair: TMenuItem

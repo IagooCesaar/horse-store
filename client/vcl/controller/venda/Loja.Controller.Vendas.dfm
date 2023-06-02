@@ -1,0 +1,2 @@
+inherited ControllerVendas: TControllerVendas
+end

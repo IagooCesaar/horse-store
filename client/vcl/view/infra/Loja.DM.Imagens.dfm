@@ -1,6 +1,6 @@
 object dmImagens: TdmImagens
-  Height = 111
-  Width = 308
+  Height = 96
+  Width = 283
   object imgIco48: TImageList
     ColorDepth = cd32Bit
     Height = 48
@@ -1207,7 +1207,7 @@ object dmImagens: TdmImagens
     ColorDepth = cd32Bit
     Height = 24
     Width = 24
-    Left = 120
+    Left = 128
     Top = 24
     Bitmap = {
       494C010101004002040018001800FFFFFFFF2110FFFFFFFFFFFFFFFF424D3600
