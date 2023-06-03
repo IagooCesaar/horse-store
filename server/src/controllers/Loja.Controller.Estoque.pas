@@ -88,11 +88,27 @@ begin
   LMovimentos.Free;
 end;
 
+procedure ObterSaldoAtual(Req: THorseRequest; Resp: THorseResponse);
+begin
+  var LCodItem := Req.Params.Field('cod_item')
+    .Required
+    .RequiredMessage('O código do item é obrigatório')
+    .InvalidFormatMessage('O valor fornecido não é um inteiro válido')
+    .AsInteger;
+
+  var LSado := TLojaModelFactory.New
+    .Estoque
+    .ObterSaldoAtualItem(LCodItem);
+  Resp.Status(THTTPStatus.Ok).Send(TJSON.ObjectToClearJsonValue(LSado));
+  LSado.Free;
+end;
+
 procedure Registry(const AContext: string);
 begin
   THorse.Group.Prefix(AContext+'/estoque')
     .Post('/:cod_item/acerto-de-estoque', CriarAcertoEstoque)
     .Get('/:cod_item/historico-movimento', ObterHistoricoMovimento)
+    .Get('/:cod_item/saldo-atual', ObterSaldoAtual)
 end;
 
 procedure ConfigSwagger(const AContext: string);
