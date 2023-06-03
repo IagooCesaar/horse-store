@@ -69,7 +69,7 @@ begin
     LDTONovoMovimento.DatMov := Now;
     LDTONovoMovimento.CodTipoMov := TLojaModelEntityEstoqueTipoMovimento.movEntrada;
     LDTONovoMovimento.CodOrigMov := TLojaModelEntityEstoqueOrigemMovimento.orgAcerto;
-    LDTONovoMovimento.DscMot := '';
+    LDTONovoMovimento.DscMot := 'Teste';
 
     var LMovimento := TLojaModelFactory.New
       .Estoque
