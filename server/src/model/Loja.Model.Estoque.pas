@@ -151,11 +151,11 @@ begin
         .&Unit(Self.UnitName)
         .Error('A origem do movimento de estoque não é do tipo de movimento de Saída');
 
-  else
+  {else
     raise EHorseException.New
       .Status(THTTPStatus.BadRequest)
       .&Unit(Self.UnitName)
-      .Error('Não foi possível reconhecer o tipo de movimento de estoque');
+      .Error('Não foi possível reconhecer o tipo de movimento de estoque');}
   end;
 
   LItem := TLojaModelDaoFactory.New.Itens.Item.ObterPorCodigo(ANovoMovimento.CodItem);
