@@ -49,7 +49,7 @@ begin
       .Estoque
       .CriarAcertoEstoque(LDto);
 
-    Resp.Status(THTTPStatus.Created).Send(TJSON.ObjectToClearJsonObject(LMovimento));
+    Resp.Status(THTTPStatus.Created).Send(TJSON.ObjectToClearJsonValue(LMovimento));
     LMovimento.Free;
   finally
     if Assigned(LDto)
@@ -82,8 +82,10 @@ begin
     .Estoque
     .ObterHistoricoMovimento(LCodItem, LDatIni, LDatFim);
 
-  Resp.Status(THTTPStatus.Ok).Send(TJSON.ObjectToClearJsonObject(LMovimentos));
-    LMovimentos.Free;
+  if LMovimentos.Count = 0
+  then Resp.Status(THTTPStatus.NoContent)
+  else Resp.Status(THTTPStatus.Ok).Send(TJSON.ObjectToClearJsonValue(LMovimentos));
+  LMovimentos.Free;
 end;
 
 procedure Registry(const AContext: string);

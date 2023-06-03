@@ -14,7 +14,8 @@ uses
   Loja.Model.Entity.Estoque.Movimento,
   Loja.Model.Entity.Estoque.Saldo,
   Loja.Model.Dto.Req.Estoque.CriarMovimento,
-  Loja.Model.Dto.Req.Estoque.AcertoEstoque;
+  Loja.Model.Dto.Req.Estoque.AcertoEstoque,
+  Loja.Model.Dto.Resp.Estoque.SaldoItem;
 
 type
   ILojaModelItens = interface
@@ -30,6 +31,7 @@ type
     function CriarNovoMovimento(ANovoMovimento: TLojaModelDtoReqEstoqueCriarMovimento): TLojaModelEntityEstoqueMovimento;
     function CriarAcertoEstoque(AAcertoEstoque: TLojaModelDtoReqEstoqueAcertoEstoque): TLojaModelEntityEstoqueMovimento;
     function ObterHistoricoMovimento(ACodItem: Integer; ADatIni, ADatFim: TDateTime): TLojaModelEntityEstoqueMovimentoLista;
+    function ObterSaldoAtualItem(ACodItem: Integer): TLojaModelDtoRespEstoqueSaldoItem;
   end;
 
   ILojaModelFactory = interface

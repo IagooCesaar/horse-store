@@ -100,6 +100,7 @@ begin
   var LSql := #13#10
   + 'select * from estoque_movimento where cod_item = :cod_item '
   + 'and cast(dat_mov as date) between cast(:dat_ini as date) and cast(:dat_fim as date) '
+  + 'order by dat_mov '
   ;
 
   var ds := TDatabaseFactory.New.SQL

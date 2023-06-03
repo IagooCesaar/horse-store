@@ -13,7 +13,8 @@ uses
   Loja.Model.Entity.Estoque.Movimento,
   Loja.Model.Entity.Estoque.Saldo,
   Loja.Model.Dto.Req.Estoque.CriarMovimento,
-  Loja.Model.Dto.Req.Estoque.AcertoEstoque;
+  Loja.Model.Dto.Req.Estoque.AcertoEstoque,
+  Loja.Model.Dto.Resp.Estoque.SaldoItem;
 
 type
   TLojaModelEstoque = class(TinterfacedObject, ILojaModelEstoque)
@@ -29,6 +30,7 @@ type
     function CriarNovoMovimento(ANovoMovimento: TLojaModelDtoReqEstoqueCriarMovimento): TLojaModelEntityEstoqueMovimento;
     function CriarAcertoEstoque(AAcertoEstoque: TLojaModelDtoReqEstoqueAcertoEstoque): TLojaModelEntityEstoqueMovimento;
     function ObterHistoricoMovimento(ACodItem: Integer; ADatIni, ADatFim: TDateTime): TLojaModelEntityEstoqueMovimentoLista;
+    function ObterSaldoAtualItem(ACodItem: Integer): TLojaModelDtoRespEstoqueSaldoItem;
   end;
 
 implementation
@@ -184,6 +186,82 @@ function TLojaModelEstoque.ObterHistoricoMovimento(ACodItem: Integer; ADatIni,
   ADatFim: TDateTime): TLojaModelEntityEstoqueMovimentoLista;
 begin
   Result := nil;
+  ADatIni := StartOfTheDay(ADatIni);
+  ADatFim := EndOfTheDay(ADatFim);
+
+  if ADatIni > ADatFim
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('A data inicial deve ser inferior à data final em pelo menos 1 dia');
+
+  var LItem := TLojaModelDaoFactory.New.Itens.Item.ObterPorCodigo(ACodItem);
+  if LItem = nil
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('O item informado não existe');
+  LItem.Free;
+
+  var LMovimentos := TLojaModelDaoFactory.New.Estoque
+        .Movimento
+        .ObterMovimentoItemEntreDatas(ACodItem, ADatIni, ADatFim);
+
+  Result := LMovimentos;
+end;
+
+function TLojaModelEstoque.ObterSaldoAtualItem(
+  ACodItem: Integer): TLojaModelDtoRespEstoqueSaldoItem;
+var
+  LUltSaldo: Integer;
+  LDatIni, LDatFim : TDateTime;
+  LUltFechamento: TLojaModelEntityEstoqueSaldo;
+  LMovimentos: TLojaModelEntityEstoqueMovimentoLista;
+begin
+  Result := TLojaModelDtoRespEstoqueSaldoItem.Create;
+  RealizarFechamentoSaldo(ACodItem);
+
+  try
+    LUltFechamento := TLojaModelDaoFactory.New.Estoque
+      .Saldo
+      .ObterUltimoFechamentoItem(ACodItem);
+
+    if LUltFechamento <> nil
+    then begin
+      LDatIni := Trunc(LUltFechamento.DatSaldo)+1;
+      LUltSaldo := LUltFechamento.QtdSaldo;
+    end else
+    begin
+      LDatIni := EncodeDate(1900,01,01);
+      LUltSaldo := 0;
+    end;
+
+    LDatFim := Trunc(Now);
+
+    LMovimentos := TLojaModelDaoFactory.New.Estoque
+      .Movimento
+      .ObterMovimentoItemEntreDatas(ACodItem, LDatIni, LDatFim);
+    if (LMovimentos <> nil) and (LMovimentos.Count > 0)
+    then begin
+      for var LMovimento in LMovimentos do
+      begin
+        case LMovimento.CodTipoMov of
+          movEntrada:
+            Inc(LUltSaldo, LMovimento.QtdMov);
+          movSaida:
+            Dec(LUltSaldo, LMovimento.QtdMov);
+        end;
+      end;
+    end;
+
+    Result.QtdSaldoAtu := LUltSaldo;
+  finally
+    if LUltFechamento <> nil
+    then FreeAndNil(LUltFechamento);
+
+    if LMovimentos <> nil
+    then FreeAndNil(LMovimentos);
+  end;
 end;
 
 procedure TLojaModelEstoque.RealizarFechamentoSaldo(ACodItem: Integer);
