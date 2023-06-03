@@ -20,6 +20,7 @@ type
     ['{2C7EAF9D-BDA3-44A8-B8AF-B9FFFF23F59D}']
     function ObterUltimoFechamentoItem(ACodItem: Integer): TLojaModelEntityEstoqueSaldo;
     function ObterFechamentoItem(ACodItem: Integer; ADatSaldo: TDateTime): TLojaModelEntityEstoqueSaldo;
+    function ObterFechamentosItem(ACodItem: Integer; ADatIni, ADatFim: TDateTime): TLojaModelEntityEstoqueSaldoLista;
     function CriarFechamentoSaldoItem(ACodItem: Integer; ADatSaldo: TDateTime; AQtdSaldo: Integer):TLojaModelEntityEstoqueSaldo;
   end;
 
