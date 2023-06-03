@@ -43,9 +43,9 @@ begin
   Result.CodItem := ASource.CodItem;
   Result.QtdMov := ASource.QtdMov;
   Result.DatMov := ASource.DatMov;
-  Result.DscOrigMov := Result.DscOrigMov;
-  Result.DscTipoMov := Result.DscTipoMov;
-  Result.DscMot := Result.DscMot;
+  Result.DscOrigMov := ASource.DscOrigMov;
+  Result.DscTipoMov := ASource.DscTipoMov;
+  Result.DscMot := ASource.DscMot;
 end;
 
 constructor TLojaModelDaoEstoqueMovimentoInMemory.Create;
@@ -94,7 +94,8 @@ begin
   Result := TLojaModelEntityEstoqueMovimentoLista.Create;
   for var LMovimento in FRepository
   do begin
-    if  (LMovimento.DatMov >= ADatIni)
+    if  (LMovimento.CodItem = ACodItem)
+    and (LMovimento.DatMov >= ADatIni)
     and (LMovimento.DatMov <= ADatFim)
     then Result.Add(Clone(LMovimento));
   end;
