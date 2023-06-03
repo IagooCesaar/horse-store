@@ -95,7 +95,7 @@ begin
          else LValido := False;
 
     if (AFiltro.NumCodBarr<> '')
-    then if (Pos(AFiltro.NomItem, FRepository[i].NumCodBarr)>0)
+    then if (Pos(AFiltro.NumCodBarr, FRepository[i].NumCodBarr)>0)
          then LValido := True and LValido
          else LValido := False;
 

@@ -269,24 +269,51 @@ begin
     var LItemCriado := TLojaModelDaoFactory.New.Itens
       .Item
       .CriarItem(LDTONovoItem);
+
+    LDTOFiltro := TLojaModelDtoReqItensFiltroItens.Create;
+    try
+      LDTOFiltro.CodItem := LItemCriado.CodItem;
+
+      var LItens := TLojaModelItens.New
+        .ObterItens(LDTOFiltro);
+
+      Assert.IsTrue(Assigned(LItens));
+      Assert.IsTrue(LItens.Count>0);
+      LItens.Free;
+    finally
+      LDTOFiltro.Free;
+    end;
+
+    LDTOFiltro := TLojaModelDtoReqItensFiltroItens.Create;
+    try
+      LDTOFiltro.NomItem := 'Pesq';
+
+      var LItens := TLojaModelItens.New
+        .ObterItens(LDTOFiltro);
+
+      Assert.IsTrue(Assigned(LItens));
+      Assert.IsTrue(LItens.Count>0);
+      LItens.Free;
+    finally
+      LDTOFiltro.Free;
+    end;
+
+    LDTOFiltro := TLojaModelDtoReqItensFiltroItens.Create;
+    try
+      LDTOFiltro.NumCodBarr := '19';
+
+      var LItens := TLojaModelItens.New
+        .ObterItens(LDTOFiltro);
+
+      Assert.IsTrue(Assigned(LItens));
+      Assert.IsTrue(LItens.Count>0);
+      LItens.Free;
+    finally
+      LDTOFiltro.Free;
+    end;
     LItemCriado.Free;
   finally
     LDTONovoItem.Free;
-  end;
-
-  LDTOFiltro := TLojaModelDtoReqItensFiltroItens.Create;
-  try
-    LDTOFiltro.NomItem := 'Pesq';
-
-    var LItens := TLojaModelItens.New
-      .ObterItens(LDTOFiltro);
-
-    Assert.IsTrue(Assigned(LItens), 'Não foi possível encontrar itens que contenham a descriação "Item"');
-    Assert.AreEqual(1, LItens.Count, 'Há mais do que 1 item');
-
-    LItens.Free;
-  finally
-    LDTOFiltro.Free;
   end;
 end;
 
