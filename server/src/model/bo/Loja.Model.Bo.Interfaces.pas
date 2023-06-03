@@ -23,6 +23,16 @@ type
     function FechamentoSaldo: ILojaModelBoEstoqueFechamentoSaldo;
   end;
 
+  ILojaModelBoItens = interface
+    ['{9012E209-99BA-461C-8241-A0B3B89792A1}']
+    function ValidaExistenciaItemPorCodigo(ACodItem: Integer): Boolean;
+  end;
+
+  ILojaModelBoCaixa = interface
+    ['{E34AC112-8645-4DDD-B2C4-C7140029A2EB}']
+    function ValidaExistenciaCaixaAberto: Boolean;
+  end;
+
   ILojaModelBoFactory = interface
     ['{12CFCFF9-0CE0-4AA0-8D81-4A3493A2CE6C}']
     function Estoque: ILojaModelBoEstoque;
