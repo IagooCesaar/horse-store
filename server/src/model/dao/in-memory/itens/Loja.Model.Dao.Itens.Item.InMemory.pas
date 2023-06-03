@@ -113,22 +113,22 @@ function TLojaModelDaoItensItemInMemory.ObterPorCodigo(
   ACodItem: Integer): TLojaModelEntityItensItem;
 begin
   Result := nil;
-  for var i := 0 to Pred(FRepository.Count)
-  do if FRepository[i].CodItem = ACodItem then begin
-    Result := Clone(FRepository[i]);
-    Break;
-  end;
+  for var i := 0 to Pred(FRepository.Count) do
+    if FRepository[i].CodItem = ACodItem then begin
+      Result := Clone(FRepository[i]);
+      Break;
+    end;
 end;
 
 function TLojaModelDaoItensItemInMemory.ObterPorNumCodBarr(
   ANumCodBarr: string): TLojaModelEntityItensItem;
 begin
   Result := nil;
-  for var i := 0 to Pred(FRepository.Count)
-  do if FRepository[i].NumCodBarr = ANumCodBarr then begin
-    Result := Clone(FRepository[i]);
-    Break;
-  end;
+  for var i := 0 to Pred(FRepository.Count) do
+    if FRepository[i].NumCodBarr = ANumCodBarr then begin
+      Result := Clone(FRepository[i]);
+      Break;
+    end;
 end;
 
 class destructor TLojaModelDaoItensItemInMemory.UnInitialize;

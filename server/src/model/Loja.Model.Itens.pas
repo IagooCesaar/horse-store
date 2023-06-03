@@ -126,6 +126,8 @@ begin
       .Status(THTTPStatus.BadRequest)
       .&Unit(Self.UnitName)
       .Error('Não foi possível encontrar o item pelo código de barras informado');
+
+  Result := LItem;
 end;
 
 end.

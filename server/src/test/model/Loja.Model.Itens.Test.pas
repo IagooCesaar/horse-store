@@ -23,7 +23,16 @@ type
     procedure Test_ObterItemPorCodigo;
 
     [Test]
+    procedure Test_ObterItemPorCodigoBarras;
+
+    [Test]
     procedure Test_NaoObterItemInexistente;
+
+    [Test]
+    procedure Test_NaoObterItemNumCodBarInexistente;
+
+    [Test]
+    procedure Test_NaoObterItemCriterioInsuficiente;
 
     [Test]
     procedure Test_CriarUmNovoItem;
@@ -154,6 +163,25 @@ begin
   end;
 end;
 
+procedure TLojaModelItensTest.Test_NaoObterItemCriterioInsuficiente;
+begin
+  var LFiltro := TLojaModelDtoReqItensFiltroItens.Create;
+  LFiltro.CodItem := 0;
+  LFiltro.NomItem := '';
+  LFiltro.NumCodBarr := '';
+  try
+    Assert.WillRaiseWithMessage(
+      procedure begin
+        TLojaModelItens.New.ObterItens(LFiltro);
+      end,
+      EHorseException,
+      'Você deve informar um critério para filtro'
+    );
+  finally
+    LFiltro.Free;
+  end;
+end;
+
 procedure TLojaModelItensTest.Test_NaoObterItemInexistente;
 begin
   Assert.WillRaiseWithMessage(
@@ -163,6 +191,18 @@ begin
     end,
     EHorseException,
     'Não foi possível encontrar o item pelo código informado'
+  );
+end;
+
+procedure TLojaModelItensTest.Test_NaoObterItemNumCodBarInexistente;
+begin
+  Assert.WillRaiseWithMessage(
+    procedure begin
+      TLojaModelItens.New
+        .ObterPorNumCodBarr('9182,456');
+    end,
+    EHorseException,
+    'Não foi possível encontrar o item pelo código de barras informado'
   );
 end;
 
@@ -182,6 +222,31 @@ begin
       .ObterPorCodigo(LItemCriado.CodItem);
 
     Assert.IsTrue(Assigned(LItem), 'Não foi possível encontrar o item código 1');
+    Assert.AreEqual(LDTONovoItem.NomItem, LItem.NomItem);
+
+    LItemCriado.Free;
+    LItem.Free;
+  finally
+    LDTONovoItem.Free;
+  end;
+end;
+
+procedure TLojaModelItensTest.Test_ObterItemPorCodigoBarras;
+var LDTONovoItem : TLojaModelDtoReqItensCriarItem;
+begin
+  LDTONovoItem := TLojaModelDtoReqItensCriarItem.Create;
+  try
+    LDTONovoItem.NomItem := 'Novo Item';
+    LDTONovoItem.NumCodBarr := '987654321';
+
+    var LItemCriado := TLojaModelDaoFactory.New.Itens
+      .Item
+      .CriarItem(LDTONovoItem);
+
+    var LItem := TLojaModelItens.New
+      .ObterPorNumCodBarr(LItemCriado.NumCodBarr);
+
+    Assert.IsTrue(Assigned(LItem), 'Não foi possível encontrar o item');
     Assert.AreEqual(LDTONovoItem.NomItem, LItem.NomItem);
 
     LItemCriado.Free;
