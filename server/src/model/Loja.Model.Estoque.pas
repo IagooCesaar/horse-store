@@ -237,10 +237,10 @@ begin
   then begin
     LDatIni := Trunc(Result.UltimoFechamento.DatSaldo)+1;
     LUltSaldo := Result.UltimoFechamento.QtdSaldo;
-  end else
+  {end else
   begin
     LDatIni := EncodeDate(1900,01,01);
-    LUltSaldo := 0;
+    LUltSaldo := 0;}
   end;
 
   LDatIni := StartOfTheDay(LDatIni);

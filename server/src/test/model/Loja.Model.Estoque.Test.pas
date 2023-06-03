@@ -56,6 +56,24 @@ type
 
     [Test]
     procedure Test_NaoCriarAcertoEstoque_SaldoRealIgualAtual;
+
+    [Test]
+    procedure Test_ObterHistoricoMovimento;
+
+    [Test]
+    procedure Test_NaoObterHistoricoMovimento_InicioSuperiorFim;
+
+    [Test]
+    procedure Test_NaoObterHistoricoMovimento_ItemInexistente;
+
+    [Test]
+    procedure Test_ObterSaldoAtualItem;
+
+    [Test]
+    procedure Test_ObterSaldoAtualItem_SemFechamento;
+
+    [Test]
+    procedure Test_NaoObterSaldoAtualItem_ItemInexistente;
   end;
 
 implementation
@@ -412,6 +430,153 @@ begin
   finally
     LDTONovoMovimento.Free;
   end;
+end;
+
+procedure TLojaModelEstoqueTest.Test_NaoObterHistoricoMovimento_InicioSuperiorFim;
+begin
+  Assert.WillRaiseWithMessageRegex(
+    procedure begin
+      TLojaModelFactory.New
+        .Estoque
+        .ObterHistoricoMovimento(1, Now+1, Now);
+    end,
+    EHorseException,
+    'A data inicial deve ser inferior à data final em pelo menos 1 dia'
+  );
+end;
+
+procedure TLojaModelEstoqueTest.Test_NaoObterHistoricoMovimento_ItemInexistente;
+begin
+  Assert.WillRaiseWithMessageRegex(
+    procedure begin
+      TLojaModelFactory.New
+        .Estoque
+        .ObterHistoricoMovimento(-1, Now, Now);
+    end,
+    EHorseException,
+    'O item informado não existe'
+  );
+end;
+
+procedure TLojaModelEstoqueTest.Test_NaoObterSaldoAtualItem_ItemInexistente;
+begin
+  Assert.WillRaiseWithMessageRegex(
+    procedure begin
+      TLojaModelFactory.New
+        .Estoque
+        .ObterSaldoAtualItem(-1);
+    end,
+    EHorseException,
+    'O item informado não existe'
+  );
+end;
+
+procedure TLojaModelEstoqueTest.Test_ObterHistoricoMovimento;
+var LDTONovoMovimento : TLojaModelDtoReqEstoqueCriarMovimento;
+begin
+  var LItem := CriarItem;
+
+  LDTONovoMovimento := TLojaModelDtoReqEstoqueCriarMovimento.Create;
+  try
+    LDTONovoMovimento.CodItem := LItem.CodItem;
+    LDTONovoMovimento.QtdMov := 10;
+    LDTONovoMovimento.DatMov := Now;
+    LDTONovoMovimento.CodTipoMov := TLojaModelEntityEstoqueTipoMovimento.movEntrada;
+    LDTONovoMovimento.CodOrigMov := TLojaModelEntityEstoqueOrigemMovimento.orgCompra;
+    LDTONovoMovimento.DscMot := 'Teste';
+
+    var LMovimento := TLojaModelFactory.New
+      .Estoque
+      .CriarNovoMovimento(LDTONovoMovimento);
+    LMovimento.Free;
+  finally
+    LDTONovoMovimento.Free;
+  end;
+
+  LDTONovoMovimento := TLojaModelDtoReqEstoqueCriarMovimento.Create;
+  try
+    LDTONovoMovimento.CodItem := LItem.CodItem;
+    LDTONovoMovimento.QtdMov := 8;
+    LDTONovoMovimento.DatMov := Now;
+    LDTONovoMovimento.CodTipoMov := TLojaModelEntityEstoqueTipoMovimento.movSaida;
+    LDTONovoMovimento.CodOrigMov := TLojaModelEntityEstoqueOrigemMovimento.orgVenda;
+    LDTONovoMovimento.DscMot := 'Teste';
+
+    var LMovimento := TLojaModelFactory.New
+      .Estoque
+      .CriarNovoMovimento(LDTONovoMovimento);
+    LMovimento.Free;
+  finally
+    LDTONovoMovimento.Free;
+  end;
+
+  var LMovimentos := TLojaModelFactory.New
+    .Estoque
+    .ObterHistoricoMovimento(LItem.CodItem, Now, Now);
+
+  Assert.AreEqual(2, LMovimentos.Count);
+  LMovimentos.Free;
+  LItem.Free;
+end;
+
+procedure TLojaModelEstoqueTest.Test_ObterSaldoAtualItem;
+var LDTONovoMovimento : TLojaModelDtoReqEstoqueCriarMovimento;
+begin
+  var LItem := CriarItem;
+
+  LDTONovoMovimento := TLojaModelDtoReqEstoqueCriarMovimento.Create;
+  try
+    LDTONovoMovimento.CodItem := LItem.CodItem;
+    LDTONovoMovimento.QtdMov := 10;
+    LDTONovoMovimento.DatMov := Now;
+    LDTONovoMovimento.CodTipoMov := TLojaModelEntityEstoqueTipoMovimento.movEntrada;
+    LDTONovoMovimento.CodOrigMov := TLojaModelEntityEstoqueOrigemMovimento.orgCompra;
+    LDTONovoMovimento.DscMot := 'Teste';
+
+    var LMovimento := TLojaModelFactory.New
+      .Estoque
+      .CriarNovoMovimento(LDTONovoMovimento);
+    LMovimento.Free;
+  finally
+    LDTONovoMovimento.Free;
+  end;
+
+  LDTONovoMovimento := TLojaModelDtoReqEstoqueCriarMovimento.Create;
+  try
+    LDTONovoMovimento.CodItem := LItem.CodItem;
+    LDTONovoMovimento.QtdMov := 8;
+    LDTONovoMovimento.DatMov := Now;
+    LDTONovoMovimento.CodTipoMov := TLojaModelEntityEstoqueTipoMovimento.movSaida;
+    LDTONovoMovimento.CodOrigMov := TLojaModelEntityEstoqueOrigemMovimento.orgVenda;
+    LDTONovoMovimento.DscMot := 'Teste';
+
+    var LMovimento := TLojaModelFactory.New
+      .Estoque
+      .CriarNovoMovimento(LDTONovoMovimento);
+    LMovimento.Free;
+  finally
+    LDTONovoMovimento.Free;
+  end;
+
+  var LSaldo := TLojaModelFactory.New
+    .Estoque
+    .ObterSaldoAtualItem(LItem.CodItem);
+
+  Assert.AreEqual(2, LSaldo.QtdSaldoAtu);
+  LSaldo.Free;
+  LItem.Free;
+end;
+
+procedure TLojaModelEstoqueTest.Test_ObterSaldoAtualItem_SemFechamento;
+begin
+  var LItem := CriarItem;
+  var LSaldo := TLojaModelFactory.New
+    .Estoque
+    .ObterSaldoAtualItem(LItem.CodItem);
+
+  Assert.AreEqual(0, LSaldo.QtdSaldoAtu);
+  LSaldo.Free;
+  LItem.Free;
 end;
 
 initialization
