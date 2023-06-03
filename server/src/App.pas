@@ -142,17 +142,6 @@ begin
 
   //Registro de Rotas
   Loja.Controller.Registry.DoRegistry(FContext);
-
-  THorse.Get('/ping',
-    procedure (AReq: THorseRequest; AResp: THorseResponse)
-    begin
-      AResp.Send(TDatabaseFactory.New.SQL
-        .SQL('SELECT * FROM MON$ATTACHMENTS')
-        .Open
-        .ToJSONArray
-      );
-    end
-  );
 end;
 
 destructor TApp.Destroy;
