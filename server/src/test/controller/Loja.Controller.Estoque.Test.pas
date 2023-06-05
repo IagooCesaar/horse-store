@@ -18,6 +18,9 @@ type
     [SetupFixture]
     procedure SetupFixture;
 
+    [TearDownFixture]
+    procedure TearDownFixture;
+
     [Test]
     procedure Test_CriarAcertoEstoque;
 
@@ -38,7 +41,8 @@ uses
   Horse.JsonInterceptor.Helpers,
 
   Loja.Controller.Api.Test,
-  Loja.Model.Dto.Req.Itens.CriarItem;
+  Loja.Model.Dto.Req.Itens.CriarItem,
+  Loja.Model.Dto.Req.Estoque.AcertoEstoque;
 
 { TLojaControllerEstoqueTest }
 
@@ -69,9 +73,29 @@ begin
   end;
 end;
 
+procedure TLojaControllerEstoqueTest.TearDownFixture;
+begin
+  FreeAndNIl(FItem);
+end;
+
 procedure TLojaControllerEstoqueTest.Test_CriarAcertoEstoque;
 begin
+  var LAcerto := TLojaModelDtoReqEstoqueAcertoEstoque.Create;
+  LAcerto.CodItem := FItem.CodItem;
+  LACerto.QtdSaldoReal := 1;
+  LAcerto.DscMot := 'Implantação Teste';
 
+  var LResponse := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/estoque/{cod_item}/acerto-de-estoque')
+      .AddUrlSegment('cod_item', FItem.CodItem.ToString)
+      .AddBody(TJson.ObjectToClearJsonString(LAcerto))
+      .Post();
+
+  Assert.AreEqual(201, LResponse.StatusCode);
+
+  LAcerto.Free;
 end;
 
 procedure TLojaControllerEstoqueTest.Test_ObterHistoricoMovimento;
