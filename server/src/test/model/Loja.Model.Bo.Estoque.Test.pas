@@ -21,6 +21,15 @@ type
 
     [Test]
     procedure Test_CriarFechamentosSaldo;
+
+    [Test]
+    procedure Test_CriarFechamentosSaldo_PreencheLacunas;
+
+    [Test]
+    procedure Test_CriarFechamentosSaldo_PreencheLacunasMesmoSemMov;
+
+    [Test]
+    procedure Test_NaoCriarFechamentosSaldo_DataRepetida;
   end;
 
 implementation
@@ -28,6 +37,8 @@ implementation
 uses
   System.SysUtils,
   System.DateUtils,
+  Horse,
+  Horse.Exception,
 
   Loja.Model.Dao.Factory,
   Loja.Model.Bo.Factory,
@@ -132,6 +143,122 @@ begin
   finally
     LDTOMovimento.Free;
   end;
+end;
+
+procedure TLojaModelBoEstoqueTest.Test_CriarFechamentosSaldo_PreencheLacunas;
+var LDatMov, LDatPrimFecha : TDateTime;
+begin
+  LDatMov := IncMonth(Now, -3);
+  LDatPrimFecha := EndOfTheMonth(LDatMov);
+
+  var LItem := CriarItem;
+  var LDTOMovimento := TLojaModelDtoReqEstoqueCriarMovimento.Create;
+  LDTOMovimento.CodItem := LItem.CodItem;
+  LItem.Free;
+
+  try
+    LDTOMovimento.DatMov := LDatMov;
+    LDTOMovimento.QtdMov := 10;
+    LDTOMovimento.CodTipoMov := movEntrada;
+    LDTOMovimento.CodOrigMov := orgCompra;
+    LDTOMovimento.DscMot := '';
+
+    var M1 := TLojaModelDaoFactory.New.Estoque.Movimento.CriarNovoMovimento(LDTOMovimento);
+    M1.Free;
+
+    var F1 := TLojaModelDaoFactory.New.Estoque.Saldo.CriarFechamentoSaldoItem(
+      LDTOMovimento.CodItem,
+      EndOfTheMonth(LDTOMovimento.DatMov),
+      LDTOMovimento.QtdMov
+    );
+    F1.Free;
+
+    LDatMov := IncMonth(Now, -1);
+
+    LDTOMovimento.DatMov := LDatMov;
+    LDTOMovimento.QtdMov := 2;
+    LDTOMovimento.CodTipoMov := movSaida;
+    LDTOMovimento.CodOrigMov := orgVenda;
+
+    var M2 := TLojaModelDaoFactory.New.Estoque.Movimento.CriarNovoMovimento(LDTOMovimento);
+    M2.Free;
+
+    TLojaModelBoFactory.New.Estoque.FechamentoSaldo.FecharSaldoMensalItem(LDTOMovimento.CodItem);
+
+    LDatMov := EndOfTheMonth(LDatMov);
+
+    //Obter lista de fechamentos de um item
+    var LFechamentos := TLojaModelDaoFactory.New.Estoque.Saldo.ObterFechamentosItem(
+      LDTOMovimento.CodItem,
+      LDatPrimFecha,
+      LDatMov
+    );
+
+    Assert.AreEqual(3, LFechamentos.Count);
+    Assert.AreEqual(8, LFechamentos.Last.QtdSaldo);
+
+    LFechamentos.Free;
+
+  finally
+    LDTOMovimento.Free;
+  end;
+end;
+
+procedure TLojaModelBoEstoqueTest.Test_CriarFechamentosSaldo_PreencheLacunasMesmoSemMov;
+var LDatUltFecha, LDatPrimFecha : TDateTime;
+begin
+  LDatPrimFecha := EndOfTheMonth(IncMonth(Now, -3));
+  LDatUltFecha := EndOfTheMonth(IncMonth(Now, -1));
+
+  var LItem := CriarItem;
+  try
+    var F1 := TLojaModelDaoFactory.New.Estoque.Saldo.CriarFechamentoSaldoItem(
+      LItem.CodItem,
+      LDatPrimFecha,
+      10
+    );
+    F1.Free;
+
+    TLojaModelBoFactory.New.Estoque.FechamentoSaldo.FecharSaldoMensalItem(LItem.CodItem);
+
+    //Obter lista de fechamentos de um item
+    var LFechamentos := TLojaModelDaoFactory.New.Estoque.Saldo.ObterFechamentosItem(
+      LItem.CodItem,
+      LDatPrimFecha,
+      LDatUltFecha
+    );
+
+    Assert.AreEqual(3, LFechamentos.Count);
+    Assert.AreEqual(10, LFechamentos.Last.QtdSaldo);
+
+    LFechamentos.Free;
+  finally
+    LItem.Free;
+  end;
+end;
+
+procedure TLojaModelBoEstoqueTest.Test_NaoCriarFechamentosSaldo_DataRepetida;
+begin
+  Assert.WillRaiseWithMessageRegex(
+    procedure begin
+      TLojaModelBoFactory.New.Estoque
+        .FechamentoSaldo
+          .CriarNovoFechamento(
+             -1,
+             EndOfTheDay(EncodeDate(2023, 05, 31)),
+             0
+          )
+          .&EndFechamentoSaldo
+        .FechamentoSaldo
+          .CriarNovoFechamento(
+             -1,
+             EndOfTheDay(EncodeDate(2023, 05, 31)),
+             0
+          );
+    end,
+    EHorseException,
+    'Já existe um fechamento de saldo para o item'
+  );
 end;
 
 initialization
