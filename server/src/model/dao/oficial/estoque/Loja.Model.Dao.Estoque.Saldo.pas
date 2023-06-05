@@ -22,6 +22,7 @@ type
 
     { ILojaModelDaoEstoqueSaldo }
     function ObterUltimoFechamentoItem(ACodItem: Integer): TLojaModelEntityEstoqueSaldo;
+    function ObterFechamentosItem(ACodItem: Integer; ADatIni, ADatFim: TDateTime): TLojaModelEntityEstoqueSaldoLista;
     function ObterFechamentoItem(ACodItem: Integer; ADatSaldo: TDateTime): TLojaModelEntityEstoqueSaldo;
     function CriarFechamentoSaldoItem(ACodItem: Integer; ADatSaldo: TDateTime; AQtdSaldo: Integer):TLojaModelEntityEstoqueSaldo;
 
@@ -107,6 +108,31 @@ begin
   then Exit;
 
   Result := AtribuiCampos(ds);
+end;
+
+function TLojaModelDaoEstoqueSaldo.ObterFechamentosItem(ACodItem: Integer;
+  ADatIni, ADatFim: TDateTime): TLojaModelEntityEstoqueSaldoLista;
+begin
+  Result := nil;
+  var LSql := #13#10
+  + 'select * from estoque_saldo where cod_item = :codItem '
+  + 'and cast(dat_saldo as date) between cast(:dat_ini as date) and cast(:dat_fim as date) '
+  ;
+
+  var ds := TDatabaseFactory.New.SQL
+    .SQL(LSql)
+    .ParamList
+      .AddInteger('cod_item', ACodItem)
+      .AddDateTime('dat_ini', ADatIni)
+      .AddDateTime('dat_fim', ADatFim)
+      .&End
+    .Open;
+
+  Result := TLojaModelEntityEstoqueSaldoLista.Create;
+  while not ds.Eof do begin
+    Result.Add(AtribuiCampos(ds));
+    ds.Next;
+  end;
 end;
 
 function TLojaModelDaoEstoqueSaldo.ObterUltimoFechamentoItem(

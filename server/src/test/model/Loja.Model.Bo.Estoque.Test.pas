@@ -3,11 +3,15 @@ unit Loja.Model.Bo.Estoque.Test;
 interface
 
 uses
-  DUnitX.TestFramework;
+  DUnitX.TestFramework,
+
+  Loja.Model.Entity.Itens.Item;
 
 type
   [TestFixture]
   TLojaModelBoEstoqueTest = class
+  private
+    function CriarItem: TLojaModelEntityItensItem;
   public
     [SetupFixture]
     procedure SetupFixture;
@@ -29,9 +33,24 @@ uses
   Loja.Model.Bo.Factory,
 
   Loja.Model.Entity.Estoque.Types,
-  Loja.Model.Dto.Req.Estoque.CriarMovimento;
+  Loja.Model.Dto.Req.Estoque.CriarMovimento,
+  Loja.Model.Dto.Req.Itens.CriarItem;
 
 { TLojaModelBoEstoqueTest }
+
+function TLojaModelBoEstoqueTest.CriarItem: TLojaModelEntityItensItem;
+var
+  LDTONovoMovimento : TLojaModelDtoReqEstoqueCriarMovimento;
+  LDTONovoItem: TLojaModelDtoReqItensCriarItem;
+begin
+  LDTONovoItem := TLojaModelDtoReqItensCriarItem.Create;
+  try
+    LDTONovoItem.NomItem := 'TLojaModelBoEstoqueTest.CriarItem';
+    Result := TLojaModelDaoFactory.New.Itens.Item.CriarItem(LDTONovoItem);
+  finally
+    LDTONovoItem.Free;
+  end;
+end;
 
 procedure TLojaModelBoEstoqueTest.SetupFixture;
 begin
@@ -50,9 +69,11 @@ begin
   // deverá haver um fechamento para cada mês entre o 1º e o último movimento
   // se último movimento for no mês atual, o último fechamento será no mês anterior
 
+  var LItem := CriarItem;
   var LDTOMovimento := TLojaModelDtoReqEstoqueCriarMovimento.Create;
+  LDTOMovimento.CodItem := LItem.CodItem;
+  LItem.Free;
   try
-    LDTOMovimento.CodItem := 1;
     LDTOMovimento.DatMov := EncodeDate(2023, 01, 15);
     LDTOMovimento.QtdMov := 10;
     LDTOMovimento.CodTipoMov := movEntrada;
@@ -98,10 +119,14 @@ begin
 
     //Obter lista de fechamentos de um item
     var LFechamentos := TLojaModelDaoFactory.New.Estoque.Saldo.ObterFechamentosItem(
-      LDTOMovimento.CodItem, EncodeDate(2023, 01, 15), EncodeDate(2023, 05, 09)
+      LDTOMovimento.CodItem,
+      EndOfTheMonth(EncodeDate(2023, 01, 15)),
+      EndOfTheMonth(EncodeDate(2023, 05, 09))
     );
 
     Assert.AreEqual(5, LFechamentos.Count);
+    Assert.AreEqual(9, LFechamentos.Last.QtdSaldo);
+
     LFechamentos.Free;
 
   finally

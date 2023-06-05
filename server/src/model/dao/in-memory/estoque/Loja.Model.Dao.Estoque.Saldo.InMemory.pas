@@ -25,6 +25,7 @@ type
 
     { ILojaModelDaoEstoqueSaldo }
     function ObterUltimoFechamentoItem(ACodItem: Integer): TLojaModelEntityEstoqueSaldo;
+    function ObterFechamentosItem(ACodItem: Integer; ADatIni, ADatFim: TDateTime): TLojaModelEntityEstoqueSaldoLista;
     function ObterFechamentoItem(ACodItem: Integer; ADatSaldo: TDateTime): TLojaModelEntityEstoqueSaldo;
     function CriarFechamentoSaldoItem(ACodItem: Integer; ADatSaldo: TDateTime; AQtdSaldo: Integer):TLojaModelEntityEstoqueSaldo;
 
@@ -41,6 +42,7 @@ begin
   Result.CodFechSaldo := ASource.CodFechSaldo;
   Result.CodItem := ASource.CodItem;
   Result.DatSaldo := ASource.DatSaldo;
+  Result.QtdSaldo := ASource.QtdSaldo;
 end;
 
 constructor TLojaModelDaoEstoqueSaldoInMemory.Create;
@@ -91,6 +93,20 @@ begin
       Result := Clone(FRepository[i]);
       Break;
     end;
+  end;
+end;
+
+function TLojaModelDaoEstoqueSaldoInMemory.ObterFechamentosItem(
+  ACodItem: Integer; ADatIni,
+  ADatFim: TDateTime): TLojaModelEntityEstoqueSaldoLista;
+begin
+  Result := TLojaModelEntityEstoqueSaldoLista.Create;
+  for var LFechamento in FRepository do
+  begin
+    if  (LFechamento.CodItem = ACodItem)
+    and (LFechamento.DatSaldo >= ADatIni)
+    and (LFechamento.DatSaldo <= ADatFim)
+    then Result.Add(Clone(LFechamento));
   end;
 end;
 
