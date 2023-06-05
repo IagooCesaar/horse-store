@@ -13,7 +13,8 @@ type
   TLojaControllerEstoqueTest = class
   private
     FBaseURL, FUsarname, FPassword: String;
-    FItem: TLojaModelEntityItensItem;
+
+    function CriarItem: TLojaModelEntityItensItem;
   public
     [SetupFixture]
     procedure SetupFixture;
@@ -46,13 +47,9 @@ uses
 
 { TLojaControllerEstoqueTest }
 
-procedure TLojaControllerEstoqueTest.SetupFixture;
+function TLojaControllerEstoqueTest.CriarItem: TLojaModelEntityItensItem;
 var LNovoItem : TLojaModelDtoReqItensCriarItem;
 begin
-  FBaseURL := TLojaControllerApiTest.GetInstance.BaseURL;
-  FUsarname := TLojaControllerApiTest.GetInstance.UserName;
-  FPassword := TLojaControllerApiTest.GetInstance.Password;
-
   try
     LNovoItem := TLojaModelDtoReqItensCriarItem.Create;
     LNovoItem.NomItem := 'Novo Item Cadastrado Via Teste Integração';
@@ -65,7 +62,7 @@ begin
       .AddBody(TJson.ObjectToClearJsonString(LNovoItem))
       .Post();
 
-    FItem := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItem>
+    Result := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItem>
       (LResponse.Content);
 
   finally
@@ -73,15 +70,23 @@ begin
   end;
 end;
 
+procedure TLojaControllerEstoqueTest.SetupFixture;
+begin
+  FBaseURL := TLojaControllerApiTest.GetInstance.BaseURL;
+  FUsarname := TLojaControllerApiTest.GetInstance.UserName;
+  FPassword := TLojaControllerApiTest.GetInstance.Password;
+end;
+
 procedure TLojaControllerEstoqueTest.TearDownFixture;
 begin
-  FreeAndNIl(FItem);
+
 end;
 
 procedure TLojaControllerEstoqueTest.Test_CriarAcertoEstoque;
 begin
+  var LItem := CriarItem;
   var LAcerto := TLojaModelDtoReqEstoqueAcertoEstoque.Create;
-  LAcerto.CodItem := FItem.CodItem;
+  LAcerto.CodItem := LItem.CodItem;
   LACerto.QtdSaldoReal := 1;
   LAcerto.DscMot := 'Implantação Teste';
 
@@ -89,7 +94,7 @@ begin
       .BasicAuthentication(FUsarname, FPassword)
       .BaseURL(FBaseURL)
       .Resource('/estoque/{cod_item}/acerto-de-estoque')
-      .AddUrlSegment('cod_item', FItem.CodItem.ToString)
+      .AddUrlSegment('cod_item', LItem.CodItem.ToString)
       .AddBody(TJson.ObjectToClearJsonString(LAcerto))
       .Post();
 
