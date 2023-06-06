@@ -16,7 +16,10 @@ type
     procedure SetupFixture;
 
     [Test]
-    procedure Test_ObterUmItem;
+    procedure Test_ObterUmItem_PorCodigo;
+
+    [Test]
+    procedure Test_ObterUmItem_PorCodigoDeBarras;
 
     [Test]
     [TestCase('Nome contenha "Teste"', 'nom_item,contains,Teste')]
@@ -89,7 +92,7 @@ begin
   Assert.AreEqual(204, LResponse.StatusCode);
 end;
 
-procedure TLojaControllerItensTest.Test_ObterUmItem;
+procedure TLojaControllerItensTest.Test_ObterUmItem_PorCodigo;
 var LItem : TLojaModelEntityItensItem;
 begin
   var LResponse := TRequest.New
@@ -104,6 +107,27 @@ begin
     LItem := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItem>
       (LResponse.Content);
     Assert.AreEqual(1, LItem.CodItem);
+  finally
+    if LItem <> nil
+    then FreeAndNil(LItem);
+  end;
+end;
+
+procedure TLojaControllerItensTest.Test_ObterUmItem_PorCodigoDeBarras;
+var LItem : TLojaModelEntityItensItem;
+begin
+  var LResponse := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/itens/codigo-barras/{num_cod_barr}')
+    .AddUrlSegment('num_cod_barr', '0123456789')
+    .Get();
+
+  Assert.AreEqual(200, LResponse.StatusCode);
+  try
+    LItem := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItem>
+      (LResponse.Content);
+    Assert.AreEqual('0123456789', LItem.NumCodBarr);
   finally
     if LItem <> nil
     then FreeAndNil(LItem);

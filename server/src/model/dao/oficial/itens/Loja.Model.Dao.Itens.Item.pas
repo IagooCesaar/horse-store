@@ -165,7 +165,7 @@ begin
     .SQL
     .SQL(LSQL)
     .ParamList
-      .AddString('cod_item', ANumCodBarr)
+      .AddString('num_cod_barr', ANumCodBarr)
       .&End
     .Open;
 

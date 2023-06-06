@@ -108,12 +108,29 @@ begin
   LItem.Free;
 end;
 
+procedure GetItemPorNumCodBarr(Req: THorseRequest; Resp: THorseResponse);
+var LCodBarr : String;
+begin
+  LCodBarr := Req.Params.Field('num_cod_barr')
+    .Required
+    .RequiredMessage('O código de barras do item é obrigatório')
+    .AsString;
+
+  var LItem := TLojaModelFactory.New
+    .Itens
+    .ObterPorNumCodBarr(LCodBarr);
+
+  Resp.Send(TJSON.ObjectToClearJsonObject(LItem));
+  LItem.Free;
+end;
+
 procedure Registry(const AContext: string);
 begin
   THorse.Group.Prefix(AContext+'/itens')
     .Post('/', CriarItem)
     .Get('/', ObterItens)
     .Get('/:cod_item', GetItemPorCodigo)
+    .Get('/codigo-barras/:num_cod_barr', GetItemPorNumCodBarr)
 end;
 
 procedure ConfigSwagger(const AContext: string);
