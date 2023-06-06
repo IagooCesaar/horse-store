@@ -19,10 +19,17 @@ type
     procedure Test_ObterUmItem;
 
     [Test]
-    procedure Test_ObterVariosItens_PorNome;
+    [TestCase('Nome contenha "Teste"','nom_item,contains,Teste')]
+    [TestCase('Nome inicie com "Novo"','nom_item,startsWith,Novo')]
+    [TestCase('Nome finalize com "Integração"','nom_item,endsWith,Integração')]
+    procedure Test_ObterVariosItens_PorNome(AParametro, ATipoFiltro, AValor: String);
 
     [Test]
     procedure Test_ObterVariosItens_PorNumCodBarr;
+
+
+    //procedure Test2(const AValue1 : Integer;const AValue2 : Integer);
+
 
     [Test]
     procedure Test_NaoObtemItens;
@@ -105,13 +112,13 @@ begin
   end;
 end;
 
-procedure TLojaControllerItensTest.Test_ObterVariosItens_PorNome;
+procedure TLojaControllerItensTest.Test_ObterVariosItens_PorNome(AParametro, ATipoFiltro, AValor: String);
 begin
   var LResponse := TRequest.New
     .BasicAuthentication(FUsarname, FPassword)
     .BaseURL(FBaseURL)
     .Resource('/itens')
-    .AddParam('nom_item[contains]', 'Cab')
+    .AddParam(Format('%s[%s]',[AParametro, ATipoFiltro]), AValor)
     .Get();
 
   Assert.AreEqual(200, LResponse.StatusCode);
