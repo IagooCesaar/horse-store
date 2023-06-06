@@ -29,6 +29,7 @@ type
     function CriarNovoMovimento(ANovoMovimento: TLojaModelDtoReqEstoqueCriarMovimento): TLojaModelEntityEstoqueMovimento;
     function CriarAcertoEstoque(AAcertoEstoque: TLojaModelDtoReqEstoqueAcertoEstoque): TLojaModelEntityEstoqueMovimento;
     function ObterHistoricoMovimento(ACodItem: Integer; ADatIni, ADatFim: TDateTime): TLojaModelEntityEstoqueMovimentoLista;
+    function ObterFechamentosSaldo(ACodItem: Integer; ADatIni, ADatFim: TDateTime): TLojaModelEntityEstoqueSaldoLista;
     function ObterSaldoAtualItem(ACodItem: Integer): TLojaModelDtoRespEstoqueSaldoItem;
   end;
 
@@ -181,6 +182,32 @@ end;
 class function TLojaModelEstoque.New: ILojaModelEstoque;
 begin
   Result := Self.Create;
+end;
+
+function TLojaModelEstoque.ObterFechamentosSaldo(ACodItem: Integer; ADatIni,
+  ADatFim: TDateTime): TLojaModelEntityEstoqueSaldoLista;
+begin
+  Result := nil;
+  ADatIni := StartOfTheDay(ADatIni);
+  ADatFim := EndOfTheDay(ADatFim);
+
+  if ADatIni > ADatFim
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('A data inicial deve ser inferior à data final em pelo menos 1 dia');
+
+  var LItem := TLojaModelDaoFactory.New.Itens.Item.ObterPorCodigo(ACodItem);
+  if LItem = nil
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('O item informado não existe');
+  LItem.Free;
+
+  Result := TLojaModelDaoFactory.New.Estoque
+    .Saldo
+    .ObterFechamentosItem(ACodItem, ADatIni, ADatFim);
 end;
 
 function TLojaModelEstoque.ObterHistoricoMovimento(ACodItem: Integer; ADatIni,

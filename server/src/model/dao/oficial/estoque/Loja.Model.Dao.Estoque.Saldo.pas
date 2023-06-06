@@ -115,7 +115,7 @@ function TLojaModelDaoEstoqueSaldo.ObterFechamentosItem(ACodItem: Integer;
 begin
   Result := nil;
   var LSql := #13#10
-  + 'select * from estoque_saldo where cod_item = :codItem '
+  + 'select * from estoque_saldo where cod_item = :cod_item '
   + 'and cast(dat_saldo as date) between cast(:dat_ini as date) and cast(:dat_fim as date) '
   ;
 

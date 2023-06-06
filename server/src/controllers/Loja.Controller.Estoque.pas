@@ -103,11 +103,42 @@ begin
   LSado.Free;
 end;
 
+procedure ObterFechamentosSaldo(Req: THorseRequest; Resp: THorseResponse);
+var LCodItem : Integer; LDatIni, LDatFim: TDateTime;
+begin
+  LCodItem := Req.Params.Field('cod_item')
+    .Required
+    .RequiredMessage('O código do item é obrigatório')
+    .InvalidFormatMessage('O valor fornecido não é um inteiro válido')
+    .AsInteger;
+
+  LDatIni := Req.Query.Field('dat_ini')
+    .Required
+    .RequiredMessage('É obrigatório informar data inicial')
+    .InvalidFormatMessage('O valor fornecido não é uma data válida')
+    .AsDate;
+
+  LDatFim := Req.Query.Field('dat_fim')
+    .Required
+    .RequiredMessage('É obrigatório informar data final')
+    .InvalidFormatMessage('O valor fornecido não é uma data válida')
+    .AsDate;
+
+  var LFechamentos := TLojaModelFactory.New.Estoque
+    .ObterFechamentosSaldo(LCodItem, LDatIni, LDatFim);
+
+  if LFechamentos.Count = 0
+  then Resp.Status(THTTPStatus.NoContent)
+  else Resp.Status(THTTPStatus.Ok).Send(TJSON.ObjectToClearJsonValue(LFechamentos));
+  LFechamentos.Free;
+end;
+
 procedure Registry(const AContext: string);
 begin
   THorse.Group.Prefix(AContext+'/estoque')
     .Post('/:cod_item/acerto-de-estoque', CriarAcertoEstoque)
     .Get('/:cod_item/historico-movimento', ObterHistoricoMovimento)
+    .Get('/:cod_item/fechamentos-saldo', ObterFechamentosSaldo)
     .Get('/:cod_item/saldo-atual', ObterSaldoAtual)
 end;
 
