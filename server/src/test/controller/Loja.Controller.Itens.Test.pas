@@ -19,7 +19,10 @@ type
     procedure Test_ObterUmItem;
 
     [Test]
-    procedure Test_ObterVariosItens;
+    procedure Test_ObterVariosItens_PorNome;
+
+    [Test]
+    procedure Test_ObterVariosItens_PorNumCodBarr;
 
     [Test]
     procedure Test_NaoObtemItens;
@@ -102,8 +105,7 @@ begin
   end;
 end;
 
-procedure TLojaControllerItensTest.Test_ObterVariosItens;
-var LItens : TLojaModelEntityItensItemLista;
+procedure TLojaControllerItensTest.Test_ObterVariosItens_PorNome;
 begin
   var LResponse := TRequest.New
     .BasicAuthentication(FUsarname, FPassword)
@@ -113,14 +115,29 @@ begin
     .Get();
 
   Assert.AreEqual(200, LResponse.StatusCode);
-  try
-    LItens := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItemLista>
-      (LResponse.Content);
-    Assert.IsTrue(LItens.Count>0);
-  finally
-    if LItens <> nil
-    then FreeAndNil(LItens);
-  end;
+
+  var LItens := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItemLista>
+    (LResponse.Content);
+  Assert.IsTrue(LItens.Count>0);
+
+  FreeAndNil(LItens);
+end;
+
+procedure TLojaControllerItensTest.Test_ObterVariosItens_PorNumCodBarr;
+begin
+  var LResponse := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/itens')
+    .AddParam('num_cod_barr[contains]', '123')
+    .Get();
+
+  Assert.AreEqual(200, LResponse.StatusCode);
+
+  var LItens := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItemLista>
+    (LResponse.Content);
+  Assert.IsTrue(LItens.Count>0);
+  FreeAndNil(LItens);
 end;
 
 initialization

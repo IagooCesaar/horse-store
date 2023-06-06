@@ -107,7 +107,7 @@ begin
 
   if AFiltro.NumCodBarr <> ''
   then begin
-    LSql := LSql + '  and i.num_cod_barr like :num_cod_bar ';
+    LSql := LSql + '  and i.num_cod_barr like :num_cod_barr ';
     case AFiltro.NumCodBarrLhsBracketsType of
       TLhsBracketsType.Contains:
         AFiltro.NumCodBarr := '%'+AFiltro.NumCodBarr+'%';
