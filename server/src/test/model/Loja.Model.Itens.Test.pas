@@ -166,7 +166,6 @@ end;
 procedure TLojaModelItensTest.Test_NaoObterItemCriterioInsuficiente;
 begin
   var LFiltro := TLojaModelDtoReqItensFiltroItens.Create;
-  LFiltro.CodItem := 0;
   LFiltro.NomItem := '';
   LFiltro.NumCodBarr := '';
   try
@@ -269,20 +268,6 @@ begin
     var LItemCriado := TLojaModelDaoFactory.New.Itens
       .Item
       .CriarItem(LDTONovoItem);
-
-    LDTOFiltro := TLojaModelDtoReqItensFiltroItens.Create;
-    try
-      LDTOFiltro.CodItem := LItemCriado.CodItem;
-
-      var LItens := TLojaModelItens.New
-        .ObterItens(LDTOFiltro);
-
-      Assert.IsTrue(Assigned(LItens));
-      Assert.IsTrue(LItens.Count>0);
-      LItens.Free;
-    finally
-      LDTOFiltro.Free;
-    end;
 
     LDTOFiltro := TLojaModelDtoReqItensFiltroItens.Create;
     try

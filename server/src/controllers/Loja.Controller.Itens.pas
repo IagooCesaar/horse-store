@@ -32,7 +32,6 @@ begin
 
   try
     LFiltros := TLojaModelDtoReqItensFiltroItens.Create;
-    LFiltros.CodItem := Req.Query.Field('cod_item').AsInteger;
 
     for LLhsBracketType in Req.Query.Field('nom_item').LhsBrackets.Types do
     begin

@@ -84,8 +84,7 @@ function TLojaModelItens.ObterItens(
   AFiltro: TLojaModelDtoReqItensFiltroItens): TObjectList<TLojaModelEntityItensItem>;
 begin
   Result := nil;
-  if  (AFiltro.CodItem = 0)
-  and (Length(AFiltro.NomItem) = 0)
+  if  (Length(AFiltro.NomItem) = 0)
   and (Length(AFiltro.NumCodBarr) = 0)
   then raise EHorseException.New
       .Status(THTTPStatus.PreconditionRequired)

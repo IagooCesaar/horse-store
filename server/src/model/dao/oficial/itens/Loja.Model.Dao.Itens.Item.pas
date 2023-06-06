@@ -100,7 +100,7 @@ begin
         AFiltro.NomItem := AFiltro.NomItem+'%';
       TLhsBracketsType.EndsWith:
         AFiltro.NomItem := '%'+AFiltro.NomItem;
-    else
+    else // Equals
       AFiltro.NomItem := AFiltro.NomItem;
     end;
   end;
@@ -115,19 +115,14 @@ begin
         AFiltro.NumCodBarr := AFiltro.NumCodBarr+'%';
       TLhsBracketsType.EndsWith:
         AFiltro.NumCodBarr := '%'+AFiltro.NumCodBarr;
-    else
+    else  // Equals
       AFiltro.NumCodBarr := AFiltro.NumCodBarr;
     end;
   end;
 
-  if AFiltro.CodItem <> 0
-  then LSql := LSql
-  + '  and i.cod_item = :cod_item ';
-
   var ds := TDatabaseFactory.New.SQL
     .SQL(LSql)
     .ParamList
-      .AddInteger('cod_item', AFiltro.CodItem)
       .AddString('nom_item', AFiltro.NomItem)
       .AddString('num_cod_barr', AFiltro.NumCodBarr)
       .&End

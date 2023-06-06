@@ -99,11 +99,6 @@ begin
          then LValido := True and LValido
          else LValido := False;
 
-    if AFiltro.CodItem > 0
-    then if AFiltro.CodItem = FRepository[i].CodItem
-         then LValido := True and LValido
-         else LValido := False;
-
     if LValido
     then Result.Add(Clone(FRepository[i]));
   end;
