@@ -19,17 +19,15 @@ type
     procedure Test_ObterUmItem;
 
     [Test]
-    [TestCase('Nome contenha "Teste"','nom_item,contains,Teste')]
-    [TestCase('Nome inicie com "Novo"','nom_item,startsWith,Novo')]
-    [TestCase('Nome finalize com "Integração"','nom_item,endsWith,Integração')]
-    procedure Test_ObterVariosItens_PorNome(AParametro, ATipoFiltro, AValor: String);
-
-    [Test]
-    procedure Test_ObterVariosItens_PorNumCodBarr;
-
-
-    //procedure Test2(const AValue1 : Integer;const AValue2 : Integer);
-
+    [TestCase('Nome contenha "Teste"', 'nom_item,contains,Teste')]
+    [TestCase('Nome Igual a "Novo Item Cadastrado Via Teste Integração" (default)', 'nom_item,eq,Novo Item Cadastrado Via Teste Integração')]
+    [TestCase('Nome inicie com "Novo"', 'nom_item,startsWith,Novo')]
+    [TestCase('Nome finalize com "Integração"', 'nom_item,endsWith,Integração')]
+    [TestCase('Código de Barras contenha com "456"', 'num_cod_barr,contains,456')]
+    [TestCase('Código de Barras igual a "0123456789"  (default)', 'num_cod_barr,eq,0123456789')]
+    [TestCase('Código de Barras inicie com "123"', 'num_cod_barr,startsWith,123')]
+    [TestCase('Código de Barras finalize com "789"', 'num_cod_barr,endsWith,789')]
+    procedure Test_ObterVariosItens(AParametro, ATipoFiltro, AValor: String);
 
     [Test]
     procedure Test_NaoObtemItens;
@@ -112,7 +110,7 @@ begin
   end;
 end;
 
-procedure TLojaControllerItensTest.Test_ObterVariosItens_PorNome(AParametro, ATipoFiltro, AValor: String);
+procedure TLojaControllerItensTest.Test_ObterVariosItens(AParametro, ATipoFiltro, AValor: String);
 begin
   var LResponse := TRequest.New
     .BasicAuthentication(FUsarname, FPassword)
@@ -121,7 +119,7 @@ begin
     .AddParam(Format('%s[%s]',[AParametro, ATipoFiltro]), AValor)
     .Get();
 
-  Assert.AreEqual(200, LResponse.StatusCode);
+  Assert.AreEqual(200, LResponse.StatusCode, LResponse.StatusText);
 
   var LItens := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItemLista>
     (LResponse.Content);
@@ -130,22 +128,6 @@ begin
   FreeAndNil(LItens);
 end;
 
-procedure TLojaControllerItensTest.Test_ObterVariosItens_PorNumCodBarr;
-begin
-  var LResponse := TRequest.New
-    .BasicAuthentication(FUsarname, FPassword)
-    .BaseURL(FBaseURL)
-    .Resource('/itens')
-    .AddParam('num_cod_barr[contains]', '123')
-    .Get();
-
-  Assert.AreEqual(200, LResponse.StatusCode);
-
-  var LItens := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItemLista>
-    (LResponse.Content);
-  Assert.IsTrue(LItens.Count>0);
-  FreeAndNil(LItens);
-end;
 
 initialization
   TDUnitX.RegisterTestFixture(TLojaControllerItensTest);
