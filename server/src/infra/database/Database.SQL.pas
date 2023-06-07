@@ -37,6 +37,7 @@ type
     procedure ValidaSQL(pSQL: string);
     function PreencherDataSet(PQuery: TQuery): TMemTable;
     function ConvertToParam(aColum: String): String;
+    function VarVoidToNull(pValor: Variant): Variant;
 
   public
     constructor Create;
@@ -59,7 +60,7 @@ type
     procedure StartTransaction;
     procedure Commit;
     procedure Rollback;
-    function VarVoidToNull(pValor: Variant): Variant;
+
 
     { IDataBaseParamList }
     function AddString(pNome: string; pValor: string): IDataBaseParamList; overload;
