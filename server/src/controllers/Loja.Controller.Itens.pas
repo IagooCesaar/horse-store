@@ -62,16 +62,16 @@ end;
 procedure CriarItem(Req: THorseRequest; Resp: THorseResponse);
 var LDto: TLojaModelDtoReqItensCriarItem;
 begin
+  if Req.Body = ''
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(C_UnitName)
+    .Error('O body não estava no formato esperado');
+
   try
-    try
-      LDto := TJson.ClearJsonAndConvertToObject
-        <TLojaModelDtoReqItensCriarItem>(Req.Body);
-    except
-      raise EHorseException.New
-        .Status(THTTPStatus.BadRequest)
-        .&Unit(C_UnitName)
-        .Error('O body não estava no formato esperado');
-    end;
+
+    LDto := TJson.ClearJsonAndConvertToObject
+      <TLojaModelDtoReqItensCriarItem>(Req.Body);
 
     var LItem := TLojaModelFactory.New
       .Itens

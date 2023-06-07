@@ -19,6 +19,9 @@ type
     procedure Test_ObterUmItem_PorCodigo;
 
     [Test]
+    procedure Test_NaoObterUmItem_CodigoNegativo;
+
+    [Test]
     procedure Test_ObterUmItem_PorCodigoDeBarras;
 
     [Test]
@@ -37,6 +40,9 @@ type
 
     [Test]
     procedure Test_CriarNovoItem;
+
+    [Test]
+    procedure Test_NaoCriarNovoItem_BodyVazio;
   end;
 
 implementation
@@ -80,6 +86,18 @@ begin
   end;
 end;
 
+procedure TLojaControllerItensTest.Test_NaoCriarNovoItem_BodyVazio;
+begin
+  var LResponse := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/itens')
+    .AddBody('')
+    .Post();
+
+  Assert.AreEqual(400, LResponse.StatusCode);
+end;
+
 procedure TLojaControllerItensTest.Test_NaoObtemItens;
 begin
   var LResponse := TRequest.New
@@ -90,6 +108,18 @@ begin
     .Get();
 
   Assert.AreEqual(204, LResponse.StatusCode);
+end;
+
+procedure TLojaControllerItensTest.Test_NaoObterUmItem_CodigoNegativo;
+begin
+  var LResponse := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/itens/{cod_item}')
+    .AddUrlSegment('cod_item', '-1')
+    .Get();
+
+  Assert.AreEqual(400, LResponse.StatusCode);
 end;
 
 procedure TLojaControllerItensTest.Test_ObterUmItem_PorCodigo;
