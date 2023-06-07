@@ -29,6 +29,9 @@ type
     procedure Test_ObterHistoricoMovimento;
 
     [Test]
+    procedure Test_ObterFechamentosSaldo;
+
+    [Test]
     procedure Test_ObterSaldoAtual;
 
 
@@ -40,6 +43,8 @@ uses
   RESTRequest4D,
   Horse,
   Horse.JsonInterceptor.Helpers,
+
+  System.DateUtils,
 
   Loja.Controller.Api.Test,
   Loja.Model.Dto.Req.Itens.CriarItem,
@@ -100,6 +105,43 @@ begin
       .Post();
 
   Assert.AreEqual(201, LResponse.StatusCode);
+
+  LAcerto.Free;
+  LItem.Free;
+end;
+
+procedure TLojaControllerEstoqueTest.Test_ObterFechamentosSaldo;
+begin
+  var LItem := CriarItem;
+  var LAcerto := TLojaModelDtoReqEstoqueAcertoEstoque.Create;
+  LAcerto.CodItem := LItem.CodItem;
+  LACerto.QtdSaldoReal := 1;
+  LAcerto.DscMot := 'Implantação Teste';
+
+  var LResponseAcerto := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/estoque/{cod_item}/acerto-de-estoque')
+      .AddUrlSegment('cod_item', LItem.CodItem.ToString)
+      .AddBody(TJson.ObjectToClearJsonString(LAcerto))
+      .Post();
+
+  Assert.AreEqual(201, LResponseAcerto.StatusCode);
+
+  var LDatIni := StartOfTheMonth(IncMonth(Now, -1));
+  var LDatFim := EndOfTheMonth(Now);
+
+  var LResponse:= TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/estoque/{cod_item}/fechamentos-saldo')
+      .AddUrlSegment('cod_item', LItem.CodItem.ToString)
+      .AddParam('dat_ini', FormatDateTime('yyyy-mm-dd', LDatIni))
+      .AddParam('dat_fim', FormatDateTime('yyyy-mm-dd', LDatFim))
+      .Timeout(90000)
+      .Get();
+
+  Assert.AreEqual(200, LResponse.StatusCode);
 
   LAcerto.Free;
   LItem.Free;

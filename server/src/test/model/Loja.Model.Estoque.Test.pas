@@ -74,6 +74,15 @@ type
 
     [Test]
     procedure Test_NaoObterSaldoAtualItem_ItemInexistente;
+
+    [Test]
+    procedure Test_ObterFechamentoSaldo;
+
+    [Test]
+    procedure Test_NaoObterFechamentoSaldo_ItemInexistente;
+
+    [Test]
+    procedure Test_NaoObterFechamentoSaldo_InicioSuperiorFim;
   end;
 
 implementation
@@ -432,6 +441,35 @@ begin
   end;
 end;
 
+procedure TLojaModelEstoqueTest.Test_NaoObterFechamentoSaldo_InicioSuperiorFim;
+begin
+  Assert.WillRaiseWithMessageRegex(
+    procedure begin
+      TLojaModelFactory.New
+        .Estoque
+        .ObterFechamentosSaldo(-1, Now+1, Now);
+    end,
+    EHorseException,
+    'A data inicial deve ser inferior à data final em pelo menos 1 dia'
+  );
+end;
+
+procedure TLojaModelEstoqueTest.Test_NaoObterFechamentoSaldo_ItemInexistente;
+begin
+  var LDatIni := StartOfTheMonth(IncMonth(Now, -1));
+  var LDatFim := EndOfTheMonth(Now);
+
+  Assert.WillRaiseWithMessageRegex(
+    procedure begin
+      TLojaModelFactory.New
+        .Estoque
+        .ObterFechamentosSaldo(-1, LDatIni, LDatFim);
+    end,
+    EHorseException,
+    'O item informado não existe'
+  );
+end;
+
 procedure TLojaModelEstoqueTest.Test_NaoObterHistoricoMovimento_InicioSuperiorFim;
 begin
   Assert.WillRaiseWithMessageRegex(
@@ -469,6 +507,37 @@ begin
     EHorseException,
     'O item informado não existe'
   );
+end;
+
+procedure TLojaModelEstoqueTest.Test_ObterFechamentoSaldo;
+var LAcerto: TLojaModelDtoReqEstoqueAcertoEstoque;
+begin
+  var LItem := CriarItem;
+  LAcerto := TLojaModelDtoReqEstoqueAcertoEstoque.Create;
+  try
+    LAcerto.CodItem := LItem.CodItem;
+    LAcerto.QtdSaldoReal := 4;
+    LAcerto.DscMot := 'Teste';
+
+    var LMovimento := TLojaModelFactory.New
+      .Estoque
+      .CriarAcertoEstoque(LAcerto);
+
+    LMovimento.Free;
+  finally
+    LAcerto.Free;
+  end;
+
+  var LDatIni := StartOfTheMonth(IncMonth(Now, -1));
+  var LDatFim := EndOfTheMonth(Now);
+
+  var LFechamentos := TLojaModelFactory.New
+    .Estoque
+    .ObterFechamentosSaldo(LItem.CodItem, LDatIni, LDatFim);
+
+  Assert.AreEqual(1, LFechamentos.Count);
+  LFechamentos.Free;
+  LItem.Free;
 end;
 
 procedure TLojaModelEstoqueTest.Test_ObterHistoricoMovimento;
