@@ -23,30 +23,6 @@ begin
   Resp.Status(THTTPStatus.OK).Send('{"healthcheck": "Ok"}');
 end;
 
-procedure GetLhsBracketsTest(Req: THorseRequest; Res: THorseResponse);
-var
-  LLhsBracketType: TLhsBracketsType;
-  LValues: TStringList;
-begin
-  THorseCoreParamConfig.GetInstance.CheckLhsBrackets(True);
-
-  LValues := TStringList.Create;
-
-  for LLhsBracketType in Req.Query.Field('test').LhsBrackets.Types do
-  begin
-
-    LValues.Add(
-      Format('test %s = %s', [
-        LLhsBracketType.ToString,
-        Req.Query.Field('test').LhsBrackets.GetValue(LLhsBracketType)
-    ]));
-  end;
-  LValues.Add('*'+Req.Query.Field('test').AsString);
-
-  Res.Send(LValues.Text);
-  LValues.Free;
-end;
-
 procedure DoRegistry(const AContext: string);
 begin
   var LContext := AContext + '/api';
@@ -54,9 +30,7 @@ begin
   Loja.Controller.Estoque.Registry(LContext);
 
   THorse
-    .Get(LContext+'/healthcheck', HealtCheck)
-    .Get(LContext+'/lhs-brackets-test', GetLhsBracketsTest);
-
+    .Get(LContext+'/healthcheck', HealtCheck);
 
   Swagger
     .Path(LContext+'/healthcheck')

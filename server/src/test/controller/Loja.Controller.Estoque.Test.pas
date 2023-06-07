@@ -138,7 +138,6 @@ begin
       .AddUrlSegment('cod_item', LItem.CodItem.ToString)
       .AddParam('dat_ini', FormatDateTime('yyyy-mm-dd', LDatIni))
       .AddParam('dat_fim', FormatDateTime('yyyy-mm-dd', LDatFim))
-      .Timeout(90000)
       .Get();
 
   Assert.AreEqual(200, LResponse.StatusCode);
