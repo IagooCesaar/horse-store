@@ -27,23 +27,21 @@ uses
 procedure CriarAcertoEstoque(Req: THorseRequest; Resp: THorseResponse);
 var LDto : TLojaModelDtoReqEstoqueAcertoEstoque;
 begin
+  if Req.Body = ''
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(C_UnitName)
+    .Error('O body não estava no formato esperado');
+
   try
-    try
-      LDto := TJson.ClearJsonAndConvertToObject
-        <TLojaModelDtoReqEstoqueAcertoEstoque>(Req.Body);
+    LDto := TJson.ClearJsonAndConvertToObject
+      <TLojaModelDtoReqEstoqueAcertoEstoque>(Req.Body);
 
-      LDto.CodItem := Req.Params.Field('cod_item')
-        .Required
-        .RequiredMessage('O código do item é obrigatório')
-        .InvalidFormatMessage('O valor fornecido não é um inteiro válido')
-        .AsInteger;
-
-    except
-      raise EHorseException.New
-        .Status(THTTPStatus.BadRequest)
-        .&Unit(C_UnitName)
-        .Error('O body não estava no formato esperado');
-    end;
+    LDto.CodItem := Req.Params.Field('cod_item')
+      .Required
+      .RequiredMessage('O código do item é obrigatório')
+      .InvalidFormatMessage('O valor fornecido não é um inteiro válido')
+      .AsInteger;
 
     var LMovimento := TLojaModelFactory.New
       .Estoque
