@@ -15,7 +15,8 @@ uses
   Loja.View.Logon in 'view\infra\Loja.View.Logon.pas' {ViewLogon},
   Vcl.Themes,
   Vcl.Styles,
-  Loja.View.Configuracoes in 'view\infra\Loja.View.Configuracoes.pas' {ViewConfiguracoes};
+  Loja.View.Configuracoes in 'view\infra\Loja.View.Configuracoes.pas' {ViewConfiguracoes},
+  Loja.Model.Infra.Configuracoes in 'model\infra\Loja.Model.Infra.Configuracoes.pas';
 
 {$R *.res}
 
