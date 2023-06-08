@@ -22,8 +22,9 @@ type
     ['{C4B5FD33-A52B-47D3-8DA8-709CAEC9CC4D}']
     function ObterPorCodigo(ACodItem: Integer): TLojaModelEntityItensItem;
     function ObterPorNumCodBarr(ANumCodBarr: string): TLojaModelEntityItensItem;
-    function ObterItens(AFiltro: TLojaModelDtoReqItensFiltroItens): TObjectList<TLojaModelEntityItensItem>;
+    function ObterItens(AFiltro: TLojaModelDtoReqItensFiltroItens): TLojaModelEntityItensItemLista;
     function CriarItem(ANovoItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
+    function AtualizarItem(AItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
   end;
 
   ILojaModelEstoque = interface

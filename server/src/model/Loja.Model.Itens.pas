@@ -23,8 +23,9 @@ type
     { ILojaModelItens }
     function ObterPorCodigo(ACodItem: Integer): TLojaModelEntityItensItem;
     function ObterPorNumCodBarr(ANumCodBarr: string): TLojaModelEntityItensItem;
-    function ObterItens(AFiltro: TLojaModelDtoReqItensFiltroItens): TObjectList<TLojaModelEntityItensItem>;
+    function ObterItens(AFiltro: TLojaModelDtoReqItensFiltroItens): TLojaModelEntityItensItemLista;
     function CriarItem(ANovoItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
+    function AtualizarItem(AItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
   end;
 
 implementation
@@ -36,6 +37,12 @@ uses
   Loja.Model.Dao.Factory;
 
 { TLojaModelItens }
+
+function TLojaModelItens.AtualizarItem(
+  AItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
+begin
+  Result := nil;
+end;
 
 constructor TLojaModelItens.Create;
 begin
@@ -81,7 +88,7 @@ begin
 end;
 
 function TLojaModelItens.ObterItens(
-  AFiltro: TLojaModelDtoReqItensFiltroItens): TObjectList<TLojaModelEntityItensItem>;
+  AFiltro: TLojaModelDtoReqItensFiltroItens): TLojaModelEntityItensItemLista;
 begin
   Result := nil;
   if  (Length(AFiltro.NomItem) = 0)

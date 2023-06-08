@@ -85,6 +85,31 @@ begin
   end;
 end;
 
+procedure AtualizarItem(Req: THorseRequest; Resp: THorseResponse);
+var LDto: TLojaModelDtoReqItensCriarItem;
+begin
+  if Req.Body = ''
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(C_UnitName)
+    .Error('O body não estava no formato esperado');
+
+  try
+    LDto := TJson.ClearJsonAndConvertToObject
+      <TLojaModelDtoReqItensCriarItem>(Req.Body);
+
+    var LItem := TLojaModelFactory.New
+      .Itens
+      .CriarItem(LDto);
+
+    Resp.Status(THTTPStatus.Created).Send(TJSON.ObjectToClearJsonObject(LItem));
+    LItem.Free;
+  finally
+    if Assigned(LDto)
+    then FreeAndNil(LDto);
+  end;
+end;
+
 procedure GetItemPorCodigo(Req: THorseRequest; Resp: THorseResponse);
 var LCodItem : Integer;
 begin
@@ -132,6 +157,7 @@ begin
     .Post('/', CriarItem)
     .Get('/', ObterItens)
     .Get('/:cod_item', GetItemPorCodigo)
+    .Put('/:cod_item', AtualizarItem)
     .Get('/codigo-barras/:num_cod_barr', GetItemPorNumCodBarr)
 end;
 
@@ -161,6 +187,22 @@ begin
         .AddResponse(Integer(THTTPStatus.InternalServerError)).&End
       .&End
 
+    .&End
+
+    .Path('/itens/{cod_item}')
+    .Tag('Itens')
+      .PUT('Atualizar o cadastro de um item')
+        .Description('Atualizar o cadastro de um item')
+        .AddParamPath('cod_item', 'Código do item')
+          .Schema(SWAG_INTEGER)
+        .&End
+        .AddParamBody('Body').Schema(TLojaModelDtoReqItensCriarItem).&End
+        .AddResponse(Integer(THTTPStatus.OK)).Schema(TLojaModelEntityItensItem).&End
+        .AddResponse(Integer(THTTPStatus.BadRequest)).&End
+        .AddResponse(Integer(THTTPStatus.NotFound)).&End
+        .AddResponse(Integer(THTTPStatus.PreconditionFailed)).&End
+        .AddResponse(Integer(THTTPStatus.InternalServerError)).&End
+      .&End
     .&End
 
     .Path('/itens/{cod_item}')
