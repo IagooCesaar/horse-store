@@ -40,8 +40,40 @@ uses
 
 function TLojaModelItens.AtualizarItem(
   AItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
+const C_NOM_MIN = 4; C_NOM_MAX = 100; C_COD_BAR_MAX = 14;
 begin
-  Result := nil;
+  if Length(AItem.NomItem) < C_NOM_MIN
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error(Format('O nome do item deverá ter no mínimo %d caracteres', [ C_NOM_MIN ]));
+
+  if Length(AItem.NomItem) > C_NOM_MAX
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error(Format('O nome do item deverá ter no máximo %d caracteres', [ C_NOM_MAX ]));
+
+  if Length(AItem.NumCodBarr) > C_COD_BAR_MAX
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error(Format('O código de barras deverá ter no máximo %d caracteres', [ C_NOM_MAX ]));
+
+  var LItem := TLojaModelDaoFactory.New.Itens
+    .Item
+    .ObterPorCodigo(AItem.CodItem);
+
+  if LItem = nil
+  then raise EHorseException.New
+      .Status(THTTPStatus.BadRequest)
+      .&Unit(Self.UnitName)
+      .Error('Não foi possível encontrar o item pelo código informado');
+  LItem.Free;
+
+  Result := TLojaModelDaoFactory.New.Itens
+    .Item
+    .AtualizarItem(AItem);
 end;
 
 constructor TLojaModelItens.Create;

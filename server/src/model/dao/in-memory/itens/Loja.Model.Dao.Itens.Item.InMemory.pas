@@ -29,6 +29,7 @@ type
     function ObterPorCodigo(ACodItem: Integer): TLojaModelEntityItensItem;
     function ObterPorNumCodBarr(ANumCodBarr: string): TLojaModelEntityItensItem;
     function CriarItem(ANovoItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
+    function AtualizarItem(AItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
     function ObterItens(AFiltro: TLojaModelDtoReqItensFiltroItens): TLojaModelEntityItensItemLista;
   end;
 
@@ -37,6 +38,20 @@ implementation
 { TLojaModelDaoItensItem }
 
 
+
+function TLojaModelDaoItensItemInMemory.AtualizarItem(
+  AItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
+begin
+  Result := nil;
+  for var LItem in FRepository do
+    if LItem.CodItem = AItem.CodItem then begin
+      LItem.NomItem := AItem.NomItem;
+      LItem.NumCodBarr := AItem.NumCodBarr;
+
+      Result := Clone(LItem);
+      Break;
+    end;
+end;
 
 function TLojaModelDaoItensItemInMemory.Clone(
   ASource: TLojaModelEntityItensItem): TLojaModelEntityItensItem;

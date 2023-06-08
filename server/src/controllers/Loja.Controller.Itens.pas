@@ -86,8 +86,20 @@ begin
 end;
 
 procedure AtualizarItem(Req: THorseRequest; Resp: THorseResponse);
-var LDto: TLojaModelDtoReqItensCriarItem;
+var LDto: TLojaModelDtoReqItensCriarItem; LCodItem : Integer;
 begin
+  LCodItem := Req.Params.Field('cod_item')
+    .Required
+    .RequiredMessage('O código do item é obrigatório')
+    .InvalidFormatMessage('O valor fornecido não é um inteiro válido')
+    .AsInteger;
+
+  if LCodItem <= 0 then
+    raise EHorseException.New
+      .Status(THTTPStatus.BadRequest)
+      .&Unit(C_UnitName)
+      .Error('O código do item deve ser superior a zero');
+
   if Req.Body = ''
   then raise EHorseException.New
     .Status(THTTPStatus.BadRequest)
@@ -97,12 +109,13 @@ begin
   try
     LDto := TJson.ClearJsonAndConvertToObject
       <TLojaModelDtoReqItensCriarItem>(Req.Body);
+    LDto.CodItem := LCodItem;
 
     var LItem := TLojaModelFactory.New
       .Itens
-      .CriarItem(LDto);
+      .AtualizarItem(LDto);
 
-    Resp.Status(THTTPStatus.Created).Send(TJSON.ObjectToClearJsonObject(LItem));
+    Resp.Status(THTTPStatus.Ok).Send(TJSON.ObjectToClearJsonObject(LItem));
     LItem.Free;
   finally
     if Assigned(LDto)

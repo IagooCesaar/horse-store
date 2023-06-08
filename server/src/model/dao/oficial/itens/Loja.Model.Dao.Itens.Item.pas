@@ -26,6 +26,7 @@ type
     function ObterPorCodigo(ACodItem: Integer): TLojaModelEntityItensItem;
     function ObterPorNumCodBarr(ANumCodBarr: string): TLojaModelEntityItensItem;
     function CriarItem(ANovoItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
+    function AtualizarItem(AItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
     function ObterItens(AFiltro: TLojaModelDtoReqItensFiltroItens): TLojaModelEntityItensItemLista;
   end;
 
@@ -44,6 +45,30 @@ begin
   Result.CodItem := ds.FieldByName('cod_item').AsInteger;
   Result.NomItem := ds.FieldByName('nom_item').AsString;
   Result.NumCodBarr := ds.FieldByName('num_cod_barr').AsString;
+end;
+
+function TLojaModelDaoItensItem.AtualizarItem(
+  AItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
+begin
+  Result := nil;
+
+  var LSql := #13#10
+  + 'update item '
+  + 'set nom_item = :nom_item, '
+  + '    num_cod_barr = :num_cod_barr '
+  + 'where (cod_item = :cod_item) '
+  ;
+
+  TDatabaseFactory.New.SQL
+    .SQL(LSql)
+    .ParamList
+      .AddInteger('cod_item', AItem.CodItem)
+      .AddString('nom_item', AItem.NomItem)
+      .AddString('num_cod_barr', Variant(AItem.NumCodBarr))
+      .&End
+    .ExecSQL();
+
+  Result := ObterPorCodigo(AItem.CodItem);
 end;
 
 constructor TLojaModelDaoItensItem.Create;
