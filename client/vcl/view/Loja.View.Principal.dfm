@@ -47,6 +47,12 @@ object ViewPrincipal: TViewPrincipal
       Left = 0
       Top = 108
       Action = acComprar
+      Wrap = True
+    end
+    object btnLogon: TToolButton
+      Left = 0
+      Top = 162
+      Action = acLogon
     end
   end
   object acmAcoes: TActionManager
@@ -90,6 +96,12 @@ object ViewPrincipal: TViewPrincipal
       Category = 'Menu'
       Caption = 'Configura'#231#245'es'
       OnExecute = acConfiguracoesExecute
+    end
+    object acLogon: TAction
+      Category = 'ToolBar'
+      Caption = 'Bloquear'
+      ImageIndex = 3
+      OnExecute = acLogonExecute
     end
   end
   object MainMenu1: TMainMenu

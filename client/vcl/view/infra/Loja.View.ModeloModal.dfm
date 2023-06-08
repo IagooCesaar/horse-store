@@ -13,6 +13,7 @@ inherited ViewModeloModal: TViewModeloModal
     Width = 931
     Height = 440
     Align = alClient
+    BevelOuter = bvSpace
     Caption = 'pModeloClient'
     ShowCaption = False
     TabOrder = 0

@@ -23,11 +23,14 @@ type
     btnItens: TToolButton;
     btnComprar: TToolButton;
     mniConfiguracoes: TMenuItem;
+    acLogon: TAction;
+    btnLogon: TToolButton;
     procedure acVenderExecute(Sender: TObject);
     procedure acItensExecute(Sender: TObject);
     procedure acComprarExecute(Sender: TObject);
     procedure acSairExecute(Sender: TObject);
     procedure acConfiguracoesExecute(Sender: TObject);
+    procedure acLogonExecute(Sender: TObject);
   private
     { Private declarations }
     procedure OpenChild(sClassName: string);
@@ -42,6 +45,8 @@ implementation
 
 uses
   Loja.DM.Imagens,
+  Loja.View.Logon,
+  Loja.View.Configuracoes,
   Loja.View.ModeloModal;
 
 {$R *.dfm}
@@ -59,12 +64,27 @@ end;
 
 procedure TViewPrincipal.acConfiguracoesExecute(Sender: TObject);
 begin
-  ShowMessage('Configurações');
+  var ViewConfiguracoes := TViewConfiguracoes.Create(Self);
+  try
+    ViewConfiguracoes.ShowModal();
+  finally
+    FreeAndNil(ViewConfiguracoes);
+  end;
 end;
 
 procedure TViewPrincipal.acItensExecute(Sender: TObject);
 begin
   ShowMessage('Itens');
+end;
+
+procedure TViewPrincipal.acLogonExecute(Sender: TObject);
+begin
+  var ViewLogon := TViewLogon.Create(Self);
+  try
+    ViewLogon.ShowModal;
+  finally
+    FreeAndNil(ViewLogon);
+  end;
 end;
 
 procedure TViewPrincipal.acSairExecute(Sender: TObject);
