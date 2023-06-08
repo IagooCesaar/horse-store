@@ -152,7 +152,7 @@ begin
       .&End
 
       .POST('Cria um novo item')
-        .Description('Obter dados cadastrais de itens. Utilize LHS Brackets para filtrar: (eq, contains, startsWith e endsWith)')
+        .Description('Cria um novo item para venda')
         .AddParamBody('Body').Schema(TLojaModelDtoReqItensCriarItem).&End
         .AddResponse(Integer(THTTPStatus.OK)).Schema(TLojaModelEntityItensItem).&End
         .AddResponse(Integer(THTTPStatus.BadRequest)).&End
@@ -161,6 +161,36 @@ begin
         .AddResponse(Integer(THTTPStatus.InternalServerError)).&End
       .&End
 
+    .&End
+
+    .Path('/itens/{cod_item}')
+    .Tag('Itens')
+      .GET('Obter dados cadastrais de um item')
+        .Description('Obter dados cadastrais de um item')
+        .AddParamPath('cod_item', 'Código do item')
+          .Schema(SWAG_INTEGER)
+        .&End
+        .AddResponse(Integer(THTTPStatus.OK)).Schema(TLojaModelEntityItensItem).&End
+        .AddResponse(Integer(THTTPStatus.BadRequest)).&End
+        .AddResponse(Integer(THTTPStatus.NotFound)).&End
+        .AddResponse(Integer(THTTPStatus.PreconditionFailed)).&End
+        .AddResponse(Integer(THTTPStatus.InternalServerError)).&End
+      .&End
+    .&End
+
+    .Path('/itens/codigo-barras/{num_cod_barr}')
+    .Tag('Itens')
+      .GET('Obter dados cadastrais de um item')
+        .Description('Obter dados cadastrais de um item')
+        .AddParamPath('num_cod_barr', 'Código de barras')
+          .Schema(SWAG_STRING)
+        .&End
+        .AddResponse(Integer(THTTPStatus.OK)).Schema(TLojaModelEntityItensItem).&End
+        .AddResponse(Integer(THTTPStatus.BadRequest)).&End
+        .AddResponse(Integer(THTTPStatus.NotFound)).&End
+        .AddResponse(Integer(THTTPStatus.PreconditionFailed)).&End
+        .AddResponse(Integer(THTTPStatus.InternalServerError)).&End
+      .&End
     .&End
   ;
 end;
