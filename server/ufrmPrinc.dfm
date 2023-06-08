@@ -52,7 +52,7 @@ object frmPrinc: TfrmPrinc
     Top = 104
     Width = 361
     Height = 105
-    Caption = 'grpAutenticacao'
+    Caption = 'Autentica'#231#227'o API'
     TabOrder = 3
     object Label2: TLabel
       Left = 3
@@ -81,6 +81,7 @@ object frmPrinc: TfrmPrinc
       Top = 63
       Width = 121
       Height = 29
+      PasswordChar = '*'
       TabOrder = 1
       Text = 'admin'
     end
