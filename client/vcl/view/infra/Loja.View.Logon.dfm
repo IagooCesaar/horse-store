@@ -29,5 +29,7 @@ object ViewLogon: TViewLogon
     Caption = 'Panel1'
     ShowCaption = False
     TabOrder = 0
+    ExplicitWidth = 600
+    ExplicitHeight = 420
   end
 end

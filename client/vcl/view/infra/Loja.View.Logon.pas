@@ -19,7 +19,8 @@ type
 implementation
 
 uses
-  Loja.View.Configuracoes;
+  Loja.View.Configuracoes,
+  Loja.Model.Infra.Usuario;
 
 {$R *.dfm}
 

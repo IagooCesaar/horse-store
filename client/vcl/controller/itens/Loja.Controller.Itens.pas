@@ -13,7 +13,7 @@ type
   private
     { Private declarations }
   public
-    { Public declarations }
+    procedure ObterItem;
   end;
 
 
@@ -22,5 +22,13 @@ implementation
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 
 {$R *.dfm}
+
+{ TControllerItens }
+
+procedure TControllerItens.ObterItem;
+begin
+  var LResponse := PreparaRequest
+    .Get();
+end;
 
 end.

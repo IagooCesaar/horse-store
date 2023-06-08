@@ -13,7 +13,6 @@ type
     FSenha: string;
 
     class var FUsuario: TLojaModelInfraUsuario;
-
   public
     constructor Create;
     destructor Destroy; override;
