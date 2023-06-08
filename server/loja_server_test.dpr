@@ -19,16 +19,10 @@ uses
   App in 'src\App.pas',
   Loja.Model.Entity.Itens.Item in 'src\model\entity\itens\Loja.Model.Entity.Itens.Item.pas',
   Loja.Model.Dao.Itens.Factory in 'src\model\dao\oficial\itens\Loja.Model.Dao.Itens.Factory.pas',
-  Loja.Model.Dao.Itens.Item in 'src\model\dao\oficial\itens\Loja.Model.Dao.Itens.Item.pas',
   Loja.Model.Dao.Itens.Factory.InMemory in 'src\model\dao\in-memory\itens\Loja.Model.Dao.Itens.Factory.InMemory.pas',
   Loja.Model.Dao.Itens.Item.InMemory in 'src\model\dao\in-memory\itens\Loja.Model.Dao.Itens.Item.InMemory.pas',
   Loja.Controller.Itens in 'src\controllers\Loja.Controller.Itens.pas',
   Loja.Controller.Registry in 'src\controllers\Loja.Controller.Registry.pas',
-  Database.Conexao in 'src\infra\database\Database.Conexao.pas',
-  Database.Factory in 'src\infra\database\Database.Factory.pas',
-  Database.Interfaces in 'src\infra\database\Database.Interfaces.pas',
-  Database.SQL in 'src\infra\database\Database.SQL.pas',
-  Database.Tipos in 'src\infra\database\Database.Tipos.pas',
   Loja.Controller.Itens.Test in 'src\test\controller\Loja.Controller.Itens.Test.pas',
   Loja.Controller.Api.Test in 'src\test\controller\Loja.Controller.Api.Test.pas',
   Loja.Model.Estoque in 'src\model\Loja.Model.Estoque.pas',
@@ -60,7 +54,8 @@ uses
   Loja.Model.Bo.Estoque in 'src\model\bo\Loja.Model.Bo.Estoque.pas',
   Loja.Model.Dto.Resp.Estoque.SaldoItem in 'src\model\dto\Loja.Model.Dto.Resp.Estoque.SaldoItem.pas',
   Loja.Model.Bo.Estoque.Test in 'src\test\model\Loja.Model.Bo.Estoque.Test.pas',
-  Loja.Controller.Infra.Test in 'src\test\controller\Loja.Controller.Infra.Test.pas';
+  Loja.Controller.Infra.Test in 'src\test\controller\Loja.Controller.Infra.Test.pas',
+  Loja.Model.Dao.Itens.Item in 'src\model\dao\oficial\itens\Loja.Model.Dao.Itens.Item.pas';
 
 {$IFNDEF TESTINSIGHT}
 var

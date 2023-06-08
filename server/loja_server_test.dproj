@@ -62,7 +62,7 @@
         <UsingDelphiRTL>true</UsingDelphiRTL>
         <Icon_MainIcon>$(BDS)\bin\delphi_PROJECTICON.ico</Icon_MainIcon>
         <Icns_MainIcns>$(BDS)\bin\delphi_PROJECTICNS.icns</Icns_MainIcns>
-        <DCC_UnitSearchPath>$(DUnitX);modules\.dcp;modules\.dcu;modules;modules\dataset-serialize\src;modules\gbswagger\Source\Core;modules\gbswagger\Source\Datasnap;modules\gbswagger\Source\Horse;modules\gbswagger\Source\Validator;modules\handle-exception\src;modules\horse\src;modules\horse-basic-auth\src;modules\horse-compression\src;modules\horse-jsoninterceptor\src;modules\horse-logger\src;modules\horse-logger-provider-console\src;modules\horse-logger-provider-logfile\src;modules\horse-octet-stream\src;modules\horse-utils-clientip\src;modules\jhonson\src;modules\restrequest4delphi\src;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <DCC_UnitSearchPath>$(DUnitX);modules\.dcp;modules\.dcu;modules;modules\dataset-serialize\src;modules\gbswagger\Source\Core;modules\gbswagger\Source\Datasnap;modules\gbswagger\Source\Horse;modules\gbswagger\Source\Validator;modules\handle-exception\src;modules\horse\src;modules\horse-basic-auth\src;modules\horse-compression\src;modules\horse-jsoninterceptor\src;modules\horse-logger\src;modules\horse-logger-provider-console\src;modules\horse-logger-provider-logfile\src;modules\horse-octet-stream\src;modules\horse-utils-clientip\src;modules\jhonson\src;modules\restrequest4delphi\src;.\src\infra\database;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <SanitizedProjectName>loja_server_test</SanitizedProjectName>
         <DCC_Define>TEST;$(DCC_Define)</DCC_Define>
         <VerInfo_Locale>1046</VerInfo_Locale>
@@ -118,16 +118,10 @@
         <DCCReference Include="src\App.pas"/>
         <DCCReference Include="src\model\entity\itens\Loja.Model.Entity.Itens.Item.pas"/>
         <DCCReference Include="src\model\dao\oficial\itens\Loja.Model.Dao.Itens.Factory.pas"/>
-        <DCCReference Include="src\model\dao\oficial\itens\Loja.Model.Dao.Itens.Item.pas"/>
         <DCCReference Include="src\model\dao\in-memory\itens\Loja.Model.Dao.Itens.Factory.InMemory.pas"/>
         <DCCReference Include="src\model\dao\in-memory\itens\Loja.Model.Dao.Itens.Item.InMemory.pas"/>
         <DCCReference Include="src\controllers\Loja.Controller.Itens.pas"/>
         <DCCReference Include="src\controllers\Loja.Controller.Registry.pas"/>
-        <DCCReference Include="src\infra\database\Database.Conexao.pas"/>
-        <DCCReference Include="src\infra\database\Database.Factory.pas"/>
-        <DCCReference Include="src\infra\database\Database.Interfaces.pas"/>
-        <DCCReference Include="src\infra\database\Database.SQL.pas"/>
-        <DCCReference Include="src\infra\database\Database.Tipos.pas"/>
         <DCCReference Include="src\test\controller\Loja.Controller.Itens.Test.pas"/>
         <DCCReference Include="src\test\controller\Loja.Controller.Api.Test.pas"/>
         <DCCReference Include="src\model\Loja.Model.Estoque.pas"/>
@@ -160,6 +154,7 @@
         <DCCReference Include="src\model\dto\Loja.Model.Dto.Resp.Estoque.SaldoItem.pas"/>
         <DCCReference Include="src\test\model\Loja.Model.Bo.Estoque.Test.pas"/>
         <DCCReference Include="src\test\controller\Loja.Controller.Infra.Test.pas"/>
+        <DCCReference Include="src\model\dao\oficial\itens\Loja.Model.Dao.Itens.Item.pas"/>
         <RcItem Include="boss.json">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>RCDATA</ResourceType>
