@@ -31,6 +31,7 @@ type
     procedure acSairExecute(Sender: TObject);
     procedure acConfiguracoesExecute(Sender: TObject);
     procedure acLogonExecute(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
     procedure OpenChild(sClassName: string);
@@ -45,9 +46,12 @@ implementation
 
 uses
   Loja.DM.Imagens,
+
   Loja.View.Logon,
   Loja.View.Configuracoes,
-  Loja.View.ModeloModal;
+  Loja.View.ModeloModal,
+
+  Loja.Model.Infra.Configuracoes;
 
 {$R *.dfm}
 
@@ -96,6 +100,12 @@ procedure TViewPrincipal.acVenderExecute(Sender: TObject);
 begin
   ShowMessage('Vender');
   OpenChild('TViewVender');
+end;
+
+procedure TViewPrincipal.FormCreate(Sender: TObject);
+begin
+  // Aplicar o tema definido nas configurações
+  TLojaModelInfraConfiguracoes.GetInstance.Tema := TLojaModelInfraConfiguracoes.GetInstance.Tema;
 end;
 
 procedure TViewPrincipal.OpenChild(sClassName: string);

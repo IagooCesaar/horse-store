@@ -13,6 +13,7 @@ object ViewPrincipal: TViewPrincipal
   FormStyle = fsMDIForm
   Menu = MainMenu1
   WindowState = wsMaximized
+  OnCreate = FormCreate
   TextHeight = 21
   object ToolBar1: TToolBar
     Left = 0

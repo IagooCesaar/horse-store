@@ -22,14 +22,16 @@ type
 implementation
 
 uses
-  Vcl.Themes;
+  Vcl.Themes,
+
+  Loja.Model.Infra.Configuracoes;
 
 {$R *.dfm}
 
 procedure TViewConfiguracoes.cmbTemasSelect(Sender: TObject);
 begin
   inherited;
-  TStyleManager.SetStyle(cmbTemas.Text);
+  TLojaModelInfraConfiguracoes.GetInstance.Tema := cmbTemas.Text;
 end;
 
 procedure TViewConfiguracoes.FormCreate(Sender: TObject);
@@ -42,7 +44,7 @@ begin
   cmbTemas.Sorted := True;
 
   for var idx := 0 to Pred(cmbTemas.Items.Count)
-  do if cmbTemas.Items[idx] = TStyleManager.ActiveStyle.Name
+  do if cmbTemas.Items[idx] = TLojaModelInfraConfiguracoes.GetInstance.Tema
      then begin
        cmbTemas.ItemIndex := idx;
        Break;
