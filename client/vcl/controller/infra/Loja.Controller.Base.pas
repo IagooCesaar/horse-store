@@ -6,7 +6,9 @@ uses
   System.SysUtils,
   System.Classes,
 
-  RESTRequest4D, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  RESTRequest4D,
+
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
   FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
   Data.DB, FireDAC.Comp.DataSet, FireDAC.Comp.Client;
 
@@ -15,14 +17,15 @@ type
     mtDados: TFDMemTable;
   private
     { Private declarations }
-  public
-    { Public declarations }
+  protected
     function PreparaRequest: IRequest;
   end;
 
 implementation
 
-{%CLASSGROUP 'Vcl.Controls.TControl'}
+uses
+  Loja.Model.Infra.Configuracoes,
+  Loja.Model.Infra.Usuario;
 
 {$R *.dfm}
 
@@ -31,7 +34,12 @@ implementation
 function TControllerBase.PreparaRequest: IRequest;
 begin
   Result := TRequest.New
-    .BaseUrl('')
+    .BaseUrl(TLojaModelInfraConfiguracoes.GetInstance.APIUrl)
+    .Timeout(TLojaModelInfraConfiguracoes.GetInstance.APITimeout)
+    .BasicAuthentication(
+      TLojaModelInfraUsuario.GetInstance.Login,
+      TLojaModelInfraUsuario.GetInstance.Senha
+    )
   ;
 end;
 

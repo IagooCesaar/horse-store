@@ -12,9 +12,13 @@ type
   private
     FIniFile: TIniFile;
     class var FConfig: TLojaModelInfraConfiguracoes;
-    function getTema: string;
-    procedure setTema(const Value: string);
 
+    function GetTema: string;
+    procedure SetTema(const Value: string);
+    function GetAPIUrl: string;
+    procedure SetAPIUrl(const Value: string);
+    function GetAPITimeout: Integer;
+    procedure SetAPITimeout(const Value: Integer);
 
   public
     constructor Create;
@@ -22,7 +26,9 @@ type
     class destructor UnInitialize;
     class function GetInstance: TLojaModelInfraConfiguracoes;
 
-    property Tema: string read getTema write setTema;
+    property Tema: string read GetTema write SetTema;
+    property APIUrl: string read GetAPIUrl write SetAPIUrl;
+    property APITimeout: Integer read GetAPITimeout write SetAPITimeout;
   end;
 
 implementation
@@ -49,6 +55,16 @@ begin
   inherited;
 end;
 
+function TLojaModelInfraConfiguracoes.GetAPITimeout: Integer;
+begin
+  Result := FIniFile.ReadInteger(C_SECAO_API, 'Timeout', 3000);
+end;
+
+function TLojaModelInfraConfiguracoes.GetAPIUrl: string;
+begin
+  Result := FIniFile.ReadString(C_SECAO_API, 'URL', 'http://localhost:9000/loja/api');
+end;
+
 class function TLojaModelInfraConfiguracoes.GetInstance: TLojaModelInfraConfiguracoes;
 begin
   if FConfig = nil
@@ -56,12 +72,22 @@ begin
   Result := FConfig;
 end;
 
-function TLojaModelInfraConfiguracoes.getTema: string;
+function TLojaModelInfraConfiguracoes.GetTema: string;
 begin
   Result := FIniFile.ReadString(C_SECAO_GERAL, 'Tema', TStyleManager.ActiveStyle.Name);
 end;
 
-procedure TLojaModelInfraConfiguracoes.setTema(const Value: string);
+procedure TLojaModelInfraConfiguracoes.SetAPITimeout(const Value: Integer);
+begin
+  FIniFile.WriteInteger(C_SECAO_API, 'Timeout', Value);
+end;
+
+procedure TLojaModelInfraConfiguracoes.SetAPIUrl(const Value: string);
+begin
+  FIniFile.WriteString(C_SECAO_API, 'URL', Value);
+end;
+
+procedure TLojaModelInfraConfiguracoes.SetTema(const Value: string);
 begin
   TStyleManager.SetStyle(Value);
   FIniFile.WriteString(C_SECAO_GERAL, 'Tema', Value);

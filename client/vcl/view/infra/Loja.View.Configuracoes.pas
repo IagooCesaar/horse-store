@@ -11,8 +11,13 @@ type
   TViewConfiguracoes = class(TViewModeloModal)
     cmbTemas: TComboBox;
     Label1: TLabel;
+    Label2: TLabel;
+    edtUrl: TEdit;
+    Label3: TLabel;
+    edtTimeout: TEdit;
     procedure FormCreate(Sender: TObject);
     procedure cmbTemasSelect(Sender: TObject);
+    procedure btnModeloOkClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -27,6 +32,18 @@ uses
   Loja.Model.Infra.Configuracoes;
 
 {$R *.dfm}
+
+procedure TViewConfiguracoes.btnModeloOkClick(Sender: TObject);
+begin
+  inherited;
+  with TLojaModelInfraConfiguracoes.GetInstance
+  do begin
+    Tema := cmbTemas.Text;
+    APIUrl := edtUrl.Text;
+    APITimeout := StrToIntDef(edtTimeout.Text, 3000);
+  end;
+  Self.ModalResult := mrOk;
+end;
 
 procedure TViewConfiguracoes.cmbTemasSelect(Sender: TObject);
 begin
@@ -49,6 +66,12 @@ begin
        cmbTemas.ItemIndex := idx;
        Break;
      end;
+
+  with TLojaModelInfraConfiguracoes.GetInstance do
+  begin
+    edtUrl.Text := APIUrl;
+    edtTimeout.Text := APITimeout.ToString;
+  end;
 end;
 
 end.

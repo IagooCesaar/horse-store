@@ -168,6 +168,7 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="model\infra\Loja.Model.Infra.Configuracoes.pas"/>
+        <DCCReference Include="model\infra\Loja.Model.Infra.Usuario.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
