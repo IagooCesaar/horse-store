@@ -40,7 +40,7 @@ end;
 
 class function TLojaModelInfraUsuario.GetInstance: TLojaModelInfraUsuario;
 begin
-  if FUsuario <> nil
+  if FUsuario = nil
   then FUsuario := TLojaModelInfraUsuario.Create;
   Result := FUsuario;
 end;

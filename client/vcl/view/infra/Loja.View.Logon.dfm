@@ -3,8 +3,8 @@ object ViewLogon: TViewLogon
   Top = 0
   BorderStyle = bsDialog
   Caption = 'Logon'
-  ClientHeight = 441
-  ClientWidth = 624
+  ClientHeight = 218
+  ClientWidth = 367
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,8 +17,8 @@ object ViewLogon: TViewLogon
     AlignWithMargins = True
     Left = 10
     Top = 10
-    Width = 604
-    Height = 421
+    Width = 347
+    Height = 198
     Margins.Left = 10
     Margins.Top = 10
     Margins.Right = 10
@@ -29,7 +29,214 @@ object ViewLogon: TViewLogon
     Caption = 'Panel1'
     ShowCaption = False
     TabOrder = 0
-    ExplicitWidth = 600
-    ExplicitHeight = 420
+    ExplicitLeft = 5
+    ExplicitTop = 5
+    ExplicitWidth = 604
+    ExplicitHeight = 421
+    object pLogin: TPanel
+      AlignWithMargins = True
+      Left = 10
+      Top = 10
+      Width = 323
+      Height = 174
+      Margins.Left = 10
+      Margins.Top = 10
+      Margins.Right = 10
+      Margins.Bottom = 10
+      Align = alClient
+      BevelOuter = bvNone
+      Color = 5064962
+      ParentBackground = False
+      ShowCaption = False
+      TabOrder = 0
+      ExplicitLeft = 18
+      ExplicitTop = 18
+      ExplicitWidth = 580
+      ExplicitHeight = 397
+      object Label2: TLabel
+        AlignWithMargins = True
+        Left = 8
+        Top = 8
+        Width = 307
+        Height = 16
+        Margins.Left = 8
+        Margins.Top = 8
+        Margins.Right = 8
+        Margins.Bottom = 0
+        Align = alTop
+        Caption = 'Login'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clSilver
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Pitch = fpVariable
+        Font.Style = []
+        Font.Quality = fqDraft
+        ParentFont = False
+        ExplicitWidth = 30
+      end
+      object lbl1: TLabel
+        AlignWithMargins = True
+        Left = 8
+        Top = 60
+        Width = 307
+        Height = 16
+        Margins.Left = 8
+        Margins.Top = 8
+        Margins.Right = 8
+        Margins.Bottom = 0
+        Align = alTop
+        Caption = 'Senha'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clSilver
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Pitch = fpVariable
+        Font.Style = []
+        Font.Quality = fqDraft
+        ParentFont = False
+        ExplicitTop = 112
+        ExplicitWidth = 36
+      end
+      object edtLogin: TEdit
+        AlignWithMargins = True
+        Left = 8
+        Top = 28
+        Width = 307
+        Height = 24
+        Margins.Left = 8
+        Margins.Top = 4
+        Margins.Right = 8
+        Margins.Bottom = 0
+        Align = alTop
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clDefault
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Pitch = fpVariable
+        Font.Style = []
+        Font.Quality = fqDraft
+        ParentFont = False
+        TabOrder = 0
+        TextHint = 'Informe seu usu'#225'rio, c'#243'digo ou e-mail'
+        ExplicitTop = 80
+        ExplicitWidth = 564
+      end
+      object edtSenha: TEdit
+        AlignWithMargins = True
+        Left = 8
+        Top = 80
+        Width = 307
+        Height = 24
+        Margins.Left = 8
+        Margins.Top = 4
+        Margins.Right = 8
+        Margins.Bottom = 0
+        Align = alTop
+        Color = clWhite
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clDefault
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Pitch = fpVariable
+        Font.Style = []
+        Font.Quality = fqDraft
+        ParentFont = False
+        PasswordChar = '*'
+        TabOrder = 1
+        TextHint = 'Informe seu senha de acesso'
+        ExplicitTop = 132
+        ExplicitWidth = 564
+      end
+      object pBotoes: TPanel
+        AlignWithMargins = True
+        Left = 8
+        Top = 112
+        Width = 307
+        Height = 30
+        Margins.Left = 8
+        Margins.Top = 8
+        Margins.Right = 8
+        Margins.Bottom = 8
+        Align = alClient
+        BevelOuter = bvNone
+        Caption = 'pBotoes'
+        Color = 5064962
+        ParentBackground = False
+        ShowCaption = False
+        TabOrder = 2
+        ExplicitTop = 164
+        ExplicitWidth = 564
+        ExplicitHeight = 201
+        object btnEntrar: TButton
+          AlignWithMargins = True
+          Left = 30
+          Top = 0
+          Width = 95
+          Height = 30
+          Cursor = crHandPoint
+          Margins.Left = 30
+          Margins.Top = 0
+          Margins.Right = 0
+          Margins.Bottom = 0
+          Align = alLeft
+          Caption = '&Entrar'
+          TabOrder = 0
+          OnClick = btnEntrarClick
+          ExplicitHeight = 201
+        end
+        object btnSair: TButton
+          AlignWithMargins = True
+          Left = 182
+          Top = 0
+          Width = 95
+          Height = 30
+          Cursor = crHandPoint
+          Margins.Left = 0
+          Margins.Top = 0
+          Margins.Right = 30
+          Margins.Bottom = 0
+          Align = alRight
+          Caption = '&Sair'
+          TabOrder = 1
+          ExplicitLeft = 439
+          ExplicitHeight = 201
+        end
+      end
+      object pMetodoConexao: TPanel
+        Left = 0
+        Top = 150
+        Width = 323
+        Height = 24
+        Align = alBottom
+        BevelOuter = bvNone
+        Caption = 'pMetodoConexao'
+        Color = 5064962
+        ParentBackground = False
+        ShowCaption = False
+        TabOrder = 3
+        ExplicitTop = 201
+        ExplicitWidth = 319
+        object sbConfig: TSpeedButton
+          Left = 0
+          Top = 0
+          Width = 105
+          Height = 24
+          Cursor = crHandPoint
+          Align = alLeft
+          Caption = 'Configurar acesso'
+          Flat = True
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWhite
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Pitch = fpVariable
+          Font.Style = [fsUnderline]
+          Font.Quality = fqDraft
+          ParentFont = False
+          OnClick = sbConfigClick
+        end
+      end
+    end
   end
 end

@@ -2,8 +2,8 @@ object ViewPrincipal: TViewPrincipal
   Left = 0
   Top = 0
   Caption = 'Loja'
-  ClientHeight = 441
-  ClientWidth = 624
+  ClientHeight = 440
+  ClientWidth = 620
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,7 +19,7 @@ object ViewPrincipal: TViewPrincipal
     Left = 0
     Top = 0
     Width = 129
-    Height = 441
+    Height = 440
     Align = alLeft
     BorderWidth = 2
     ButtonHeight = 54
@@ -31,7 +31,7 @@ object ViewPrincipal: TViewPrincipal
     List = True
     ShowCaptions = True
     TabOrder = 0
-    ExplicitHeight = 440
+    ExplicitHeight = 441
     object btnVender: TToolButton
       Left = 0
       Top = 0

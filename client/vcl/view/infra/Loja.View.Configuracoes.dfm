@@ -1,14 +1,16 @@
 inherited ViewConfiguracoes: TViewConfiguracoes
   Caption = 'Configura'#231#245'es'
-  ClientHeight = 279
-  ClientWidth = 448
+  ClientHeight = 278
+  ClientWidth = 444
   OnCreate = FormCreate
   ExplicitWidth = 460
   ExplicitHeight = 317
   TextHeight = 21
   inherited pModeloClient: TPanel
-    Width = 448
-    Height = 223
+    Width = 444
+    Height = 222
+    ExplicitWidth = 444
+    ExplicitHeight = 222
     object Label1: TLabel
       Left = 8
       Top = 8
@@ -58,15 +60,19 @@ inherited ViewConfiguracoes: TViewConfiguracoes
     end
   end
   inherited pModeloBotoes: TPanel
-    Top = 223
-    Width = 448
+    Top = 222
+    Width = 444
+    ExplicitTop = 223
+    ExplicitWidth = 448
     inherited btnModeloOk: TButton
       Left = 241
       Caption = 'Aplicar'
       OnClick = btnModeloOkClick
+      ExplicitLeft = 241
     end
     inherited btnModeloCancelar: TButton
       Left = 344
+      ExplicitLeft = 344
     end
   end
 end
