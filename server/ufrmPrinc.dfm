@@ -93,6 +93,14 @@ object frmPrinc: TfrmPrinc
       TabOrder = 2
     end
   end
+  object btnSwagger: TButton
+    Left = 343
+    Top = 35
+    Width = 106
+    Height = 29
+    Action = acSwagger
+    TabOrder = 4
+  end
   object aclPrinc: TActionList
     Left = 576
     Top = 24
@@ -110,6 +118,11 @@ object frmPrinc: TfrmPrinc
       Category = 'API'
       Caption = 'Definir Senha'
       OnExecute = acDefinirSenhaExecute
+    end
+    object acSwagger: TAction
+      Category = 'API'
+      Caption = 'Swagger'
+      OnExecute = acSwaggerExecute
     end
   end
   object ApplicationEvents1: TApplicationEvents

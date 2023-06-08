@@ -25,12 +25,15 @@ type
     edtSenha: TEdit;
     Label3: TLabel;
     btnDefinirSenha: TButton;
+    btnSwagger: TButton;
+    acSwagger: TAction;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure acIniciarAPIExecute(Sender: TObject);
     procedure acPararAPIExecute(Sender: TObject);
     procedure ApplicationEvents1Idle(Sender: TObject; var Done: Boolean);
     procedure acDefinirSenhaExecute(Sender: TObject);
+    procedure acSwaggerExecute(Sender: TObject);
   private
     FApp: TApp;
   public
@@ -41,6 +44,9 @@ var
   frmPrinc: TfrmPrinc;
 
 implementation
+
+uses
+  Winapi.ShellAPI;
 
 {$R *.dfm}
 
@@ -58,6 +64,16 @@ end;
 procedure TfrmPrinc.acPararAPIExecute(Sender: TObject);
 begin
   FApp.Stop;
+end;
+
+procedure TfrmPrinc.acSwaggerExecute(Sender: TObject);
+begin
+  var LUrl := Copy(
+    FApp.BaseURL, 0,
+    Pos('/api',FApp.BaseURL)-1
+  )+'/swagger-ui';
+
+  ShellExecute(Application.Handle,PChar('Open'),PChar (LUrl), Nil,Nil,SW_SHOWNORMAL);
 end;
 
 procedure TfrmPrinc.ApplicationEvents1Idle(Sender: TObject; var Done: Boolean);
