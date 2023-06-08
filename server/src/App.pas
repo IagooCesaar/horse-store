@@ -72,7 +72,9 @@ uses
 procedure TApp.ConfigSwagger();
 begin
   Swagger
-    .BasePath(THorse.Host)
+    //.BasePath(GetBaseURL)
+    .BasePath('/loja/api')
+    .AddBasicSecurity.&End
     .Register
       .Response(Integer(THTTPStatus.NoContent)).Description('No Content').&End
       .Response(Integer(THTTPStatus.BadRequest)).Description('Bad Request').Schema(TLojaModelDTORespApiError).&End
@@ -144,7 +146,6 @@ begin
 
   LoadBossConfig();
   ConfigLogger();
-  ConfigSwagger();
 
   THorse.MaxConnections := StrToIntDef(GetEnvironmentVariable('MAXCONNECTIONS'), 10000);
   THorse.ListenQueue := StrToIntDef(GetEnvironmentVariable('LISTENQUEUE'), 200);
@@ -219,6 +220,8 @@ begin
   FStartedAt := Now;
   THorse.Listen(APort,
     procedure begin
+      ConfigSwagger();
+
       {$IF defined(CONSOLE) and (not defined(TEST))}
       Writeln(Format('Server is runing on %s:%d', [THorse.Host, THorse.Port]));
       Writeln(Format('Try use Swagger on %s/swagger-ui', [GetBaseURL]));

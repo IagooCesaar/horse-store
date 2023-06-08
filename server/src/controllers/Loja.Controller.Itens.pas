@@ -8,7 +8,7 @@ uses
   Horse.JsonInterceptor.Helpers;
 
 procedure Registry(const AContext: string);
-procedure ConfigSwagger(const AContext: string);
+procedure ConfigSwagger;
 
 const C_UnitName = 'Loja.Controller.Itens';
 
@@ -16,7 +16,8 @@ implementation
 
 uses
   System.SysUtils,
-  System.NetEncoding,
+  GBSwagger.Model.Interfaces,
+
   Loja.Model.Factory,
   Loja.Model.Entity.Itens.Item,
   Loja.Model.Dto.Req.Itens.CriarItem,
@@ -69,7 +70,6 @@ begin
     .Error('O body não estava no formato esperado');
 
   try
-
     LDto := TJson.ClearJsonAndConvertToObject
       <TLojaModelDtoReqItensCriarItem>(Req.Body);
 
@@ -126,6 +126,8 @@ end;
 
 procedure Registry(const AContext: string);
 begin
+  ConfigSwagger;
+
   THorse.Group.Prefix(AContext+'/itens')
     .Post('/', CriarItem)
     .Get('/', ObterItens)
@@ -133,9 +135,23 @@ begin
     .Get('/codigo-barras/:num_cod_barr', GetItemPorNumCodBarr)
 end;
 
-procedure ConfigSwagger(const AContext: string);
+procedure ConfigSwagger;
 begin
-
+  Swagger
+    .Path('/itens')
+    .Tag('Itens')
+      .GET('Obter dados cadastrais de vários itens')
+        .Description('Obter dados cadastrais de itens. Utilize LHS Brackets para filtrar: (eq, contains, startsWith e endsWith)')
+        .AddParamQuery('nom_item', 'Nome do item. Utilize LHS Brackets para filtrar: (eq, contains, startsWith e endsWith)').&End
+        .AddParamQuery('num_cod_barr', 'Número do código de barras do item. Utilize LHS Brackets para filtrar: (eq, contains, startsWith e endsWith)').&End
+        .AddResponse(Integer(THTTPStatus.OK)).Schema(TLojaModelEntityItensItem).IsArray(true).&End
+        .AddResponse(Integer(THTTPStatus.BadRequest)).&End
+        .AddResponse(Integer(THTTPStatus.NotFound)).&End
+        .AddResponse(Integer(THTTPStatus.PreconditionFailed)).&End
+        .AddResponse(Integer(THTTPStatus.InternalServerError)).&End
+      .&End
+    .&End
+  ;
 end;
 
 end.
