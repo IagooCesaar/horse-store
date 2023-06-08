@@ -43,6 +43,13 @@ type
 
     [Test]
     procedure Test_NaoCriarNovoItem_BodyVazio;
+
+    [Test]
+    procedure Test_AtualizarNovoItem;
+
+    [Test]
+    procedure Test_NaoAtualizarNovoItem_BodyVazio;
+
   end;
 
 implementation
@@ -65,6 +72,55 @@ begin
   FPassword := TLojaControllerApiTest.GetInstance.Password;
 end;
 
+procedure TLojaControllerItensTest.Test_AtualizarNovoItem;
+var LDTO : TLojaModelDtoReqItensCriarItem;
+begin
+  try
+    LDTO := TLojaModelDtoReqItensCriarItem.Create;
+    LDTO.NomItem := 'Novo Item Cadastrado Via Teste Integração';
+    LDTO.NumCodBarr := '0123456789';
+
+    var LResponseCriar := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/itens')
+      .AddBody(TJson.ObjectToClearJsonString(LDTO))
+      .Post();
+
+    Assert.AreEqual(201, LResponseCriar.StatusCode);
+
+    var LItemCriado := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItem>
+      (LResponseCriar.Content);
+
+    Assert.AreEqual(LDTO.NomItem, LItemCriado.NomItem);
+    Assert.AreEqual(LDTO.NumCodBarr, LItemCriado.NumCodBarr);
+
+    LDTO.NomItem := 'Nome atualizado';
+    LDTO.NumCodBarr := '9876543210';
+
+    var LResponse := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/itens/{cod_item}')
+      .AddUrlSegment('cod_item', LItemCriado.CodItem.ToString)
+      .AddBody(TJson.ObjectToClearJsonString(LDTO))
+      .Put();
+
+    Assert.AreEqual(200, LResponse.StatusCode);
+
+    var LItemAtualizado := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItem>
+      (LResponse.Content);
+
+    Assert.AreEqual(LDTO.NomItem, LItemAtualizado.NomItem);
+    Assert.AreEqual(LDTO.NumCodBarr, LItemAtualizado.NumCodBarr);
+
+    LItemCriado.Free;
+    LItemAtualizado.Free;
+  finally
+    FreeAndNil(LDTO);
+  end;
+end;
+
 procedure TLojaControllerItensTest.Test_CriarNovoItem;
 var LNovoItem : TLojaModelDtoReqItensCriarItem;
 begin
@@ -84,6 +140,11 @@ begin
   finally
     FreeAndNil(LNovoItem);
   end;
+end;
+
+procedure TLojaControllerItensTest.Test_NaoAtualizarNovoItem_BodyVazio;
+begin
+
 end;
 
 procedure TLojaControllerItensTest.Test_NaoCriarNovoItem_BodyVazio;
