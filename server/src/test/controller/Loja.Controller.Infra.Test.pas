@@ -23,6 +23,9 @@ type
 
     [Test]
     procedure Test_Swagger;
+
+    [Test]
+    procedure Test_Autenticacao;
   public
   end;
 
@@ -49,6 +52,23 @@ begin
 
 end;
 
+procedure TLojaControllerInfraTest.Test_Autenticacao;
+begin
+  var LResponseOk := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/validar-logon')
+    .Get();
+
+  Assert.AreEqual(200, LResponseOk.StatusCode);
+
+  var LResponseNot := TRequest.New
+    .BaseURL(FBaseURL)
+    .Resource('/validar-logon')
+    .Get();
+
+  Assert.AreEqual(401, LResponseNot.StatusCode);
+end;
 procedure TLojaControllerInfraTest.Test_HealthCheck;
 begin
   var LResponse := TRequest.New
