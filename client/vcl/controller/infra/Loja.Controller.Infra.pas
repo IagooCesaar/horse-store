@@ -13,7 +13,7 @@ type
   private
     { Private declarations }
   public
-    { Public declarations }
+    function ValidarLogon: Boolean;
   end;
 
 var
@@ -24,5 +24,16 @@ implementation
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 
 {$R *.dfm}
+
+{ TControllerInfra }
+
+function TControllerInfra.ValidarLogon: Boolean;
+begin
+  var LResponse := PreparaRequest
+    .Resource('/validar-logon')
+    .Get();
+
+  Result := LResponse.StatusCode = 200;
+end;
 
 end.

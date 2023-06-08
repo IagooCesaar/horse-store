@@ -43,6 +43,12 @@ begin
   TLojaModelInfraUsuario.GetInstance.Senha := edtSenha.Text;
 
   var Controller := TControllerInfra.Create(Self);
+  try
+    if not Controller.ValidarLogon
+    then raise Exception.Create('Credenciais inválidas');
+  finally
+    FreeAndNil(Controller);
+  end;
 
   Self.ModalResult := mrOk;
 end;
