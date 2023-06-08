@@ -169,6 +169,11 @@
         </DCCReference>
         <DCCReference Include="model\infra\Loja.Model.Infra.Configuracoes.pas"/>
         <DCCReference Include="model\infra\Loja.Model.Infra.Usuario.pas"/>
+        <DCCReference Include="controller\infra\Loja.Controller.Infra.pas">
+            <Form>ControllerInfra</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

@@ -57,7 +57,7 @@ object ViewLogon: TViewLogon
         AlignWithMargins = True
         Left = 8
         Top = 8
-        Width = 307
+        Width = 30
         Height = 16
         Margins.Left = 8
         Margins.Top = 8
@@ -73,13 +73,12 @@ object ViewLogon: TViewLogon
         Font.Style = []
         Font.Quality = fqDraft
         ParentFont = False
-        ExplicitWidth = 30
       end
       object lbl1: TLabel
         AlignWithMargins = True
         Left = 8
         Top = 60
-        Width = 307
+        Width = 36
         Height = 16
         Margins.Left = 8
         Margins.Top = 8
@@ -95,8 +94,6 @@ object ViewLogon: TViewLogon
         Font.Style = []
         Font.Quality = fqDraft
         ParentFont = False
-        ExplicitTop = 112
-        ExplicitWidth = 36
       end
       object edtLogin: TEdit
         AlignWithMargins = True

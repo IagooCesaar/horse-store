@@ -32,7 +32,8 @@ implementation
 
 uses
   Loja.View.Configuracoes,
-  Loja.Model.Infra.Usuario;
+  Loja.Model.Infra.Usuario,
+  Loja.Controller.Infra;
 
 {$R *.dfm}
 
@@ -40,6 +41,8 @@ procedure TViewLogon.btnEntrarClick(Sender: TObject);
 begin
   TLojaModelInfraUsuario.GetInstance.Login := edtLogin.Text;
   TLojaModelInfraUsuario.GetInstance.Senha := edtSenha.Text;
+
+  var Controller := TControllerInfra.Create(Self);
 
   Self.ModalResult := mrOk;
 end;

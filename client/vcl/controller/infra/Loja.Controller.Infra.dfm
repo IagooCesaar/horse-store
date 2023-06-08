@@ -1,0 +1,2 @@
+inherited ControllerInfra: TControllerInfra
+end
