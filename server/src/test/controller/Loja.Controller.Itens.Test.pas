@@ -50,6 +50,9 @@ type
     [Test]
     procedure Test_NaoAtualizarNovoItem_BodyVazio;
 
+    [Test]
+    procedure Test_NaoAtualizarNovoItem_CodigoNegativo;
+
   end;
 
 implementation
@@ -143,8 +146,65 @@ begin
 end;
 
 procedure TLojaControllerItensTest.Test_NaoAtualizarNovoItem_BodyVazio;
+var LDTO : TLojaModelDtoReqItensCriarItem;
 begin
+  try
+    LDTO := TLojaModelDtoReqItensCriarItem.Create;
+    LDTO.NomItem := 'Novo Item Cadastrado Via Teste Integração';
+    LDTO.NumCodBarr := '0123456789';
 
+    var LResponseCriar := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/itens')
+      .AddBody(TJson.ObjectToClearJsonString(LDTO))
+      .Post();
+
+    Assert.AreEqual(201, LResponseCriar.StatusCode);
+
+    var LItemCriado := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItem>
+      (LResponseCriar.Content);
+
+    Assert.AreEqual(LDTO.NomItem, LItemCriado.NomItem);
+    Assert.AreEqual(LDTO.NumCodBarr, LItemCriado.NumCodBarr);
+
+
+    var LResponse := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/itens/{cod_item}')
+      .AddUrlSegment('cod_item', LItemCriado.CodItem.ToString)
+      .AddBody('')
+      .Put();
+
+    Assert.AreEqual(400, LResponse.StatusCode);
+
+    LItemCriado.Free;
+  finally
+    FreeAndNil(LDTO);
+  end;
+end;
+
+procedure TLojaControllerItensTest.Test_NaoAtualizarNovoItem_CodigoNegativo;
+var LDTO : TLojaModelDtoReqItensCriarItem;
+begin
+  try
+    LDTO := TLojaModelDtoReqItensCriarItem.Create;
+    LDTO.NomItem := 'Novo Item Cadastrado Via Teste Integração';
+    LDTO.NumCodBarr := '0123456789';
+
+    var LResponse := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/itens/{cod_item}')
+      .AddUrlSegment('cod_item', '-1')
+      .AddBody(TJson.ObjectToClearJsonString(LDTO))
+      .Put();
+
+    Assert.AreEqual(400, LResponse.StatusCode);
+  finally
+    FreeAndNil(LDTO);
+  end;
 end;
 
 procedure TLojaControllerItensTest.Test_NaoCriarNovoItem_BodyVazio;
