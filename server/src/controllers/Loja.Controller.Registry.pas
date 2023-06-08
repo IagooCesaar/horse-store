@@ -33,7 +33,7 @@ begin
     .Get(LContext+'/healthcheck', HealtCheck);
 
   Swagger
-    .Path(LContext+'/healthcheck')
+    .Path('/healthcheck')
     .Tag('Infraestrutura')
       .GET('Health Check')
         .Description('Health Check')

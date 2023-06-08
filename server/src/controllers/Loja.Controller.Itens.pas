@@ -154,7 +154,7 @@ begin
       .POST('Cria um novo item')
         .Description('Cria um novo item para venda')
         .AddParamBody('Body').Schema(TLojaModelDtoReqItensCriarItem).&End
-        .AddResponse(Integer(THTTPStatus.OK)).Schema(TLojaModelEntityItensItem).&End
+        .AddResponse(Integer(THTTPStatus.Created)).Schema(TLojaModelEntityItensItem).&End
         .AddResponse(Integer(THTTPStatus.BadRequest)).&End
         .AddResponse(Integer(THTTPStatus.NotFound)).&End
         .AddResponse(Integer(THTTPStatus.PreconditionFailed)).&End

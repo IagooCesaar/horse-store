@@ -8,7 +8,7 @@ uses
   Horse.JsonInterceptor.Helpers;
 
 procedure Registry(const AContext: string);
-procedure ConfigSwagger(const AContext: string);
+procedure ConfigSwagger;
 
 const C_UnitName = 'Loja.Controller.Estoque';
 
@@ -16,13 +16,17 @@ implementation
 
 uses
   System.SysUtils,
-  System.NetEncoding,
+  GBSwagger.Model.Interfaces,
+
   Loja.Model.Factory,
   Loja.Model.Dto.Req.Estoque.AcertoEstoque,
 
   Loja.Model.Entity.Itens.Item,
   Loja.Model.Dto.Req.Itens.CriarItem,
-  Loja.Model.Dto.Req.Itens.FiltroItens;
+  Loja.Model.Dto.Req.Itens.FiltroItens,
+  Loja.Model.Dto.Resp.Estoque.SaldoItem,
+  Loja.Model.Entity.Estoque.Saldo,
+  Loja.Model.Entity.Estoque.Movimento;
 
 procedure CriarAcertoEstoque(Req: THorseRequest; Resp: THorseResponse);
 var LDto : TLojaModelDtoReqEstoqueAcertoEstoque;
@@ -94,11 +98,11 @@ begin
     .InvalidFormatMessage('O valor fornecido não é um inteiro válido')
     .AsInteger;
 
-  var LSado := TLojaModelFactory.New
+  var LSaldo := TLojaModelFactory.New
     .Estoque
     .ObterSaldoAtualItem(LCodItem);
-  Resp.Status(THTTPStatus.Ok).Send(TJSON.ObjectToClearJsonValue(LSado));
-  LSado.Free;
+  Resp.Status(THTTPStatus.Ok).Send(TJSON.ObjectToClearJsonValue(LSaldo));
+  LSaldo.Free;
 end;
 
 procedure ObterFechamentosSaldo(Req: THorseRequest; Resp: THorseResponse);
@@ -133,6 +137,8 @@ end;
 
 procedure Registry(const AContext: string);
 begin
+  ConfigSwagger;
+
   THorse.Group.Prefix(AContext+'/estoque')
     .Post('/:cod_item/acerto-de-estoque', CriarAcertoEstoque)
     .Get('/:cod_item/historico-movimento', ObterHistoricoMovimento)
@@ -140,9 +146,89 @@ begin
     .Get('/:cod_item/saldo-atual', ObterSaldoAtual)
 end;
 
-procedure ConfigSwagger(const AContext: string);
+procedure ConfigSwagger;
 begin
+  Swagger
+    .Path('/estoque/{cod_item}/saldo-atual')
+    .Tag('Estoque')
+      .GET('Obtêm saldo atual do item')
+        .Description('Obtêm saldo atual, último fechamento e últimos movimentos do item')
+        .AddParamPath('cod_item', 'Código do item')
+          .Schema(SWAG_INTEGER)
+        .&End
+        .AddResponse(Integer(THTTPStatus.OK)).Schema(TLojaModelDtoRespEstoqueSaldoItem).&End
+        .AddResponse(Integer(THTTPStatus.BadRequest)).&End
+        .AddResponse(Integer(THTTPStatus.NotFound)).&End
+        .AddResponse(Integer(THTTPStatus.PreconditionFailed)).&End
+        .AddResponse(Integer(THTTPStatus.InternalServerError)).&End
+      .&End
+    .&End
 
+    .Path('/estoque/{cod_item}/fechamentos-saldo')
+    .Tag('Estoque')
+      .GET('Obtêm fechamentos de saldo do item')
+        .Description('Obtêm fechamentos de saldo do item em um período de tempo')
+        .AddParamPath('cod_item', 'Código do item')
+          .Schema(SWAG_INTEGER)
+        .&End
+        .AddParamQuery('dat_ini', 'Data inicial (YYYY-MM-DD)')
+          .Schema(SWAG_STRING)
+          .Required(True)
+        .&End
+        .AddParamQuery('dat_fim', 'Data final (YYYY-MM-DD)')
+          .Schema(SWAG_STRING)
+          .Required(True)
+        .&End
+        .AddResponse(Integer(THTTPStatus.OK)).Schema(TLojaModelEntityEstoqueSaldo).IsArray(True).&End
+        .AddResponse(Integer(THTTPStatus.NoContent)).&End
+        .AddResponse(Integer(THTTPStatus.BadRequest)).&End
+        .AddResponse(Integer(THTTPStatus.NotFound)).&End
+        .AddResponse(Integer(THTTPStatus.PreconditionFailed)).&End
+        .AddResponse(Integer(THTTPStatus.InternalServerError)).&End
+      .&End
+    .&End
+
+    .Path('/estoque/{cod_item}/historico-movimento')
+    .Tag('Estoque')
+      .GET('Obtêm histórico de movimentação')
+        .Description('Obtêm histórico de movimentação de estoque do item em um período de tempo')
+        .AddParamPath('cod_item', 'Código do item')
+          .Schema(SWAG_INTEGER)
+        .&End
+        .AddParamQuery('dat_ini', 'Data inicial (YYYY-MM-DD)')
+          .Schema(SWAG_STRING)
+          .Required(True)
+        .&End
+        .AddParamQuery('dat_fim', 'Data final (YYYY-MM-DD)')
+          .Schema(SWAG_STRING)
+          .Required(True)
+        .&End
+        .AddResponse(Integer(THTTPStatus.OK)).Schema(TLojaModelEntityEstoqueMovimento).IsArray(True).&End
+        .AddResponse(Integer(THTTPStatus.NoContent)).&End
+        .AddResponse(Integer(THTTPStatus.BadRequest)).&End
+        .AddResponse(Integer(THTTPStatus.NotFound)).&End
+        .AddResponse(Integer(THTTPStatus.PreconditionFailed)).&End
+        .AddResponse(Integer(THTTPStatus.InternalServerError)).&End
+      .&End
+    .&End
+
+    .Path('/estoque/{cod_item}/acerto-de-estoque')
+    .Tag('Estoque')
+      .POST('Realizar acerto de estoque')
+        .Description('Defini o saldo atual do item')
+        .AddParamPath('cod_item', 'Código do item')
+          .Schema(SWAG_INTEGER)
+        .&End
+        .AddParamBody('Body')
+          .Schema(TLojaModelDtoReqEstoqueAcertoEstoque)
+        .&End
+        .AddResponse(Integer(THTTPStatus.Created)).Schema(TLojaModelEntityEstoqueMovimento).&End
+        .AddResponse(Integer(THTTPStatus.BadRequest)).&End
+        .AddResponse(Integer(THTTPStatus.NotFound)).&End
+        .AddResponse(Integer(THTTPStatus.PreconditionFailed)).&End
+        .AddResponse(Integer(THTTPStatus.InternalServerError)).&End
+      .&End
+    .&End
 end;
 
 end.
