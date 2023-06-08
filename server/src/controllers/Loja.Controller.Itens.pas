@@ -150,6 +150,17 @@ begin
         .AddResponse(Integer(THTTPStatus.PreconditionFailed)).&End
         .AddResponse(Integer(THTTPStatus.InternalServerError)).&End
       .&End
+
+      .POST('Cria um novo item')
+        .Description('Obter dados cadastrais de itens. Utilize LHS Brackets para filtrar: (eq, contains, startsWith e endsWith)')
+        .AddParamBody('Body').Schema(TLojaModelDtoReqItensCriarItem).&End
+        .AddResponse(Integer(THTTPStatus.OK)).Schema(TLojaModelEntityItensItem).&End
+        .AddResponse(Integer(THTTPStatus.BadRequest)).&End
+        .AddResponse(Integer(THTTPStatus.NotFound)).&End
+        .AddResponse(Integer(THTTPStatus.PreconditionFailed)).&End
+        .AddResponse(Integer(THTTPStatus.InternalServerError)).&End
+      .&End
+
     .&End
   ;
 end;
