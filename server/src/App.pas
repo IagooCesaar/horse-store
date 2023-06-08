@@ -62,7 +62,8 @@ uses
   Database.Factory,
   Database.Tipos,
 
-  Loja.Controller.Registry;
+  Loja.Controller.Registry,
+  Loja.Model.Dto.Resp.ApiError;
 
 { TApp }
 
@@ -70,7 +71,26 @@ uses
 
 procedure TApp.ConfigSwagger();
 begin
-  
+  Swagger
+    .BasePath(THorse.Host)
+    .Register
+      .Response(Integer(THTTPStatus.NoContent)).Description('No Content').&End
+      .Response(Integer(THTTPStatus.BadRequest)).Description('Bad Request').Schema(TLojaModelDTORespApiError).&End
+      .Response(Integer(THTTPStatus.NotFound)).Description('Not Found').&End
+      .Response(Integer(THTTPStatus.InternalServerError)).Description('Internal Server Error').&End
+    .&End
+    .AddProtocol(TGBSwaggerProtocol.gbHttp)
+    //.AddProtocol(TGBSwaggerProtocol.gbHttps)
+    .Info
+      .Title('Loja API')
+      .Version(Self.Version)
+      .Description(Self.Description)
+      .Contact
+        .Name('Iago César F. Nogueira')
+        .Email('iagocesar.nogueira@gmail.com')
+      .&End
+    .&End
+  .&End;
 end;
 
 procedure TApp.ConfigDatabase;
@@ -132,10 +152,11 @@ begin
   THorse.Use(Jhonson('UTF-8'))
         .Use(Compression())
         .Use(OctetStream)
-        .Use(HorseSwagger('/swagger-ui', FContext+'/api-docs'))
+        .Use(HorseSwagger(FContext+'/swagger-ui', FContext+'/api-docs'))
         .Use(HorseBasicAuthentication(ValidarLogin,
           THorseBasicAuthenticationConfig.New.SkipRoutes([
-            FContext+'/api/healthcheck/'
+            FContext+'/api/healthcheck/',
+            FContext+'/swagger-ui/'
           ])
         ))
         .Use(HandleException);

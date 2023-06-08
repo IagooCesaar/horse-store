@@ -55,7 +55,8 @@ uses
   Loja.Model.Dto.Resp.Estoque.SaldoItem in 'src\model\dto\Loja.Model.Dto.Resp.Estoque.SaldoItem.pas',
   Loja.Model.Bo.Estoque.Test in 'src\test\model\Loja.Model.Bo.Estoque.Test.pas',
   Loja.Controller.Infra.Test in 'src\test\controller\Loja.Controller.Infra.Test.pas',
-  Loja.Model.Dao.Itens.Item in 'src\model\dao\oficial\itens\Loja.Model.Dao.Itens.Item.pas';
+  Loja.Model.Dao.Itens.Item in 'src\model\dao\oficial\itens\Loja.Model.Dao.Itens.Item.pas',
+  Loja.Model.Dto.Resp.ApiError in 'src\model\dto\Loja.Model.Dto.Resp.ApiError.pas';
 
 {$IFNDEF TESTINSIGHT}
 var

@@ -20,6 +20,9 @@ type
 
     [Test]
     procedure Test_HealthCheck;
+
+    [Test]
+    procedure Test_Swagger;
   public
   end;
 
@@ -49,9 +52,20 @@ end;
 procedure TLojaControllerInfraTest.Test_HealthCheck;
 begin
   var LResponse := TRequest.New
-    .BasicAuthentication(FUsarname, FPassword)
+    //.BasicAuthentication(FUsarname, FPassword)
     .BaseURL(FBaseURL)
     .Resource('/healthcheck')
+    .Get();
+
+  Assert.AreEqual(200, LResponse.StatusCode);
+end;
+
+procedure TLojaControllerInfraTest.Test_Swagger;
+begin
+  var LResponse := TRequest.New
+    //.BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL.Replace('/api', ''))
+    .Resource('/swagger-ui')
     .Get();
 
   Assert.AreEqual(200, LResponse.StatusCode);
