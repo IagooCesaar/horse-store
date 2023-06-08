@@ -48,6 +48,21 @@ type
 
     [Test]
     procedure Test_ObterItensCadastrados;
+
+    [Test]
+    procedure Test_AtualizarUmNovoItem;
+
+    [Test]
+    procedure Test_NaoAtualizarItemComDescricaoPequena;
+
+    [Test]
+    procedure Test_NaoAtualizarItemComDescricaoGrande;
+
+    [Test]
+    procedure Test_NaoAtualizarItemComCodigoBarrasGrande;
+
+    [Test]
+    procedure Test_NaoAtualizarItem_ItemInexistente;
   end;
 
 implementation
@@ -83,6 +98,39 @@ begin
 end;
 
 
+procedure TLojaModelItensTest.Test_AtualizarUmNovoItem;
+var LDto : TLojaModelDtoReqItensCriarItem;
+begin
+  LDto := TLojaModelDtoReqItensCriarItem.Create;
+  try
+    LDto.NomItem := 'Novo Item';
+    LDto.NumCodBarr := '123456789';
+
+    var LItemCriado := TLojaModelItens.New
+      .CriarItem(LDto);
+
+    Assert.IsTrue(LItemCriado <> nil);
+    Assert.AreEqual(LDto.NomItem, LItemCriado.NomItem, 'O nome não coincide');
+    Assert.AreEqual(LDto.NumCodBarr, LItemCriado.NumCodBarr, 'O código de barras não coincide');
+
+    LDto.NomItem := 'Nome atualizado';
+    LDto.NumCodBarr := '987654321';
+    LDto.CodItem := LItemCriado.CodItem;
+
+    var LItemAtualizado := TLojaModelItens.New
+      .AtualizarItem(LDto);
+
+    Assert.IsTrue(LItemAtualizado <> nil);
+    Assert.AreEqual(LDto.NomItem, LItemAtualizado.NomItem, 'O nome não coincide');
+    Assert.AreEqual(LDto.NumCodBarr, LItemAtualizado.NumCodBarr, 'O código de barras não coincide');
+
+    LItemCriado.Free;
+    LItemAtualizado.Free;
+  finally
+    LDto.Free;
+  end;
+end;
+
 procedure TLojaModelItensTest.Test_CriarUmNovoItem;
 var LDTONovoItem : TLojaModelDtoReqItensCriarItem;
 begin
@@ -101,6 +149,143 @@ begin
     LItem.Free;
   finally
     LDTONovoItem.Free;
+  end;
+end;
+
+procedure TLojaModelItensTest.Test_NaoAtualizarItemComCodigoBarrasGrande;
+var LDto : TLojaModelDtoReqItensCriarItem;
+begin
+  LDto := TLojaModelDtoReqItensCriarItem.Create;
+  try
+    LDto.NomItem := 'Novo Item';
+    LDto.NumCodBarr := '123456789';
+
+    var LItemCriado := TLojaModelItens.New
+      .CriarItem(LDto);
+
+    Assert.IsTrue(LItemCriado <> nil);
+    Assert.AreEqual(LDto.NomItem, LItemCriado.NomItem, 'O nome não coincide');
+    Assert.AreEqual(LDto.NumCodBarr, LItemCriado.NumCodBarr, 'O código de barras não coincide');
+
+    LDto.NomItem := 'abc123';
+    LDto.NumCodBarr := '987654321987654321987654321';
+    LDto.CodItem := LItemCriado.CodItem;
+
+    Assert.WillRaiseWithMessageRegex(
+      procedure begin
+        TLojaModelItens.New
+          .AtualizarItem(LDto);
+      end,
+      EHorseException,
+      'O código de barras deverá ter no máximo'
+    );
+
+    LItemCriado.Free;
+  finally
+    LDto.Free;
+  end;
+end;
+
+procedure TLojaModelItensTest.Test_NaoAtualizarItemComDescricaoGrande;
+var LDto : TLojaModelDtoReqItensCriarItem;
+begin
+  LDto := TLojaModelDtoReqItensCriarItem.Create;
+  try
+    LDto.NomItem := 'Novo Item';
+    LDto.NumCodBarr := '123456789';
+
+    var LItemCriado := TLojaModelItens.New
+      .CriarItem(LDto);
+
+    Assert.IsTrue(LItemCriado <> nil);
+    Assert.AreEqual(LDto.NomItem, LItemCriado.NomItem, 'O nome não coincide');
+    Assert.AreEqual(LDto.NumCodBarr, LItemCriado.NumCodBarr, 'O código de barras não coincide');
+
+    LDto.NomItem := '01234567890123456789012345678901234567890123456789'+
+      '01234567890123456789012345678901234567890123456789AAAAAA';
+    LDto.NumCodBarr := '987654321';
+    LDto.CodItem := LItemCriado.CodItem;
+
+    Assert.WillRaiseWithMessageRegex(
+      procedure begin
+        TLojaModelItens.New
+          .AtualizarItem(LDto);
+      end,
+      EHorseException,
+      'O nome do item deverá ter no máximo'
+    );
+
+    LItemCriado.Free;
+  finally
+    LDto.Free;
+  end;
+end;
+
+procedure TLojaModelItensTest.Test_NaoAtualizarItemComDescricaoPequena;
+var LDto : TLojaModelDtoReqItensCriarItem;
+begin
+  LDto := TLojaModelDtoReqItensCriarItem.Create;
+  try
+    LDto.NomItem := 'Novo Item';
+    LDto.NumCodBarr := '123456789';
+
+    var LItemCriado := TLojaModelItens.New
+      .CriarItem(LDto);
+
+    Assert.IsTrue(LItemCriado <> nil);
+    Assert.AreEqual(LDto.NomItem, LItemCriado.NomItem, 'O nome não coincide');
+    Assert.AreEqual(LDto.NumCodBarr, LItemCriado.NumCodBarr, 'O código de barras não coincide');
+
+    LDto.NomItem := 'abc';
+    LDto.NumCodBarr := '987654321';
+    LDto.CodItem := LItemCriado.CodItem;
+
+    Assert.WillRaiseWithMessageRegex(
+      procedure begin
+        TLojaModelItens.New
+          .AtualizarItem(LDto);
+      end,
+      EHorseException,
+      'O nome do item deverá ter no mínimo'
+    );
+
+    LItemCriado.Free;
+  finally
+    LDto.Free;
+  end;
+end;
+
+procedure TLojaModelItensTest.Test_NaoAtualizarItem_ItemInexistente;
+var LDto : TLojaModelDtoReqItensCriarItem;
+begin
+  LDto := TLojaModelDtoReqItensCriarItem.Create;
+  try
+    LDto.NomItem := 'Novo Item';
+    LDto.NumCodBarr := '123456789';
+
+    var LItemCriado := TLojaModelItens.New
+      .CriarItem(LDto);
+
+    Assert.IsTrue(LItemCriado <> nil);
+    Assert.AreEqual(LDto.NomItem, LItemCriado.NomItem, 'O nome não coincide');
+    Assert.AreEqual(LDto.NumCodBarr, LItemCriado.NumCodBarr, 'O código de barras não coincide');
+
+    LDto.NomItem := 'abc123';
+    LDto.NumCodBarr := '1234567890';
+    LDto.CodItem := -1;
+
+    Assert.WillRaiseWithMessageRegex(
+      procedure begin
+        TLojaModelItens.New
+          .AtualizarItem(LDto);
+      end,
+      EHorseException,
+      'Não foi possível encontrar o item pelo código informado'
+    );
+
+    LItemCriado.Free;
+  finally
+    LDto.Free;
   end;
 end;
 
