@@ -2,10 +2,26 @@
 	"hash": "d41d8cd98f00b204e9800998ecf8427e",
 	"updated": "2023-06-02T11:33:19.1940816-03:00",
 	"installedModules": {
+		"github.com/viniciussanchez/dataset-serialize": {
+			"name": "dataset-serialize",
+			"version": "v2.4.9",
+			"hash": "0df5fa71a508ce66a50ef649231af9c9",
+			"artifacts": {},
+			"failed": false,
+			"changed": false
+		},
 		"github.com/viniciussanchez/restrequest4delphi": {
 			"name": "restrequest4delphi",
 			"version": "v4.0.1",
 			"hash": "6c29544901622f140e775f0c63c013ec",
+			"artifacts": {},
+			"failed": false,
+			"changed": false
+		},
+		"https://github.com/iagoocesaar/horse-jsoninterceptor": {
+			"name": "horse-jsoninterceptor",
+			"version": "0.0.6",
+			"hash": "03298741ff77f442103fb40346b542a2",
 			"artifacts": {},
 			"failed": false,
 			"changed": false

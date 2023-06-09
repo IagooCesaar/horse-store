@@ -18,7 +18,8 @@ uses
   Loja.View.Configuracoes in 'view\infra\Loja.View.Configuracoes.pas' {ViewConfiguracoes},
   Loja.Model.Infra.Configuracoes in 'model\infra\Loja.Model.Infra.Configuracoes.pas',
   Loja.Model.Infra.Usuario in 'model\infra\Loja.Model.Infra.Usuario.pas',
-  Loja.Controller.Infra in 'controller\infra\Loja.Controller.Infra.pas' {ControllerInfra: TDataModule};
+  Loja.Controller.Infra in 'controller\infra\Loja.Controller.Infra.pas' {ControllerInfra: TDataModule},
+  Loja.Model.Infra.DTO.ApiError in 'model\infra\Loja.Model.Infra.DTO.ApiError.pas';
 
 {$R *.res}
 

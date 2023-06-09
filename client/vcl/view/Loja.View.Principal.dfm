@@ -2,8 +2,8 @@ object ViewPrincipal: TViewPrincipal
   Left = 0
   Top = 0
   Caption = 'Loja'
-  ClientHeight = 440
-  ClientWidth = 620
+  ClientHeight = 572
+  ClientWidth = 876
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -13,13 +13,14 @@ object ViewPrincipal: TViewPrincipal
   FormStyle = fsMDIForm
   Menu = MainMenu1
   WindowState = wsMaximized
+  OnActivate = FormActivate
   OnCreate = FormCreate
   TextHeight = 21
   object ToolBar1: TToolBar
     Left = 0
     Top = 0
     Width = 129
-    Height = 440
+    Height = 553
     Align = alLeft
     BorderWidth = 2
     ButtonHeight = 54
@@ -31,7 +32,7 @@ object ViewPrincipal: TViewPrincipal
     List = True
     ShowCaptions = True
     TabOrder = 0
-    ExplicitHeight = 441
+    ExplicitHeight = 438
     object btnVender: TToolButton
       Left = 0
       Top = 0
@@ -55,6 +56,16 @@ object ViewPrincipal: TViewPrincipal
       Top = 162
       Action = acLogon
     end
+  end
+  object sbar1: TStatusBar
+    Left = 0
+    Top = 553
+    Width = 876
+    Height = 19
+    Panels = <>
+    ExplicitLeft = 312
+    ExplicitTop = 240
+    ExplicitWidth = 0
   end
   object acmAcoes: TActionManager
     ActionBars = <

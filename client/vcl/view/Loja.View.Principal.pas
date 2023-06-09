@@ -25,6 +25,7 @@ type
     mniConfiguracoes: TMenuItem;
     acLogon: TAction;
     btnLogon: TToolButton;
+    sbar1: TStatusBar;
     procedure acVenderExecute(Sender: TObject);
     procedure acItensExecute(Sender: TObject);
     procedure acComprarExecute(Sender: TObject);
@@ -32,6 +33,7 @@ type
     procedure acConfiguracoesExecute(Sender: TObject);
     procedure acLogonExecute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
   private
     { Private declarations }
     procedure OpenChild(sClassName: string);
@@ -51,19 +53,14 @@ uses
   Loja.View.Configuracoes,
   Loja.View.ModeloModal,
 
-  Loja.Model.Infra.Configuracoes;
+  Loja.Model.Infra.Configuracoes,
+  Loja.Model.Infra.Usuario;
 
 {$R *.dfm}
 
 procedure TViewPrincipal.acComprarExecute(Sender: TObject);
 begin
-  ShowMessage('Comprar');
-  var ViewModeloModal := TViewModeloModal.Create(Self);
-  try
-    ViewModeloModal.ShowModal;
-  finally
-    ViewModeloModal.Free;
-  end;
+  //
 end;
 
 procedure TViewPrincipal.acConfiguracoesExecute(Sender: TObject);
@@ -78,7 +75,7 @@ end;
 
 procedure TViewPrincipal.acItensExecute(Sender: TObject);
 begin
-  ShowMessage('Itens');
+  //
 end;
 
 procedure TViewPrincipal.acLogonExecute(Sender: TObject);
@@ -98,8 +95,13 @@ end;
 
 procedure TViewPrincipal.acVenderExecute(Sender: TObject);
 begin
-  ShowMessage('Vender');
-  OpenChild('TViewVender');
+  //
+end;
+
+procedure TViewPrincipal.FormActivate(Sender: TObject);
+begin
+  while TLojaModelInfraUsuario.GetInstance.Login = ''
+  do acLogon.Execute;
 end;
 
 procedure TViewPrincipal.FormCreate(Sender: TObject);

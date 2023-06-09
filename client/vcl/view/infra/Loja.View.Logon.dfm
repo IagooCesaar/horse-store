@@ -3,22 +3,22 @@ object ViewLogon: TViewLogon
   Top = 0
   BorderStyle = bsDialog
   Caption = 'Logon'
-  ClientHeight = 218
+  ClientHeight = 236
   ClientWidth = 367
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
-  Font.Height = -12
+  Font.Height = -16
   Font.Name = 'Segoe UI'
   Font.Style = []
   Position = poScreenCenter
-  TextHeight = 15
+  TextHeight = 21
   object Panel1: TPanel
     AlignWithMargins = True
     Left = 10
     Top = 10
     Width = 347
-    Height = 198
+    Height = 216
     Margins.Left = 10
     Margins.Top = 10
     Margins.Right = 10
@@ -29,16 +29,14 @@ object ViewLogon: TViewLogon
     Caption = 'Panel1'
     ShowCaption = False
     TabOrder = 0
-    ExplicitLeft = 5
-    ExplicitTop = 5
-    ExplicitWidth = 604
-    ExplicitHeight = 421
+    ExplicitWidth = 343
+    ExplicitHeight = 215
     object pLogin: TPanel
       AlignWithMargins = True
       Left = 10
       Top = 10
       Width = 323
-      Height = 174
+      Height = 192
       Margins.Left = 10
       Margins.Top = 10
       Margins.Right = 10
@@ -49,108 +47,74 @@ object ViewLogon: TViewLogon
       ParentBackground = False
       ShowCaption = False
       TabOrder = 0
-      ExplicitLeft = 18
-      ExplicitTop = 18
-      ExplicitWidth = 580
-      ExplicitHeight = 397
+      ExplicitWidth = 319
+      ExplicitHeight = 191
       object Label2: TLabel
         AlignWithMargins = True
         Left = 8
         Top = 8
-        Width = 30
-        Height = 16
+        Width = 307
+        Height = 21
         Margins.Left = 8
         Margins.Top = 8
         Margins.Right = 8
         Margins.Bottom = 0
         Align = alTop
         Caption = 'Login'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clSilver
-        Font.Height = -13
-        Font.Name = 'Tahoma'
-        Font.Pitch = fpVariable
-        Font.Style = []
-        Font.Quality = fqDraft
-        ParentFont = False
+        ExplicitWidth = 39
       end
       object lbl1: TLabel
         AlignWithMargins = True
         Left = 8
-        Top = 60
-        Width = 36
-        Height = 16
+        Top = 70
+        Width = 307
+        Height = 21
         Margins.Left = 8
         Margins.Top = 8
         Margins.Right = 8
         Margins.Bottom = 0
         Align = alTop
         Caption = 'Senha'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clSilver
-        Font.Height = -13
-        Font.Name = 'Tahoma'
-        Font.Pitch = fpVariable
-        Font.Style = []
-        Font.Quality = fqDraft
-        ParentFont = False
+        ExplicitWidth = 43
       end
       object edtLogin: TEdit
         AlignWithMargins = True
         Left = 8
-        Top = 28
+        Top = 33
         Width = 307
-        Height = 24
+        Height = 29
         Margins.Left = 8
         Margins.Top = 4
         Margins.Right = 8
         Margins.Bottom = 0
         Align = alTop
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clDefault
-        Font.Height = -13
-        Font.Name = 'Tahoma'
-        Font.Pitch = fpVariable
-        Font.Style = []
-        Font.Quality = fqDraft
-        ParentFont = False
         TabOrder = 0
         TextHint = 'Informe seu usu'#225'rio, c'#243'digo ou e-mail'
-        ExplicitTop = 80
-        ExplicitWidth = 564
+        ExplicitWidth = 303
       end
       object edtSenha: TEdit
         AlignWithMargins = True
         Left = 8
-        Top = 80
+        Top = 95
         Width = 307
-        Height = 24
+        Height = 29
         Margins.Left = 8
         Margins.Top = 4
         Margins.Right = 8
         Margins.Bottom = 0
         Align = alTop
         Color = clWhite
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clDefault
-        Font.Height = -13
-        Font.Name = 'Tahoma'
-        Font.Pitch = fpVariable
-        Font.Style = []
-        Font.Quality = fqDraft
-        ParentFont = False
         PasswordChar = '*'
         TabOrder = 1
         TextHint = 'Informe seu senha de acesso'
-        ExplicitTop = 132
-        ExplicitWidth = 564
+        ExplicitWidth = 303
       end
       object pBotoes: TPanel
         AlignWithMargins = True
         Left = 8
-        Top = 112
+        Top = 132
         Width = 307
-        Height = 30
+        Height = 28
         Margins.Left = 8
         Margins.Top = 8
         Margins.Right = 8
@@ -162,15 +126,14 @@ object ViewLogon: TViewLogon
         ParentBackground = False
         ShowCaption = False
         TabOrder = 2
-        ExplicitTop = 164
-        ExplicitWidth = 564
-        ExplicitHeight = 201
+        ExplicitWidth = 303
+        ExplicitHeight = 27
         object btnEntrar: TButton
           AlignWithMargins = True
           Left = 30
           Top = 0
           Width = 95
-          Height = 30
+          Height = 28
           Cursor = crHandPoint
           Margins.Left = 30
           Margins.Top = 0
@@ -180,14 +143,14 @@ object ViewLogon: TViewLogon
           Caption = '&Entrar'
           TabOrder = 0
           OnClick = btnEntrarClick
-          ExplicitHeight = 201
+          ExplicitHeight = 27
         end
         object btnSair: TButton
           AlignWithMargins = True
           Left = 182
           Top = 0
           Width = 95
-          Height = 30
+          Height = 28
           Cursor = crHandPoint
           Margins.Left = 0
           Margins.Top = 0
@@ -196,13 +159,14 @@ object ViewLogon: TViewLogon
           Align = alRight
           Caption = '&Sair'
           TabOrder = 1
-          ExplicitLeft = 439
-          ExplicitHeight = 201
+          OnClick = btnSairClick
+          ExplicitLeft = 178
+          ExplicitHeight = 27
         end
       end
       object pMetodoConexao: TPanel
         Left = 0
-        Top = 150
+        Top = 168
         Width = 323
         Height = 24
         Align = alBottom
@@ -212,24 +176,22 @@ object ViewLogon: TViewLogon
         ParentBackground = False
         ShowCaption = False
         TabOrder = 3
-        ExplicitTop = 201
+        ExplicitTop = 167
         ExplicitWidth = 319
         object sbConfig: TSpeedButton
           Left = 0
           Top = 0
-          Width = 105
+          Width = 133
           Height = 24
           Cursor = crHandPoint
           Align = alLeft
           Caption = 'Configurar acesso'
           Flat = True
           Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWhite
-          Font.Height = -11
-          Font.Name = 'Tahoma'
-          Font.Pitch = fpVariable
-          Font.Style = [fsUnderline]
-          Font.Quality = fqDraft
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Segoe UI'
+          Font.Style = []
           ParentFont = False
           OnClick = sbConfigClick
         end

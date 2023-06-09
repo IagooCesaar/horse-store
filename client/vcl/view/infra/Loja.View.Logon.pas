@@ -21,6 +21,7 @@ type
     sbConfig: TSpeedButton;
     procedure btnEntrarClick(Sender: TObject);
     procedure sbConfigClick(Sender: TObject);
+    procedure btnSairClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -51,6 +52,11 @@ begin
   end;
 
   Self.ModalResult := mrOk;
+end;
+
+procedure TViewLogon.btnSairClick(Sender: TObject);
+begin
+  Self.ModalResult := mrCancel;
 end;
 
 procedure TViewLogon.sbConfigClick(Sender: TObject);

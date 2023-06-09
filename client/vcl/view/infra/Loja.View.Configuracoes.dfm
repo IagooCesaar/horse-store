@@ -1,16 +1,16 @@
 inherited ViewConfiguracoes: TViewConfiguracoes
   Caption = 'Configura'#231#245'es'
-  ClientHeight = 278
+  ClientHeight = 270
   ClientWidth = 444
   OnCreate = FormCreate
-  ExplicitWidth = 460
-  ExplicitHeight = 317
+  ExplicitWidth = 456
+  ExplicitHeight = 308
   TextHeight = 21
   inherited pModeloClient: TPanel
     Width = 444
-    Height = 222
+    Height = 214
     ExplicitWidth = 444
-    ExplicitHeight = 222
+    ExplicitHeight = 338
     object Label1: TLabel
       Left = 8
       Top = 8
@@ -35,7 +35,7 @@ inherited ViewConfiguracoes: TViewConfiguracoes
     object cmbTemas: TComboBox
       Left = 8
       Top = 35
-      Width = 145
+      Width = 345
       Height = 29
       Style = csDropDownList
       TabOrder = 0
@@ -59,20 +59,21 @@ inherited ViewConfiguracoes: TViewConfiguracoes
       Text = 'edtTimeout'
     end
   end
-  inherited pModeloBotoes: TPanel
-    Top = 222
+  inherited pModeloBotoes: TCategoryButtons
+    Top = 214
     Width = 444
-    ExplicitTop = 223
-    ExplicitWidth = 448
+    Color = clBtnShadow
+    ExplicitTop = 337
+    ExplicitWidth = 440
     inherited btnModeloOk: TButton
-      Left = 241
+      Left = 234
       Caption = 'Aplicar'
       OnClick = btnModeloOkClick
-      ExplicitLeft = 241
+      ExplicitLeft = 230
     end
     inherited btnModeloCancelar: TButton
-      Left = 344
-      ExplicitLeft = 344
+      Left = 337
+      ExplicitLeft = 333
     end
   end
 end
