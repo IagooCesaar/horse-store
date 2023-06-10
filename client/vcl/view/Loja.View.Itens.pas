@@ -11,24 +11,35 @@ uses
 
 type
   TViewItens = class(TViewModeloMdi)
-    dbCOD_ITEM: TDBEdit;
-    dbgrdItens: TDBGrid;
-    dbNOM_ITEM: TDBEdit;
-    dbNUM_COD_BARR: TDBEdit;
     dsItens: TDataSource;
-    Label1: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
     grpPesquisa: TGroupBox;
     Label4: TLabel;
     edtFiltroCodigo: TEdit;
-    Panel1: TPanel;
+    pFiltroDescricao: TPanel;
     Label5: TLabel;
     rbtFiltroDescricaoContenha: TRadioButton;
     rbtFiltroDescricaoInicie: TRadioButton;
     rbtFiltroDescricaoFinalize: TRadioButton;
     edtFiltroDescricao: TEdit;
     btnPesquisar: TButton;
+    rbtFiltroDescricaoNaoFiltrar: TRadioButton;
+    Panel1: TPanel;
+    Label6: TLabel;
+    rbtFiltroCodBarrasContenha: TRadioButton;
+    rbtFiltroCodBarrasInicie: TRadioButton;
+    rbtFiltroCodBarrasFinalize: TRadioButton;
+    Edit1: TEdit;
+    rbtFiltroCodBarrasNaoFiltrar: TRadioButton;
+    pGrid: TPanel;
+    pManut: TPanel;
+    dbgrdItens: TDBGrid;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    dbCOD_ITEM: TDBEdit;
+    dbNOM_ITEM: TDBEdit;
+    dbNUM_COD_BARR: TDBEdit;
+    dbnItens: TDBNavigator;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure btnPesquisarClick(Sender: TObject);
@@ -48,22 +59,24 @@ uses
 {$R *.dfm}
 
 procedure TViewItens.btnPesquisarClick(Sender: TObject);
-var LNomeFiltro: TLhsBracketFilter;
+var LFiltroNome, LFiltroCodBarras: TLhsBracketFilter;
 begin
   inherited;
-  LNomeFiltro.Valor := edtFiltroDescricao.Text;
+  LFiltroNome.Valor := edtFiltroDescricao.Text;
   if rbtFiltroDescricaoContenha.Checked
-  then LNomeFiltro.Tipo := TLhsBracketsType.Contains
+  then LFiltroNome.Tipo := TLhsBracketsType.Contains
   else
   if rbtFiltroDescricaoInicie.Checked
-  then LNomeFiltro.Tipo := TLhsBracketsType.StartsWith
+  then LFiltroNome.Tipo := TLhsBracketsType.StartsWith
   else
   if rbtFiltroDescricaoFinalize.Checked
-  then LNomeFiltro.Tipo := TLhsBracketsType.EndsWith;
+  then LFiltroNome.Tipo := TLhsBracketsType.EndsWith;
 
-  FController.ObterItens(LNomeFiltro);
+  FController.ObterItens(StrToIntDef(edtFiltroCodigo.Text, 0),
+    LFiltroNome, LFiltroCodBarras);
 
-  LNomeFiltro := Default(TLhsBracketFilter);
+  if FController.mtDados.IsEmpty
+  then ShowMessage('A consulta não retornou dados');
 end;
 
 procedure TViewItens.FormCreate(Sender: TObject);

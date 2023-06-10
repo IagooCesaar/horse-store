@@ -3,8 +3,8 @@ object ViewLogon: TViewLogon
   Top = 0
   BorderStyle = bsDialog
   Caption = 'Logon'
-  ClientHeight = 236
-  ClientWidth = 367
+  ClientHeight = 235
+  ClientWidth = 363
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -13,13 +13,14 @@ object ViewLogon: TViewLogon
   Font.Style = []
   Position = poScreenCenter
   OnActivate = FormActivate
+  OnShow = FormShow
   TextHeight = 21
   object Panel1: TPanel
     AlignWithMargins = True
     Left = 10
     Top = 10
-    Width = 347
-    Height = 216
+    Width = 343
+    Height = 215
     Margins.Left = 10
     Margins.Top = 10
     Margins.Right = 10
@@ -31,8 +32,8 @@ object ViewLogon: TViewLogon
     ParentColor = True
     ShowCaption = False
     TabOrder = 0
-    ExplicitWidth = 343
-    ExplicitHeight = 215
+    ExplicitWidth = 347
+    ExplicitHeight = 216
     object pLogin: TPanel
       AlignWithMargins = True
       Left = 10
@@ -48,13 +49,11 @@ object ViewLogon: TViewLogon
       ParentColor = True
       ShowCaption = False
       TabOrder = 0
-      ExplicitWidth = 319
-      ExplicitHeight = 191
       object Label2: TLabel
         AlignWithMargins = True
         Left = 8
         Top = 8
-        Width = 307
+        Width = 39
         Height = 21
         Margins.Left = 8
         Margins.Top = 8
@@ -62,13 +61,12 @@ object ViewLogon: TViewLogon
         Margins.Bottom = 0
         Align = alTop
         Caption = 'Login'
-        ExplicitWidth = 39
       end
       object lbl1: TLabel
         AlignWithMargins = True
         Left = 8
         Top = 70
-        Width = 307
+        Width = 43
         Height = 21
         Margins.Left = 8
         Margins.Top = 8
@@ -76,7 +74,6 @@ object ViewLogon: TViewLogon
         Margins.Bottom = 0
         Align = alTop
         Caption = 'Senha'
-        ExplicitWidth = 43
       end
       object edtLogin: TEdit
         AlignWithMargins = True
@@ -91,7 +88,6 @@ object ViewLogon: TViewLogon
         Align = alTop
         TabOrder = 0
         TextHint = 'Informe seu usu'#225'rio, c'#243'digo ou e-mail'
-        ExplicitWidth = 303
       end
       object edtSenha: TEdit
         AlignWithMargins = True
@@ -108,7 +104,6 @@ object ViewLogon: TViewLogon
         PasswordChar = '*'
         TabOrder = 1
         TextHint = 'Informe seu senha de acesso'
-        ExplicitWidth = 303
       end
       object pBotoes: TPanel
         AlignWithMargins = True
@@ -126,8 +121,6 @@ object ViewLogon: TViewLogon
         ParentColor = True
         ShowCaption = False
         TabOrder = 2
-        ExplicitWidth = 303
-        ExplicitHeight = 27
         object btnEntrar: TButton
           AlignWithMargins = True
           Left = 30
@@ -143,7 +136,6 @@ object ViewLogon: TViewLogon
           Caption = '&Entrar'
           TabOrder = 0
           OnClick = btnEntrarClick
-          ExplicitHeight = 27
         end
         object btnSair: TButton
           AlignWithMargins = True
@@ -160,8 +152,6 @@ object ViewLogon: TViewLogon
           Caption = '&Sair'
           TabOrder = 1
           OnClick = btnSairClick
-          ExplicitLeft = 178
-          ExplicitHeight = 27
         end
       end
       object pMetodoConexao: TPanel
@@ -175,8 +165,6 @@ object ViewLogon: TViewLogon
         ParentColor = True
         ShowCaption = False
         TabOrder = 3
-        ExplicitTop = 167
-        ExplicitWidth = 319
         object sbConfig: TSpeedButton
           Left = 0
           Top = 0

@@ -23,6 +23,7 @@ type
     procedure sbConfigClick(Sender: TObject);
     procedure btnSairClick(Sender: TObject);
     procedure FormActivate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
   public
@@ -61,6 +62,12 @@ begin
 end;
 
 procedure TViewLogon.FormActivate(Sender: TObject);
+begin
+  if edtLogin.CanFocus
+  then edtLogin.SetFocus;
+end;
+
+procedure TViewLogon.FormShow(Sender: TObject);
 begin
   if edtLogin.CanFocus
   then edtLogin.SetFocus;

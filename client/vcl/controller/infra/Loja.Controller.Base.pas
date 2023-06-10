@@ -15,12 +15,16 @@ uses
 type
   TControllerBase = class(TDataModule)
     mtDados: TFDMemTable;
+    procedure DataModuleCreate(Sender: TObject);
   private
+    FPodeAplicarAtualizacoes: Boolean;
     { Private declarations }
   protected
     function PreparaRequest: IRequest;
     procedure RaiseException(AResponse : IResponse; ATituloMensagem: string);
     procedure Serializar(AResponse : IResponse; dsDestino: TDataSet = nil);
+  public
+    property PodeAplicarAtualizacoes: Boolean read FPodeAplicarAtualizacoes write FPodeAplicarAtualizacoes;
   end;
 
 implementation
@@ -97,6 +101,11 @@ begin
     );
   end;
   raise Exception.Create(LMensagem);
+end;
+
+procedure TControllerBase.DataModuleCreate(Sender: TObject);
+begin
+  FPodeAplicarAtualizacoes := True;
 end;
 
 function TControllerBase.PreparaRequest: IRequest;

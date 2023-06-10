@@ -1,5 +1,6 @@
 inherited ControllerItens: TControllerItens
   inherited mtDados: TFDMemTable
+    BeforePost = mtDadosBeforePost
     object mtDadosCOD_ITEM: TIntegerField
       Alignment = taCenter
       DisplayLabel = 'C'#243'digo'
