@@ -1,4 +1,4 @@
-unit Loja.View.Vender;
+unit Loja.View.Comprar;
 
 interface
 
@@ -8,7 +8,7 @@ uses
   Vcl.ExtCtrls;
 
 type
-  TViewVender = class(TViewModeloMdi)
+  TViewComprar = class(TViewModeloMdi)
   private
     { Private declarations }
   public

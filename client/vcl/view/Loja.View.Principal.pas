@@ -60,7 +60,7 @@ uses
 
 procedure TViewPrincipal.acComprarExecute(Sender: TObject);
 begin
-  //
+  OpenChild('TViewComprar');
 end;
 
 procedure TViewPrincipal.acConfiguracoesExecute(Sender: TObject);
@@ -95,7 +95,7 @@ end;
 
 procedure TViewPrincipal.acVenderExecute(Sender: TObject);
 begin
-  //
+  OpenChild('TViewVender');
 end;
 
 procedure TViewPrincipal.FormActivate(Sender: TObject);

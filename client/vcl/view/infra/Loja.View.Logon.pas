@@ -22,7 +22,7 @@ type
     procedure btnEntrarClick(Sender: TObject);
     procedure sbConfigClick(Sender: TObject);
     procedure btnSairClick(Sender: TObject);
-    procedure FormShow(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -60,7 +60,7 @@ begin
   Self.ModalResult := mrCancel;
 end;
 
-procedure TViewLogon.FormShow(Sender: TObject);
+procedure TViewLogon.FormActivate(Sender: TObject);
 begin
   if edtLogin.CanFocus
   then edtLogin.SetFocus;

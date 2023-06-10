@@ -1,5 +1,5 @@
-inherited ViewVender: TViewVender
-  Caption = 'Ponto de Venda'
+inherited ViewComprar: TViewComprar
+  Caption = 'Compras'
   TextHeight = 21
   inherited pModeloClient: TPanel
     ExplicitLeft = 0
@@ -10,9 +10,9 @@ inherited ViewVender: TViewVender
   inherited pModeloTop: TPanel
     ExplicitWidth = 890
     inherited lbModeloTitulo: TLabel
-      Caption = 'Ponto de Venda'
+      Caption = 'Compras'
       ExplicitTop = 10
-      ExplicitWidth = 147
+      ExplicitWidth = 82
     end
   end
 end

@@ -179,6 +179,11 @@
             <Form>ViewItens</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="view\Loja.View.Comprar.pas">
+            <Form>ViewComprar</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="model\infra\Loja.Model.Infra.Types.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

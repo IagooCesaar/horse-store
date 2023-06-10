@@ -6,7 +6,10 @@ uses
   System.SysUtils, System.Classes, Loja.Controller.Base, FireDAC.Stan.Intf,
   FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
   FireDAC.Phys.Intf, FireDAC.DApt.Intf, Data.DB, FireDAC.Comp.DataSet,
-  FireDAC.Comp.Client;
+  FireDAC.Comp.Client,
+
+
+  Loja.Model.Infra.Types;
 
 type
   TControllerItens = class(TControllerBase)
@@ -17,7 +20,7 @@ type
     { Private declarations }
   public
     procedure ObterItem;
-    procedure ObterItens(ANome: string);
+    procedure ObterItens(ANome: TLhsBracketFilter);
   end;
 
 
@@ -35,17 +38,18 @@ begin
     .Get();
 end;
 
-procedure TControllerItens.ObterItens(ANome: string);
+procedure TControllerItens.ObterItens(ANome: TLhsBracketFilter);
 begin
   var LResponse := PreparaRequest
     .Resource('/itens')
-    .AddParam(Format('%s[%s]',['nom_item', 'contains']), ANome)
+    .AddParam(Format('%s%s',['nom_item', ANome.Tipo.ToString]), ANome.Valor)
     .Get();
 
-  if LResponse.StatusCode <> 200
+  if not(LResponse.StatusCode in [200,204])
   then RaiseException(LResponse, 'Falha ao obter lista de itens');
 
-  Serializar(LResponse);
+  if LResponse.StatusCode = 200
+  then Serializar(LResponse);
 end;
 
 end.

@@ -20,7 +20,9 @@ uses
   Loja.Model.Infra.Usuario in 'model\infra\Loja.Model.Infra.Usuario.pas',
   Loja.Controller.Infra in 'controller\infra\Loja.Controller.Infra.pas' {ControllerInfra: TDataModule},
   Loja.Model.Infra.DTO.ApiError in 'model\infra\Loja.Model.Infra.DTO.ApiError.pas',
-  Loja.View.Itens in 'view\Loja.View.Itens.pas' {ViewItens};
+  Loja.View.Itens in 'view\Loja.View.Itens.pas' {ViewItens},
+  Loja.View.Comprar in 'view\Loja.View.Comprar.pas' {ViewComprar},
+  Loja.Model.Infra.Types in 'model\infra\Loja.Model.Infra.Types.pas';
 
 {$R *.res}
 
@@ -31,6 +33,7 @@ begin
     ,TViewModeloModal
     ,TViewVender
     ,TViewItens
+    ,TViewComprar
   ]);
 
   Application.Initialize;
