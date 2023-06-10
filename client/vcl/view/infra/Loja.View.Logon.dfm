@@ -12,6 +12,7 @@ object ViewLogon: TViewLogon
   Font.Name = 'Segoe UI'
   Font.Style = []
   Position = poScreenCenter
+  OnShow = FormShow
   TextHeight = 21
   object Panel1: TPanel
     AlignWithMargins = True
@@ -27,10 +28,9 @@ object ViewLogon: TViewLogon
     BevelKind = bkFlat
     BevelOuter = bvNone
     Caption = 'Panel1'
+    ParentColor = True
     ShowCaption = False
     TabOrder = 0
-    ExplicitWidth = 343
-    ExplicitHeight = 215
     object pLogin: TPanel
       AlignWithMargins = True
       Left = 10
@@ -43,12 +43,9 @@ object ViewLogon: TViewLogon
       Margins.Bottom = 10
       Align = alClient
       BevelOuter = bvNone
-      Color = 5064962
-      ParentBackground = False
+      ParentColor = True
       ShowCaption = False
       TabOrder = 0
-      ExplicitWidth = 319
-      ExplicitHeight = 191
       object Label2: TLabel
         AlignWithMargins = True
         Left = 8
@@ -90,7 +87,6 @@ object ViewLogon: TViewLogon
         Align = alTop
         TabOrder = 0
         TextHint = 'Informe seu usu'#225'rio, c'#243'digo ou e-mail'
-        ExplicitWidth = 303
       end
       object edtSenha: TEdit
         AlignWithMargins = True
@@ -107,7 +103,6 @@ object ViewLogon: TViewLogon
         PasswordChar = '*'
         TabOrder = 1
         TextHint = 'Informe seu senha de acesso'
-        ExplicitWidth = 303
       end
       object pBotoes: TPanel
         AlignWithMargins = True
@@ -122,12 +117,9 @@ object ViewLogon: TViewLogon
         Align = alClient
         BevelOuter = bvNone
         Caption = 'pBotoes'
-        Color = 5064962
-        ParentBackground = False
+        ParentColor = True
         ShowCaption = False
         TabOrder = 2
-        ExplicitWidth = 303
-        ExplicitHeight = 27
         object btnEntrar: TButton
           AlignWithMargins = True
           Left = 30
@@ -143,7 +135,6 @@ object ViewLogon: TViewLogon
           Caption = '&Entrar'
           TabOrder = 0
           OnClick = btnEntrarClick
-          ExplicitHeight = 27
         end
         object btnSair: TButton
           AlignWithMargins = True
@@ -160,8 +151,6 @@ object ViewLogon: TViewLogon
           Caption = '&Sair'
           TabOrder = 1
           OnClick = btnSairClick
-          ExplicitLeft = 178
-          ExplicitHeight = 27
         end
       end
       object pMetodoConexao: TPanel
@@ -172,12 +161,10 @@ object ViewLogon: TViewLogon
         Align = alBottom
         BevelOuter = bvNone
         Caption = 'pMetodoConexao'
-        Color = 5064962
-        ParentBackground = False
+        ParentColor = True
         ShowCaption = False
         TabOrder = 3
-        ExplicitTop = 167
-        ExplicitWidth = 319
+        ExplicitTop = 171
         object sbConfig: TSpeedButton
           Left = 0
           Top = 0

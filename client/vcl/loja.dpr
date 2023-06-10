@@ -30,6 +30,7 @@ begin
     ,TViewModeloMdi
     ,TViewModeloModal
     ,TViewVender
+    ,TViewItens
   ]);
 
   Application.Initialize;

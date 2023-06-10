@@ -32,7 +32,6 @@ object ViewPrincipal: TViewPrincipal
     List = True
     ShowCaptions = True
     TabOrder = 0
-    ExplicitHeight = 438
     object btnVender: TToolButton
       Left = 0
       Top = 0
@@ -63,9 +62,6 @@ object ViewPrincipal: TViewPrincipal
     Width = 876
     Height = 19
     Panels = <>
-    ExplicitLeft = 312
-    ExplicitTop = 240
-    ExplicitWidth = 0
   end
   object acmAcoes: TActionManager
     ActionBars = <
@@ -97,11 +93,13 @@ object ViewPrincipal: TViewPrincipal
     object acItens: TAction
       Category = 'ToolBar'
       Caption = 'Itens'
+      ImageIndex = 4
       OnExecute = acItensExecute
     end
     object acComprar: TAction
       Category = 'ToolBar'
       Caption = 'Comprar'
+      ImageIndex = 5
       OnExecute = acComprarExecute
     end
     object acConfiguracoes: TAction

@@ -22,6 +22,7 @@ type
     procedure btnEntrarClick(Sender: TObject);
     procedure sbConfigClick(Sender: TObject);
     procedure btnSairClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
   public
@@ -57,6 +58,12 @@ end;
 procedure TViewLogon.btnSairClick(Sender: TObject);
 begin
   Self.ModalResult := mrCancel;
+end;
+
+procedure TViewLogon.FormShow(Sender: TObject);
+begin
+  if edtLogin.CanFocus
+  then edtLogin.SetFocus;
 end;
 
 procedure TViewLogon.sbConfigClick(Sender: TObject);

@@ -19,7 +19,8 @@ type
     { Private declarations }
   protected
     function PreparaRequest: IRequest;
-    procedure InternalRaiseException(AResponse : IResponse; ATituloMensagem: string);
+    procedure RaiseException(AResponse : IResponse; ATituloMensagem: string);
+    procedure Serializar(AResponse : IResponse; dsDestino: TDataSet = nil);
   end;
 
 implementation
@@ -37,7 +38,7 @@ uses
 
 { TControllerBase }
 
-procedure TControllerBase.InternalRaiseException(AResponse: IResponse;
+procedure TControllerBase.RaiseException(AResponse: IResponse;
   ATituloMensagem: string);
 var LMensagem: String;
 
@@ -108,6 +109,14 @@ begin
       TLojaModelInfraUsuario.GetInstance.Senha
     )
   ;
+end;
+
+procedure TControllerBase.Serializar(AResponse: IResponse; dsDestino: TDataSet);
+begin
+  if dsDestino = nil
+  then dsDestino := mtDados;
+
+  dsDestino.LoadFromJSON(AResponse.Content);
 end;
 
 end.

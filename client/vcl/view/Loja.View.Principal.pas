@@ -75,7 +75,7 @@ end;
 
 procedure TViewPrincipal.acItensExecute(Sender: TObject);
 begin
-  //
+  OpenChild('TViewItens');
 end;
 
 procedure TViewPrincipal.acLogonExecute(Sender: TObject);
