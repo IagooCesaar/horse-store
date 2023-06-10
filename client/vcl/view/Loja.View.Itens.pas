@@ -28,7 +28,7 @@ type
     rbtFiltroCodBarrasContenha: TRadioButton;
     rbtFiltroCodBarrasInicie: TRadioButton;
     rbtFiltroCodBarrasFinalize: TRadioButton;
-    Edit1: TEdit;
+    edtFiltroCodBarras: TEdit;
     rbtFiltroCodBarrasNaoFiltrar: TRadioButton;
     pGrid: TPanel;
     pManut: TPanel;
@@ -40,9 +40,14 @@ type
     dbNOM_ITEM: TDBEdit;
     dbNUM_COD_BARR: TDBEdit;
     dbnItens: TDBNavigator;
+    btnEstoque: TButton;
+    btnPrecoVenda: TButton;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure btnPesquisarClick(Sender: TObject);
+    procedure dsItensStateChange(Sender: TObject);
+    procedure btnPrecoVendaClick(Sender: TObject);
+    procedure btnEstoqueClick(Sender: TObject);
   private
     { Private declarations }
     FController: TControllerItens;
@@ -58,6 +63,12 @@ uses
 
 {$R *.dfm}
 
+procedure TViewItens.btnEstoqueClick(Sender: TObject);
+begin
+  inherited;
+  ShowMessage(':: em desenvolvimento ::');
+end;
+
 procedure TViewItens.btnPesquisarClick(Sender: TObject);
 var LFiltroNome, LFiltroCodBarras: TLhsBracketFilter;
 begin
@@ -72,11 +83,34 @@ begin
   if rbtFiltroDescricaoFinalize.Checked
   then LFiltroNome.Tipo := TLhsBracketsType.EndsWith;
 
+  LFiltroCodBarras.Valor := edtFiltroCodBarras.Text;
+  if rbtFiltroCodBarrasContenha.Checked
+  then LFiltroCodBarras.Tipo := TLhsBracketsType.Contains
+  else
+  if rbtFiltroCodBarrasInicie.Checked
+  then LFiltroCodBarras.Tipo := TLhsBracketsType.StartsWith
+  else
+  if rbtFiltroCodBarrasFinalize.Checked
+  then LFiltroCodBarras.Tipo := TLhsBracketsType.EndsWith;
+
   FController.ObterItens(StrToIntDef(edtFiltroCodigo.Text, 0),
     LFiltroNome, LFiltroCodBarras);
 
   if FController.mtDados.IsEmpty
   then ShowMessage('A consulta não retornou dados');
+end;
+
+procedure TViewItens.btnPrecoVendaClick(Sender: TObject);
+begin
+  inherited;
+  ShowMessage(':: em desenvolvimento ::');
+end;
+
+procedure TViewItens.dsItensStateChange(Sender: TObject);
+begin
+  inherited;
+  btnEstoque.Enabled := not(dsItens.State in [dsInsert, dsEdit]);
+  btnPrecoVenda.Enabled := not(dsItens.State in [dsInsert, dsEdit]);
 end;
 
 procedure TViewItens.FormCreate(Sender: TObject);

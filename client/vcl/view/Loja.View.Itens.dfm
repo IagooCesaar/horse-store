@@ -1,15 +1,15 @@
 inherited ViewItens: TViewItens
   Caption = 'Cadastro de Itens'
-  ClientHeight = 792
+  ClientHeight = 550
   ClientWidth = 1222
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   ExplicitWidth = 1234
-  ExplicitHeight = 830
+  ExplicitHeight = 588
   TextHeight = 21
   inherited pModeloClient: TPanel
     Width = 1222
-    Height = 735
+    Height = 493
     ExplicitLeft = 0
     ExplicitTop = 57
     ExplicitWidth = 1218
@@ -171,7 +171,7 @@ inherited ViewItens: TViewItens
           Caption = 'Finalize'
           TabOrder = 2
         end
-        object Edit1: TEdit
+        object edtFiltroCodBarras: TEdit
           Left = 0
           Top = 27
           Width = 614
@@ -198,19 +198,20 @@ inherited ViewItens: TViewItens
       Left = 0
       Top = 180
       Width = 624
-      Height = 555
+      Height = 313
       Align = alClient
       BevelOuter = bvNone
       Caption = 'pGrid'
       ShowCaption = False
       TabOrder = 1
       ExplicitWidth = 250
+      ExplicitHeight = 555
       object dbgrdItens: TDBGrid
         AlignWithMargins = True
         Left = 10
         Top = 10
         Width = 604
-        Height = 535
+        Height = 293
         Margins.Left = 10
         Margins.Top = 10
         Margins.Right = 10
@@ -229,11 +230,14 @@ inherited ViewItens: TViewItens
       Left = 624
       Top = 180
       Width = 598
-      Height = 555
+      Height = 313
       Align = alRight
       Caption = 'pManut'
       ShowCaption = False
       TabOrder = 2
+      ExplicitLeft = 627
+      ExplicitTop = 183
+      ExplicitHeight = 555
       object Label1: TLabel
         Left = 17
         Top = 55
@@ -295,6 +299,24 @@ inherited ViewItens: TViewItens
         ShowHint = True
         TabOrder = 3
       end
+      object btnEstoque: TButton
+        Left = 17
+        Top = 231
+        Width = 121
+        Height = 49
+        Caption = 'Estoque'
+        TabOrder = 4
+        OnClick = btnEstoqueClick
+      end
+      object btnPrecoVenda: TButton
+        Left = 144
+        Top = 231
+        Width = 121
+        Height = 49
+        Caption = 'Pre'#231'o Venda'
+        TabOrder = 5
+        OnClick = btnPrecoVendaClick
+      end
     end
   end
   inherited pModeloTop: TPanel
@@ -312,7 +334,8 @@ inherited ViewItens: TViewItens
     end
   end
   object dsItens: TDataSource
-    Left = 520
-    Top = 8
+    OnStateChange = dsItensStateChange
+    Left = 40
+    Top = 328
   end
 end

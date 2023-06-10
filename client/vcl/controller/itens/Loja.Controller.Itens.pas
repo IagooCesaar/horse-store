@@ -116,7 +116,7 @@ begin
       then LRequest.AddParam(Format('%s%s',['nom_item', ANome.Tipo.ToString]), ANome.Valor);
 
       if ACodBarras.Valor <> ''
-      then LRequest.AddParam(Format('%s%s',['nom_item', ACodBarras.Tipo.ToString]), ACodBarras.Valor);
+      then LRequest.AddParam(Format('%s%s',['num_cod_barr', ACodBarras.Tipo.ToString]), ACodBarras.Valor);
     end;
 
     ANome := Default(TLhsBracketFilter);
