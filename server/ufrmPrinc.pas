@@ -68,12 +68,7 @@ end;
 
 procedure TfrmPrinc.acSwaggerExecute(Sender: TObject);
 begin
-  var LUrl := Copy(
-    FApp.BaseURL, 0,
-    Pos('/api',FApp.BaseURL)-1
-  )+'/swagger-ui';
-
-  ShellExecute(Application.Handle,PChar('Open'),PChar (LUrl), Nil,Nil,SW_SHOWNORMAL);
+  ShellExecute(Application.Handle,PChar('Open'),PChar (FApp.SwaggerURL), Nil,Nil,SW_SHOWNORMAL);
 end;
 
 procedure TfrmPrinc.ApplicationEvents1Idle(Sender: TObject; var Done: Boolean);

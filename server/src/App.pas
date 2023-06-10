@@ -24,6 +24,7 @@ type
     function GetDescription: string;
     function GetEmExecucao: Boolean;
     function ValidarLogin(const AUsername, APassword: string): Boolean;
+    function GetSwaggerURL: string;
   public
     constructor Create;
     destructor Destroy; override;
@@ -33,6 +34,7 @@ type
 
     property Context: string read FContext;
     property BaseURL: string read GetBaseURL;
+    property SwaggerURL: string read GetSwaggerURL;
     property Version: string read GetVersion;
     property Description: string read GetDescription;
     property EmExecucao: Boolean read GetEmExecucao;
@@ -157,7 +159,8 @@ begin
         .Use(HorseBasicAuthentication(ValidarLogin,
           THorseBasicAuthenticationConfig.New.SkipRoutes([
             FContext+'/api/healthcheck/',
-            FContext+'/swagger-ui/'
+            FContext+'/swagger-ui/',
+            FContext+'/api-docs/'
           ])
         ))
         .Use(HandleException);
@@ -189,6 +192,14 @@ end;
 function TApp.GetEmExecucao: Boolean;
 begin
   Result := THorse.IsRunning;
+end;
+
+function TApp.GetSwaggerURL: string;
+begin
+  Result := Copy(
+    BaseURL, 0,
+    Pos('/api',BaseURL)-1
+  )+'/swagger-ui';
 end;
 
 function TApp.GetVersion: string;
@@ -224,7 +235,7 @@ begin
 
       {$IF defined(CONSOLE) and (not defined(TEST))}
       Writeln(Format('Server is runing on %s:%d', [THorse.Host, THorse.Port]));
-      Writeln(Format('Try use Swagger on %s/swagger-ui', [GetBaseURL]));
+      Writeln(Format('Try use Swagger on %s', [SwaggerURL]));
       Writeln(Format('Interval to start: %dms',[MilliSecondsBetween(Now, STARTED_AT)]));
       Readln;
       {$ENDIF}
