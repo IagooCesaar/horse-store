@@ -184,6 +184,20 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="model\infra\Loja.Model.Infra.Types.pas"/>
+        <DCCReference Include="controller\estoque\Loja.Controller.Estoque.Saldo.pas">
+            <Form>ControllerEstoqueSaldo</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
+        <DCCReference Include="controller\estoque\Loja.Controller.Estoque.Movimento.pas">
+            <Form>ControllerEstoqueMovimento</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
+        <DCCReference Include="view\Loja.View.Estoque.Consulta.pas">
+            <Form>ViewEstoqueConsulta</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

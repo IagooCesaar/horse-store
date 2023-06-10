@@ -1,19 +1,19 @@
 inherited ViewItens: TViewItens
   Caption = 'Cadastro de Itens'
-  ClientHeight = 550
+  ClientHeight = 792
   ClientWidth = 1222
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  ExplicitWidth = 1234
-  ExplicitHeight = 588
+  ExplicitWidth = 1238
+  ExplicitHeight = 831
   TextHeight = 21
   inherited pModeloClient: TPanel
     Width = 1222
-    Height = 493
+    Height = 735
     ExplicitLeft = 0
     ExplicitTop = 57
-    ExplicitWidth = 1218
-    ExplicitHeight = 734
+    ExplicitWidth = 1222
+    ExplicitHeight = 735
     object grpPesquisa: TGroupBox
       AlignWithMargins = True
       Left = 3
@@ -23,8 +23,6 @@ inherited ViewItens: TViewItens
       Align = alTop
       Caption = ':: Pesquisar  '
       TabOrder = 0
-      ExplicitLeft = 6
-      ExplicitTop = 6
       object Label4: TLabel
         Left = 17
         Top = 32
@@ -98,9 +96,6 @@ inherited ViewItens: TViewItens
           Height = 29
           Align = alBottom
           TabOrder = 3
-          ExplicitLeft = 1
-          ExplicitTop = 26
-          ExplicitWidth = 485
         end
         object rbtFiltroDescricaoNaoFiltrar: TRadioButton
           Left = 384
@@ -118,6 +113,7 @@ inherited ViewItens: TViewItens
         Top = 111
         Width = 121
         Height = 49
+        Cursor = crHandPoint
         Caption = 'Pesquisar'
         TabOrder = 2
         OnClick = btnPesquisarClick
@@ -178,7 +174,6 @@ inherited ViewItens: TViewItens
           Height = 29
           Align = alBottom
           TabOrder = 3
-          ExplicitWidth = 487
         end
         object rbtFiltroCodBarrasNaoFiltrar: TRadioButton
           Left = 511
@@ -197,21 +192,20 @@ inherited ViewItens: TViewItens
     object pGrid: TPanel
       Left = 0
       Top = 180
-      Width = 624
-      Height = 313
+      Width = 614
+      Height = 555
       Align = alClient
       BevelOuter = bvNone
       Caption = 'pGrid'
       ShowCaption = False
       TabOrder = 1
-      ExplicitWidth = 250
-      ExplicitHeight = 555
+      ExplicitWidth = 624
       object dbgrdItens: TDBGrid
         AlignWithMargins = True
         Left = 10
         Top = 10
-        Width = 604
-        Height = 293
+        Width = 594
+        Height = 535
         Margins.Left = 10
         Margins.Top = 10
         Margins.Right = 10
@@ -227,16 +221,21 @@ inherited ViewItens: TViewItens
       end
     end
     object pManut: TPanel
-      Left = 624
-      Top = 180
+      AlignWithMargins = True
+      Left = 614
+      Top = 190
       Width = 598
-      Height = 313
+      Height = 535
+      Margins.Left = 0
+      Margins.Top = 10
+      Margins.Right = 10
+      Margins.Bottom = 10
       Align = alRight
       Caption = 'pManut'
       ShowCaption = False
       TabOrder = 2
-      ExplicitLeft = 627
-      ExplicitTop = 183
+      ExplicitLeft = 624
+      ExplicitTop = 180
       ExplicitHeight = 555
       object Label1: TLabel
         Left = 17
@@ -292,6 +291,7 @@ inherited ViewItens: TViewItens
         Top = 1
         Width = 596
         Height = 48
+        Cursor = crHandPoint
         DataSource = dsItens
         VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast, nbInsert, nbEdit, nbPost, nbCancel]
         Align = alTop
@@ -304,6 +304,7 @@ inherited ViewItens: TViewItens
         Top = 231
         Width = 121
         Height = 49
+        Cursor = crHandPoint
         Caption = 'Estoque'
         TabOrder = 4
         OnClick = btnEstoqueClick
@@ -313,6 +314,7 @@ inherited ViewItens: TViewItens
         Top = 231
         Width = 121
         Height = 49
+        Cursor = crHandPoint
         Caption = 'Pre'#231'o Venda'
         TabOrder = 5
         OnClick = btnPrecoVendaClick
@@ -321,7 +323,7 @@ inherited ViewItens: TViewItens
   end
   inherited pModeloTop: TPanel
     Width = 1222
-    ExplicitWidth = 1218
+    ExplicitWidth = 1222
     inherited bvlModeloLinha: TBevel
       Width = 1222
       ExplicitWidth = 1222

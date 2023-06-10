@@ -22,7 +22,10 @@ uses
   Loja.Model.Infra.DTO.ApiError in 'model\infra\Loja.Model.Infra.DTO.ApiError.pas',
   Loja.View.Itens in 'view\Loja.View.Itens.pas' {ViewItens},
   Loja.View.Comprar in 'view\Loja.View.Comprar.pas' {ViewComprar},
-  Loja.Model.Infra.Types in 'model\infra\Loja.Model.Infra.Types.pas';
+  Loja.Model.Infra.Types in 'model\infra\Loja.Model.Infra.Types.pas',
+  Loja.Controller.Estoque.Saldo in 'controller\estoque\Loja.Controller.Estoque.Saldo.pas' {ControllerEstoqueSaldo: TDataModule},
+  Loja.Controller.Estoque.Movimento in 'controller\estoque\Loja.Controller.Estoque.Movimento.pas' {ControllerEstoqueMovimento: TDataModule},
+  Loja.View.Estoque.Consulta in 'view\Loja.View.Estoque.Consulta.pas' {ViewEstoqueConsulta};
 
 {$R *.res}
 

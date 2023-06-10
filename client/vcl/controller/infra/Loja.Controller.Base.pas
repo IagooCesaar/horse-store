@@ -55,7 +55,7 @@ var LMensagem: String;
         LJson := TJSONObject.ParseJSONValue(AResponse.Content) as TJSONObject;
         LApiError := TJson.ClearJsonAndConvertToObject<TLojaModelInfraDTOApiError>(LJson);
         Result := Format(
-          #13#10+
+          #13#10#13#10+
           'Mensagem: %s'+#13#10+#13#10+
           'Unit da API: %s'+#13#10+
           'Status code: %d %s',
@@ -70,6 +70,7 @@ var LMensagem: String;
     except
       // Se erro ocorre antes dos controles de Exceção do Horse, vem em text/plain
       Result := Format(
+        #13#10#13#10+
         'Mensagem: %s'+#13#10+#13#10+
         'Status code: %d %s',
         [AResponse.Content, AResponse.StatusCode, AResponse.StatusText]

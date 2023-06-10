@@ -59,6 +59,7 @@ end;
 procedure TViewLogon.btnSairClick(Sender: TObject);
 begin
   Self.ModalResult := mrCancel;
+  Application.Terminate;
 end;
 
 procedure TViewLogon.FormActivate(Sender: TObject);

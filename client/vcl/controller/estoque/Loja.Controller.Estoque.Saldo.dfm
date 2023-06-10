@@ -1,0 +1,2 @@
+inherited ControllerEstoqueSaldo: TControllerEstoqueSaldo
+end

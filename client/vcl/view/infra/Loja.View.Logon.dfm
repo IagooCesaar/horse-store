@@ -32,14 +32,12 @@ object ViewLogon: TViewLogon
     ParentColor = True
     ShowCaption = False
     TabOrder = 0
-    ExplicitWidth = 347
-    ExplicitHeight = 216
     object pLogin: TPanel
       AlignWithMargins = True
       Left = 10
       Top = 10
-      Width = 323
-      Height = 192
+      Width = 319
+      Height = 191
       Margins.Left = 10
       Margins.Top = 10
       Margins.Right = 10
@@ -53,7 +51,7 @@ object ViewLogon: TViewLogon
         AlignWithMargins = True
         Left = 8
         Top = 8
-        Width = 39
+        Width = 303
         Height = 21
         Margins.Left = 8
         Margins.Top = 8
@@ -61,12 +59,13 @@ object ViewLogon: TViewLogon
         Margins.Bottom = 0
         Align = alTop
         Caption = 'Login'
+        ExplicitWidth = 39
       end
       object lbl1: TLabel
         AlignWithMargins = True
         Left = 8
         Top = 70
-        Width = 43
+        Width = 303
         Height = 21
         Margins.Left = 8
         Margins.Top = 8
@@ -74,12 +73,13 @@ object ViewLogon: TViewLogon
         Margins.Bottom = 0
         Align = alTop
         Caption = 'Senha'
+        ExplicitWidth = 43
       end
       object edtLogin: TEdit
         AlignWithMargins = True
         Left = 8
         Top = 33
-        Width = 307
+        Width = 303
         Height = 29
         Margins.Left = 8
         Margins.Top = 4
@@ -93,7 +93,7 @@ object ViewLogon: TViewLogon
         AlignWithMargins = True
         Left = 8
         Top = 95
-        Width = 307
+        Width = 303
         Height = 29
         Margins.Left = 8
         Margins.Top = 4
@@ -109,8 +109,8 @@ object ViewLogon: TViewLogon
         AlignWithMargins = True
         Left = 8
         Top = 132
-        Width = 307
-        Height = 28
+        Width = 303
+        Height = 27
         Margins.Left = 8
         Margins.Top = 8
         Margins.Right = 8
@@ -126,7 +126,7 @@ object ViewLogon: TViewLogon
           Left = 30
           Top = 0
           Width = 95
-          Height = 28
+          Height = 27
           Cursor = crHandPoint
           Margins.Left = 30
           Margins.Top = 0
@@ -139,10 +139,10 @@ object ViewLogon: TViewLogon
         end
         object btnSair: TButton
           AlignWithMargins = True
-          Left = 182
+          Left = 178
           Top = 0
           Width = 95
-          Height = 28
+          Height = 27
           Cursor = crHandPoint
           Margins.Left = 0
           Margins.Top = 0
@@ -156,8 +156,8 @@ object ViewLogon: TViewLogon
       end
       object pMetodoConexao: TPanel
         Left = 0
-        Top = 168
-        Width = 323
+        Top = 167
+        Width = 319
         Height = 24
         Align = alBottom
         BevelOuter = bvNone
