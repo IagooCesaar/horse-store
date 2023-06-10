@@ -31,7 +31,7 @@ type
     [TestCase('Nome finalize com "Integração"', 'nom_item,endsWith,Integração')]
     [TestCase('Código de Barras contenha com "456"', 'num_cod_barr,contains,456')]
     [TestCase('Código de Barras igual a "0123456789"  (default)', 'num_cod_barr,eq,0123456789')]
-    [TestCase('Código de Barras inicie com "123"', 'num_cod_barr,startsWith,123')]
+    [TestCase('Código de Barras inicie com "0123"', 'num_cod_barr,startsWith,0123')]
     [TestCase('Código de Barras finalize com "789"', 'num_cod_barr,endsWith,789')]
     procedure Test_ObterVariosItens(AParametro, ATipoFiltro, AValor: String);
 
@@ -244,24 +244,38 @@ begin
 end;
 
 procedure TLojaControllerItensTest.Test_ObterUmItem_PorCodigo;
-var LItem : TLojaModelEntityItensItem;
 begin
+  var LNovoItem := TLojaModelDtoReqItensCriarItem.Create;
+  LNovoItem.NomItem := 'Novo Item Cadastrado Via Teste Integração';
+  LNovoItem.NumCodBarr := '0123456789';
+
+  var LResponseCriar := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/itens')
+    .AddBody(TJson.ObjectToClearJsonString(LNovoItem))
+    .Post();
+
+  Assert.AreEqual(201, LResponseCriar.StatusCode);
+  var LItemCriado := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItem>
+    (LResponseCriar.Content);
+
   var LResponse := TRequest.New
     .BasicAuthentication(FUsarname, FPassword)
     .BaseURL(FBaseURL)
     .Resource('/itens/{cod_item}')
-    .AddUrlSegment('cod_item', '1')
+    .AddUrlSegment('cod_item', LItemCriado.CodItem.ToString)
     .Get();
 
   Assert.AreEqual(200, LResponse.StatusCode);
-  try
-    LItem := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItem>
-      (LResponse.Content);
-    Assert.AreEqual(1, LItem.CodItem);
-  finally
-    if LItem <> nil
-    then FreeAndNil(LItem);
-  end;
+
+  var LItem := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItem>
+    (LResponse.Content);
+  Assert.AreEqual(LItemCriado.CodItem, LItem.CodItem);
+
+  LNovoItem.Free;
+  LItemCriado.Free;
+  LItem.Free;
 end;
 
 procedure TLojaControllerItensTest.Test_ObterUmItem_PorCodigoDeBarras;
