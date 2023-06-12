@@ -49,7 +49,6 @@ procedure TControllerItens.mtDadosBeforePost(DataSet: TDataSet);
 var LResponse: IResponse;
 begin
   inherited;
-  //if not PodeAplicarAtualizacoes
   if DataSet.ControlsDisabled
   then Exit;
 
@@ -76,11 +75,9 @@ begin
     if not(LResponse.StatusCode in [200,201])
     then RaiseException(LResponse, 'Erro ao atualizar o cadastro do item');
 
-    //PodeAplicarAtualizacoes := False;
     DataSet.MergeFromJSONObject(LResponse.Content);
   finally
     DataSet.EnableControls;
-    //PodeAplicarAtualizacoes := True;
   end;
 end;
 
@@ -92,7 +89,7 @@ begin
     .Get();
 
   if not(LResponse.StatusCode in [200,204])
-    then RaiseException(LResponse, 'Falha ao obter lista de itens');
+  then RaiseException(LResponse, 'Falha ao obter dados do item');
 
   if LResponse.StatusCode = 200
   then Serializar(LResponse);
@@ -102,9 +99,6 @@ procedure TControllerItens.ObterItens(ACodItem: Integer;
   ANome, ACodBarras: TLhsBracketFilter );
 begin
   try
-    mtDados.DisableControls;
-    //PodeAplicarAtualizacoes := False;
-
     if mtDados.Active
     then mtDados.Close;
 
@@ -138,10 +132,7 @@ begin
 
     if LResponse.StatusCode = 200
     then Serializar(LResponse);
-
   finally
-    mtDados.EnableControls;
-    //PodeAplicarAtualizacoes := True;
     if not mtDados.Active
     then mtDados.CreateDataSet;
   end;

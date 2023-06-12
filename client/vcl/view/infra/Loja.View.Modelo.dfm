@@ -2,8 +2,8 @@ object ViewModelo: TViewModelo
   Left = 0
   Top = 0
   Caption = 'ViewModelo'
-  ClientHeight = 435
-  ClientWidth = 600
+  ClientHeight = 434
+  ClientWidth = 596
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

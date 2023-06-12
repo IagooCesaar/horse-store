@@ -16,9 +16,7 @@ uses
 type
   TControllerBase = class(TDataModule)
     mtDados: TFDMemTable;
-    procedure DataModuleCreate(Sender: TObject);
   private
-    FPodeAplicarAtualizacoes: Boolean;
     { Private declarations }
   protected
     function PreparaRequest: IRequest;
@@ -27,7 +25,6 @@ type
     procedure Serializar(AJsonString : string; dsDestino: TDataSet = nil); overload;
     procedure Serializar(AJsonValue : TJSONValue; dsDestino: TDataSet = nil); overload;
   public
-    //property PodeAplicarAtualizacoes: Boolean read FPodeAplicarAtualizacoes write FPodeAplicarAtualizacoes;
   end;
 
 implementation
@@ -106,11 +103,6 @@ begin
   raise Exception.Create(LMensagem);
 end;
 
-procedure TControllerBase.DataModuleCreate(Sender: TObject);
-begin
-  FPodeAplicarAtualizacoes := True;
-end;
-
 function TControllerBase.PreparaRequest: IRequest;
 begin
   Result := TRequest.New
@@ -128,7 +120,12 @@ begin
   if dsDestino = nil
   then dsDestino := mtDados;
 
-  dsDestino.LoadFromJSON(AResponse.Content);
+  try
+    dsDestino.DisableControls;
+    dsDestino.LoadFromJSON(AResponse.Content);
+  finally
+    dsDestino.EnableControls;
+  end;
 end;
 
 procedure TControllerBase.Serializar(AJsonString: string; dsDestino: TDataSet);
@@ -136,7 +133,12 @@ begin
   if dsDestino = nil
   then dsDestino := mtDados;
 
-  dsDestino.LoadFromJSON(AJsonString);
+  try
+    dsDestino.DisableControls;
+    dsDestino.LoadFromJSON(AJsonString);
+  finally
+    dsDestino.EnableControls;
+  end;
 end;
 
 procedure TControllerBase.Serializar(AJsonValue: TJSONValue;
@@ -145,11 +147,16 @@ begin
   if dsDestino = nil
   then dsDestino := mtDados;
 
-  if AJsonValue is TJSONObject
-  then dsDestino.LoadFromJSON(AJsonValue as TJSONObject)
-  else
-  if AJsonValue is TJSONArray
-  then dsDestino.LoadFromJSON(AJsonValue as TJSONArray);
+  try
+    dsDestino.DisableControls;
+    if AJsonValue is TJSONObject
+    then dsDestino.LoadFromJSON(AJsonValue as TJSONObject)
+    else
+    if AJsonValue is TJSONArray
+    then dsDestino.LoadFromJSON(AJsonValue as TJSONArray);
+  finally
+    dsDestino.EnableControls;
+  end;
 end;
 
 

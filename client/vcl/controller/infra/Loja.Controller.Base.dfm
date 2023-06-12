@@ -1,5 +1,4 @@
 object ControllerBase: TControllerBase
-  OnCreate = DataModuleCreate
   Height = 145
   Width = 526
   object mtDados: TFDMemTable

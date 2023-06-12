@@ -3,8 +3,8 @@ object ViewLogon: TViewLogon
   Top = 0
   BorderStyle = bsDialog
   Caption = 'Logon'
-  ClientHeight = 235
-  ClientWidth = 363
+  ClientHeight = 234
+  ClientWidth = 359
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,8 +19,8 @@ object ViewLogon: TViewLogon
     AlignWithMargins = True
     Left = 10
     Top = 10
-    Width = 343
-    Height = 215
+    Width = 339
+    Height = 214
     Margins.Left = 10
     Margins.Top = 10
     Margins.Right = 10
@@ -32,8 +32,6 @@ object ViewLogon: TViewLogon
     ParentColor = True
     ShowCaption = False
     TabOrder = 0
-    ExplicitWidth = 339
-    ExplicitHeight = 214
     object pLogin: TPanel
       AlignWithMargins = True
       Left = 10
@@ -55,7 +53,7 @@ object ViewLogon: TViewLogon
         AlignWithMargins = True
         Left = 8
         Top = 8
-        Width = 303
+        Width = 39
         Height = 21
         Margins.Left = 8
         Margins.Top = 8
@@ -63,13 +61,12 @@ object ViewLogon: TViewLogon
         Margins.Bottom = 0
         Align = alTop
         Caption = 'Login'
-        ExplicitWidth = 39
       end
       object lbl1: TLabel
         AlignWithMargins = True
         Left = 8
         Top = 70
-        Width = 303
+        Width = 43
         Height = 21
         Margins.Left = 8
         Margins.Top = 8
@@ -77,7 +74,6 @@ object ViewLogon: TViewLogon
         Margins.Bottom = 0
         Align = alTop
         Caption = 'Senha'
-        ExplicitWidth = 43
       end
       object edtLogin: TEdit
         AlignWithMargins = True

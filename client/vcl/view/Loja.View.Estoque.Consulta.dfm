@@ -10,9 +10,8 @@ inherited ViewEstoqueConsulta: TViewEstoqueConsulta
   inherited pModeloClient: TPanel
     Width = 823
     Height = 524
-    ExplicitTop = -1
-    ExplicitWidth = 804
-    ExplicitHeight = 539
+    ExplicitWidth = 819
+    ExplicitHeight = 523
     object pItem: TPanel
       Left = 0
       Top = 0
@@ -23,8 +22,10 @@ inherited ViewEstoqueConsulta: TViewEstoqueConsulta
       Caption = 'pItem'
       ShowCaption = False
       TabOrder = 0
-      ExplicitTop = -3
-      ExplicitWidth = 804
+      ExplicitWidth = 819
+      DesignSize = (
+        823
+        145)
       object Label1: TLabel
         Left = 10
         Top = 15
@@ -105,6 +106,18 @@ inherited ViewEstoqueConsulta: TViewEstoqueConsulta
         ReadOnly = True
         TabOrder = 3
       end
+      object btnPesquisar: TButton
+        Left = 692
+        Top = 84
+        Width = 121
+        Height = 49
+        Cursor = crHandPoint
+        Anchors = [akTop, akRight]
+        Caption = 'Realizar Acerto'
+        TabOrder = 4
+        OnClick = btnPesquisarClick
+        ExplicitLeft = 688
+      end
     end
     object GroupBox1: TGroupBox
       AlignWithMargins = True
@@ -125,10 +138,8 @@ inherited ViewEstoqueConsulta: TViewEstoqueConsulta
       HeaderFont.Name = 'Segoe UI'
       HeaderFont.Style = [fsBold]
       TabOrder = 1
-      ExplicitLeft = 0
-      ExplicitTop = 144
-      ExplicitWidth = 616
-      ExplicitHeight = 165
+      ExplicitWidth = 799
+      ExplicitHeight = 212
       object dbgSaldo: TDBGrid
         AlignWithMargins = True
         Left = 10
@@ -169,6 +180,7 @@ inherited ViewEstoqueConsulta: TViewEstoqueConsulta
       HeaderFont.Name = 'Segoe UI'
       HeaderFont.Style = [fsBold]
       TabOrder = 2
+      ExplicitWidth = 799
       object DBGrid1: TDBGrid
         AlignWithMargins = True
         Left = 10
@@ -194,17 +206,17 @@ inherited ViewEstoqueConsulta: TViewEstoqueConsulta
   inherited pModeloBotoes: TCategoryButtons
     Top = 524
     Width = 823
-    ExplicitTop = 464
-    ExplicitWidth = 823
+    ExplicitTop = 523
+    ExplicitWidth = 819
     inherited btnModeloOk: TButton
       Left = 613
       Visible = False
-      ExplicitLeft = 402
+      ExplicitLeft = 609
     end
     inherited btnModeloCancelar: TButton
       Left = 716
       Caption = 'Voltar'
-      ExplicitLeft = 505
+      ExplicitLeft = 712
     end
   end
   object dsItem: TDataSource

@@ -198,6 +198,11 @@
             <Form>ViewEstoqueConsulta</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="model\Loja.Model.Estoque.AcertoEstoque.pas"/>
+        <DCCReference Include="view\Loja.View.Estoque.AcertoEstoque.pas">
+            <Form>ViewAcertoEstoque</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

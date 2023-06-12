@@ -29,12 +29,16 @@ type
     dsFechamento: TDataSource;
     GroupBox2: TGroupBox;
     DBGrid1: TDBGrid;
+    btnPesquisar: TButton;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure btnPesquisarClick(Sender: TObject);
   private
     FControllerItens: TControllerItens;
     FControllerSaldo: TControllerEstoqueSaldo;
     FCodItem: Integer;
+
+    procedure AtualizarTela;
   public
     { Public declarations }
     class function Exibir(AOwner: TComponent; ACodItem: Integer): Integer;
@@ -43,7 +47,23 @@ type
 
 implementation
 
+uses
+  Loja.View.Estoque.AcertoEstoque;
+
 {$R *.dfm}
+
+procedure TViewEstoqueConsulta.AtualizarTela;
+begin
+  FControllerItens.ObterItem(FCodItem);
+  FControllerSaldo.ObterSaldo(FCodItem);
+end;
+
+procedure TViewEstoqueConsulta.btnPesquisarClick(Sender: TObject);
+begin
+  inherited;
+  if TViewAcertoEstoque.Exibir(Self, FCodItem) = mrOk
+  then AtualizarTela;
+end;
 
 class function TViewEstoqueConsulta.Exibir(AOwner: TComponent; ACodItem: Integer): Integer;
 begin
@@ -71,8 +91,7 @@ end;
 procedure TViewEstoqueConsulta.FormShow(Sender: TObject);
 begin
   inherited;
-  FControllerItens.ObterItem(FCodItem);
-  FControllerSaldo.ObterSaldo(FCodItem);
+  AtualizarTela;
 end;
 
 end.
