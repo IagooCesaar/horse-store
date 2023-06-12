@@ -59,14 +59,15 @@ type
 implementation
 
 uses
-  Loja.Model.Infra.Types;
+  Loja.Model.Infra.Types,
+  Loja.View.Estoque.Consulta;
 
 {$R *.dfm}
 
 procedure TViewItens.btnEstoqueClick(Sender: TObject);
 begin
   inherited;
-  ShowMessage(':: em desenvolvimento ::');
+  TViewEstoqueConsulta.Exibir(Self, FController.mtDadosCOD_ITEM.AsInteger);
 end;
 
 procedure TViewItens.btnPesquisarClick(Sender: TObject);

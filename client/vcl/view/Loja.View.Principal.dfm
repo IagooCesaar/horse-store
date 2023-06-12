@@ -36,24 +36,28 @@ object ViewPrincipal: TViewPrincipal
     object btnVender: TToolButton
       Left = 0
       Top = 0
+      Cursor = crHandPoint
       Action = acVender
       Wrap = True
     end
     object btnItens: TToolButton
       Left = 0
       Top = 54
+      Cursor = crHandPoint
       Action = acItens
       Wrap = True
     end
     object btnComprar: TToolButton
       Left = 0
       Top = 108
+      Cursor = crHandPoint
       Action = acComprar
       Wrap = True
     end
     object btnLogon: TToolButton
       Left = 0
       Top = 162
+      Cursor = crHandPoint
       Action = acLogon
     end
   end

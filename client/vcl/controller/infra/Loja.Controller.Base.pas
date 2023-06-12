@@ -5,6 +5,7 @@ interface
 uses
   System.SysUtils,
   System.Classes,
+  System.JSON,
 
   RESTRequest4D,
 
@@ -22,15 +23,16 @@ type
   protected
     function PreparaRequest: IRequest;
     procedure RaiseException(AResponse : IResponse; ATituloMensagem: string);
-    procedure Serializar(AResponse : IResponse; dsDestino: TDataSet = nil);
+    procedure Serializar(AResponse : IResponse; dsDestino: TDataSet = nil); overload;
+    procedure Serializar(AJsonString : string; dsDestino: TDataSet = nil); overload;
+    procedure Serializar(AJsonValue : TJSONValue; dsDestino: TDataSet = nil); overload;
   public
-    property PodeAplicarAtualizacoes: Boolean read FPodeAplicarAtualizacoes write FPodeAplicarAtualizacoes;
+    //property PodeAplicarAtualizacoes: Boolean read FPodeAplicarAtualizacoes write FPodeAplicarAtualizacoes;
   end;
 
 implementation
 
 uses
-  System.JSON,
   DataSet.Serialize,
   Horse.JsonInterceptor.Helpers,
 
@@ -128,5 +130,27 @@ begin
 
   dsDestino.LoadFromJSON(AResponse.Content);
 end;
+
+procedure TControllerBase.Serializar(AJsonString: string; dsDestino: TDataSet);
+begin
+  if dsDestino = nil
+  then dsDestino := mtDados;
+
+  dsDestino.LoadFromJSON(AJsonString);
+end;
+
+procedure TControllerBase.Serializar(AJsonValue: TJSONValue;
+  dsDestino: TDataSet);
+begin
+  if dsDestino = nil
+  then dsDestino := mtDados;
+
+  if AJsonValue is TJSONObject
+  then dsDestino.LoadFromJSON(AJsonValue as TJSONObject)
+  else
+  if AJsonValue is TJSONArray
+  then dsDestino.LoadFromJSON(AJsonValue as TJSONArray);
+end;
+
 
 end.

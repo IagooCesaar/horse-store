@@ -32,6 +32,8 @@ object ViewLogon: TViewLogon
     ParentColor = True
     ShowCaption = False
     TabOrder = 0
+    ExplicitWidth = 339
+    ExplicitHeight = 214
     object pLogin: TPanel
       AlignWithMargins = True
       Left = 10
@@ -47,6 +49,8 @@ object ViewLogon: TViewLogon
       ParentColor = True
       ShowCaption = False
       TabOrder = 0
+      ExplicitWidth = 315
+      ExplicitHeight = 190
       object Label2: TLabel
         AlignWithMargins = True
         Left = 8
@@ -88,6 +92,7 @@ object ViewLogon: TViewLogon
         Align = alTop
         TabOrder = 0
         TextHint = 'Informe seu usu'#225'rio, c'#243'digo ou e-mail'
+        ExplicitWidth = 299
       end
       object edtSenha: TEdit
         AlignWithMargins = True
@@ -104,6 +109,7 @@ object ViewLogon: TViewLogon
         PasswordChar = '*'
         TabOrder = 1
         TextHint = 'Informe seu senha de acesso'
+        ExplicitWidth = 299
       end
       object pBotoes: TPanel
         AlignWithMargins = True
@@ -121,6 +127,8 @@ object ViewLogon: TViewLogon
         ParentColor = True
         ShowCaption = False
         TabOrder = 2
+        ExplicitWidth = 299
+        ExplicitHeight = 26
         object btnEntrar: TButton
           AlignWithMargins = True
           Left = 30
@@ -136,6 +144,7 @@ object ViewLogon: TViewLogon
           Caption = '&Entrar'
           TabOrder = 0
           OnClick = btnEntrarClick
+          ExplicitHeight = 26
         end
         object btnSair: TButton
           AlignWithMargins = True
@@ -152,6 +161,8 @@ object ViewLogon: TViewLogon
           Caption = '&Sair'
           TabOrder = 1
           OnClick = btnSairClick
+          ExplicitLeft = 174
+          ExplicitHeight = 26
         end
       end
       object pMetodoConexao: TPanel
@@ -165,6 +176,8 @@ object ViewLogon: TViewLogon
         ParentColor = True
         ShowCaption = False
         TabOrder = 3
+        ExplicitTop = 166
+        ExplicitWidth = 315
         object sbConfig: TSpeedButton
           Left = 0
           Top = 0

@@ -25,7 +25,7 @@ type
   private
     { Private declarations }
   public
-    procedure ObterItem;
+    procedure ObterItem(ACodItem: Integer);
     procedure ObterItens(ACodItem: Integer;
       ANome, ACodBarras: TLhsBracketFilter );
   end;
@@ -49,7 +49,8 @@ procedure TControllerItens.mtDadosBeforePost(DataSet: TDataSet);
 var LResponse: IResponse;
 begin
   inherited;
-  if not PodeAplicarAtualizacoes
+  //if not PodeAplicarAtualizacoes
+  if DataSet.ControlsDisabled
   then Exit;
 
   var LBody := DataSet.ToJSONObject();
@@ -71,22 +72,30 @@ begin
       .POST();
   end;
   try
+    DataSet.DisableControls;
     if not(LResponse.StatusCode in [200,201])
     then RaiseException(LResponse, 'Erro ao atualizar o cadastro do item');
 
-    PodeAplicarAtualizacoes := False;
+    //PodeAplicarAtualizacoes := False;
     DataSet.MergeFromJSONObject(LResponse.Content);
   finally
-    //LBody.Free;
-    PodeAplicarAtualizacoes := True;
+    DataSet.EnableControls;
+    //PodeAplicarAtualizacoes := True;
   end;
-
 end;
 
-procedure TControllerItens.ObterItem;
+procedure TControllerItens.ObterItem(ACodItem: Integer);
 begin
   var LResponse := PreparaRequest
+    .Resource('/itens/{cod_item}')
+    .AddUrlSegment('cod_item', ACodItem.ToString)
     .Get();
+
+  if not(LResponse.StatusCode in [200,204])
+    then RaiseException(LResponse, 'Falha ao obter lista de itens');
+
+  if LResponse.StatusCode = 200
+  then Serializar(LResponse);
 end;
 
 procedure TControllerItens.ObterItens(ACodItem: Integer;
@@ -94,7 +103,7 @@ procedure TControllerItens.ObterItens(ACodItem: Integer;
 begin
   try
     mtDados.DisableControls;
-    PodeAplicarAtualizacoes := False;
+    //PodeAplicarAtualizacoes := False;
 
     if mtDados.Active
     then mtDados.Close;
@@ -132,7 +141,7 @@ begin
 
   finally
     mtDados.EnableControls;
-    PodeAplicarAtualizacoes := True;
+    //PodeAplicarAtualizacoes := True;
     if not mtDados.Active
     then mtDados.CreateDataSet;
   end;
