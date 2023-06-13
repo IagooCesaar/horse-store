@@ -76,7 +76,8 @@ uses
 
   Loja.Model.Itens,
   Loja.Model.Dto.Req.Itens.CriarItem,
-  Loja.Model.Dto.Req.Itens.FiltroItens;
+  Loja.Model.Dto.Req.Itens.FiltroItens,
+  Loja.infra.Utils.Funcoes;
 
 procedure TLojaModelItensTest.Setup;
 begin
@@ -104,7 +105,7 @@ begin
   LDto := TLojaModelDtoReqItensCriarItem.Create;
   try
     LDto.NomItem := 'Novo Item';
-    LDto.NumCodBarr := '123456789';
+    LDto.NumCodBarr := '192837645';
 
     var LItemCriado := TLojaModelItens.New
       .CriarItem(LDto);
@@ -114,7 +115,7 @@ begin
     Assert.AreEqual(LDto.NumCodBarr, LItemCriado.NumCodBarr, 'O código de barras não coincide');
 
     LDto.NomItem := 'Nome atualizado';
-    LDto.NumCodBarr := '987654321';
+    LDto.NumCodBarr := '73826142851';
     LDto.CodItem := LItemCriado.CodItem;
 
     var LItemAtualizado := TLojaModelItens.New
@@ -158,7 +159,7 @@ begin
   LDto := TLojaModelDtoReqItensCriarItem.Create;
   try
     LDto.NomItem := 'Novo Item';
-    LDto.NumCodBarr := '123456789';
+    LDto.NumCodBarr := '164379285';
 
     var LItemCriado := TLojaModelItens.New
       .CriarItem(LDto);
@@ -192,7 +193,7 @@ begin
   LDto := TLojaModelDtoReqItensCriarItem.Create;
   try
     LDto.NomItem := 'Novo Item';
-    LDto.NumCodBarr := '123456789';
+    LDto.NumCodBarr := '794613825';
 
     var LItemCriado := TLojaModelItens.New
       .CriarItem(LDto);
@@ -203,7 +204,7 @@ begin
 
     LDto.NomItem := '01234567890123456789012345678901234567890123456789'+
       '01234567890123456789012345678901234567890123456789AAAAAA';
-    LDto.NumCodBarr := '987654321';
+    LDto.NumCodBarr := '794613285';
     LDto.CodItem := LItemCriado.CodItem;
 
     Assert.WillRaiseWithMessageRegex(
@@ -227,7 +228,7 @@ begin
   LDto := TLojaModelDtoReqItensCriarItem.Create;
   try
     LDto.NomItem := 'Novo Item';
-    LDto.NumCodBarr := '123456789';
+    LDto.NumCodBarr := '147258369';
 
     var LItemCriado := TLojaModelItens.New
       .CriarItem(LDto);
@@ -237,7 +238,7 @@ begin
     Assert.AreEqual(LDto.NumCodBarr, LItemCriado.NumCodBarr, 'O código de barras não coincide');
 
     LDto.NomItem := 'abc';
-    LDto.NumCodBarr := '987654321';
+    LDto.NumCodBarr := '963852741';
     LDto.CodItem := LItemCriado.CodItem;
 
     Assert.WillRaiseWithMessageRegex(
@@ -261,7 +262,7 @@ begin
   LDto := TLojaModelDtoReqItensCriarItem.Create;
   try
     LDto.NomItem := 'Novo Item';
-    LDto.NumCodBarr := '123456789';
+    LDto.NumCodBarr := '739182465';
 
     var LItemCriado := TLojaModelItens.New
       .CriarItem(LDto);

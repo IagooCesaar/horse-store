@@ -68,7 +68,7 @@ begin
   try
     LNovoItem := TLojaModelDtoReqItensCriarItem.Create;
     LNovoItem.NomItem := 'Novo Item Cadastrado Via Teste Integração';
-    LNovoItem.NumCodBarr := '0123456789';
+    LNovoItem.NumCodBarr := '';
 
     var LResponse := TRequest.New
       .BasicAuthentication(FUsarname, FPassword)

@@ -71,6 +71,20 @@ begin
       .Error('Não foi possível encontrar o item pelo código informado');
   LItem.Free;
 
+  if AItem.NumCodBarr <> ''
+  then begin
+    var LItemExiteCodBarr := TLojaModelDaoFactory.New.Itens.Item.ObterPorNumCodBarr(AItem.NumCodBarr);
+    if (LItemExiteCodBarr <> nil) and (LItemExiteCodBarr.CodItem <> AItem.CodItem)
+    then try
+      raise EHorseException.New
+        .Status(THTTPStatus.BadRequest)
+        .&Unit(Self.UnitName)
+        .Error('Já existe um item cadastrado com este código de barras');
+    finally
+      LItemExiteCodBarr.Free;
+    end;
+  end;
+
   Result := TLojaModelDaoFactory.New.Itens
     .Item
     .AtualizarItem(AItem);
@@ -102,6 +116,20 @@ begin
     .Status(THTTPStatus.BadRequest)
     .&Unit(Self.UnitName)
     .Error(Format('O código de barras deverá ter no máximo %d caracteres', [ C_NOM_MAX ]));
+
+  if ANovoItem.NumCodBarr <> ''
+  then begin
+    var LItem := TLojaModelDaoFactory.New.Itens.Item.ObterPorNumCodBarr(ANovoItem.NumCodBarr);
+    if LItem <> nil
+    then try
+      raise EHorseException.New
+        .Status(THTTPStatus.BadRequest)
+        .&Unit(Self.UnitName)
+        .Error('Já existe um item cadastrado com este código de barras');
+    finally
+      LItem.Free;
+    end;
+  end;
 
   Result := TLojaModelDaoFactory.New.Itens
     .Item

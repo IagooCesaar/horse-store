@@ -64,7 +64,11 @@ uses
 
   Loja.Controller.Api.Test,
   Loja.Model.Entity.Itens.Item,
-  Loja.Model.Dto.Req.Itens.CriarItem;
+  Loja.Model.Dto.Req.Itens.CriarItem,
+  Loja.infra.Utils.Funcoes;
+
+const
+  C_NUM_COD_BARR: string = '0123456789';
 
 { TLojaControllerItensTest }
 
@@ -81,7 +85,7 @@ begin
   try
     LDTO := TLojaModelDtoReqItensCriarItem.Create;
     LDTO.NomItem := 'Novo Item Cadastrado Via Teste Integração';
-    LDTO.NumCodBarr := '0123456789';
+    LDTO.NumCodBarr := TLojaInfraUtilsFuncoes.GeraStringRandomica(14,1);
 
     var LResponseCriar := TRequest.New
       .BasicAuthentication(FUsarname, FPassword)
@@ -99,7 +103,7 @@ begin
     Assert.AreEqual(LDTO.NumCodBarr, LItemCriado.NumCodBarr);
 
     LDTO.NomItem := 'Nome atualizado';
-    LDTO.NumCodBarr := '9876543210';
+    LDTO.NumCodBarr := TLojaInfraUtilsFuncoes.GeraStringRandomica(14,1);
 
     var LResponse := TRequest.New
       .BasicAuthentication(FUsarname, FPassword)
@@ -130,7 +134,7 @@ begin
   try
     LNovoItem := TLojaModelDtoReqItensCriarItem.Create;
     LNovoItem.NomItem := 'Novo Item Cadastrado Via Teste Integração';
-    LNovoItem.NumCodBarr := '0123456789';
+    LNovoItem.NumCodBarr := TLojaInfraUtilsFuncoes.GeraStringRandomica(14,1);
 
     var LResponse := TRequest.New
       .BasicAuthentication(FUsarname, FPassword)
@@ -151,7 +155,7 @@ begin
   try
     LDTO := TLojaModelDtoReqItensCriarItem.Create;
     LDTO.NomItem := 'Novo Item Cadastrado Via Teste Integração';
-    LDTO.NumCodBarr := '0123456789';
+    LDTO.NumCodBarr := '';
 
     var LResponseCriar := TRequest.New
       .BasicAuthentication(FUsarname, FPassword)
@@ -191,7 +195,7 @@ begin
   try
     LDTO := TLojaModelDtoReqItensCriarItem.Create;
     LDTO.NomItem := 'Novo Item Cadastrado Via Teste Integração';
-    LDTO.NumCodBarr := '0123456789';
+    LDTO.NumCodBarr := C_NUM_COD_BARR;
 
     var LResponse := TRequest.New
       .BasicAuthentication(FUsarname, FPassword)
@@ -247,7 +251,7 @@ procedure TLojaControllerItensTest.Test_ObterUmItem_PorCodigo;
 begin
   var LNovoItem := TLojaModelDtoReqItensCriarItem.Create;
   LNovoItem.NomItem := 'Novo Item Cadastrado Via Teste Integração';
-  LNovoItem.NumCodBarr := '0123456789';
+  LNovoItem.NumCodBarr := '';
 
   var LResponseCriar := TRequest.New
     .BasicAuthentication(FUsarname, FPassword)
@@ -285,7 +289,7 @@ begin
     .BasicAuthentication(FUsarname, FPassword)
     .BaseURL(FBaseURL)
     .Resource('/itens/codigo-barras/{num_cod_barr}')
-    .AddUrlSegment('num_cod_barr', '0123456789')
+    .AddUrlSegment('num_cod_barr', C_NUM_COD_BARR)
     .Get();
 
   Assert.AreEqual(200, LResponse.StatusCode);
