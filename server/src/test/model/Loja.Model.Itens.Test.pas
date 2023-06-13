@@ -47,6 +47,9 @@ type
     procedure Test_NaoCriarItemComCodigoBarrasGrande;
 
     [Test]
+    procedure Test_NaoCriarItemComCodigoBarrasRepetido;
+
+    [Test]
     procedure Test_ObterItensCadastrados;
 
     [Test]
@@ -63,6 +66,9 @@ type
 
     [Test]
     procedure Test_NaoAtualizarItem_ItemInexistente;
+
+    [Test]
+    procedure Test_NaoAtualizarItem_CodigoBarrasRepetido;
   end;
 
 implementation
@@ -256,6 +262,45 @@ begin
   end;
 end;
 
+procedure TLojaModelItensTest.Test_NaoAtualizarItem_CodigoBarrasRepetido;
+var LDTONovoItem : TLojaModelDtoReqItensCriarItem;
+begin
+  var LNumCodBarr := TLojaInfraUtilsFuncoes.GeraStringRandomica(14,1);
+  LDTONovoItem := TLojaModelDtoReqItensCriarItem.Create;
+  try
+    LDTONovoItem.NomItem := 'Novo Item 1';
+    LDTONovoItem.NumCodBarr := LNumCodBarr;
+
+    var LItem1 := TLojaModelItens.New.CriarItem(LDTONovoItem);
+    Assert.IsTrue(LItem1 <> nil);
+    LItem1.Free;
+
+    LDTONovoItem.NomItem := 'Novo Item 2';
+    LDTONovoItem.NumCodBarr := '';
+
+    var LItem2 := TLojaModelItens.New.CriarItem(LDTONovoItem);
+    Assert.IsTrue(LItem2 <> nil);
+
+    LDTONovoItem.CodItem := LItem2.CodItem;
+    LDTONovoItem.NumCodBarr := LNumCodBarr;
+
+    try
+      Assert.WillRaiseWithMessageRegex(
+        procedure begin
+          TLojaModelItens.New
+            .AtualizarItem(LDTONovoItem);
+        end,
+        EHorseException,
+        'Já existe um item cadastrado com este código de barras'
+      );
+    finally
+      LItem2.Free;
+    end;
+  finally
+    LDTONovoItem.Free;
+  end;
+end;
+
 procedure TLojaModelItensTest.Test_NaoAtualizarItem_ItemInexistente;
 var LDto : TLojaModelDtoReqItensCriarItem;
 begin
@@ -305,6 +350,34 @@ begin
       EHorseException,
       'O código de barras deverá ter no máximo'
     );
+  finally
+    LDTONovoItem.Free;
+  end;
+end;
+
+procedure TLojaModelItensTest.Test_NaoCriarItemComCodigoBarrasRepetido;
+var LDTONovoItem : TLojaModelDtoReqItensCriarItem;
+begin
+  LDTONovoItem := TLojaModelDtoReqItensCriarItem.Create;
+  try
+    LDTONovoItem.NomItem := 'Novo Item';
+    LDTONovoItem.NumCodBarr := TLojaInfraUtilsFuncoes.GeraStringRandomica(14,1);
+
+    var LItem := TLojaModelItens.New.CriarItem(LDTONovoItem);
+    Assert.IsTrue(LItem <> nil);
+
+    try
+      Assert.WillRaiseWithMessageRegex(
+        procedure begin
+          TLojaModelItens.New
+            .CriarItem(LDTONovoItem);
+        end,
+        EHorseException,
+        'Já existe um item cadastrado com este código de barras'
+      );
+    finally
+      LItem.Free;
+    end;
   finally
     LDTONovoItem.Free;
   end;
