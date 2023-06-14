@@ -4,8 +4,8 @@ inherited ViewModeloModal: TViewModeloModal
   ClientHeight = 494
   ClientWidth = 923
   Position = poMainFormCenter
-  ExplicitWidth = 939
-  ExplicitHeight = 533
+  ExplicitWidth = 935
+  ExplicitHeight = 532
   TextHeight = 21
   object pModeloClient: TPanel
     Left = 0
@@ -17,6 +17,8 @@ inherited ViewModeloModal: TViewModeloModal
     Caption = 'pModeloClient'
     ShowCaption = False
     TabOrder = 0
+    ExplicitWidth = 919
+    ExplicitHeight = 437
   end
   object pModeloBotoes: TCategoryButtons
     Left = 0
@@ -29,9 +31,12 @@ inherited ViewModeloModal: TViewModeloModal
     RegularButtonColor = clWhite
     SelectedButtonColor = 15132390
     TabOrder = 1
+    TabStop = False
+    ExplicitTop = 437
+    ExplicitWidth = 919
     object btnModeloOk: TButton
       AlignWithMargins = True
-      Left = 717
+      Left = 713
       Top = 8
       Width = 95
       Height = 36
@@ -42,11 +47,11 @@ inherited ViewModeloModal: TViewModeloModal
       Margins.Bottom = 8
       Align = alRight
       TabOrder = 0
-      ExplicitLeft = 713
+      ExplicitLeft = 709
     end
     object btnModeloCancelar: TButton
       AlignWithMargins = True
-      Left = 820
+      Left = 816
       Top = 8
       Width = 95
       Height = 36
@@ -59,7 +64,7 @@ inherited ViewModeloModal: TViewModeloModal
       Caption = 'Cancelar'
       ModalResult = 2
       TabOrder = 1
-      ExplicitLeft = 816
+      ExplicitLeft = 812
     end
   end
 end
