@@ -108,15 +108,14 @@ inherited ViewEstoqueConsulta: TViewEstoqueConsulta
       end
       object btnPesquisar: TButton
         Left = 692
-        Top = 84
+        Top = 97
         Width = 121
-        Height = 49
+        Height = 36
         Cursor = crHandPoint
         Anchors = [akTop, akRight]
         Caption = 'Realizar Acerto'
         TabOrder = 4
         OnClick = btnPesquisarClick
-        ExplicitLeft = 688
       end
     end
     object GroupBox1: TGroupBox

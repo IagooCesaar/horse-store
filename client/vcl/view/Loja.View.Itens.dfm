@@ -111,9 +111,9 @@ inherited ViewItens: TViewItens
       end
       object btnPesquisar: TButton
         Left = 659
-        Top = 111
+        Top = 124
         Width = 121
-        Height = 49
+        Height = 36
         Cursor = crHandPoint
         Caption = 'Pesquisar'
         TabOrder = 2
@@ -304,7 +304,7 @@ inherited ViewItens: TViewItens
         Left = 17
         Top = 231
         Width = 121
-        Height = 49
+        Height = 36
         Cursor = crHandPoint
         Caption = 'Estoque'
         TabOrder = 4
@@ -314,7 +314,7 @@ inherited ViewItens: TViewItens
         Left = 144
         Top = 231
         Width = 121
-        Height = 49
+        Height = 36
         Cursor = crHandPoint
         Caption = 'Pre'#231'o Venda'
         TabOrder = 5
