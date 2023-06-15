@@ -15,7 +15,10 @@ uses
   Loja.Model.Entity.Estoque.Saldo,
   Loja.Model.Dto.Req.Estoque.CriarMovimento,
   Loja.Model.Dto.Req.Estoque.AcertoEstoque,
-  Loja.Model.Dto.Resp.Estoque.SaldoItem;
+  Loja.Model.Dto.Resp.Estoque.SaldoItem,
+
+  Loja.Model.Dto.Req.Preco.CriarPrecoVenda,
+  Loja.Model.Entity.Preco.Venda;
 
 type
   ILojaModelItens = interface
@@ -38,15 +41,16 @@ type
 
   ILojaModelPreco = interface
     ['{5AFBBF1C-8A33-4253-9D14-94595FF92902}']
-    //Criar preço item
-    //Obter histórico preço item
-    //Obter preço atual
+    function CriarPrecoVendaItem(ANovoPreco: TLojaModelDtoReqPrecoCriarPrecoVenda): TLojaModelEntityPrecoVenda;
+    function ObterHistoricoPrecoVendaItem(ACodItem: Integer; ADatRef: TDateTime): TLojaModelEntityPrecoVendaLista;
+    function ObterPrecoVendaAtual(ACodItem: Integer): TLojaModelEntityPrecoVenda;
   end;
 
   ILojaModelFactory = interface
     ['{FBA02FC1-F0C9-4969-BF2A-AA7662040FC8}']
     function Itens: ILojaModelItens;
     function Estoque: ILojaModelEstoque;
+    function Preco: ILojaModelPreco;
   end;
 
 implementation

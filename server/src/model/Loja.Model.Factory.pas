@@ -21,13 +21,15 @@ type
     { ILojaModelFactory }
     function Itens: ILojaModelItens;
     function Estoque: ILojaModelEstoque;
+    function Preco: ILojaModelPreco;
   end;
 
 implementation
 
 uses
   Loja.Model.Itens,
-  Loja.Model.Estoque;
+  Loja.Model.Estoque,
+  Loja.Model.Preco;
 
 { TLojaModelFactory }
 
@@ -55,6 +57,11 @@ end;
 class function TLojaModelFactory.New: ILojaModelFactory;
 begin
   Result := Self.Create;
+end;
+
+function TLojaModelFactory.Preco: ILojaModelPreco;
+begin
+  Result := TlojaModelPreco.New;
 end;
 
 end.

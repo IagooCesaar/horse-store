@@ -45,7 +45,8 @@ uses
   Loja.Model.Dto.Resp.ApiError in 'src\model\dto\Loja.Model.Dto.Resp.ApiError.pas',
   Loja.Model.Entity.Preco.Venda in 'src\model\entity\preco\Loja.Model.Entity.Preco.Venda.pas',
   Loja.Model.Dto.Req.Preco.CriarPrecoVenda in 'src\model\dto\Loja.Model.Dto.Req.Preco.CriarPrecoVenda.pas',
-  Loja.Controller.Preco in 'src\controllers\Loja.Controller.Preco.pas';
+  Loja.Controller.Preco in 'src\controllers\Loja.Controller.Preco.pas',
+  Loja.Model.Preco in 'src\model\Loja.Model.Preco.pas';
 
 begin
   var App := TApp.Create;
