@@ -16,7 +16,8 @@ implementation
 
 uses
   Loja.Controller.Itens,
-  Loja.Controller.Estoque;
+  Loja.Controller.Estoque,
+  Loja.Controller.Preco;
 
 procedure HealtCheck(Req: THorseRequest; Resp: THorseResponse);
 begin
@@ -33,6 +34,7 @@ begin
   var LContext := AContext + '/api';
   Loja.Controller.Itens.Registry(LContext);
   Loja.Controller.Estoque.Registry(LContext);
+  Loja.Controller.Preco.Registry(LContext);
 
   THorse
     .Get(LContext+'/healthcheck', HealtCheck)

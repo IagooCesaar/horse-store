@@ -1,5 +1,6 @@
 delete from estoque_movimento where 1=1;
 delete from estoque_saldo where 1=1;
+delete from preco_venda where 1=1;
 delete from item where 1=1;
 
 set generator GEN_ESTOQUE_MOVIMENTO_ID to 0;

@@ -36,6 +36,13 @@ type
     function ObterSaldoAtualItem(ACodItem: Integer): TLojaModelDtoRespEstoqueSaldoItem;
   end;
 
+  ILojaModelPreco = interface
+    ['{5AFBBF1C-8A33-4253-9D14-94595FF92902}']
+    //Criar preço item
+    //Obter histórico preço item
+    //Obter preço atual
+  end;
+
   ILojaModelFactory = interface
     ['{FBA02FC1-F0C9-4969-BF2A-AA7662040FC8}']
     function Itens: ILojaModelItens;

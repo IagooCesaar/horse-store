@@ -42,7 +42,10 @@ uses
   Loja.Model.Bo.Estoque in 'src\model\bo\Loja.Model.Bo.Estoque.pas',
   Loja.Model.Dto.Resp.Estoque.SaldoItem in 'src\model\dto\Loja.Model.Dto.Resp.Estoque.SaldoItem.pas',
   Loja.Model.Dao.Itens.Item in 'src\model\dao\oficial\itens\Loja.Model.Dao.Itens.Item.pas',
-  Loja.Model.Dto.Resp.ApiError in 'src\model\dto\Loja.Model.Dto.Resp.ApiError.pas';
+  Loja.Model.Dto.Resp.ApiError in 'src\model\dto\Loja.Model.Dto.Resp.ApiError.pas',
+  Loja.Model.Entity.Preco.Venda in 'src\model\entity\preco\Loja.Model.Entity.Preco.Venda.pas',
+  Loja.Model.Dto.Req.Preco.CriarPrecoVenda in 'src\model\dto\Loja.Model.Dto.Req.Preco.CriarPrecoVenda.pas',
+  Loja.Controller.Preco in 'src\controllers\Loja.Controller.Preco.pas';
 
 begin
   var App := TApp.Create;
