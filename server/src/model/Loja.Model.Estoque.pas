@@ -75,7 +75,7 @@ begin
   LItem := TLojaModelDaoFactory.New.Itens.Item.ObterPorCodigo(AAcertoEstoque.CodItem);
   if LItem = nil
   then raise EHorseException.New
-    .Status(THTTPStatus.BadRequest)
+    .Status(THTTPStatus.NotFound)
     .&Unit(Self.UnitName)
     .Error('O item informado não existe');
   LItem.Free;
@@ -163,7 +163,7 @@ begin
   LItem := TLojaModelDaoFactory.New.Itens.Item.ObterPorCodigo(ANovoMovimento.CodItem);
   if LItem = nil
   then raise EHorseException.New
-    .Status(THTTPStatus.BadRequest)
+    .Status(THTTPStatus.NotFound)
     .&Unit(Self.UnitName)
     .Error('O item informado não existe');
   LItem.Free;
@@ -200,7 +200,7 @@ begin
   var LItem := TLojaModelDaoFactory.New.Itens.Item.ObterPorCodigo(ACodItem);
   if LItem = nil
   then raise EHorseException.New
-    .Status(THTTPStatus.BadRequest)
+    .Status(THTTPStatus.NotFound)
     .&Unit(Self.UnitName)
     .Error('O item informado não existe');
   LItem.Free;
@@ -226,7 +226,7 @@ begin
   var LItem := TLojaModelDaoFactory.New.Itens.Item.ObterPorCodigo(ACodItem);
   if LItem = nil
   then raise EHorseException.New
-    .Status(THTTPStatus.BadRequest)
+    .Status(THTTPStatus.NotFound)
     .&Unit(Self.UnitName)
     .Error('O item informado não existe');
   LItem.Free;
@@ -247,7 +247,7 @@ begin
   var LItem := TLojaModelDaoFactory.New.Itens.Item.ObterPorCodigo(ACodItem);
   if LItem = nil
   then raise EHorseException.New
-    .Status(THTTPStatus.BadRequest)
+    .Status(THTTPStatus.NotFound)
     .&Unit(Self.UnitName)
     .Error('O item informado não existe');
   LItem.Free;

@@ -135,7 +135,7 @@ begin
           .Schema(SWAG_INTEGER)
         .&End
         .AddParamQuery('dat_ref', 'Data de referência')
-          .Schema(SWAG_STRING)
+          .Schema(SWAG_STRING, 'date-time')
           .Required(True)
         .&End
         .Description('Obtêm o histórico de preço de venda de item praticado a partir da data de referência informada')

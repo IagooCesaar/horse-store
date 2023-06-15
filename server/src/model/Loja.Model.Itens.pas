@@ -173,7 +173,7 @@ begin
 
   if LItem = nil
   then raise EHorseException.New
-      .Status(THTTPStatus.BadRequest)
+      .Status(THTTPStatus.NotFound)
       .&Unit(Self.UnitName)
       .Error('Não foi possível encontrar o item pelo código informado');
 
@@ -189,7 +189,7 @@ begin
 
   if not Assigned(LItem)
   then raise EHorseException.New
-      .Status(THTTPStatus.BadRequest)
+      .Status(THTTPStatus.NotFound)
       .&Unit(Self.UnitName)
       .Error('Não foi possível encontrar o item pelo código de barras informado');
 
