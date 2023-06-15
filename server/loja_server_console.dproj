@@ -155,6 +155,11 @@
         <DCCReference Include="src\model\dto\Loja.Model.Dto.Req.Preco.CriarPrecoVenda.pas"/>
         <DCCReference Include="src\controllers\Loja.Controller.Preco.pas"/>
         <DCCReference Include="src\model\Loja.Model.Preco.pas"/>
+        <DCCReference Include="src\model\dao\Loja.Model.Dao.Preco.Interfaces.pas"/>
+        <DCCReference Include="src\model\dao\in-memory\preco\Loja.Model.Dao.Preco.Venda.InMemory.pas"/>
+        <DCCReference Include="src\model\dao\in-memory\preco\Loja.Model.Dao.Preco.Factory.InMemory.pas"/>
+        <DCCReference Include="src\model\dao\oficial\preco\Loja.Model.Dao.Preco.Venda.pas"/>
+        <DCCReference Include="src\model\dao\oficial\preco\Loja.Model.Dao.Preco.Factory.pas"/>
         <RcItem Include="boss.json">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>RCDATA</ResourceType>
