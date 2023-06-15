@@ -15,7 +15,7 @@ uses
 type
   TLojaModelDaoItensItemInMemory = class(TNoRefCountObject, ILojaModelDaoItensItem)
   private
-    FRepository: TObjectList<TLojaModelEntityItensItem>;
+    FRepository: TLojaModelEntityItensItemLista;
     function Clone(ASource: TLojaModelEntityItensItem): TLojaModelEntityItensItem;
 
     class var FDao: TLojaModelDaoItensItemInMemory;
@@ -64,7 +64,7 @@ end;
 
 constructor TLojaModelDaoItensItemInMemory.Create;
 begin
-  FRepository := TObjectList<TLojaModelEntityItensItem>.Create;
+  FRepository := TLojaModelEntityItensItemLista.Create;
 end;
 
 function TLojaModelDaoItensItemInMemory.CriarItem(

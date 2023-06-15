@@ -5,6 +5,7 @@ interface
 type
   ILojaModelDaoPrecoVenda = interface
     ['{4242CDE4-338F-44AB-B60F-1A389F3C0B7C}']
+
   end;
 
   ILojaModelDaoPrecoFactory = interface
