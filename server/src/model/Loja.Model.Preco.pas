@@ -25,6 +25,12 @@ type
 
 implementation
 
+uses
+  Horse,
+  Horse.Exception,
+
+  Loja.Model.Dao.Factory;
+
 { TLojaModelPreco }
 
 constructor TLojaModelPreco.Create;
@@ -36,6 +42,43 @@ function TLojaModelPreco.CriarPrecoVendaItem(
   ANovoPreco: TLojaModelDtoReqPrecoCriarPrecoVenda): TLojaModelEntityPrecoVenda;
 begin
   Result := nil;
+
+  if ANovoPreco.VrVnda <= 0
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('O valor de venda deve ser maior que zero');
+
+  var LItem := TLojaModelDaoFactory.New.Itens
+    .Item
+    .ObterPorCodigo(ANovoPreco.CodItem);
+  if LItem = nil
+  then raise EHorseException.New
+    .Status(THTTPStatus.NotFound)
+    .&Unit(Self.UnitName)
+    .Error('Não foi possível encontrar o item pelo código informado');
+  LItem.Free;
+
+  var LPrecoVigente := TLojaModelDaoFactory.New.Preco
+    .Venda.
+    ObterPrecoVendaVigente(ANovoPreco.CodItem, ANovoPreco.DatIni);
+  if LPrecoVigente <> nil
+  then try
+    if ANovoPreco.DatIni = LPrecoVigente.DatIni
+    then raise EHorseException.New
+      .Status(THTTPStatus.BadRequest)
+      .&Unit(Self.UnitName)
+      .Error('Já existe um preço configurado para inicar na data informada');
+  finally
+    LPrecoVigente.Free;
+  end;
+
+  var LPreco := TLojaModelDaoFactory.New.Preco
+    .Venda
+    .CriarPrecoVendaItem(ANovoPreco);
+
+  Result := LPreco;
+
 end;
 
 destructor TLojaModelPreco.Destroy;
