@@ -27,6 +27,7 @@ type
     { ILojaModelDaoItensItem }
     function CriarPrecoVendaItem(ANovoPreco: TLojaModelDtoReqPrecoCriarPrecoVenda): TLojaModelEntityPrecoVenda;
     function ObterHistoricoPrecoVendaItem(ACodItem: Integer; ADatRef: TDateTime): TLojaModelEntityPrecoVendaLista;
+    function ObterPrecoVendaVigente(ACodItem: Integer; ADatRef: TDateTime): TLojaModelEntityPrecoVenda;
     function ObterPrecoVendaAtual(ACodItem: Integer): TLojaModelEntityPrecoVenda;
   end;
 
@@ -99,13 +100,19 @@ end;
 
 function TLojaModelDaoPrecoVendaInMemory.ObterPrecoVendaAtual(
   ACodItem: Integer): TLojaModelEntityPrecoVenda;
+begin
+  Result := ObterPrecoVendaVigente(ACodItem, Now);
+end;
+
+function TLojaModelDaoPrecoVendaInMemory.ObterPrecoVendaVigente(
+  ACodItem: Integer; ADatRef: TDateTime): TLojaModelEntityPrecoVenda;
 var
   LPrecoVigente: TLojaModelEntityPrecoVenda;
 begin
   for var LPreco in FRepository
   do begin
     if  (LPreco.CodItem = ACodItem)
-    and (LPreco.DatIni <= Now)
+    and (LPreco.DatIni <= ADatRef)
     then begin
       // identificar o preço que estava vigente hoje
       if LPrecoVigente = nil
@@ -119,7 +126,6 @@ begin
   then Result := nil
   else Result := Clone(LPrecoVigente);
 end;
-
 class destructor TLojaModelDaoPrecoVendaInMemory.UnInitialize;
 begin
   if FDao <> nil

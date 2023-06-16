@@ -20,6 +20,7 @@ type
     { ILojaModelDaoPrecoVenda }
     function CriarPrecoVendaItem(ANovoPreco: TLojaModelDtoReqPrecoCriarPrecoVenda): TLojaModelEntityPrecoVenda;
     function ObterHistoricoPrecoVendaItem(ACodItem: Integer; ADatRef: TDateTime): TLojaModelEntityPrecoVendaLista;
+    function ObterPrecoVendaVigente(ACodItem: Integer; ADatRef: TDateTime): TLojaModelEntityPrecoVenda;
     function ObterPrecoVendaAtual(ACodItem: Integer): TLojaModelEntityPrecoVenda;
 
   end;
@@ -27,6 +28,7 @@ type
 implementation
 
 uses
+  System.SysUtils,
   Database.Factory,
   Horse.Commons;
 
@@ -112,19 +114,26 @@ end;
 function TLojaModelDaoPrecoVenda.ObterPrecoVendaAtual(
   ACodItem: Integer): TLojaModelEntityPrecoVenda;
 begin
+  Result := ObterPrecoVendaVigente(ACodItem, Now);
+end;
+
+function TLojaModelDaoPrecoVenda.ObterPrecoVendaVigente(ACodItem: Integer;
+  ADatRef: TDateTime): TLojaModelEntityPrecoVenda;
+begin
   Result := nil;
   var LSql := #13#10
   + 'select * from preco_venda pv '
   + 'where pv.cod_item = :cod_item '
   + '  and pv.dat_ini = (select max(x.dat_ini) from preco_venda x '
   + '                     where x.cod_item = pv.cod_item '
-  + '                       and x.dat_ini <= current_timestamp) '
+  + '                       and x.dat_ini <= :dat_ref) '
   ;
 
   var ds := TDatabaseFactory.New.SQL
     .SQL(LSql)
     .ParamList
       .AddInteger('cod_item', ACodItem)
+      .AddDateTime('dat_ref', ADatRef)
       .&End
     .Open();
 
