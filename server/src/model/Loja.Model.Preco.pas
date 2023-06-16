@@ -3,6 +3,7 @@ unit Loja.Model.Preco;
 interface
 
 uses
+  System.SysUtils,
   System.Classes,
   System.Generics.Collections,
 
@@ -96,12 +97,44 @@ function TLojaModelPreco.ObterHistoricoPrecoVendaItem(ACodItem: Integer;
   ADatRef: TDateTime): TLojaModelEntityPrecoVendaLista;
 begin
   Result := nil;
+
+  var LItem := TLojaModelDaoFactory.New.Itens
+    .Item
+    .ObterPorCodigo(ACodItem);
+  if LItem = nil
+  then raise EHorseException.New
+    .Status(THTTPStatus.NotFound)
+    .&Unit(Self.UnitName)
+    .Error('Não foi possível encontrar o item pelo código informado');
+  LItem.Free;
+
+  var LHistorico := TLojaModelDaoFactory.New.Preco
+    .Venda.
+    ObterHistoricoPrecoVendaItem(ACodItem, ADatRef);
+
+  Result := LHistorico;
 end;
 
 function TLojaModelPreco.ObterPrecoVendaAtual(
   ACodItem: Integer): TLojaModelEntityPrecoVenda;
 begin
-  Result := nil;
+  Result := Nil;
+
+  var LItem := TLojaModelDaoFactory.New.Itens
+    .Item
+    .ObterPorCodigo(ACodItem);
+  if LItem = nil
+  then raise EHorseException.New
+    .Status(THTTPStatus.NotFound)
+    .&Unit(Self.UnitName)
+    .Error('Não foi possível encontrar o item pelo código informado');
+  LItem.Free;
+
+  var LPrecoVigente := TLojaModelDaoFactory.New.Preco
+    .Venda
+    .ObterPrecoVendaAtual(ACodItem);
+
+  Result := LPrecoVigente;
 end;
 
 end.
