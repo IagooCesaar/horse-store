@@ -18,6 +18,9 @@ type
 
 implementation
 
+uses
+  Loja.Model.Dao.Preco.Venda;
+
 { TLojaModelDaoPrecoFactory }
 
 constructor TLojaModelDaoPrecoFactory.Create;
@@ -38,7 +41,7 @@ end;
 
 function TLojaModelDaoPrecoFactory.Venda: ILojaModelDaoPrecoVenda;
 begin
-
+  Result := TLojaModelDaoPrecoVenda.New;
 end;
 
 end.

@@ -22,6 +22,9 @@ type
 
 implementation
 
+uses
+  Loja.Model.Dao.Preco.Venda.InMemory;
+
 { TLojaModelDaoPrecoFactoryInMemory }
 
 constructor TLojaModelDaoPrecoFactoryInMemory.Create;
@@ -50,7 +53,7 @@ end;
 
 function TLojaModelDaoPrecoFactoryInMemory.Venda: ILojaModelDaoPrecoVenda;
 begin
-
+  Result := TLojaModelDaoPrecoVendaInMemory.GetInstance;
 end;
 
 end.
