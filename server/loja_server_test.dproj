@@ -166,6 +166,8 @@
         <DCCReference Include="src\model\dao\oficial\preco\Loja.Model.Dao.Preco.Factory.pas"/>
         <DCCReference Include="src\model\dao\oficial\preco\Loja.Model.Dao.Preco.Venda.pas"/>
         <DCCReference Include="src\controllers\Loja.Controller.Preco.pas"/>
+        <DCCReference Include="src\test\model\Loja.Model.Preco.Test.pas"/>
+        <DCCReference Include="src\test\controller\Loja.Controller.Preco.Test.pas"/>
         <RcItem Include="boss.json">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>RCDATA</ResourceType>

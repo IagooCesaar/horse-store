@@ -66,7 +66,9 @@ uses
   Loja.Model.Dao.Preco.Venda.InMemory in 'src\model\dao\in-memory\preco\Loja.Model.Dao.Preco.Venda.InMemory.pas',
   Loja.Model.Dao.Preco.Factory in 'src\model\dao\oficial\preco\Loja.Model.Dao.Preco.Factory.pas',
   Loja.Model.Dao.Preco.Venda in 'src\model\dao\oficial\preco\Loja.Model.Dao.Preco.Venda.pas',
-  Loja.Controller.Preco in 'src\controllers\Loja.Controller.Preco.pas';
+  Loja.Controller.Preco in 'src\controllers\Loja.Controller.Preco.pas',
+  Loja.Model.Preco.Test in 'src\test\model\Loja.Model.Preco.Test.pas',
+  Loja.Controller.Preco.Test in 'src\test\controller\Loja.Controller.Preco.Test.pas';
 
 {$IFNDEF TESTINSIGHT}
 var

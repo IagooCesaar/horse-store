@@ -152,18 +152,19 @@ begin
   THorse.MaxConnections := StrToIntDef(GetEnvironmentVariable('MAXCONNECTIONS'), 10000);
   THorse.ListenQueue := StrToIntDef(GetEnvironmentVariable('LISTENQUEUE'), 200);
 
-  THorse.Use(Jhonson('UTF-8'))
-        .Use(Compression())
-        .Use(OctetStream)
-        .Use(HorseSwagger(FContext+'/swagger-ui', FContext+'/api-docs'))
-        .Use(HorseBasicAuthentication(ValidarLogin,
-          THorseBasicAuthenticationConfig.New.SkipRoutes([
-            FContext+'/api/healthcheck/',
-            FContext+'/swagger-ui/',
-            FContext+'/api-docs/'
-          ])
-        ))
-        .Use(HandleException);
+  THorse
+    .Use(Compression())
+    .Use(Jhonson('UTF-8'))
+    .Use(OctetStream)
+    .Use(HorseSwagger(FContext+'/swagger-ui', FContext+'/api-docs'))
+    .Use(HorseBasicAuthentication(ValidarLogin,
+      THorseBasicAuthenticationConfig.New.SkipRoutes([
+        FContext+'/api/healthcheck/',
+        FContext+'/swagger-ui/',
+        FContext+'/api-docs/'
+      ])
+    ))
+    .Use(HandleException);
 
   //Registro de Rotas
   Loja.Controller.Registry.DoRegistry(FContext);
