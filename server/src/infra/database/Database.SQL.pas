@@ -112,12 +112,7 @@ function TDatabaseSQL.AddFloat(pNome: string;
 begin
   Result := Self;
   if FQuery.FindParam(pNome) = nil then Exit;
-  pValor := VarVoidToNull(pValor);
-
-  if not(pValor = null) then
-    AddFloat(pNome, pValor)
-  else
-    AddNull(ftFloat, pNome, pValor);
+  FQuery.ParamByName(pNome).AsFloat := pValor;
 end;
 
 function TDatabaseSQL.AddFloat(pNome: string;
