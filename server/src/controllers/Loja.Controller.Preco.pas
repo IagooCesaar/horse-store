@@ -31,10 +31,14 @@ begin
     .AsInteger;
 
   var LPreco := TLojaModelFactory.New.Preco.ObterPrecoVendaAtual(LCodItem);
-
-  if LPreco = nil
-  then Resp.Status(THTTPStatus.NoContent)
-  else Resp.Send(TJson.ObjectToClearJsonValue(LPreco)).Status(THTTPStatus.OK);
+  try
+    if LPreco = nil
+    then Resp.Status(THTTPStatus.NoContent)
+    else Resp.Send(TJson.ObjectToClearJsonValue(LPreco)).Status(THTTPStatus.OK);
+  finally
+    if LPreco <> nil
+    then FreeAndNil(LPreco);
+  end;
 end;
 
 procedure GetHistoricoPrecoVenda(Req: THorseRequest; Resp: THorseResponse);
@@ -52,10 +56,14 @@ begin
     .AsDateTime;
 
   var LHistorico := TLojaModelFactory.New.Preco.ObterHistoricoPrecoVendaItem(LCodItem, LDatRef);
-
-  if (LHistorico = nil) or (LHistorico.Count = 0)
-  then Resp.Status(THTTPStatus.NoContent)
-  else Resp.Send(TJson.ObjectToClearJsonValue(LHistorico)).Status(THTTPStatus.OK);
+  try
+    if (LHistorico = nil) or (LHistorico.Count = 0)
+    then Resp.Status(THTTPStatus.NoContent)
+    else Resp.Send(TJson.ObjectToClearJsonValue(LHistorico)).Status(THTTPStatus.OK);
+  finally
+    if LHistorico <> nil
+    then FreeAndNil(LHistorico);
+  end;
 end;
 
 procedure PostCriarPrecoVenda(Req: THorseRequest; Resp: THorseResponse);
@@ -79,6 +87,7 @@ begin
     var LPreco := TLojaModelFactory.New.Preco.CriarPrecoVendaItem(LDto);
 
     Resp.Status(THTTPStatus.Created).Send(TJson.ObjectToClearJsonValue(LPreco));
+    LPreco.Free;
   finally
     LDto.Free;
   end;
