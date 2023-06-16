@@ -89,9 +89,10 @@ begin
   var LSql := #13#10
   + 'select * from preco_venda pv '
   + 'where pv.cod_item = :cod_item '
-  + '  and pv.dat_ini >= (select max(x.dat_ini) from preco_venda x '
-  + '                     where x.cod_item = pv.cod_item '
-  + '                       and x.dat_ini <= :dat_ref) '
+  + '  and pv.dat_ini >= coalesce((select max(x.dat_ini) from preco_venda x '
+  + '                              where x.cod_item = pv.cod_item '
+  + '                                and x.dat_ini <= :dat_ref) '
+  + '                              ,:dat_ref) '
   + 'order by pv.dat_ini '
   ;
 
@@ -124,9 +125,10 @@ begin
   var LSql := #13#10
   + 'select * from preco_venda pv '
   + 'where pv.cod_item = :cod_item '
-  + '  and pv.dat_ini = (select max(x.dat_ini) from preco_venda x '
-  + '                     where x.cod_item = pv.cod_item '
-  + '                       and x.dat_ini <= :dat_ref) '
+  + '  and pv.dat_ini = coalesce((select max(x.dat_ini) from preco_venda x '
+  + '                             where x.cod_item = pv.cod_item '
+  + '                               and x.dat_ini <= :dat_ref) '
+  + '                             ,:dat_ref) '
   ;
 
   var ds := TDatabaseFactory.New.SQL
