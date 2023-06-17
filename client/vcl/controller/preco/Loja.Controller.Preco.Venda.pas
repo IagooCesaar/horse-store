@@ -54,7 +54,6 @@ begin
   if not(LResponse.StatusCode in [200,204])
   then RaiseException(LResponse, 'Falha ao obter histórico de preço de venda do item');
 
-
   if LResponse.StatusCode = 200
   then Serializar(LResponse, mtDados);
 end;
