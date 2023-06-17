@@ -254,39 +254,35 @@ begin
 end;
 
 procedure TLojaModelPrecoTest.Test_ObterPrecoVendaAtual;
+
+  procedure CriarPrecoVenda(ACodItem: Integer; ADatIni: TDateTime; AVr: Currency);
+  begin
+    var LDto := TLojaModelDtoReqPrecoCriarPrecoVenda.Create;
+    LDto.CodItem := ACodItem;
+    LDto.DatIni := ADatIni;
+    LDto.VrVnda := AVr;
+
+    var LPreco := TLojaModelFactory.New
+      .Preco
+      .CriarPrecoVendaItem(LDto);
+
+    LDto.Free;
+    LPreco.Free;
+  end;
+
 begin
   var LItemCriado := CriarItem('TLojaModelPrecoTest.Test_CriarPrecoVenda', '');
-  var LDto := TLojaModelDtoReqPrecoCriarPrecoVenda.Create;
-  LDto.CodItem := LItemCriado.CodItem;
-  LDto.DatIni := IncDay(Now, -7);
-  LDto.VrVnda := 1.99;
 
-  var LPreco1 := TLojaModelFactory.New
-    .Preco
-    .CriarPrecoVendaItem(LDto);
-
-  Assert.AreEqual(LDto.VrVnda, LPreco1.VrVnda);
-  Assert.AreEqual(LDto.DatIni, LPreco1.DatIni);
-
-  LDto.DatIni := IncDay(Now, +7);
-  LDto.VrVnda := 2.99;
-
-  var LPreco2 := TLojaModelFactory.New
-    .Preco
-    .CriarPrecoVendaItem(LDto);
-
-  Assert.AreEqual(LDto.VrVnda, LPreco2.VrVnda);
-  Assert.AreEqual(LDto.DatIni, LPreco2.DatIni);
+  CriarPrecoVenda(LItemCriado.CodItem, IncDay(Now, +7), 3.99);
+  CriarPrecoVenda(LItemCriado.CodItem, IncDay(Now, -7), 1.99);
+  CriarPrecoVenda(LItemCriado.CodItem, IncDay(Now, -1), 2.99);
 
   var LPrecoAtual := TLojaModelFactory.New
     .Preco
     .ObterPrecoVendaAtual(LItemCriado.CodItem);
 
-  Assert.AreEqual(LPreco1.VrVnda, LPrecoAtual.VrVnda);
+  Assert.AreEqual(Double(2.99), Double(LPrecoAtual.VrVnda));
 
-  LPreco1.Free;
-  LPreco2.Free;
-  LDto.Free;
   LItemCriado.Free;
   LPrecoAtual.Free;
 end;
