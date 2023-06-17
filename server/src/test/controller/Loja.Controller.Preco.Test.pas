@@ -32,16 +32,26 @@ type
     procedure Test_NaoCriarPrecoVenda_PrecoJaExistente;
 
     [Test]
+    procedure Test_NaoCriarPrecoVenda_BodyInvalido;
+
+    [Test]
     procedure Test_ObterPrecoVendaAtual;
 
     [Test]
     procedure Test_NaoObterPrecoVendaAtual_ItemInexistente;
 
     [Test]
+    procedure Test_NaoObterPrecoVendaAtual_PrecoInexistente;
+
+    [Test]
     procedure Test_ObterHistoricoPrecoVenda;
 
     [Test]
     procedure Test_NaoObterHistoricoPrecoVenda_ItemInexistente;
+
+    [Test]
+    procedure Test_NaoObterHistoricoPrecoVenda_PrecoInexistente;
+
   public
   end;
 
@@ -110,6 +120,23 @@ begin
   Assert.AreEqual(201, LResponse.StatusCode);
 
   LDto.Free;
+  LItemCriado.Free;
+end;
+
+procedure TLojaControllerPrecoTest.Test_NaoCriarPrecoVenda_BodyInvalido;
+begin
+  var LItemCriado := CriarItem('Criar Preço Venda', '');
+
+  var LResponse := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/preco-venda/{cod_item}')
+      .AddUrlSegment('cod_item', LItemCriado.CodItem.ToString)
+      .AddBody('')
+      .Post();
+
+  Assert.AreEqual(400, LResponse.StatusCode);
+
   LItemCriado.Free;
 end;
 
@@ -202,6 +229,23 @@ begin
   Assert.AreEqual(404, LResponse1.StatusCode);
 end;
 
+procedure TLojaControllerPrecoTest.Test_NaoObterHistoricoPrecoVenda_PrecoInexistente;
+begin
+  var LItemCriado := CriarItem('Criar Preço Venda', '');
+
+  var LResponse1 := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/preco-venda/{cod_item}/historico')
+      .AddUrlSegment('cod_item', LItemCriado.CodItem.ToString)
+      .AddParam('dat_ref', FormatDateTime('yyyy-mm-dd', Now))
+      .Get();
+
+  Assert.AreEqual(204, LResponse1.StatusCode);
+
+  LItemCriado.Free;
+end;
+
 procedure TLojaControllerPrecoTest.Test_NaoObterPrecoVendaAtual_ItemInexistente;
 begin
   var LResponse1 := TRequest.New
@@ -212,6 +256,20 @@ begin
       .Get();
 
   Assert.AreEqual(404, LResponse1.StatusCode);
+end;
+
+procedure TLojaControllerPrecoTest.Test_NaoObterPrecoVendaAtual_PrecoInexistente;
+begin
+  var LItemCriado := CriarItem('Criar Preço Venda', '');
+  var LResponse1 := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/preco-venda/{cod_item}')
+    .AddUrlSegment('cod_item', LItemCriado.CodItem.ToString)
+    .Get();
+
+  Assert.AreEqual(204, LResponse1.StatusCode);
+  LItemCriado.Free;
 end;
 
 procedure TLojaControllerPrecoTest.Test_ObterHistoricoPrecoVenda;
