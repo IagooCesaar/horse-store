@@ -6,7 +6,8 @@ uses
   System.Classes,
   Database.Interfaces,
   Database.Conexao,
-  Database.SQL;
+  Database.SQL,
+  Database.Script;
 
 type
   TDatabaseFactory = class(TInterfacedObject, IDatabaseFactory)
@@ -19,6 +20,7 @@ type
     { IDatabaseFactory }
     function Conexao: IDataBaseConexao;
     function SQL: IDataBaseSQL;
+    function Script: IDatabaseScript;
   end;
 
 implementation
@@ -33,6 +35,11 @@ end;
 function TDatabaseFactory.Conexao: IDataBaseConexao;
 begin
   Result := TDatabaseConexao.New;
+end;
+
+function TDatabaseFactory.Script: IDatabaseScript;
+begin
+  Result := TDatabaseScript.New;
 end;
 
 function TDatabaseFactory.SQL: IDataBaseSQL;

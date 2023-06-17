@@ -9,14 +9,18 @@ uses
   FireDac.DApt, FireDAC.Stan.Pool, FireDAC.Stan.Async,
   FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Error, FireDAC.UI.Intf,
   FireDAC.Phys.Intf, FireDAC.Stan.Def, FireDAC.Phys, FireDAC.Comp.Client,
-  FireDAC.Comp.DataSet;
+  FireDAC.Comp.DataSet, FireDac.Comp.Script, FireDAC.Stan.Param,
+  FireDAC.Comp.ScriptCommands, FireDAC.Stan.Util;
 
 type
   TQuery = FireDAC.Comp.Client.TFDQuery;
   TStoredProc = FireDAC.Comp.Client.TFDStoredProc;
   TMemTable = FireDAC.Comp.Client.TFDMemTable;
+  TScript = FireDac.Comp.Script.TFDScript;
+  TParams = FireDAC.Stan.Param.TFDParams;
   TConnection = FireDAC.Comp.Client.TFDConnection;
   TDataSet = Data.DB.TDataSet;
+
 
   TParamsConsultaBDValue = record
     FValor: variant;
