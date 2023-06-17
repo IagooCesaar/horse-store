@@ -116,6 +116,7 @@ inherited ViewEstoqueConsulta: TViewEstoqueConsulta
         Caption = 'Realizar Acerto'
         TabOrder = 4
         OnClick = btnPesquisarClick
+        ExplicitLeft = 688
       end
     end
     object GroupBox1: TGroupBox

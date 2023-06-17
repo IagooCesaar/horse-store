@@ -60,7 +60,8 @@ implementation
 
 uses
   Loja.Model.Infra.Types,
-  Loja.View.Estoque.Consulta;
+  Loja.View.Estoque.Consulta,
+  Loja.View.Preco.ConsultaPreco;
 
 {$R *.dfm}
 
@@ -104,7 +105,7 @@ end;
 procedure TViewItens.btnPrecoVendaClick(Sender: TObject);
 begin
   inherited;
-  ShowMessage(':: em desenvolvimento ::');
+  TViewConsultaPrecoVenda.Exibir(Self, FController.mtDadosCOD_ITEM.AsInteger);
 end;
 
 procedure TViewItens.dsItensStateChange(Sender: TObject);
