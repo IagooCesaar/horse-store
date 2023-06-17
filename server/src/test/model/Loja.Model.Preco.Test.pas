@@ -201,70 +201,56 @@ begin
 end;
 
 procedure TLojaModelPrecoTest.Test_ObterHistoricoPrecoVenda;
-var LDatIni, LDatFim: TDateTime;
+var LDat1, LDat2, LDat3, LDat4: TDateTime;
+
+  procedure CriarPrecoVenda(ACodItem: Integer; ADatIni: TDateTime; AVr: Currency);
+  begin
+    var LDto := TLojaModelDtoReqPrecoCriarPrecoVenda.Create;
+    LDto.CodItem := ACodItem;
+    LDto.DatIni := ADatIni;
+    LDto.VrVnda := AVr;
+
+    var LPreco := TLojaModelFactory.New
+      .Preco
+      .CriarPrecoVendaItem(LDto);
+
+    LDto.Free;
+    LPreco.Free;
+  end;
+
 begin
-  LDatIni := IncDay(Now, -7);
-  LDatFim := IncDay(Now, +5);
+  LDat1 := IncDay(Now, -7);
+  LDat2 := IncDay(Now, -5);
+  LDat3 := IncDay(Now,  0);
+  LDat4 := IncDay(Now, +5);
 
   var LItemCriado := CriarItem('TLojaModelPrecoTest.Test_CriarPrecoVenda', '');
-  var LDto := TLojaModelDtoReqPrecoCriarPrecoVenda.Create;
-  LDto.CodItem := LItemCriado.CodItem;
-  LDto.DatIni := LDatIni;
-  LDto.VrVnda := 1.99;
 
-  var LPreco1 := TLojaModelFactory.New
+  CriarPrecoVenda(LItemCriado.CodItem, LDat4, 8.99);
+  CriarPrecoVenda(LItemCriado.CodItem, LDat3, 5.99);
+
+  CriarPrecoVenda(LItemCriado.CodItem, LDat1, 1.99);
+  CriarPrecoVenda(LItemCriado.CodItem, LDat2, 2.99);
+
+  var LHistorico1 := TLojaModelFactory.New
     .Preco
-    .CriarPrecoVendaItem(LDto);
+    .ObterHistoricoPrecoVendaItem(LItemCriado.CodItem, IncDay(LDat1,1) );
 
-  Assert.AreEqual(LDto.VrVnda, LPreco1.VrVnda);
-  Assert.AreEqual(LDto.DatIni, LPreco1.DatIni);
+  Assert.AreEqual(4, LHistorico1.Count);
+  Assert.AreEqual(Double(1.99), Double(LHistorico1.First.VrVnda));
+  Assert.AreEqual(Double(8.99), Double(LHistorico1.Last.VrVnda));
 
-  LDto.DatIni := IncDay(Now, -5);
-  LDto.VrVnda := 2.99;
-
-  var LPreco2 := TLojaModelFactory.New
+  var LHistorico2 := TLojaModelFactory.New
     .Preco
-    .CriarPrecoVendaItem(LDto);
+    .ObterHistoricoPrecoVendaItem(LItemCriado.CodItem, IncDay(LDat2,1) );
 
-  Assert.AreEqual(LDto.VrVnda, LPreco2.VrVnda);
-  Assert.AreEqual(LDto.DatIni, LPreco2.DatIni);
+  Assert.AreEqual(3, LHistorico2.Count);
+  Assert.AreEqual(Double(2.99), Double(LHistorico2.First.VrVnda));
+  Assert.AreEqual(Double(8.99), Double(LHistorico2.Last.VrVnda));
 
-  LDto.DatIni := LDatFim;
-  LDto.VrVnda := 8.99;
-
-  var LPreco3 := TLojaModelFactory.New
-    .Preco
-    .CriarPrecoVendaItem(LDto);
-
-  Assert.AreEqual(LDto.VrVnda, LPreco3.VrVnda);
-  Assert.AreEqual(LDto.DatIni, LPreco3.DatIni);
-
-  LDto.DatIni := IncDay(Now, 0);
-  LDto.VrVnda := 5.99;
-
-  var LPreco4 := TLojaModelFactory.New
-    .Preco
-    .CriarPrecoVendaItem(LDto);
-
-  Assert.AreEqual(LDto.VrVnda, LPreco4.VrVnda);
-  Assert.AreEqual(LDto.DatIni, LPreco4.DatIni);
-
-
-  var LHistorico := TLojaModelFactory.New
-    .Preco
-    .ObterHistoricoPrecoVendaItem(LItemCriado.CodItem, LDatIni);
-
-  Assert.AreEqual(4, LHistorico.Count);
-  Assert.AreEqual(Double(1.99), Double(LHistorico.First.VrVnda));
-  Assert.AreEqual(Double(8.99), Double(LHistorico.Last.VrVnda));
-
-  LPreco1.Free;
-  LPreco2.Free;
-  LPreco3.Free;
-  LPreco4.Free;
-  LDto.Free;
   LItemCriado.Free;
-  LHistorico.Free;
+  LHistorico1.Free;
+  LHistorico2.Free;
 end;
 
 procedure TLojaModelPrecoTest.Test_ObterPrecoVendaAtual;
