@@ -112,7 +112,7 @@ inherited ViewConsultaPrecoVenda: TViewConsultaPrecoVenda
       Margins.Top = 10
       Margins.Right = 10
       Margins.Bottom = 10
-      ActivePage = tsHistorico
+      ActivePage = tsNovoPreco
       Align = alClient
       TabOrder = 1
       OnChange = pcPrecosChange
@@ -134,6 +134,7 @@ inherited ViewConsultaPrecoVenda: TViewConsultaPrecoVenda
           Caption = 'Panel1'
           ShowCaption = False
           TabOrder = 0
+          ExplicitWidth = 891
           object Label5: TLabel
             Left = 10
             Top = 10

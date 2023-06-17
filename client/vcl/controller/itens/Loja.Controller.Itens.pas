@@ -23,6 +23,8 @@ type
   private
     { Private declarations }
   public
+    procedure CriarDatasets; override;
+
     procedure ObterItem(ACodItem: Integer);
     procedure ObterItens(ACodItem: Integer;
       ANome, ACodBarras: TLhsBracketFilter );
@@ -36,6 +38,12 @@ implementation
 {$R *.dfm}
 
 { TControllerItens }
+
+procedure TControllerItens.CriarDatasets;
+begin
+  inherited;
+
+end;
 
 procedure TControllerItens.DataModuleCreate(Sender: TObject);
 begin

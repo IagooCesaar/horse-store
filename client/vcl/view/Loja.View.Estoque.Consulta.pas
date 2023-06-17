@@ -91,6 +91,9 @@ end;
 procedure TViewEstoqueConsulta.FormShow(Sender: TObject);
 begin
   inherited;
+  FControllerSaldo.CriarDatasets;
+  FControllerItens.CriarDatasets;
+
   AtualizarTela;
 end;
 

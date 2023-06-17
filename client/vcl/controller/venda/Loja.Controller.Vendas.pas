@@ -13,7 +13,7 @@ type
   private
     { Private declarations }
   public
-    { Public declarations }
+    procedure CriarDatasets; override;
   end;
 
 
@@ -22,5 +22,13 @@ implementation
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 
 {$R *.dfm}
+
+{ TControllerVendas }
+
+procedure TControllerVendas.CriarDatasets;
+begin
+  inherited;
+
+end;
 
 end.

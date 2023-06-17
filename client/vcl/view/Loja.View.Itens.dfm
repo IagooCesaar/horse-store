@@ -4,6 +4,7 @@ inherited ViewItens: TViewItens
   ClientWidth = 1218
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnShow = FormShow
   ExplicitWidth = 1230
   ExplicitHeight = 829
   TextHeight = 21

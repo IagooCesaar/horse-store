@@ -1,15 +1,15 @@
 inherited ViewEstoqueConsulta: TViewEstoqueConsulta
   Caption = 'Consulta de Estoque'
-  ClientHeight = 579
-  ClientWidth = 819
+  ClientHeight = 578
+  ClientWidth = 815
   OnCreate = FormCreate
   OnShow = FormShow
-  ExplicitWidth = 835
-  ExplicitHeight = 618
+  ExplicitWidth = 831
+  ExplicitHeight = 617
   TextHeight = 21
   inherited pModeloClient: TPanel
-    Width = 819
-    Height = 523
+    Width = 815
+    Height = 522
     ExplicitWidth = 819
     ExplicitHeight = 523
     object pItem: TPanel
@@ -24,7 +24,7 @@ inherited ViewEstoqueConsulta: TViewEstoqueConsulta
       TabOrder = 0
       ExplicitWidth = 819
       DesignSize = (
-        819
+        815
         145)
       object Label1: TLabel
         Left = 10
@@ -107,7 +107,7 @@ inherited ViewEstoqueConsulta: TViewEstoqueConsulta
         TabOrder = 3
       end
       object btnPesquisar: TButton
-        Left = 688
+        Left = 680
         Top = 97
         Width = 121
         Height = 36
@@ -116,14 +116,15 @@ inherited ViewEstoqueConsulta: TViewEstoqueConsulta
         Caption = 'Realizar Acerto'
         TabOrder = 4
         OnClick = btnPesquisarClick
+        ExplicitLeft = 688
       end
     end
     object GroupBox1: TGroupBox
       AlignWithMargins = True
       Left = 10
       Top = 301
-      Width = 799
-      Height = 212
+      Width = 795
+      Height = 211
       Margins.Left = 10
       Margins.Top = 10
       Margins.Right = 10
@@ -137,6 +138,8 @@ inherited ViewEstoqueConsulta: TViewEstoqueConsulta
       HeaderFont.Name = 'Segoe UI'
       HeaderFont.Style = [fsBold]
       TabOrder = 1
+      ExplicitWidth = 799
+      ExplicitHeight = 212
       object dbgSaldo: TDBGrid
         AlignWithMargins = True
         Left = 10
@@ -162,7 +165,7 @@ inherited ViewEstoqueConsulta: TViewEstoqueConsulta
       AlignWithMargins = True
       Left = 10
       Top = 155
-      Width = 799
+      Width = 795
       Height = 126
       Margins.Left = 10
       Margins.Top = 10
@@ -177,6 +180,7 @@ inherited ViewEstoqueConsulta: TViewEstoqueConsulta
       HeaderFont.Name = 'Segoe UI'
       HeaderFont.Style = [fsBold]
       TabOrder = 2
+      ExplicitWidth = 799
       object DBGrid1: TDBGrid
         AlignWithMargins = True
         Left = 10
@@ -200,8 +204,8 @@ inherited ViewEstoqueConsulta: TViewEstoqueConsulta
     end
   end
   inherited pModeloBotoes: TCategoryButtons
-    Top = 523
-    Width = 819
+    Top = 522
+    Width = 815
     ExplicitTop = 523
     ExplicitWidth = 819
     inherited btnModeloOk: TButton

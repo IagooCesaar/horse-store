@@ -32,6 +32,8 @@ type
   private
     { Private declarations }
   public
+    procedure CriarDatasets; override;
+
     procedure ObterSaldo(ACodItem: Integer);
     procedure RealizarAcertoEstoque(ACodItem: Integer; AAcerto: TLojaModelEstoqueAcertoEstoque);
   end;
@@ -45,6 +47,18 @@ uses
 {$R *.dfm}
 
 { TControllerEstoqueSaldo }
+
+procedure TControllerEstoqueSaldo.CriarDatasets;
+begin
+  inherited;
+  if mtUltFecha.Active
+  then mtUltFecha.Close;
+  mtUltFecha.CreateDataSet;
+
+  if mtMovimentos.Active
+  then mtMovimentos.Close;
+  mtMovimentos.CreateDataSet;
+end;
 
 procedure TControllerEstoqueSaldo.ObterSaldo(ACodItem: Integer);
 var LBody: TJSONObject;
@@ -85,6 +99,17 @@ begin
       if not mtMovimentos.Active
       then mtMovimentos.CreateDataSet;
     end;
+  end
+  else
+  begin
+    if not mtDados.Active
+    then mtDados.CreateDataSet;
+
+    if not mtUltFecha.Active
+    then mtUltFecha.CreateDataSet;
+
+    if not mtMovimentos.Active
+    then mtMovimentos.CreateDataSet;
   end;
 end;
 

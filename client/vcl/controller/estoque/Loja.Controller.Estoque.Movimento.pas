@@ -10,10 +10,8 @@ uses
 
 type
   TControllerEstoqueMovimento = class(TControllerBase)
-  private
-    { Private declarations }
   public
-    { Public declarations }
+    procedure CriarDatasets; override;
   end;
 
 
@@ -22,5 +20,13 @@ implementation
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 
 {$R *.dfm}
+
+{ TControllerEstoqueMovimento }
+
+procedure TControllerEstoqueMovimento.CriarDatasets;
+begin
+  inherited;
+
+end;
 
 end.

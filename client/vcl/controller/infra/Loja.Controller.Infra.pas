@@ -10,8 +10,6 @@ uses
 
 type
   TControllerInfra = class(TControllerBase)
-  private
-    { Private declarations }
   public
     function ValidarLogon: Boolean;
   end;

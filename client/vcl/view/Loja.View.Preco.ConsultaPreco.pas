@@ -77,7 +77,7 @@ end;
 procedure TViewConsultaPrecoVenda.btnCadastrarClick(Sender: TObject);
 begin
   inherited;
-  if FControllerPrecoVenda.mtNovoPrecoCOD_ITEM.AsInteger = 0
+  if FControllerPrecoVenda.mtNovoPrecoVR_VNDA.AsInteger = 0
   then raise Exception.Create('Você deverá informar o valor de venda');
 
   FControllerPrecoVenda.mtNovoPrecoCOD_ITEM.AsInteger := FCodItem;
@@ -125,6 +125,10 @@ begin
   inherited;
   edtDatIniVig.DateTime := Now;
   edtDatIniPrecoVenda.DateTime := StartOfTheDay(IncMonth(Now, -2));
+
+  FControllerItens.CriarDatasets;
+  FControllerPrecoVenda.CriarDatasets;
+
   AtualizarTela;
 end;
 

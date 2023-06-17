@@ -31,7 +31,8 @@ type
   private
     { Private declarations }
   public
-    { Public declarations }
+    procedure CriarDatasets; override;
+
     procedure ObterPrecoVendaAtual(ACodItem: Integer);
     procedure ObterHistoricoPrecoVenda(ACodItem: Integer; ADatRef: TDateTime);
     procedure CriarPrecoVenda(ANovoPreco: TLojaModelPrecoPrecoVenda);
@@ -45,6 +46,18 @@ uses
 {%CLASSGROUP 'Vcl.Controls.TControl'}
 
 {$R *.dfm}
+
+procedure TControllerPrecoVenda.CriarDatasets;
+begin
+  inherited;
+  if mtPrecoAtual.Active
+  then mtPrecoAtual.Close;
+  mtPrecoAtual.CreateDataSet;
+
+  if mtNovoPreco.Active
+  then mtNovoPreco.Close;
+  mtNovoPreco.CreateDataSet;
+end;
 
 procedure TControllerPrecoVenda.CriarPrecoVenda(
   ANovoPreco: TLojaModelPrecoPrecoVenda);
@@ -109,7 +122,8 @@ begin
   then RaiseException(LResponse, 'Falha ao obter histórico de preço de venda do item');
 
   if LResponse.StatusCode = 200
-  then Serializar(LResponse, mtDados);
+  then Serializar(LResponse, mtDados)
+  else mtDados.CreateDataset;
 end;
 
 procedure TControllerPrecoVenda.ObterPrecoVendaAtual(ACodItem: Integer);
@@ -126,7 +140,8 @@ begin
   then RaiseException(LResponse, 'Falha ao obter preço atual do item');
 
   if LResponse.StatusCode = 200
-  then Serializar(LResponse, mtPrecoAtual);
+  then Serializar(LResponse, mtPrecoAtual)
+  else mtPrecoAtual.CreateDataSet;
 end;
 
 end.

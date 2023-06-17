@@ -48,6 +48,7 @@ type
     procedure dsItensStateChange(Sender: TObject);
     procedure btnPrecoVendaClick(Sender: TObject);
     procedure btnEstoqueClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
     FController: TControllerItens;
@@ -68,7 +69,8 @@ uses
 procedure TViewItens.btnEstoqueClick(Sender: TObject);
 begin
   inherited;
-  TViewEstoqueConsulta.Exibir(Self, FController.mtDadosCOD_ITEM.AsInteger);
+  if not(FController.mtDados.IsEmpty)
+  then TViewEstoqueConsulta.Exibir(Self, FController.mtDadosCOD_ITEM.AsInteger);
 end;
 
 procedure TViewItens.btnPesquisarClick(Sender: TObject);
@@ -105,7 +107,8 @@ end;
 procedure TViewItens.btnPrecoVendaClick(Sender: TObject);
 begin
   inherited;
-  TViewConsultaPrecoVenda.Exibir(Self, FController.mtDadosCOD_ITEM.AsInteger);
+  if not(FController.mtDados.IsEmpty)
+  then TViewConsultaPrecoVenda.Exibir(Self, FController.mtDadosCOD_ITEM.AsInteger);
 end;
 
 procedure TViewItens.dsItensStateChange(Sender: TObject);
@@ -126,6 +129,12 @@ procedure TViewItens.FormDestroy(Sender: TObject);
 begin
   inherited;
   FreeAndNil(FController);
+end;
+
+procedure TViewItens.FormShow(Sender: TObject);
+begin
+  inherited;
+  FController.CriarDatasets;
 end;
 
 end.

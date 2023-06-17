@@ -19,6 +19,8 @@ type
   private
     { Private declarations }
   protected
+    procedure CriarDatasets; virtual;
+
     function PreparaRequest: IRequest;
     procedure RaiseException(AResponse : IResponse; ATituloMensagem: string);
     procedure Serializar(AResponse : IResponse; dsDestino: TDataSet = nil); overload;
@@ -101,6 +103,13 @@ begin
     );
   end;
   raise Exception.Create(LMensagem);
+end;
+
+procedure TControllerBase.CriarDatasets;
+begin
+  if mtDados.Active
+  then mtDados.Close;
+  mtDados.CreateDataSet;
 end;
 
 function TControllerBase.PreparaRequest: IRequest;
