@@ -1,0 +1,2 @@
+inherited ControllerPrecoVenda: TControllerPrecoVenda
+end

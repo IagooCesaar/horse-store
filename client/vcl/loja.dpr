@@ -27,7 +27,9 @@ uses
   Loja.Controller.Estoque.Movimento in 'controller\estoque\Loja.Controller.Estoque.Movimento.pas' {ControllerEstoqueMovimento: TDataModule},
   Loja.View.Estoque.Consulta in 'view\Loja.View.Estoque.Consulta.pas' {ViewEstoqueConsulta},
   Loja.Model.Estoque.AcertoEstoque in 'model\Loja.Model.Estoque.AcertoEstoque.pas',
-  Loja.View.Estoque.AcertoEstoque in 'view\Loja.View.Estoque.AcertoEstoque.pas' {ViewAcertoEstoque};
+  Loja.View.Estoque.AcertoEstoque in 'view\Loja.View.Estoque.AcertoEstoque.pas' {ViewAcertoEstoque},
+  Loja.View.Preco.ConsultaPreco in 'view\Loja.View.Preco.ConsultaPreco.pas' {ViewConsultaPrecoVenda},
+  Loja.Controller.Preco.Venda in 'controller\preco\Loja.Controller.Preco.Venda.pas' {ControllerPrecoVenda: TDataModule};
 
 {$R *.res}
 

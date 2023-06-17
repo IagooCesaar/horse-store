@@ -203,6 +203,15 @@
             <Form>ViewAcertoEstoque</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="view\Loja.View.Preco.ConsultaPreco.pas">
+            <Form>ViewConsultaPrecoVenda</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="controller\preco\Loja.Controller.Preco.Venda.pas">
+            <Form>ControllerPrecoVenda</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
