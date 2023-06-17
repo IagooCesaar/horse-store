@@ -29,7 +29,8 @@ uses
   Loja.Model.Estoque.AcertoEstoque in 'model\Loja.Model.Estoque.AcertoEstoque.pas',
   Loja.View.Estoque.AcertoEstoque in 'view\Loja.View.Estoque.AcertoEstoque.pas' {ViewAcertoEstoque},
   Loja.View.Preco.ConsultaPreco in 'view\Loja.View.Preco.ConsultaPreco.pas' {ViewConsultaPrecoVenda},
-  Loja.Controller.Preco.Venda in 'controller\preco\Loja.Controller.Preco.Venda.pas' {ControllerPrecoVenda: TDataModule};
+  Loja.Controller.Preco.Venda in 'controller\preco\Loja.Controller.Preco.Venda.pas' {ControllerPrecoVenda: TDataModule},
+  Loja.Model.Preco.PrecoVenda in 'model\Loja.Model.Preco.PrecoVenda.pas';
 
 {$R *.res}
 

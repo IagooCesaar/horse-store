@@ -43,4 +43,31 @@ inherited ControllerPrecoVenda: TControllerPrecoVenda
       DisplayFormat = '#,##0.00'
     end
   end
+  object mtNovoPreco: TFDMemTable
+    BeforePost = mtNovoPrecoBeforePost
+    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.Mode = fmAll
+    ResourceOptions.AssignedValues = [rvSilentMode]
+    ResourceOptions.SilentMode = True
+    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
+    UpdateOptions.CheckRequired = False
+    UpdateOptions.AutoCommitUpdates = True
+    Left = 238
+    Top = 33
+    object mtNovoPrecoCOD_ITEM: TIntegerField
+      Alignment = taCenter
+      DisplayLabel = 'C'#243'd. Item'
+      FieldName = 'COD_ITEM'
+    end
+    object mtNovoPrecoDAT_INI: TDateTimeField
+      Alignment = taCenter
+      DisplayLabel = 'Data Inicio'
+      FieldName = 'DAT_INI'
+    end
+    object mtNovoPrecoVR_VNDA: TFloatField
+      DisplayLabel = 'Valor Venda'
+      FieldName = 'VR_VNDA'
+      DisplayFormat = '#,##0.00'
+    end
+  end
 end

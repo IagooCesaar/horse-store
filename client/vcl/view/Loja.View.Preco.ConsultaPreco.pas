@@ -9,7 +9,9 @@ uses
 
   Loja.Controller.Preco.Venda,
   Loja.Controller.Itens, Data.DB, Vcl.Mask, Vcl.DBCtrls, Vcl.ComCtrls,
-  Vcl.Grids, Vcl.DBGrids;
+  Vcl.Grids, Vcl.DBGrids, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
+  FireDAC.DApt.Intf, FireDAC.Comp.DataSet, FireDAC.Comp.Client;
 
 type
   TViewConsultaPrecoVenda = class(TViewModeloModal)
@@ -32,10 +34,17 @@ type
     dbgHistorico: TDBGrid;
     Label5: TLabel;
     edtDatIniPrecoVenda: TDateTimePicker;
+    dsNovoPreco: TDataSource;
     btnCadastrar: TButton;
+    Label6: TLabel;
+    Label7: TLabel;
+    dbVR_VNDA: TDBEdit;
+    edtDatIniVig: TDateTimePicker;
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure edtDatIniPrecoVendaChange(Sender: TObject);
+    procedure btnCadastrarClick(Sender: TObject);
+    procedure pcPrecosChange(Sender: TObject);
   private
     FCodItem: Integer;
     FControllerItens: TControllerItens;
@@ -50,6 +59,10 @@ type
 
 implementation
 
+uses
+  System.DateUtils,
+  Loja.Model.Preco.PrecoVenda;
+
 {$R *.dfm}
 
 { TViewConsultaPrecoVenda }
@@ -59,6 +72,20 @@ begin
   FControllerItens.ObterItem(FCodItem);
   FControllerPrecoVenda.ObterPrecoVendaAtual(FCodItem);
   FControllerPrecoVenda.ObterHistoricoPrecoVenda(FCodItem, edtDatIniPrecoVenda.DateTime);
+end;
+
+procedure TViewConsultaPrecoVenda.btnCadastrarClick(Sender: TObject);
+begin
+  inherited;
+  if FControllerPrecoVenda.mtNovoPrecoCOD_ITEM.AsInteger = 0
+  then raise Exception.Create('Você deverá informar o valor de venda');
+
+  FControllerPrecoVenda.mtNovoPrecoCOD_ITEM.AsInteger := FCodItem;
+  FControllerPrecoVenda.mtNovoPrecoDAT_INI.AsDateTime := edtDatIniVig.DateTime;
+  FControllerPrecoVenda.mtNovoPreco.Post;
+
+  AtualizarTela;
+  pcPrecos.ActivePage := tsHistorico;
 end;
 
 procedure TViewConsultaPrecoVenda.edtDatIniPrecoVendaChange(Sender: TObject);
@@ -88,6 +115,7 @@ begin
   dsItem.DataSet := FControllerItens.mtDados;
   dsHistoricoPreco.DataSet := FControllerPrecoVenda.mtDados;
   dsPrecoAtual.DataSet := FControllerPrecoVenda.mtPrecoAtual;
+  dsNovoPreco.DataSet := FControllerPrecoVenda.mtNovoPreco;
 
   pcPrecos.ActivePage := tsHistorico;
 end;
@@ -95,7 +123,17 @@ end;
 procedure TViewConsultaPrecoVenda.FormShow(Sender: TObject);
 begin
   inherited;
+  edtDatIniVig.DateTime := Now;
+  edtDatIniPrecoVenda.DateTime := StartOfTheDay(IncMonth(Now, -2));
   AtualizarTela;
+end;
+
+procedure TViewConsultaPrecoVenda.pcPrecosChange(Sender: TObject);
+begin
+  inherited;
+  if (pcPrecos.ActivePage = tsNovoPreco)
+  and not(dsNovoPreco.State in [dsInsert])
+  then dsNovoPreco.DataSet.Append;
 end;
 
 end.

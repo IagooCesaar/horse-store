@@ -8,8 +8,6 @@ uses
   FireDAC.Phys.Intf, FireDAC.DApt.Intf, Data.DB, FireDAC.Comp.DataSet,
   FireDAC.Comp.Client,
 
-  Vcl.Dialogs,
-
   RESTRequest4D,
   DataSet.Serialize,
 

@@ -4,6 +4,8 @@ inherited ViewConsultaPrecoVenda: TViewConsultaPrecoVenda
   ClientWidth = 923
   OnCreate = FormCreate
   OnShow = FormShow
+  ExplicitWidth = 935
+  ExplicitHeight = 532
   TextHeight = 21
   inherited pModeloClient: TPanel
     Width = 923
@@ -110,9 +112,10 @@ inherited ViewConsultaPrecoVenda: TViewConsultaPrecoVenda
       Margins.Top = 10
       Margins.Right = 10
       Margins.Bottom = 10
-      ActivePage = tsNovoPreco
+      ActivePage = tsHistorico
       Align = alClient
       TabOrder = 1
+      OnChange = pcPrecosChange
       ExplicitWidth = 899
       ExplicitHeight = 272
       object tsHistorico: TTabSheet
@@ -131,7 +134,6 @@ inherited ViewConsultaPrecoVenda: TViewConsultaPrecoVenda
           Caption = 'Panel1'
           ShowCaption = False
           TabOrder = 0
-          ExplicitWidth = 891
           object Label5: TLabel
             Left = 10
             Top = 10
@@ -170,14 +172,48 @@ inherited ViewConsultaPrecoVenda: TViewConsultaPrecoVenda
       object tsNovoPreco: TTabSheet
         Caption = ':: Novo Pre'#231'o  '
         ImageIndex = 1
+        object Label6: TLabel
+          Left = 10
+          Top = 10
+          Width = 81
+          Height = 21
+          Caption = 'Novo pre'#231'o'
+        end
+        object Label7: TLabel
+          Left = 215
+          Top = 10
+          Width = 98
+          Height = 21
+          Caption = 'In'#237'cio vig'#234'ncia'
+        end
         object btnCadastrar: TButton
-          Left = 16
-          Top = 176
-          Width = 174
+          Left = 215
+          Top = 88
+          Width = 186
           Height = 36
           Cursor = crHandPoint
           Caption = 'Cadastrar novo pre'#231'o'
           TabOrder = 0
+          OnClick = btnCadastrarClick
+        end
+        object dbVR_VNDA: TDBEdit
+          Left = 10
+          Top = 37
+          Width = 199
+          Height = 29
+          DataField = 'VR_VNDA'
+          DataSource = dsNovoPreco
+          TabOrder = 1
+        end
+        object edtDatIniVig: TDateTimePicker
+          Left = 215
+          Top = 37
+          Width = 186
+          Height = 29
+          Date = 45094.000000000000000000
+          Time = 0.671491319444612600
+          Kind = dtkDateTime
+          TabOrder = 2
         end
       end
     end
@@ -204,6 +240,10 @@ inherited ViewConsultaPrecoVenda: TViewConsultaPrecoVenda
   object dsHistoricoPreco: TDataSource
     AutoEdit = False
     Left = 184
+    Top = 440
+  end
+  object dsNovoPreco: TDataSource
+    Left = 280
     Top = 440
   end
 end
