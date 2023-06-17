@@ -37,6 +37,12 @@ type
 
     [Test]
     procedure Test_NaoObterPrecoVendaAtual_ItemInexistente;
+
+    [Test]
+    procedure Test_ObterHistoricoPrecoVenda;
+
+    [Test]
+    procedure Test_NaoObterHistoricoPrecoVenda_ItemInexistente;
   end;
 
 implementation
@@ -168,6 +174,19 @@ begin
   LItemCriado.Free;
 end;
 
+procedure TLojaModelPrecoTest.Test_NaoObterHistoricoPrecoVenda_ItemInexistente;
+begin
+  Assert.WillRaiseWithMessageRegex(
+    procedure begin
+      TLojaModelFactory.New
+        .Preco
+        .ObterHistoricoPrecoVendaItem(-1, Now);
+    end,
+    EHorseException,
+    'Não foi possível encontrar o item pelo código informado'
+  );
+end;
+
 procedure TLojaModelPrecoTest.Test_NaoObterPrecoVendaAtual_ItemInexistente;
 begin
   Assert.WillRaiseWithMessageRegex(
@@ -179,6 +198,73 @@ begin
     EHorseException,
     'Não foi possível encontrar o item pelo código informado'
   );
+end;
+
+procedure TLojaModelPrecoTest.Test_ObterHistoricoPrecoVenda;
+var LDatIni, LDatFim: TDateTime;
+begin
+  LDatIni := IncDay(Now, -7);
+  LDatFim := IncDay(Now, +5);
+
+  var LItemCriado := CriarItem('TLojaModelPrecoTest.Test_CriarPrecoVenda', '');
+  var LDto := TLojaModelDtoReqPrecoCriarPrecoVenda.Create;
+  LDto.CodItem := LItemCriado.CodItem;
+  LDto.DatIni := LDatIni;
+  LDto.VrVnda := 1.99;
+
+  var LPreco1 := TLojaModelFactory.New
+    .Preco
+    .CriarPrecoVendaItem(LDto);
+
+  Assert.AreEqual(LDto.VrVnda, LPreco1.VrVnda);
+  Assert.AreEqual(LDto.DatIni, LPreco1.DatIni);
+
+  LDto.DatIni := IncDay(Now, -5);
+  LDto.VrVnda := 2.99;
+
+  var LPreco2 := TLojaModelFactory.New
+    .Preco
+    .CriarPrecoVendaItem(LDto);
+
+  Assert.AreEqual(LDto.VrVnda, LPreco2.VrVnda);
+  Assert.AreEqual(LDto.DatIni, LPreco2.DatIni);
+
+  LDto.DatIni := LDatFim;
+  LDto.VrVnda := 8.99;
+
+  var LPreco3 := TLojaModelFactory.New
+    .Preco
+    .CriarPrecoVendaItem(LDto);
+
+  Assert.AreEqual(LDto.VrVnda, LPreco3.VrVnda);
+  Assert.AreEqual(LDto.DatIni, LPreco3.DatIni);
+
+  LDto.DatIni := IncDay(Now, 0);
+  LDto.VrVnda := 5.99;
+
+  var LPreco4 := TLojaModelFactory.New
+    .Preco
+    .CriarPrecoVendaItem(LDto);
+
+  Assert.AreEqual(LDto.VrVnda, LPreco4.VrVnda);
+  Assert.AreEqual(LDto.DatIni, LPreco4.DatIni);
+
+
+  var LHistorico := TLojaModelFactory.New
+    .Preco
+    .ObterHistoricoPrecoVendaItem(LItemCriado.CodItem, LDatIni);
+
+  Assert.AreEqual(4, LHistorico.Count);
+  Assert.AreEqual(Double(1.99), Double(LHistorico.First.VrVnda));
+  Assert.AreEqual(Double(8.99), Double(LHistorico.Last.VrVnda));
+
+  LPreco1.Free;
+  LPreco2.Free;
+  LPreco3.Free;
+  LPreco4.Free;
+  LDto.Free;
+  LItemCriado.Free;
+  LHistorico.Free;
 end;
 
 procedure TLojaModelPrecoTest.Test_ObterPrecoVendaAtual;

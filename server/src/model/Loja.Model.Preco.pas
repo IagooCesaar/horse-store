@@ -6,6 +6,8 @@ uses
   System.SysUtils,
   System.Classes,
   System.Generics.Collections,
+  System.Generics.Defaults,
+  System.DateUtils,
 
   Loja.Model.Interfaces,
   Loja.Model.Entity.Preco.Venda,
@@ -111,6 +113,20 @@ begin
   var LHistorico := TLojaModelDaoFactory.New.Preco
     .Venda.
     ObterHistoricoPrecoVendaItem(ACodItem, ADatRef);
+
+  LHistorico.Sort(TComparer<TLojaModelEntityPrecoVenda>.Construct(
+    function (const L, R: TLojaModelEntityPrecoVenda): Integer
+    begin
+      if L.DatIni > R.DatIni
+      then Result := 1
+      else
+      if L.DatIni < R.DatIni
+      then Result := -1
+
+      else Result := 0;
+    end
+  ));
+
 
   Result := LHistorico;
 end;
