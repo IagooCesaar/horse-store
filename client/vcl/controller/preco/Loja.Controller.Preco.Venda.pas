@@ -46,13 +46,14 @@ begin
   then mtDados.Close;
 
   var LResponse := PreparaRequest
-    .Resource('/preco-venda/{cod_item}')
+    .Resource('/preco-venda/{cod_item}/historico')
     .AddUrlSegment('cod_item', ACodItem.ToString)
     .AddParam('dat_ref', FormatDateTime('yyyy-mm-dd', ADatRef))
     .Get();
 
   if not(LResponse.StatusCode in [200,204])
   then RaiseException(LResponse, 'Falha ao obter histórico de preço de venda do item');
+
 
   if LResponse.StatusCode = 200
   then Serializar(LResponse, mtDados);

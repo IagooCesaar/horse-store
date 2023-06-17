@@ -1,19 +1,24 @@
 inherited ViewConsultaPrecoVenda: TViewConsultaPrecoVenda
   Caption = 'Consulta de Pre'#231'o'
+  ClientHeight = 494
+  ClientWidth = 923
   OnCreate = FormCreate
   OnShow = FormShow
   TextHeight = 21
   inherited pModeloClient: TPanel
+    Width = 923
+    Height = 438
     object pItem: TPanel
       Left = 0
       Top = 0
-      Width = 919
+      Width = 923
       Height = 145
       Align = alTop
       BevelOuter = bvNone
       Caption = 'pItem'
       ShowCaption = False
       TabOrder = 0
+      ExplicitWidth = 919
       object Label1: TLabel
         Left = 10
         Top = 15
@@ -22,7 +27,7 @@ inherited ViewConsultaPrecoVenda: TViewConsultaPrecoVenda
         Caption = 'C'#243'digo'
       end
       object Label2: TLabel
-        Left = 144
+        Left = 137
         Top = 15
         Width = 67
         Height = 21
@@ -99,15 +104,17 @@ inherited ViewConsultaPrecoVenda: TViewConsultaPrecoVenda
       AlignWithMargins = True
       Left = 10
       Top = 155
-      Width = 899
-      Height = 272
+      Width = 903
+      Height = 273
       Margins.Left = 10
       Margins.Top = 10
       Margins.Right = 10
       Margins.Bottom = 10
-      ActivePage = tsHistorico
+      ActivePage = tsNovoPreco
       Align = alClient
       TabOrder = 1
+      ExplicitWidth = 899
+      ExplicitHeight = 272
       object tsHistorico: TTabSheet
         Margins.Left = 10
         Margins.Top = 10
@@ -117,13 +124,14 @@ inherited ViewConsultaPrecoVenda: TViewConsultaPrecoVenda
         object Panel1: TPanel
           Left = 0
           Top = 0
-          Width = 891
+          Width = 895
           Height = 44
           Align = alTop
           BevelOuter = bvNone
           Caption = 'Panel1'
           ShowCaption = False
           TabOrder = 0
+          ExplicitWidth = 891
           object Label5: TLabel
             Left = 10
             Top = 10
@@ -146,10 +154,11 @@ inherited ViewConsultaPrecoVenda: TViewConsultaPrecoVenda
         object dbgHistorico: TDBGrid
           Left = 0
           Top = 44
-          Width = 891
-          Height = 192
+          Width = 895
+          Height = 193
           Align = alClient
           DataSource = dsHistoricoPreco
+          ReadOnly = True
           TabOrder = 1
           TitleFont.Charset = DEFAULT_CHARSET
           TitleFont.Color = clWindowText
@@ -164,7 +173,7 @@ inherited ViewConsultaPrecoVenda: TViewConsultaPrecoVenda
         object btnCadastrar: TButton
           Left = 16
           Top = 176
-          Width = 153
+          Width = 174
           Height = 36
           Cursor = crHandPoint
           Caption = 'Cadastrar novo pre'#231'o'
@@ -174,12 +183,12 @@ inherited ViewConsultaPrecoVenda: TViewConsultaPrecoVenda
     end
   end
   inherited pModeloBotoes: TCategoryButtons
+    Top = 438
+    Width = 923
     inherited btnModeloOk: TButton
-      Left = 709
       Visible = False
     end
     inherited btnModeloCancelar: TButton
-      Left = 812
       Caption = 'Voltar'
     end
   end

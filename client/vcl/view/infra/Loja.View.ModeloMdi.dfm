@@ -1,19 +1,19 @@
 inherited ViewModeloMdi: TViewModeloMdi
   Caption = 'ViewModeloMdi'
-  ClientHeight = 617
-  ClientWidth = 882
+  ClientHeight = 616
+  ClientWidth = 878
   FormStyle = fsMDIChild
   Visible = True
   WindowState = wsMaximized
   OnClose = FormClose
-  ExplicitWidth = 898
-  ExplicitHeight = 656
+  ExplicitWidth = 894
+  ExplicitHeight = 655
   TextHeight = 21
   object pModeloClient: TPanel
     Left = 0
     Top = 57
-    Width = 882
-    Height = 560
+    Width = 878
+    Height = 559
     Align = alClient
     BevelOuter = bvNone
     Caption = 'pModeloClient'
@@ -27,7 +27,7 @@ inherited ViewModeloMdi: TViewModeloMdi
   object pModeloTop: TPanel
     Left = 0
     Top = 0
-    Width = 882
+    Width = 878
     Height = 57
     Align = alTop
     BevelOuter = bvNone
