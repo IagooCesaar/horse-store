@@ -109,6 +109,8 @@ function TLojaModelDaoPrecoVendaInMemory.ObterPrecoVendaVigente(
 var
   LPrecoVigente: TLojaModelEntityPrecoVenda;
 begin
+  LPrecoVigente := nil;
+
   for var LPreco in FRepository
   do begin
     if  (LPreco.CodItem = ACodItem)

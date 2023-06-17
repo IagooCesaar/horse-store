@@ -31,6 +31,12 @@ type
 
     [Test]
     procedure Test_NaoCriarPrecoVenda_PrecoJaExistente;
+
+    [Test]
+    procedure Test_ObterPrecoVendaAtual;
+
+    [Test]
+    procedure Test_NaoObterPrecoVendaAtual_ItemInexistente;
   end;
 
 implementation
@@ -38,6 +44,7 @@ implementation
 uses
   Horse,
   Horse.Exception,
+  System.DateUtils,
 
   Loja.Model.Factory,
   Loja.Model.Dao.Factory,
@@ -159,6 +166,57 @@ begin
 
   LDto.Free;
   LItemCriado.Free;
+end;
+
+procedure TLojaModelPrecoTest.Test_NaoObterPrecoVendaAtual_ItemInexistente;
+begin
+  Assert.WillRaiseWithMessageRegex(
+    procedure begin
+      TLojaModelFactory.New
+        .Preco
+        .ObterPrecoVendaAtual(-1);
+    end,
+    EHorseException,
+    'Não foi possível encontrar o item pelo código informado'
+  );
+end;
+
+procedure TLojaModelPrecoTest.Test_ObterPrecoVendaAtual;
+begin
+  var LItemCriado := CriarItem('TLojaModelPrecoTest.Test_CriarPrecoVenda', '');
+  var LDto := TLojaModelDtoReqPrecoCriarPrecoVenda.Create;
+  LDto.CodItem := LItemCriado.CodItem;
+  LDto.DatIni := IncDay(Now, -7);
+  LDto.VrVnda := 1.99;
+
+  var LPreco1 := TLojaModelFactory.New
+    .Preco
+    .CriarPrecoVendaItem(LDto);
+
+  Assert.AreEqual(LDto.VrVnda, LPreco1.VrVnda);
+  Assert.AreEqual(LDto.DatIni, LPreco1.DatIni);
+
+  LDto.DatIni := IncDay(Now, +7);
+  LDto.VrVnda := 2.99;
+
+  var LPreco2 := TLojaModelFactory.New
+    .Preco
+    .CriarPrecoVendaItem(LDto);
+
+  Assert.AreEqual(LDto.VrVnda, LPreco2.VrVnda);
+  Assert.AreEqual(LDto.DatIni, LPreco2.DatIni);
+
+  var LPrecoAtual := TLojaModelFactory.New
+    .Preco
+    .ObterPrecoVendaAtual(LItemCriado.CodItem);
+
+  Assert.AreEqual(LPreco1.VrVnda, LPrecoAtual.VrVnda);
+
+  LPreco1.Free;
+  LPreco2.Free;
+  LDto.Free;
+  LItemCriado.Free;
+  LPrecoAtual.Free;
 end;
 
 initialization
