@@ -4,13 +4,16 @@ interface
 
 uses
   DUnitX.TestFramework,
-  System.SysUtils;
+  System.SysUtils,
+
+  Loja.Model.Entity.Itens.Item;
 
 type
   [TestFixture]
   TLojaControllerItensTest = class
   private
     FBaseURL, FUsarname, FPassword: String;
+    function CriarItem(ANome, ACodBarr: string): TLojaModelEntityItensItem;
   public
     [SetupFixture]
     procedure SetupFixture;
@@ -63,20 +66,42 @@ uses
   Horse.JsonInterceptor.Helpers,
 
   Loja.Controller.Api.Test,
-  Loja.Model.Entity.Itens.Item,
   Loja.Model.Dto.Req.Itens.CriarItem,
   Loja.infra.Utils.Funcoes;
 
-const
-  C_NUM_COD_BARR: string = '0123456789';
-
 { TLojaControllerItensTest }
+
+function TLojaControllerItensTest.CriarItem(ANome, ACodBarr: string): TLojaModelEntityItensItem;
+var LNovoItem : TLojaModelDtoReqItensCriarItem;
+begin
+  try
+    LNovoItem := TLojaModelDtoReqItensCriarItem.Create;
+    LNovoItem.NomItem := ANome;
+    LNovoItem.NumCodBarr := ACodBarr;
+
+    var LResponse := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/itens')
+      .AddBody(TJson.ObjectToClearJsonString(LNovoItem))
+      .Post();
+
+    Result := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItem>
+      (LResponse.Content);
+
+  finally
+    FreeAndNil(LNovoItem);
+  end;
+end;
 
 procedure TLojaControllerItensTest.SetupFixture;
 begin
   FBaseURL := TLojaControllerApiTest.GetInstance.BaseURL;
   FUsarname := TLojaControllerApiTest.GetInstance.UserName;
   FPassword := TLojaControllerApiTest.GetInstance.Password;
+
+  CriarItem('Teste', '0123456789').Free;
+  CriarItem('Novo Item Cadastrado Via Teste Integração', '').Free;
 end;
 
 procedure TLojaControllerItensTest.Test_AtualizarNovoItem;
@@ -195,7 +220,7 @@ begin
   try
     LDTO := TLojaModelDtoReqItensCriarItem.Create;
     LDTO.NomItem := 'Novo Item Cadastrado Via Teste Integração';
-    LDTO.NumCodBarr := C_NUM_COD_BARR;
+    LDTO.NumCodBarr := '';
 
     var LResponse := TRequest.New
       .BasicAuthentication(FUsarname, FPassword)
@@ -285,21 +310,28 @@ end;
 procedure TLojaControllerItensTest.Test_ObterUmItem_PorCodigoDeBarras;
 var LItem : TLojaModelEntityItensItem;
 begin
+  var LItemCriado := CriarItem(
+    'TLojaControllerItensTest.Test_ObterUmItem_PorCodigoDeBarras',
+    TLojaInfraUtilsFuncoes.GeraStringRandomica(14,1));
+
   var LResponse := TRequest.New
     .BasicAuthentication(FUsarname, FPassword)
     .BaseURL(FBaseURL)
     .Resource('/itens/codigo-barras/{num_cod_barr}')
-    .AddUrlSegment('num_cod_barr', C_NUM_COD_BARR)
+    .AddUrlSegment('num_cod_barr', LItemCriado.NumCodBarr)
     .Get();
 
   Assert.AreEqual(200, LResponse.StatusCode);
   try
     LItem := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItem>
       (LResponse.Content);
-    Assert.AreEqual('0123456789', LItem.NumCodBarr);
+    Assert.AreEqual(LItemCriado.NumCodBarr, LItem.NumCodBarr);
   finally
     if LItem <> nil
     then FreeAndNil(LItem);
+
+    if LItemCriado <> nil
+    then FreeAndNil(LItemCriado);
   end;
 end;
 
