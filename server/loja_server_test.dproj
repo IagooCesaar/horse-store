@@ -173,6 +173,11 @@
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>boss_config</ResourceId>
         </RcItem>
+        <RcItem Include="database\Limpar banco de dados.sql">
+            <ContainerId>ResourceItem</ContainerId>
+            <ResourceType>RCDATA</ResourceType>
+            <ResourceId>script_limpa_db</ResourceId>
+        </RcItem>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -217,6 +222,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="boss.json" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win64">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="database\Limpar banco de dados.sql" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win64">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>

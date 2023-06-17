@@ -106,7 +106,7 @@ begin
   LDBDriverParams.DriverDefName := 'FB_DRIVER';
   LDBDriverParams.VendorLib := ''; // Path para fbclient.dll
 
-  LDBParams.ConnectionDefName := 'loja_prod';
+  LDBParams.ConnectionDefName := 'bd_loja';
   LDBParams.Server := 'localhost';
   LDBParams.Database := 'C:\#DEV\#Projetos\loja\server\database\loja-bd.fbd';
   LDBParams.UserName := 'SYSDBA';
@@ -124,6 +124,26 @@ begin
     .SetConnectionDefParams(LDBParams)
     .SetConnectionDefPoolParams(LDBPoolParams)
     .IniciaPoolConexoes;
+
+  {$IFDEF Test}
+  var RS := TResourceStream.Create(HInstance, 'script_limpa_db', System.Types.RT_RCDATA);
+  var LScript := TStringList.Create;
+  try
+    RS.Position := 0;
+    LScript.LoadFromStream(RS, TEncoding.UTF8);
+    try
+      TDatabaseFactory.New
+        .Script
+        .AddScript(LScript.Text)
+        .ExecuteAll;
+    except
+       raise Exception.Create('Falha ao executar script de limpeza de banco de dados');
+    end;
+  finally
+    RS.Free;
+    LScript.Free;
+  end;
+  {$ENDIF}
 end;
 
 procedure TApp.ConfigLogger();
