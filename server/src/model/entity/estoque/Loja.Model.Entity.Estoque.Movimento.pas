@@ -52,24 +52,22 @@ end;
 
 function TLojaModelEntityEstoqueMovimento.GetDscTipoMov: string;
 begin
-  Result := ESTOQUE_TIPO_MOVIMENTO[FCodTipoMov];
+  Result := FCodTipoMov.ToString;
 end;
 
 function TLojaModelEntityEstoqueMovimento.GetDscOrigMov: string;
 begin
-  Result := ESTOQUE_ORIGEM_MOVIMENTO[FCodOrigMOv];
+  Result := FCodOrigMOv.ToString;
 end;
 
 procedure TLojaModelEntityEstoqueMovimento.SetDscTipoMov(AValue: string);
 begin
-  FCodTipoMov := TLojaModelEntityEstoqueTipoMovimento(AnsiIndexStr(
-    AValue,ESTOQUE_TIPO_MOVIMENTO));
+  FCodTipoMov := TLojaModelEntityEstoqueTipoMovimento.Create(AValue);
 end;
 
 procedure TLojaModelEntityEstoqueMovimento.SetDscOrigMov(AValue: string);
 begin
-  FCodOrigMOv := TLojaModelEntityEstoqueOrigemMovimento(AnsiIndexStr(
-    AValue,ESTOQUE_ORIGEM_MOVIMENTO));
+  FCodOrigMOv := TLojaModelEntityEstoqueOrigemMovimento.Create(AValue);
 end;
 
 
