@@ -51,7 +51,8 @@ uses
   Loja.Model.Dao.Preco.Venda.InMemory in 'src\model\dao\in-memory\preco\Loja.Model.Dao.Preco.Venda.InMemory.pas',
   Loja.Model.Dao.Preco.Factory.InMemory in 'src\model\dao\in-memory\preco\Loja.Model.Dao.Preco.Factory.InMemory.pas',
   Loja.Model.Dao.Preco.Venda in 'src\model\dao\oficial\preco\Loja.Model.Dao.Preco.Venda.pas',
-  Loja.Model.Dao.Preco.Factory in 'src\model\dao\oficial\preco\Loja.Model.Dao.Preco.Factory.pas';
+  Loja.Model.Dao.Preco.Factory in 'src\model\dao\oficial\preco\Loja.Model.Dao.Preco.Factory.pas',
+  Loja.Model.Entity.Caixa.Types in 'src\model\entity\caixa\Loja.Model.Entity.Caixa.Types.pas';
 
 begin
   var App := TApp.Create;
