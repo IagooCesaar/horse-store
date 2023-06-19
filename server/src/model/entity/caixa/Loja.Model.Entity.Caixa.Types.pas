@@ -34,10 +34,6 @@ type
     function ToString: string;
     constructor Create(AValue: string); overload;
   end;
-  {
-  var T := TLojaModelEntityCaixaMeioPagamento.Create('DN');
-  var s := T.ToString;
-  }
 
   TTipoMovimentoHelper = record helper for TLojaModelEntityCaixaTipoMovimento
   public
@@ -50,6 +46,12 @@ type
     function ToString: string;
     constructor Create(AValue: string); overload;
   end;
+
+const
+  CAIXA_MOVIMENTOS_ENTRADA = [orgVenda, orgDevolucaoCompra, orgReforco];
+  CAIXA_MOVIMENTOS_SAIDA = [orgCompra, orgDevolucaoVenda, orgSangria];
+  CAIXA_MEIO_PAGAMENTO_COMUM = [pagDinheiro, pagCheque];
+  CAIXA_MEIO_PAGAMENTO_DIGITAL = [pagPix, pagCartaoCredito, pagCartaoDebito];
 
 implementation
 
