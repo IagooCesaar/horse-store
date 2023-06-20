@@ -46,11 +46,16 @@ type
     function ObterPrecoVendaAtual(ACodItem: Integer): TLojaModelEntityPrecoVenda;
   end;
 
+  ILojaModelCaixa = interface
+    ['{D1CBDDA3-2034-49E7-929B-2B86FF2C925C}']
+  end;
+
   ILojaModelFactory = interface
     ['{FBA02FC1-F0C9-4969-BF2A-AA7662040FC8}']
     function Itens: ILojaModelItens;
     function Estoque: ILojaModelEstoque;
     function Preco: ILojaModelPreco;
+    function Caixa: ILojaModelCaixa;
   end;
 
 implementation

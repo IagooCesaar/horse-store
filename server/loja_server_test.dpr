@@ -68,7 +68,13 @@ uses
   Loja.Model.Dao.Preco.Venda in 'src\model\dao\oficial\preco\Loja.Model.Dao.Preco.Venda.pas',
   Loja.Controller.Preco in 'src\controllers\Loja.Controller.Preco.pas',
   Loja.Model.Preco.Test in 'src\test\model\Loja.Model.Preco.Test.pas',
-  Loja.Controller.Preco.Test in 'src\test\controller\Loja.Controller.Preco.Test.pas';
+  Loja.Controller.Preco.Test in 'src\test\controller\Loja.Controller.Preco.Test.pas',
+  Loja.Model.Entity.Caixa.Types in 'src\model\entity\caixa\Loja.Model.Entity.Caixa.Types.pas',
+  Loja.Model.Entity.Caixa.Movimento in 'src\model\entity\caixa\Loja.Model.Entity.Caixa.Movimento.pas',
+  Loja.Model.Entity.Caixa.Caixa in 'src\model\entity\caixa\Loja.Model.Entity.Caixa.Caixa.pas',
+  Loja.Model.Dto.Resp.Caixa.ResumoCaixa in 'src\model\dto\Loja.Model.Dto.Resp.Caixa.ResumoCaixa.pas',
+  Loja.Model.Caixa in 'src\model\Loja.Model.Caixa.pas',
+  Loja.Model.Dao.Caixa.Interfaces in 'src\model\dao\Loja.Model.Dao.Caixa.Interfaces.pas';
 
 {$IFNDEF TESTINSIGHT}
 var

@@ -168,6 +168,12 @@
         <DCCReference Include="src\controllers\Loja.Controller.Preco.pas"/>
         <DCCReference Include="src\test\model\Loja.Model.Preco.Test.pas"/>
         <DCCReference Include="src\test\controller\Loja.Controller.Preco.Test.pas"/>
+        <DCCReference Include="src\model\entity\caixa\Loja.Model.Entity.Caixa.Types.pas"/>
+        <DCCReference Include="src\model\entity\caixa\Loja.Model.Entity.Caixa.Movimento.pas"/>
+        <DCCReference Include="src\model\entity\caixa\Loja.Model.Entity.Caixa.Caixa.pas"/>
+        <DCCReference Include="src\model\dto\Loja.Model.Dto.Resp.Caixa.ResumoCaixa.pas"/>
+        <DCCReference Include="src\model\Loja.Model.Caixa.pas"/>
+        <DCCReference Include="src\model\dao\Loja.Model.Dao.Caixa.Interfaces.pas"/>
         <RcItem Include="boss.json">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>RCDATA</ResourceType>

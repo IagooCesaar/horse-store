@@ -29,19 +29,30 @@ type
     orgReforco
   );
 
-  TMeioPagamentoHelper = record helper for TLojaModelEntityCaixaMeioPagamento
+  TLojaModelEntityCaixaSituacao = (
+    sitAberto,
+    sitFechado
+  );
+
+  TLojaModelEntityCaixaMeioPagamentoHelper = record helper for TLojaModelEntityCaixaMeioPagamento
   public
     function ToString: string;
     constructor Create(AValue: string); overload;
   end;
 
-  TTipoMovimentoHelper = record helper for TLojaModelEntityCaixaTipoMovimento
+  TLojaModelEntityCaixaTipoMovimentoHelper = record helper for TLojaModelEntityCaixaTipoMovimento
   public
     function ToString: string;
     constructor Create(AValue: string); overload;
   end;
 
-  TOrigemMovimentoHelper = record helper for TLojaModelEntityCaixaOrigemMovimento
+  TLojaModelEntityCaixaOrigemMovimentoHelper = record helper for TLojaModelEntityCaixaOrigemMovimento
+  public
+    function ToString: string;
+    constructor Create(AValue: string); overload;
+  end;
+
+  TLojaModelEntityCaixaSituacaoHelper = record helper for TLojaModelEntityCaixaSituacao
   public
     function ToString: string;
     constructor Create(AValue: string); overload;
@@ -57,7 +68,7 @@ implementation
 
 { TMeioPagamentoHelper }
 
-constructor TMeioPagamentoHelper.Create(AValue: string);
+constructor TLojaModelEntityCaixaMeioPagamentoHelper.Create(AValue: string);
 begin
   case AnsiIndexStr(AValue,['DN', 'PX', 'CC', 'CD', 'CH']) of
     0: Self := pagDinheiro;
@@ -68,7 +79,7 @@ begin
   end;
 end;
 
-function TMeioPagamentoHelper.ToString: string;
+function TLojaModelEntityCaixaMeioPagamentoHelper.ToString: string;
 begin
   case (Self) of
     pagDinheiro:
@@ -86,7 +97,7 @@ end;
 
 { TTipoMovimentoHelper }
 
-constructor TTipoMovimentoHelper.Create(AValue: string);
+constructor TLojaModelEntityCaixaTipoMovimentoHelper.Create(AValue: string);
 begin
   case AnsiIndexStr(AValue,['E', 'S']) of
     0: Self := movEntrada;
@@ -94,7 +105,7 @@ begin
   end;
 end;
 
-function TTipoMovimentoHelper.ToString: string;
+function TLojaModelEntityCaixaTipoMovimentoHelper.ToString: string;
 begin
   case (Self) of
     movEntrada:
@@ -106,7 +117,7 @@ end;
 
 { TOrigemMovimentoHelper }
 
-constructor TOrigemMovimentoHelper.Create(AValue: string);
+constructor TLojaModelEntityCaixaOrigemMovimentoHelper.Create(AValue: string);
 begin
   case AnsiIndexStr(AValue,['VE', 'DV', 'CO', 'DC', 'SG', 'RF']) of
     0: Self := orgVenda;
@@ -118,7 +129,7 @@ begin
   end;
 end;
 
-function TOrigemMovimentoHelper.ToString: string;
+function TLojaModelEntityCaixaOrigemMovimentoHelper.ToString: string;
 begin
   case (Self) of
     orgVenda:
@@ -133,6 +144,26 @@ begin
       Result := 'SG';
     orgReforco:
       Result := 'RF';
+  end;
+end;
+
+{ TLojaModelEntityCaixaSituacaoHelper }
+
+constructor TLojaModelEntityCaixaSituacaoHelper.Create(AValue: string);
+begin
+  case AnsiIndexStr(AValue, ['A', 'F']) of
+    0: Self := sitAberto;
+    1: Self := sitFechado;
+  end;
+end;
+
+function TLojaModelEntityCaixaSituacaoHelper.ToString: string;
+begin
+  case (Self) of
+    sitAberto:
+      Result := 'A';
+    sitFechado:
+      Result := 'F';
   end;
 end;
 

@@ -22,6 +22,7 @@ type
     function Itens: ILojaModelItens;
     function Estoque: ILojaModelEstoque;
     function Preco: ILojaModelPreco;
+    function Caixa: ILojaModelCaixa;
   end;
 
 implementation
@@ -29,9 +30,15 @@ implementation
 uses
   Loja.Model.Itens,
   Loja.Model.Estoque,
-  Loja.Model.Preco;
+  Loja.Model.Preco,
+  Loja.Model.Caixa;
 
 { TLojaModelFactory }
+
+function TLojaModelFactory.Caixa: ILojaModelCaixa;
+begin
+  Result := TLojaModelCaixa.New;
+end;
 
 constructor TLojaModelFactory.Create;
 begin
