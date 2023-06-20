@@ -19,7 +19,8 @@ type
 
   ILojaModelDaoCaixaFactory = interface
     ['{5D01581E-CEAF-48F4-94F6-7D62F0D81138}']
-
+    function Caixa: ILojaModelDaoCaixaCaixa;
+    function Movimento: ILojaModelDaoCaixaMovimento;
   end;
 
 implementation

@@ -30,12 +30,13 @@ type
 
   ILojaModelBoCaixa = interface
     ['{E34AC112-8645-4DDD-B2C4-C7140029A2EB}']
-    function ValidaExistenciaCaixaAberto: Boolean;
+    //function ValidaExistenciaCaixaAberto: Boolean;
   end;
 
   ILojaModelBoFactory = interface
     ['{12CFCFF9-0CE0-4AA0-8D81-4A3493A2CE6C}']
     function Estoque: ILojaModelBoEstoque;
+    function Caixa: ILojaModelBoCaixa;
   end;
 
 implementation

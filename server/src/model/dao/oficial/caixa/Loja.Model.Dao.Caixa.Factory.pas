@@ -17,12 +17,24 @@ type
     class function New: ILojaModelDaoCaixaFactory;
 
     { ILojaModelDaoCaixaFactory }
+    function Caixa: ILojaModelDaoCaixaCaixa;
+    function Movimento: ILojaModelDaoCaixaMovimento;
 
   end;
 
 implementation
 
+uses
+  Loja.Model.Dao.Caixa.Caixa,
+  Loja.Model.Dao.Caixa.Movimento;
+
+
 { TLojaModelDaoCaixaFactory }
+
+function TLojaModelDaoCaixaFactory.Caixa: ILojaModelDaoCaixaCaixa;
+begin
+  Result := TLojaModelDaoCaixaCaixa.New;
+end;
 
 constructor TLojaModelDaoCaixaFactory.Create;
 begin
@@ -33,6 +45,11 @@ destructor TLojaModelDaoCaixaFactory.Destroy;
 begin
 
   inherited;
+end;
+
+function TLojaModelDaoCaixaFactory.Movimento: ILojaModelDaoCaixaMovimento;
+begin
+  Result := TLojaModelDaoCaixaMovimento.New;
 end;
 
 class function TLojaModelDaoCaixaFactory.New: ILojaModelDaoCaixaFactory;

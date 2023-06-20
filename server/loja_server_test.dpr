@@ -76,7 +76,12 @@ uses
   Loja.Model.Caixa in 'src\model\Loja.Model.Caixa.pas',
   Loja.Model.Dao.Caixa.Interfaces in 'src\model\dao\Loja.Model.Dao.Caixa.Interfaces.pas',
   Loja.Model.Dao.Caixa.Factory in 'src\model\dao\oficial\caixa\Loja.Model.Dao.Caixa.Factory.pas',
-  Loja.Model.Dao.Caixa.Factory.InMemory in 'src\model\dao\in-memory\caixa\Loja.Model.Dao.Caixa.Factory.InMemory.pas';
+  Loja.Model.Dao.Caixa.Factory.InMemory in 'src\model\dao\in-memory\caixa\Loja.Model.Dao.Caixa.Factory.InMemory.pas',
+  Loja.Model.Dao.Caixa.Caixa in 'src\model\dao\oficial\caixa\Loja.Model.Dao.Caixa.Caixa.pas',
+  Loja.Model.Dao.Caixa.Movimento in 'src\model\dao\oficial\caixa\Loja.Model.Dao.Caixa.Movimento.pas',
+  Loja.Model.Dao.Caixa.Movimento.InMemory in 'src\model\dao\in-memory\caixa\Loja.Model.Dao.Caixa.Movimento.InMemory.pas',
+  Loja.Model.Dao.Caixa.Caixa.InMemory in 'src\model\dao\in-memory\caixa\Loja.Model.Dao.Caixa.Caixa.InMemory.pas',
+  Loja.Model.Bo.Caixa in 'src\model\bo\Loja.Model.Bo.Caixa.pas';
 
 {$IFNDEF TESTINSIGHT}
 var

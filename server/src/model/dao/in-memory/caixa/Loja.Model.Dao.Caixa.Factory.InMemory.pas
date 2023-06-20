@@ -19,15 +19,20 @@ type
     class destructor UnInitialize;
 
     { ILojaModelDaoCaixaFactory }
-
+    function Caixa: ILojaModelDaoCaixaCaixa;
+    function Movimento: ILojaModelDaoCaixaMovimento;
   end;
 
 implementation
 
-{ TLojaModelDaoCaixaFactory }
+uses
+  Loja.Model.Dao.Caixa.Caixa.InMemory,
+  Loja.Model.Dao.Caixa.Movimento.InMemory;
 
-
-{ TLojaModelDaoCaixaFactoryInMemory }
+function TLojaModelDaoCaixaFactoryInMemory.Caixa: ILojaModelDaoCaixaCaixa;
+begin
+  Result := TLojaModelDaoCaixaCaixaInMemory.GetInstance;
+end;
 
 destructor TLojaModelDaoCaixaFactoryInMemory.Destroy;
 begin
@@ -39,6 +44,12 @@ class function TLojaModelDaoCaixaFactoryInMemory.GetInstance: ILojaModelDaoCaixa
 begin
   if FFactory = nil
   then FFactory := TLojaModelDaoCaixaFactoryInMemory.Create;
+  Result := FFactory;
+end;
+
+function TLojaModelDaoCaixaFactoryInMemory.Movimento: ILojaModelDaoCaixaMovimento;
+begin
+  Result := TLojaModelDaoCaixaMovimentoInMemory.GetInstance;
 end;
 
 class destructor TLojaModelDaoCaixaFactoryInMemory.UnInitialize;

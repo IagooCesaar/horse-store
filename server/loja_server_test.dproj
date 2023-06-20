@@ -176,6 +176,11 @@
         <DCCReference Include="src\model\dao\Loja.Model.Dao.Caixa.Interfaces.pas"/>
         <DCCReference Include="src\model\dao\oficial\caixa\Loja.Model.Dao.Caixa.Factory.pas"/>
         <DCCReference Include="src\model\dao\in-memory\caixa\Loja.Model.Dao.Caixa.Factory.InMemory.pas"/>
+        <DCCReference Include="src\model\dao\oficial\caixa\Loja.Model.Dao.Caixa.Caixa.pas"/>
+        <DCCReference Include="src\model\dao\oficial\caixa\Loja.Model.Dao.Caixa.Movimento.pas"/>
+        <DCCReference Include="src\model\dao\in-memory\caixa\Loja.Model.Dao.Caixa.Movimento.InMemory.pas"/>
+        <DCCReference Include="src\model\dao\in-memory\caixa\Loja.Model.Dao.Caixa.Caixa.InMemory.pas"/>
+        <DCCReference Include="src\model\bo\Loja.Model.Bo.Caixa.pas"/>
         <RcItem Include="boss.json">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>RCDATA</ResourceType>

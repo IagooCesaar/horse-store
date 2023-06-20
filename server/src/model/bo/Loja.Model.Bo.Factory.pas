@@ -15,14 +15,21 @@ type
 
     { ILojaModelBoFactory }
     function Estoque: ILojaModelBoEstoque;
+    function Caixa: ILojaModelBoCaixa;
   end;
 
 implementation
 
 uses
-  Loja.Model.Bo.Estoque;
+  Loja.Model.Bo.Estoque,
+  Loja.Model.Bo.Caixa;
 
 { TLojaModelBoFactory }
+
+function TLojaModelBoFactory.Caixa: ILojaModelBoCaixa;
+begin
+  Result := TLojaModelBoCaixa.New;
+end;
 
 constructor TLojaModelBoFactory.Create;
 begin
