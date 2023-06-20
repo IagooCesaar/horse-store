@@ -8,7 +8,8 @@ uses
   Loja.Model.Dao.Interfaces,
   Loja.Model.Dao.Itens.Interfaces,
   Loja.Model.Dao.Estoque.Interfaces,
-  Loja.Model.Dao.Preco.Interfaces;
+  Loja.Model.Dao.Preco.Interfaces,
+  Loja.Model.Dao.Caixa.Interfaces;
 
 type
   TLojaModelDaoFactory = class(TNoRefCountObject, ILojaModelDaoFactory)
@@ -26,6 +27,7 @@ type
     function Itens: ILojaModelDaoItensFactory;
     function Estoque: ILojaModelDaoEstoqueFactory;
     function Preco: ILojaModelDaoPrecoFactory;
+    function Caixa: ILojaModelDaoCaixaFactory;
   end;
 
 
@@ -37,9 +39,18 @@ uses
   Loja.Model.Dao.Estoque.Factory,
   Loja.Model.Dao.Estoque.Factory.InMemory,
   Loja.Model.Dao.Preco.Factory,
-  Loja.Model.Dao.Preco.Factory.InMemory;
+  Loja.Model.Dao.Preco.Factory.InMemory,
+  Loja.Model.Dao.Caixa.Factory,
+  Loja.Model.Dao.Caixa.Factory.InMemory;
 
 { TLojaModelDaoFactory }
+
+function TLojaModelDaoFactory.Caixa: ILojaModelDaoCaixaFactory;
+begin
+  if not InMemory
+  then Result := TLojaModelDaoCaixaFactory.New
+  else Result := TLojaModelDaoCaixaFactoryInMemory.GetInstance;
+end;
 
 constructor TLojaModelDaoFactory.Create;
 begin

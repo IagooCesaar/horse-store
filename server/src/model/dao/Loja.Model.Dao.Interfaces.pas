@@ -8,7 +8,8 @@ uses
 
   Loja.Model.Dao.Itens.Interfaces,
   Loja.Model.Dao.Estoque.Interfaces,
-  Loja.Model.Dao.Preco.Interfaces;
+  Loja.Model.Dao.Preco.Interfaces,
+  Loja.Model.Dao.Caixa.Interfaces;
 
 type
 
@@ -17,6 +18,7 @@ type
     function Itens: ILojaModelDaoItensFactory;
     function Estoque: ILojaModelDaoEstoqueFactory;
     function Preco: ILojaModelDaoPrecoFactory;
+    function Caixa: ILojaModelDaoCaixaFactory;
   end;
 
 implementation
