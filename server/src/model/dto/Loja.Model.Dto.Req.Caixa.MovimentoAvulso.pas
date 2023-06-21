@@ -6,6 +6,7 @@ uses
   System.SysUtils,
   System.Classes,
   System.Generics.Collections,
+  GBSwagger.Model.Attributes,
 
   Loja.Model.Entity.Caixa.Types;
 
@@ -14,13 +15,16 @@ type
   private
     FCodCaixa: Integer;
     FVrMov: Currency;
-    FDscMotv: string;
+    FDscObs: string;
     FOrigMov: TLojaModelEntityCaixaOrigemMovimento;
   public
+    [SwagIgnore]
     property CodCaixa: Integer read FCodCaixa write FCodCaixa;
-    property VrMov: Currency read FVrMov write FVrMov;
-    property DscMotv: string read FDscMotv write FDscMotv;
+    [SwagIgnore]
     property OrigMov: TLojaModelEntityCaixaOrigemMovimento read FOrigMov write FOrigMov;
+
+    property VrMov: Currency read FVrMov write FVrMov;
+    property DscObs: string read FDscObs write FDscObs;
   end;
 
 implementation

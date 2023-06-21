@@ -85,11 +85,11 @@ begin
       .GET('Obtêm lista de caixas')
         .Description('Obtêm uma lista de caixas que foram abertos no periodo especificado')
         .AddParamQuery('dat_ini', 'Data inicial')
-          .Schema(SWAG_STRING, '$(date)')
+          .Schema(SWAG_STRING, 'date')
           .Required(True)
         .&End
         .AddParamQuery('dat_fim', 'Data final')
-          .Schema(SWAG_STRING, '$(date)')
+          .Schema(SWAG_STRING, 'date')
           .Required(True)
         .&End
         .AddResponse(Integer(THTTPStatus.OK))
@@ -174,7 +174,6 @@ begin
         .&End
         .AddResponse(Integer(THTTPStatus.OK))
           .Schema(TLojaModelDtoRespCaixaResumoCaixa)
-          .IsArray(True)
         .&End
         .AddResponse(Integer(THTTPStatus.NoContent)).&End
         .AddResponse(Integer(THTTPStatus.BadRequest)).&End
