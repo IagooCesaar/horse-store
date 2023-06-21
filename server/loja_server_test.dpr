@@ -81,7 +81,11 @@ uses
   Loja.Model.Dao.Caixa.Movimento in 'src\model\dao\oficial\caixa\Loja.Model.Dao.Caixa.Movimento.pas',
   Loja.Model.Dao.Caixa.Movimento.InMemory in 'src\model\dao\in-memory\caixa\Loja.Model.Dao.Caixa.Movimento.InMemory.pas',
   Loja.Model.Dao.Caixa.Caixa.InMemory in 'src\model\dao\in-memory\caixa\Loja.Model.Dao.Caixa.Caixa.InMemory.pas',
-  Loja.Model.Bo.Caixa in 'src\model\bo\Loja.Model.Bo.Caixa.pas';
+  Loja.Model.Bo.Caixa in 'src\model\bo\Loja.Model.Bo.Caixa.pas',
+  Loja.Controller.Caixa in 'src\controllers\Loja.Controller.Caixa.pas',
+  Loja.Model.Dto.Req.Caixa.Abertura in 'src\model\dto\Loja.Model.Dto.Req.Caixa.Abertura.pas',
+  Loja.Model.Dto.Req.Caixa.Fechamento in 'src\model\dto\Loja.Model.Dto.Req.Caixa.Fechamento.pas',
+  Loja.Model.Dto.Req.Caixa.MovimentoAvulso in 'src\model\dto\Loja.Model.Dto.Req.Caixa.MovimentoAvulso.pas';
 
 {$IFNDEF TESTINSIGHT}
 var

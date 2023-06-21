@@ -160,7 +160,23 @@
         <DCCReference Include="src\model\dao\in-memory\preco\Loja.Model.Dao.Preco.Factory.InMemory.pas"/>
         <DCCReference Include="src\model\dao\oficial\preco\Loja.Model.Dao.Preco.Venda.pas"/>
         <DCCReference Include="src\model\dao\oficial\preco\Loja.Model.Dao.Preco.Factory.pas"/>
+        <DCCReference Include="src\model\dto\Loja.Model.Dto.Req.Caixa.Abertura.pas"/>
+        <DCCReference Include="src\model\dto\Loja.Model.Dto.Req.Caixa.Fechamento.pas"/>
+        <DCCReference Include="src\model\dto\Loja.Model.Dto.Req.Caixa.MovimentoAvulso.pas"/>
+        <DCCReference Include="src\model\dto\Loja.Model.Dto.Resp.Caixa.ResumoCaixa.pas"/>
+        <DCCReference Include="src\controllers\Loja.Controller.Caixa.pas"/>
+        <DCCReference Include="src\model\entity\caixa\Loja.Model.Entity.Caixa.Caixa.pas"/>
+        <DCCReference Include="src\model\entity\caixa\Loja.Model.Entity.Caixa.Movimento.pas"/>
         <DCCReference Include="src\model\entity\caixa\Loja.Model.Entity.Caixa.Types.pas"/>
+        <DCCReference Include="src\model\Loja.Model.Caixa.pas"/>
+        <DCCReference Include="src\model\bo\Loja.Model.Bo.Caixa.pas"/>
+        <DCCReference Include="src\model\dao\Loja.Model.Dao.Caixa.Interfaces.pas"/>
+        <DCCReference Include="src\model\dao\in-memory\caixa\Loja.Model.Dao.Caixa.Caixa.InMemory.pas"/>
+        <DCCReference Include="src\model\dao\in-memory\caixa\Loja.Model.Dao.Caixa.Factory.InMemory.pas"/>
+        <DCCReference Include="src\model\dao\in-memory\caixa\Loja.Model.Dao.Caixa.Movimento.InMemory.pas"/>
+        <DCCReference Include="src\model\dao\oficial\caixa\Loja.Model.Dao.Caixa.Caixa.pas"/>
+        <DCCReference Include="src\model\dao\oficial\caixa\Loja.Model.Dao.Caixa.Factory.pas"/>
+        <DCCReference Include="src\model\dao\oficial\caixa\Loja.Model.Dao.Caixa.Movimento.pas"/>
         <RcItem Include="boss.json">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>RCDATA</ResourceType>

@@ -48,6 +48,14 @@ type
 
   ILojaModelCaixa = interface
     ['{D1CBDDA3-2034-49E7-929B-2B86FF2C925C}']
+    // obter caixa -- caixa que estiver aberto
+    // obter caixa por código
+    // obter resumo de caixa -- total por meio de pagamento
+    // obter movimentação de caixa -- movimentos específicos do caixa
+    // abrir caixa
+    // fechar caixa
+    // reforço de caixa  -- com observação
+    // sangria de caixa  -- com observação
   end;
 
   ILojaModelFactory = interface

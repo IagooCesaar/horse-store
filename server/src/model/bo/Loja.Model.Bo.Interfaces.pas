@@ -30,7 +30,10 @@ type
 
   ILojaModelBoCaixa = interface
     ['{E34AC112-8645-4DDD-B2C4-C7140029A2EB}']
-    //function ValidaExistenciaCaixaAberto: Boolean;
+    //function PermiteMovimentoCaixa: Boolean;
+    //function CaixaAberto: boolean;
+    //function CriaMovimentoCaixa;
+    //function Saldo Real ($$)
   end;
 
   ILojaModelBoFactory = interface
