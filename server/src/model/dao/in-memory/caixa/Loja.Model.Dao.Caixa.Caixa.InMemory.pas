@@ -26,6 +26,7 @@ type
 
     { ILojaModelDaoCaixaMovimento }
     function ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
+    function ObterCaixaPorCodigo(ACodCaixa: Integer): TLojaModelEntityCaixaCaixa;
   end;
 
 implementation
@@ -67,6 +68,18 @@ begin
   Result := nil;
   for var LCaixa in FRepository do
     if LCaixa.CodSit = sitAberto
+    then begin
+      Result := Clone(LCaixa);
+      Break;
+    end;
+end;
+
+function TLojaModelDaoCaixaCaixaInMemory.ObterCaixaPorCodigo(
+  ACodCaixa: Integer): TLojaModelEntityCaixaCaixa;
+begin
+  Result := nil;
+  for var LCaixa in FRepository do
+    if LCaixa.CodCaixa = ACodCaixa
     then begin
       Result := Clone(LCaixa);
       Break;

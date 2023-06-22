@@ -52,7 +52,7 @@ type
   ILojaModelCaixa = interface
     ['{D1CBDDA3-2034-49E7-929B-2B86FF2C925C}']
     function ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
-    // obter caixa por código
+    function ObterCaixaPorCodigo(ACodCaixa: Integer): TLojaModelEntityCaixaCaixa;
     // obter resumo de caixa -- total por meio de pagamento
     // obter movimentação de caixa -- movimentos específicos do caixa
     // abrir caixa

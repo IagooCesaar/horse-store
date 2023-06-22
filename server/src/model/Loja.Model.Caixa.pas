@@ -19,6 +19,7 @@ type
 
     { ILojaModelCaixa }
     function ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
+    function ObterCaixaPorCodigo(ACodCaixa: Integer): TLojaModelEntityCaixaCaixa;
   end;
 
 implementation
@@ -52,6 +53,20 @@ function TLojaModelCaixa.ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
 begin
   Result := TLojaModelBoFactory.New.Caixa
     .ObterCaixaAberto;
+end;
+
+function TLojaModelCaixa.ObterCaixaPorCodigo(
+  ACodCaixa: Integer): TLojaModelEntityCaixaCaixa;
+begin
+  if ACodCaixa <= 0
+  then EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('O código de caixa informado é inválido');
+
+  Result := TLojaModelDaoFactory.New.Caixa
+    .Caixa
+    .ObterCaixaPorCodigo(ACodCaixa);
 end;
 
 end.

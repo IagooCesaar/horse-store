@@ -45,7 +45,17 @@ end;
 
 procedure GetCaixaPorCodigo(Req: THorseRequest; Resp: THorseResponse);
 begin
+  var LCodCaixa := Req.Params.Field('cod_caixa')
+    .InvalidFormatMessage('O valor informado não é um inteiro válido')
+    .AsInteger;
 
+  var LCaixa := TLojaModelFactory.New.Caixa.ObterCaixaPorCodigo(LCodCaixa);
+
+  if LCaixa = nil
+  then Resp.Status(THTTPStatus.NoContent)
+  else Resp.Status(THTTPStatus.OK).Send(TJson.ObjectToClearJsonValue(LCaixa));
+
+  LCaixa.Free;
 end;
 
 procedure GetResumoCaixa(Req: THorseRequest; Resp: THorseResponse);

@@ -23,6 +23,7 @@ type
 
     { ILojaModelDaoCaixaCaixa }
     function ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
+    function ObterCaixaPorCodigo(ACodCaixa: Integer): TLojaModelEntityCaixaCaixa;
   end;
 
 implementation
@@ -71,6 +72,28 @@ begin
 
   var ds := TDatabaseFactory.New.SQL
     .SQL(LSql)
+    .Open;
+
+  if ds.IsEmpty
+  then Exit;
+
+  Result := AtribuiCampos(ds);
+end;
+
+function TLojaModelDaoCaixaCaixa.ObterCaixaPorCodigo(
+  ACodCaixa: Integer): TLojaModelEntityCaixaCaixa;
+begin
+  Result := nil;
+  var LSql := #13#10
+  + 'select first 1 * from caixa '
+  + 'where cod_caixa = :cod_caixa '
+  ;
+
+  var ds := TDatabaseFactory.New.SQL
+    .SQL(LSql)
+    .ParamList
+      .AddInteger('cod_caixa', ACodCaixa)
+      .&End
     .Open;
 
   if ds.IsEmpty
