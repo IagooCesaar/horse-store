@@ -11,6 +11,7 @@ type
     ['{715AEB32-93A4-4C1C-A522-0E282059A1FA}']
     function ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
     function ObterCaixaPorCodigo(ACodCaixa: Integer): TLojaModelEntityCaixaCaixa;
+    function ObterUltimoCaixaFechado(ADatRef: TDateTime): TLojaModelEntityCaixaCaixa;
   end;
 
   ILojaModelDaoCaixaMovimento = interface

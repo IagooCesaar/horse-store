@@ -27,6 +27,7 @@ type
     { ILojaModelDaoCaixaMovimento }
     function ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
     function ObterCaixaPorCodigo(ACodCaixa: Integer): TLojaModelEntityCaixaCaixa;
+    function ObterUltimoCaixaFechado(ADatRef: TDateTime): TLojaModelEntityCaixaCaixa;
   end;
 
 implementation
@@ -84,6 +85,27 @@ begin
       Result := Clone(LCaixa);
       Break;
     end;
+end;
+
+function TLojaModelDaoCaixaCaixaInMemory.ObterUltimoCaixaFechado(
+  ADatRef: TDateTime): TLojaModelEntityCaixaCaixa;
+var LUlt: TLojaModelEntityCaixaCaixa;
+begin
+  Result := nil;
+  LUlt := nil;
+
+  for var LCaixa in FRepository do
+    if LCaixa.CodSit = sitFechado
+    then begin
+      if LUlt = nil
+      then LUlt := LCaixa
+      else
+      if LUlt.DatFecha <= LCaixa.DatFecha
+      then LUlt := LCaixa;
+    end;
+
+  if LUlt <> nil
+  then Result := Clone(LUlt);
 end;
 
 class destructor TLojaModelDaoCaixaCaixaInMemory.UnInitialize;

@@ -24,6 +24,7 @@ type
     { ILojaModelDaoCaixaCaixa }
     function ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
     function ObterCaixaPorCodigo(ACodCaixa: Integer): TLojaModelEntityCaixaCaixa;
+    function ObterUltimoCaixaFechado(ADatRef: TDateTime): TLojaModelEntityCaixaCaixa;
   end;
 
 implementation
@@ -85,7 +86,7 @@ function TLojaModelDaoCaixaCaixa.ObterCaixaPorCodigo(
 begin
   Result := nil;
   var LSql := #13#10
-  + 'select first 1 * from caixa '
+  + 'select * from caixa '
   + 'where cod_caixa = :cod_caixa '
   ;
 
@@ -93,6 +94,31 @@ begin
     .SQL(LSql)
     .ParamList
       .AddInteger('cod_caixa', ACodCaixa)
+      .&End
+    .Open;
+
+  if ds.IsEmpty
+  then Exit;
+
+  Result := AtribuiCampos(ds);
+end;
+
+function TLojaModelDaoCaixaCaixa.ObterUltimoCaixaFechado(
+  ADatRef: TDateTime): TLojaModelEntityCaixaCaixa;
+begin
+  Result := nil;
+
+  var LSql := #13#10
+  + 'select first 1 * from caixa c '
+  + 'where c.cod_sit = ''F'' '
+  + '  and c.dat_fecha = (select max(x.dat_fecha) from caixa x '
+  + '                     where x.cod_sit = c.cod_sit and x.dat_fecha <= :dat_ref) '
+  ;
+
+  var ds := TDatabaseFactory.New.SQL
+    .SQL(LSql)
+    .ParamList
+      .AddInteger('dat_ref', ADatRef)
       .&End
     .Open;
 

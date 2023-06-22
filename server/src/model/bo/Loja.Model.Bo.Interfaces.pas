@@ -34,6 +34,7 @@ type
     ['{E34AC112-8645-4DDD-B2C4-C7140029A2EB}']
     //function PermiteMovimentoCaixa: Boolean;
     function ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
+    // permite abrir caixa
     //function CriaMovimentoCaixa;
     //function Saldo Real ($$)
   end;
