@@ -33,7 +33,14 @@ end;
 
 procedure GetCaixaAberto(Req: THorseRequest; Resp: THorseResponse);
 begin
+  var LCaixa := TLojaModelFactory.New.Caixa
+    .ObterCaixaAberto;
 
+  if LCaixa = nil
+  then Resp.Status(THTTPStatus.NoContent)
+  else Resp.Status(THTTPStatus.OK).Send(TJson.ObjectToClearJsonValue(LCaixa));
+
+  LCaixa.Free;
 end;
 
 procedure GetCaixaPorCodigo(Req: THorseRequest; Resp: THorseResponse);
@@ -47,6 +54,16 @@ begin
 end;
 
 procedure GetMovimentoCaixa(Req: THorseRequest; Resp: THorseResponse);
+begin
+
+end;
+
+procedure PostMovimentoSangria(Req: THorseRequest; Resp: THorseResponse);
+begin
+
+end;
+
+procedure PostMovimentoReforco(Req: THorseRequest; Resp: THorseResponse);
 begin
 
 end;
@@ -73,8 +90,8 @@ begin
     .Patch('/:cod_caixa/fechar-caixa', PatchFecharCaixa)
     .Get('/:cod_caixa/resumo', GetResumoCaixa)
     .Get('/:cod_caixa/movimento', GetMovimentoCaixa)
-    .Post('/:cod_caixa/movimento/sangria', GetCaixaAberto)
-    .Post('/:cod_caixa/movimento/reforco', GetCaixaAberto)
+    .Post('/:cod_caixa/movimento/sangria', PostMovimentoSangria)
+    .Post('/:cod_caixa/movimento/reforco', PostMovimentoReforco)
 end;
 
 procedure ConfigSwagger;

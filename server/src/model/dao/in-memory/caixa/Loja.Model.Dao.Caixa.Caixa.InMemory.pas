@@ -8,7 +8,8 @@ uses
   System.Generics.Collections,
 
   Loja.Model.Dao.Caixa.Interfaces,
-  Loja.Model.Entity.Caixa.Caixa;
+  Loja.Model.Entity.Caixa.Caixa,
+  Loja.Model.Entity.Caixa.Types;
 
 type
   TLojaModelDaoCaixaCaixaInMemory = class(TInterfacedObject, ILojaModelDaoCaixaCaixa)
@@ -24,6 +25,7 @@ type
     class destructor UnInitialize;
 
     { ILojaModelDaoCaixaMovimento }
+    function ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
   end;
 
 implementation
@@ -34,7 +36,12 @@ function TLojaModelDaoCaixaCaixaInMemory.Clone(
   ASource: TLojaModelEntityCaixaCaixa): TLojaModelEntityCaixaCaixa;
 begin
   Result := TLojaModelEntityCaixaCaixa.Create;
-
+  Result.CodCaixa := ASource.CodCaixa;
+  Result.CodSit := ASource.CodSit;
+  Result.DatAbert := ASource.DatAbert;
+  Result.VrAbert := ASource.VrAbert;
+  Result.DatFecha := ASource.DatFecha;
+  Result.VrFecha := ASource.VrFecha;
 end;
 
 constructor TLojaModelDaoCaixaCaixaInMemory.Create;
@@ -53,6 +60,17 @@ begin
   if FDao = nil
   then FDao := TLojaModelDaoCaixaCaixaInMemory.Create;
   Result := FDao;
+end;
+
+function TLojaModelDaoCaixaCaixaInMemory.ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
+begin
+  Result := nil;
+  for var LCaixa in FRepository do
+    if LCaixa.CodSit = sitAberto
+    then begin
+      Result := Clone(LCaixa);
+      Break;
+    end;
 end;
 
 class destructor TLojaModelDaoCaixaCaixaInMemory.UnInitialize;

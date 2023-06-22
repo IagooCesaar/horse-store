@@ -4,7 +4,9 @@ interface
 
 uses
   System.Classes,
-  System.Generics.Collections;
+  System.Generics.Collections,
+
+  Loja.Model.Entity.Caixa.Caixa;
 
 type
   ILojaModelBoEstoque = interface;
@@ -31,7 +33,7 @@ type
   ILojaModelBoCaixa = interface
     ['{E34AC112-8645-4DDD-B2C4-C7140029A2EB}']
     //function PermiteMovimentoCaixa: Boolean;
-    //function CaixaAberto: boolean;
+    function ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
     //function CriaMovimentoCaixa;
     //function Saldo Real ($$)
   end;

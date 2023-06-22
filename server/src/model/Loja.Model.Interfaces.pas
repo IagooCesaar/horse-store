@@ -18,7 +18,10 @@ uses
   Loja.Model.Dto.Resp.Estoque.SaldoItem,
 
   Loja.Model.Dto.Req.Preco.CriarPrecoVenda,
-  Loja.Model.Entity.Preco.Venda;
+  Loja.Model.Entity.Preco.Venda,
+
+  Loja.Model.Entity.Caixa.Caixa,
+  Loja.Model.Entity.Caixa.Movimento;
 
 type
   ILojaModelItens = interface
@@ -48,7 +51,7 @@ type
 
   ILojaModelCaixa = interface
     ['{D1CBDDA3-2034-49E7-929B-2B86FF2C925C}']
-    // obter caixa -- caixa que estiver aberto
+    function ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
     // obter caixa por código
     // obter resumo de caixa -- total por meio de pagamento
     // obter movimentação de caixa -- movimentos específicos do caixa

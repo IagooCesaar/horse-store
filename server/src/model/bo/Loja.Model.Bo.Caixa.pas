@@ -7,7 +7,8 @@ uses
   System.Classes,
   System.Generics.Collections,
 
-  Loja.Model.Bo.Interfaces;
+  Loja.Model.Bo.Interfaces,
+  Loja.Model.Entity.Caixa.Caixa;
 
 type
   TLojaModelBoCaixa = class(TInterfacedObject, ILojaModelBoCaixa)
@@ -17,12 +18,18 @@ type
     class function New: ILojaModelBoCaixa;
 
     { ILojaModelBoCaixa }
+    function ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
 
   end;
 
 implementation
 
+uses
+
+  Loja.Model.Dao.Factory;
+
 { TLojaModelBoCaixa }
+
 
 constructor TLojaModelBoCaixa.Create;
 begin
@@ -38,6 +45,13 @@ end;
 class function TLojaModelBoCaixa.New: ILojaModelBoCaixa;
 begin
   Result := Self.Create;
+end;
+
+function TLojaModelBoCaixa.ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
+begin
+  Result := TLojaModelDaoFactory.New.Caixa
+    .Caixa
+    .ObterCaixaAberto;
 end;
 
 end.

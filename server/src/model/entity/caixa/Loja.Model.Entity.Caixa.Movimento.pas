@@ -18,7 +18,9 @@ type
     FVrMov: Currency;
     FDatMov: TDateTime;
     FDscObs: string;
+    FCodMov: Integer;
   public
+    property CodMov: Integer read FCodMov write FCodMov;
     property CodCaixa: integer read FCodCaixa write FCodCaixa;
     property CodTipoMov: TLojaModelEntityCaixaTipoMovimento read FCodTipoMov write FCodTipoMov;
     property CodMeioPagto: TLojaModelEntityCaixaMeioPagamento read FCodMeioPagto write FCodMeioPagto;
