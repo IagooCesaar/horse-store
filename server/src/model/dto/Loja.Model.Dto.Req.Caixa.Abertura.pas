@@ -11,12 +11,12 @@ uses
 type
   TLojaModelDtoReqCaixaAbertura = class
   private
-    FVrAbertura: Currency;
+    FVrAbert: Currency;
     FDatAbert: TDateTime;
   public
     [SwagIgnore]
     property DatAbert: TDateTime read FDatAbert write FDatAbert;
-    property VrAbertura: Currency read FVrAbertura write FVrAbertura;
+    property VrAbert: Currency read FVrAbert write FVrAbert;
   end;
 
 implementation

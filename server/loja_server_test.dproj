@@ -184,7 +184,7 @@
         <DCCReference Include="src\controllers\Loja.Controller.Caixa.pas"/>
         <DCCReference Include="src\model\dto\Loja.Model.Dto.Req.Caixa.Abertura.pas"/>
         <DCCReference Include="src\model\dto\Loja.Model.Dto.Req.Caixa.Fechamento.pas"/>
-        <DCCReference Include="src\model\dto\Loja.Model.Dto.Req.Caixa.MovimentoAvulso.pas"/>
+        <DCCReference Include="src\model\dto\Loja.Model.Dto.Req.Caixa.CriarMovimento.pas"/>
         <RcItem Include="boss.json">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>RCDATA</ResourceType>

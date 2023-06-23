@@ -10,7 +10,8 @@ uses
 
   Loja.Model.Dao.Caixa.Interfaces,
   Loja.Model.Entity.Caixa.Caixa,
-  Loja.Model.Entity.Caixa.Types;
+  Loja.Model.Entity.Caixa.Types,
+  Loja.Model.Dto.Req.Caixa.Abertura;
 
 type
   TLojaModelDaoCaixaCaixa = class(TInterfacedObject, ILojaModelDaoCaixaCaixa)
@@ -25,6 +26,7 @@ type
     function ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
     function ObterCaixaPorCodigo(ACodCaixa: Integer): TLojaModelEntityCaixaCaixa;
     function ObterUltimoCaixaFechado(ADatRef: TDateTime): TLojaModelEntityCaixaCaixa;
+    function CriarNovoCaixa(ANovoCaixa: TLojaModelDtoReqCaixaAbertura): TLojaModelEntityCaixaCaixa;
   end;
 
 implementation
@@ -50,6 +52,30 @@ end;
 constructor TLojaModelDaoCaixaCaixa.Create;
 begin
 
+end;
+
+function TLojaModelDaoCaixaCaixa.CriarNovoCaixa(
+  ANovoCaixa: TLojaModelDtoReqCaixaAbertura): TLojaModelEntityCaixaCaixa;
+begin
+  Result := nil;
+  var LId := TDatabaseFactory.New.SQL.GeraProximoCodigo('GEN_CAIXA_ID');
+
+  var LSql := #13#10
+  + 'insert into caixa(cod_caixa, cod_sit, dat_abert, vr_abert) '
+  + 'values (:cod_caixa, :cod_sit, :dat_abert, :vr_abert) '
+  ;
+
+  TDatabaseFactory.New.SQL
+    .SQL(LSql)
+    .ParamList
+      .AddInteger('cod_caixa', LId)
+      .AddString('cod_sit', sitAberto.ToString)
+      .AddDateTime('dat_abert', ANovoCaixa.DatAbert)
+      .AddFloat('vr_abert', ANovoCaixa.VrAbert)
+      .&End
+    .ExecSQL;
+
+   Result := ObterCaixaPorCodigo(LId);
 end;
 
 destructor TLojaModelDaoCaixaCaixa.Destroy;
@@ -118,7 +144,7 @@ begin
   var ds := TDatabaseFactory.New.SQL
     .SQL(LSql)
     .ParamList
-      .AddInteger('dat_ref', ADatRef)
+      .AddDateTime('dat_ref', ADatRef)
       .&End
     .Open;
 

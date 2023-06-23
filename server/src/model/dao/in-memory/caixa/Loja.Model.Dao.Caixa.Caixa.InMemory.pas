@@ -9,7 +9,8 @@ uses
 
   Loja.Model.Dao.Caixa.Interfaces,
   Loja.Model.Entity.Caixa.Caixa,
-  Loja.Model.Entity.Caixa.Types;
+  Loja.Model.Entity.Caixa.Types,
+  Loja.Model.Dto.Req.Caixa.Abertura;
 
 type
   TLojaModelDaoCaixaCaixaInMemory = class(TInterfacedObject, ILojaModelDaoCaixaCaixa)
@@ -28,6 +29,7 @@ type
     function ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
     function ObterCaixaPorCodigo(ACodCaixa: Integer): TLojaModelEntityCaixaCaixa;
     function ObterUltimoCaixaFechado(ADatRef: TDateTime): TLojaModelEntityCaixaCaixa;
+    function CriarNovoCaixa(ANovoCaixa: TLojaModelDtoReqCaixaAbertura): TLojaModelEntityCaixaCaixa;
   end;
 
 implementation
@@ -49,6 +51,23 @@ end;
 constructor TLojaModelDaoCaixaCaixaInMemory.Create;
 begin
   FRepository := TLojaModelEntityCaixaCaixaLista.Create;
+end;
+
+function TLojaModelDaoCaixaCaixaInMemory.CriarNovoCaixa(
+  ANovoCaixa: TLojaModelDtoReqCaixaAbertura): TLojaModelEntityCaixaCaixa;
+var LId: Integer;
+begin
+  if FRepository.Count > 0
+  then LId := FRepository.Last.CodCaixa
+  else LId := 1;
+
+  FRepository.Add(TLojaModelEntityCaixaCaixa.Create);
+  FRepository.Last.CodCaixa := LId;
+  FRepository.Last.CodSit := sitAberto;
+  FRepository.Last.DatAbert := ANovoCaixa.DatAbert;
+  FRepository.Last.VrAbert := ANovoCaixa.VrAbert;
+
+  Result := Clone(FRepository.Last);
 end;
 
 destructor TLojaModelDaoCaixaCaixaInMemory.Destroy;

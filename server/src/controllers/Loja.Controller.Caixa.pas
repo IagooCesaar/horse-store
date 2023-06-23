@@ -20,7 +20,7 @@ uses
 
   Loja.Model.Factory,
   Loja.Model.Dto.Resp.Caixa.ResumoCaixa,
-  Loja.Model.Dto.Req.Caixa.MovimentoAvulso,
+  Loja.Model.Dto.Req.Caixa.CriarMovimento,
   Loja.Model.Dto.Req.Caixa.Abertura,
   Loja.Model.Dto.Req.Caixa.Fechamento,
   Loja.Model.Entity.Caixa.Caixa,
@@ -251,7 +251,7 @@ begin
           .Schema(SWAG_INTEGER)
         .&End
         .AddParamBody('Body')
-          .Schema(TLojaModelDtoReqCaixaMovimentoAvulso)
+          .Schema(TLojaModelDtoReqCaixaCriarMovimento)
         .&End
         .AddResponse(Integer(THTTPStatus.Created))
           .Schema(TLojaModelEntityCaixaMovimento)
@@ -272,7 +272,7 @@ begin
           .Schema(SWAG_INTEGER)
         .&End
         .AddParamBody('Body')
-          .Schema(TLojaModelDtoReqCaixaMovimentoAvulso)
+          .Schema(TLojaModelDtoReqCaixaCriarMovimento)
         .&End
         .AddResponse(Integer(THTTPStatus.Created))
           .Schema(TLojaModelEntityCaixaMovimento)

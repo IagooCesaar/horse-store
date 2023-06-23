@@ -4,7 +4,10 @@ interface
 
 uses
   Loja.Model.Entity.Caixa.Caixa,
-  Loja.Model.Entity.Caixa.Movimento;
+  Loja.Model.Entity.Caixa.Movimento,
+  Loja.Model.Dto.Req.Caixa.Abertura,
+  Loja.Model.Dto.Req.Caixa.Fechamento,
+  Loja.Model.Dto.Req.Caixa.CriarMovimento;
 
 type
   ILojaModelDaoCaixaCaixa = interface
@@ -12,11 +15,14 @@ type
     function ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
     function ObterCaixaPorCodigo(ACodCaixa: Integer): TLojaModelEntityCaixaCaixa;
     function ObterUltimoCaixaFechado(ADatRef: TDateTime): TLojaModelEntityCaixaCaixa;
+    function CriarNovoCaixa(ANovoCaixa: TLojaModelDtoReqCaixaAbertura): TLojaModelEntityCaixaCaixa;
   end;
 
   ILojaModelDaoCaixaMovimento = interface
     ['{8941F82E-D594-4BA1-8826-9FC4B83E941D}']
-
+    function ObterMovimentoPorCodigo(ACodMov: Integer): TLojaModelEntityCaixaMovimento;
+    function ObterMovimentoPorCaixa(ACodCaixa: Integer): TLojaModelEntityCaixaMovimentoLista;
+    function CriarNovoMovimento(ANovoMovimento: TLojaModelDtoReqCaixaCriarMovimento): TLojaModelEntityCaixaMovimento;
   end;
 
   ILojaModelDaoCaixaFactory = interface
