@@ -8,7 +8,10 @@ uses
 
   Loja.Model.Interfaces,
   Loja.Model.Entity.Caixa.Types,
-  Loja.Model.Entity.Caixa.Caixa;
+  Loja.Model.Entity.Caixa.Caixa,
+  Loja.Model.Dto.Req.Caixa.Abertura,
+  Loja.Model.Dto.Req.Caixa.Fechamento,
+  Loja.Model.Dto.Req.Caixa.MovimentoAvulso;
 
 type
   TLojaModelCaixa = class(TInterfacedObject, ILojaModelCaixa)
@@ -20,6 +23,7 @@ type
     { ILojaModelCaixa }
     function ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
     function ObterCaixaPorCodigo(ACodCaixa: Integer): TLojaModelEntityCaixaCaixa;
+    function AberturaCaixa(AAbertura: TLojaModelDtoReqCaixaAbertura): TLojaModelEntityCaixaCaixa;
   end;
 
 implementation
@@ -32,6 +36,40 @@ uses
   Loja.Model.Bo.Factory;
 
 { TLojaModelCaixa }
+
+function TLojaModelCaixa.AberturaCaixa(
+  AAbertura: TLojaModelDtoReqCaixaAbertura): TLojaModelEntityCaixaCaixa;
+begin
+   if AAbertura.VrAbertura < 0
+   then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('O caixa não poderá ser aberto com valor negativo');
+
+   AAbertura.DatAbert := Now;
+
+   var LCaixaAberto := TLojaModelDaoFactory.New.Caixa
+     .Caixa
+     .ObterCaixaAberto;
+   if LCaixaAberto <> nil
+   then try
+     raise EHorseException.New
+      .Status(THTTPStatus.PreconditionFailed)
+      .&Unit(Self.UnitName)
+      .Error(Format(
+        'Há um caixa aberto (Data abertura: %s). Feche-o para então realizar nova abertura.',
+        [DateTimeToStr(LCaixaAberto.DatAbert)])
+      );
+   finally
+     LCaixaAberto.Free;
+   end;
+
+   var LUltFechado := TLojaModelDaoFactory.New.Caixa
+     .Caixa
+     .ObterUltimoCaixaFechado(AAbertura.DatAbert);
+
+   LUltFechado.Free;
+end;
 
 constructor TLojaModelCaixa.Create;
 begin

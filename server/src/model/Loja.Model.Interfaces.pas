@@ -21,7 +21,8 @@ uses
   Loja.Model.Entity.Preco.Venda,
 
   Loja.Model.Entity.Caixa.Caixa,
-  Loja.Model.Entity.Caixa.Movimento;
+  Loja.Model.Entity.Caixa.Movimento,
+  Loja.Model.Dto.Req.Caixa.Abertura;
 
 type
   ILojaModelItens = interface
@@ -55,7 +56,7 @@ type
     function ObterCaixaPorCodigo(ACodCaixa: Integer): TLojaModelEntityCaixaCaixa;
     // obter resumo de caixa -- total por meio de pagamento
     // obter movimentação de caixa -- movimentos específicos do caixa
-    // abrir caixa
+    function AberturaCaixa(AAbertura: TLojaModelDtoReqCaixaAbertura): TLojaModelEntityCaixaCaixa;
     // fechar caixa
     // reforço de caixa  -- com observação
     // sangria de caixa  -- com observação

@@ -95,12 +95,13 @@ begin
   LUlt := nil;
 
   for var LCaixa in FRepository do
-    if LCaixa.CodSit = sitFechado
+    if  (LCaixa.CodSit = sitFechado)
+    and (LCaixa.DatFecha <= ADatRef)
     then begin
       if LUlt = nil
       then LUlt := LCaixa
       else
-      if LUlt.DatFecha <= LCaixa.DatFecha
+      if LCaixa.DatFecha > LUlt.DatFecha
       then LUlt := LCaixa;
     end;
 

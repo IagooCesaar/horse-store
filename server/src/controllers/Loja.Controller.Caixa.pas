@@ -80,7 +80,21 @@ end;
 
 procedure PostAbrirCaixa(Req: THorseRequest; Resp: THorseResponse);
 begin
+  if Req.Body = ''
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(C_UnitName)
+    .Error('O body não estava no formato esperado');
 
+  var LDto :=  TJson.ClearJsonAndConvertToObject
+    <TLojaModelDtoReqCaixaAbertura>(Req.Body);
+  try
+    var LCaixa := TLojaModelFactory.New.Caixa.AberturaCaixa(LDto);
+    Resp.Status(THTTPStatus.Created).Send(TJson.ObjectToClearJsonValue(LCaixa));
+    LCaixa.Free;
+  finally
+    LDto.Free;
+  end;
 end;
 
 procedure PatchFecharCaixa(Req: THorseRequest; Resp: THorseResponse);
