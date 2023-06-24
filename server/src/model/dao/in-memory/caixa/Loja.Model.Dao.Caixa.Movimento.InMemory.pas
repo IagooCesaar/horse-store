@@ -48,8 +48,23 @@ end;
 
 function TLojaModelDaoCaixaMovimentoInMemory.CriarNovoMovimento(
   ANovoMovimento: TLojaModelDtoReqCaixaCriarMovimento): TLojaModelEntityCaixaMovimento;
+var LId : Integer;
 begin
+  if FRepository.Count = 0
+  then LId := 1
+  else LID := FRepository.Last.CodMov + 1;
 
+  FRepository.Add(TLojaModelEntityCaixaMovimento.Create);
+  FRepository.Last.CodMov := LId;
+  FRepository.Last.CodCaixa := ANovoMovimento.CodCaixa;
+  FRepository.Last.CodTipoMov := ANovoMovimento.CodTipoMov;
+  FRepository.Last.CodMeioPagto := ANovoMovimento.CodMeioPagto;
+  FRepository.Last.CodOrigMov := ANovoMovimento.CodOrigMov;
+  FRepository.Last.VrMov := ANovoMovimento.VrMov;
+  FRepository.Last.DatMov := ANovoMovimento.DatMov;
+  FRepository.Last.DscObs := ANovoMovimento.DscObs;
+
+  Result := Clone(FRepository.Last);
 end;
 
 destructor TLojaModelDaoCaixaMovimentoInMemory.Destroy;
@@ -68,13 +83,23 @@ end;
 function TLojaModelDaoCaixaMovimentoInMemory.ObterMovimentoPorCaixa(
   ACodCaixa: Integer): TLojaModelEntityCaixaMovimentoLista;
 begin
+  Result := TLojaModelEntityCaixaMovimentoLista.Create;
 
+  for var LMovimento in FRepository
+  do if LMovimento.CodCaixa = ACodCaixa
+     then Result.Add(Clone(LMovimento));
 end;
 
 function TLojaModelDaoCaixaMovimentoInMemory.ObterMovimentoPorCodigo(
   ACodMov: Integer): TLojaModelEntityCaixaMovimento;
 begin
-
+  Result := nil;
+  for var LMovimento in FRepository
+  do if LMovimento.CodMov = ACodMov
+  then begin
+    Result := Clone(LMovimento);
+    Break;
+  end;
 end;
 
 class destructor TLojaModelDaoCaixaMovimentoInMemory.UnInitialize;
