@@ -22,7 +22,9 @@ uses
 
   Loja.Model.Entity.Caixa.Caixa,
   Loja.Model.Entity.Caixa.Movimento,
-  Loja.Model.Dto.Req.Caixa.Abertura;
+  Loja.Model.Dto.Req.Caixa.Abertura,
+  Loja.Model.Dto.Req.Caixa.Fechamento,
+  Loja.Model.Dto.Req.Caixa.CriarMovimento;
 
 type
   ILojaModelItens = interface
@@ -58,8 +60,8 @@ type
     // obter movimentação de caixa -- movimentos específicos do caixa
     function AberturaCaixa(AAbertura: TLojaModelDtoReqCaixaAbertura): TLojaModelEntityCaixaCaixa;
     // fechar caixa
-    // reforço de caixa  -- com observação
-    // sangria de caixa  -- com observação
+    function CriarReforcoCaixa(AMovimento: TLojaModelDtoReqCaixaCriarMovimento): TLojaModelEntityCaixaMovimento;
+    function CriarSangriaCaixa(AMovimento: TLojaModelDtoReqCaixaCriarMovimento): TLojaModelEntityCaixaMovimento;
   end;
 
   ILojaModelFactory = interface

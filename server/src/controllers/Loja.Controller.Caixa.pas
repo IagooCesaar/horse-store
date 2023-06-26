@@ -70,12 +70,50 @@ end;
 
 procedure PostMovimentoSangria(Req: THorseRequest; Resp: THorseResponse);
 begin
+  if Req.Body = ''
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(C_UnitName)
+    .Error('O body não estava no formato esperado');
 
+  var LCodCaixa := Req.Params.Field('cod_caixa')
+    .InvalidFormatMessage('O valor informado não é um inteiro válido')
+    .AsInteger;
+
+  var LDto := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDtoReqCaixaCriarMovimento>(Req.Body);
+  try
+    LDto.CodCaixa := LCodCaixa;
+    var LMovimento := TLojaModelFactory.New.Caixa.CriarSangriaCaixa(LDto);
+    Resp.Status(THttpStatus.Created).Send(TJson.ObjectToClearJsonValue(LMovimento));
+    LMovimento.Free;
+  finally
+    LDto.Free;
+  end;
 end;
 
 procedure PostMovimentoReforco(Req: THorseRequest; Resp: THorseResponse);
 begin
+  if Req.Body = ''
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(C_UnitName)
+    .Error('O body não estava no formato esperado');
 
+  var LCodCaixa := Req.Params.Field('cod_caixa')
+    .InvalidFormatMessage('O valor informado não é um inteiro válido')
+    .AsInteger;
+
+  var LDto := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDtoReqCaixaCriarMovimento>(Req.Body);
+  try
+    LDto.CodCaixa := LCodCaixa;
+    var LMovimento := TLojaModelFactory.New.Caixa.CriarReforcoCaixa(LDto);
+    Resp.Status(THttpStatus.Created).Send(TJson.ObjectToClearJsonValue(LMovimento));
+    LMovimento.Free;
+  finally
+    LDto.Free;
+  end;
 end;
 
 procedure PostAbrirCaixa(Req: THorseRequest; Resp: THorseResponse);
@@ -86,7 +124,7 @@ begin
     .&Unit(C_UnitName)
     .Error('O body não estava no formato esperado');
 
-  var LDto :=  TJson.ClearJsonAndConvertToObject
+  var LDto := TJson.ClearJsonAndConvertToObject
     <TLojaModelDtoReqCaixaAbertura>(Req.Body);
   try
     var LCaixa := TLojaModelFactory.New.Caixa.AberturaCaixa(LDto);
