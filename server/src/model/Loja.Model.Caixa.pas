@@ -189,50 +189,52 @@ begin
     .Status(THTTPStatus.NotFound)
     .&Unit(Self.UnitName)
     .Error('O código de caixa informado não existe');
+  try
 
-  if LCaixa.CodSit <> sitAberto
-  then raise EHorseException.New
-    .Status(THTTPStatus.PreconditionFailed)
-    .&Unit(Self.UnitName)
-    .Error('O caixa informado não está na stuação "Aberto"');
-
-  AMovimento.DatMov := Now;
-  if AMovimento.CodOrigMov in CAIXA_MOVIMENTOS_SAIDA
-  then AMovimento.CodTipoMov := movSaida
-  else AMovimento.CodTipoMov := movEntrada;
-
-  if  (AMovimento.CodTipoMov = movSaida)
-  and (AMovimento.CodMeioPagto = pagDinheiro)
-  then begin
-    LSaldo := 0;
-
-    var LMovimentos := TLojaModelDaoFactory.New.Caixa
-      .Movimento
-      .ObterMovimentoPorCaixa(LCaixa.CodCaixa);
-    for var LMovimento in LMovimentos
-    do begin
-      if LMovimento.CodMeioPagto = pagDinheiro
-      then
-        if LMovimento.CodTipoMov = movEntrada
-        then LSaldo := LSaldo + LMovimento.VrMov
-        else LSaldo := LSaldo - LMovimento.VrMov;
-    end;
-    LMovimentos.Free;
-
-    if LSaldo < AMovimento.VrMov
+    if LCaixa.CodSit <> sitAberto
     then raise EHorseException.New
       .Status(THTTPStatus.PreconditionFailed)
       .&Unit(Self.UnitName)
-      .Error('Não há saldo disponível em dinheiro para realizar este tipo de movimento');
+      .Error('O caixa informado não está na stuação "Aberto"');
+
+    AMovimento.DatMov := Now;
+    if AMovimento.CodOrigMov in CAIXA_MOVIMENTOS_SAIDA
+    then AMovimento.CodTipoMov := movSaida
+    else AMovimento.CodTipoMov := movEntrada;
+
+    if  (AMovimento.CodTipoMov = movSaida)
+    and (AMovimento.CodMeioPagto = pagDinheiro)
+    then begin
+      LSaldo := 0;
+
+      var LMovimentos := TLojaModelDaoFactory.New.Caixa
+        .Movimento
+        .ObterMovimentoPorCaixa(LCaixa.CodCaixa);
+      for var LMovimento in LMovimentos
+      do begin
+        if LMovimento.CodMeioPagto = pagDinheiro
+        then
+          if LMovimento.CodTipoMov = movEntrada
+          then LSaldo := LSaldo + LMovimento.VrMov
+          else LSaldo := LSaldo - LMovimento.VrMov;
+      end;
+      LMovimentos.Free;
+
+      if LSaldo < AMovimento.VrMov
+      then raise EHorseException.New
+        .Status(THTTPStatus.PreconditionFailed)
+        .&Unit(Self.UnitName)
+        .Error('Não há saldo disponível em dinheiro para realizar este tipo de movimento');
+    end;
+
+    var LNovoMovimento := TLojaModelDaoFactory.New.Caixa
+      .Movimento
+      .CriarNovoMovimento(AMovimento);
+    Result := LNovoMovimento;
+
+  finally
+    LCaixa.Free;
   end;
-
-
-  var LNovoMovimento := TLojaModelDaoFactory.New.Caixa
-    .Movimento
-    .CriarNovoMovimento(AMovimento);
-  Result := LNovoMovimento;
-
-  LCaixa.Free;
 end;
 
 function TLojaModelCaixa.CriarReforcoCaixa(
@@ -242,6 +244,7 @@ begin
   AMovimento.CodOrigMov := orgReforco;
 
   Result := CriarMovimentoCaixa(AMovimento);
+  AMovimento.Free;
 end;
 
 function TLojaModelCaixa.CriarSangriaCaixa(
@@ -251,6 +254,7 @@ begin
   AMovimento.CodOrigMov := orgSangria;
 
   Result := CriarMovimentoCaixa(AMovimento);
+  AMovimento.Free;
 end;
 
 destructor TLojaModelCaixa.Destroy;
