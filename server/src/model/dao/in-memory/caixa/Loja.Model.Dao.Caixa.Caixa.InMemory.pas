@@ -13,7 +13,7 @@ uses
   Loja.Model.Dto.Req.Caixa.Abertura;
 
 type
-  TLojaModelDaoCaixaCaixaInMemory = class(TInterfacedObject, ILojaModelDaoCaixaCaixa)
+  TLojaModelDaoCaixaCaixaInMemory = class(TNoRefCountObject, ILojaModelDaoCaixaCaixa)
   private
     FRepository: TLojaModelEntityCaixaCaixaLista;
     function Clone(ASource: TLojaModelEntityCaixaCaixa): TLojaModelEntityCaixaCaixa;

@@ -38,7 +38,14 @@ function TLojaModelDaoCaixaMovimentoInMemory.Clone(
   ASource: TLojaModelEntityCaixaMovimento): TLojaModelEntityCaixaMovimento;
 begin
   Result := TLojaModelEntityCaixaMovimento.Create;
-
+  Result.CodMov := ASource.CodMov;
+  Result.CodCaixa := ASource.CodCaixa;
+  Result.CodTipoMov := ASource.CodTipoMov;
+  Result.CodMeioPagto := ASource.CodMeioPagto;
+  Result.CodOrigMov := ASource.CodOrigMov;
+  Result.VrMov := ASource.VrMov;
+  Result.DatMov := ASource.DatMov;
+  Result.DscObs := ASource.DscObs;
 end;
 
 constructor TLojaModelDaoCaixaMovimentoInMemory.Create;

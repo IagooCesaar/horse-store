@@ -14,7 +14,7 @@ type
     [TearDownFixture]
     procedure TearDownFixture;
 
-    //[Test]
+    [Test]
     procedure Test_AberturaDeCaixa;
   end;
 
