@@ -10,7 +10,7 @@ uses
   Loja.Model.Dao.Caixa.Interfaces;
 
 type
-  TLojaModelDaoCaixaFactoryInMemory = class(TInterfacedObject, ILojaModelDaoCaixaFactory)
+  TLojaModelDaoCaixaFactoryInMemory = class(TNoRefCountObject, ILojaModelDaoCaixaFactory)
   private
     class var FFactory: TLojaModelDaoCaixaFactoryInMemory;
   public

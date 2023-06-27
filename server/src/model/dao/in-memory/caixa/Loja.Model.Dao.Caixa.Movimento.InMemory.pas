@@ -12,7 +12,7 @@ uses
   Loja.Model.Dto.Req.Caixa.CriarMovimento;
 
 type
-  TLojaModelDaoCaixaMovimentoInMemory = class(TInterfacedObject, ILojaModelDaoCaixaMovimento)
+  TLojaModelDaoCaixaMovimentoInMemory = class(TNoRefCountObject, ILojaModelDaoCaixaMovimento)
   private
     FRepository: TLojaModelEntityCaixaMovimentoLista;
     function Clone(ASource: TLojaModelEntityCaixaMovimento): TLojaModelEntityCaixaMovimento;
