@@ -286,7 +286,9 @@ begin
           [LMeioPagto.CodMeioPagto.Name]));
     end;
 
-    // persistir - update (verbo patch)
+    Result := TLojaModelDaoFactory.New.Caixa
+      .Caixa
+      .AtualizarFechamentoCaixa(AFechamento.CodCaixa, Now, LResumo.VrSaldo);
 
   finally
     LResumo.Free;
