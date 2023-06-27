@@ -12,7 +12,8 @@ uses
   Loja.Model.Entity.Caixa.Movimento,
   Loja.Model.Dto.Req.Caixa.Abertura,
   Loja.Model.Dto.Req.Caixa.Fechamento,
-  Loja.Model.Dto.Req.Caixa.CriarMovimento;
+  Loja.Model.Dto.Req.Caixa.CriarMovimento,
+  Loja.Model.Dto.Resp.Caixa.ResumoCaixa;
 
 type
   TLojaModelCaixa = class(TInterfacedObject, ILojaModelCaixa)
@@ -30,6 +31,9 @@ type
 
     function CriarReforcoCaixa(AMovimento: TLojaModelDtoReqCaixaCriarMovimento): TLojaModelEntityCaixaMovimento;
     function CriarSangriaCaixa(AMovimento: TLojaModelDtoReqCaixaCriarMovimento): TLojaModelEntityCaixaMovimento;
+
+    function ObterResumoCaixa(ACodCaixa: Integer): TLojaModelDtoRespCaixaResumoCaixa;
+    function ObterMovimentoCaixa(ACodCaixa: Integer): TLojaModelEntityCaixaMovimentoLista;
   end;
 
 implementation
@@ -37,6 +41,7 @@ implementation
 uses
   Horse,
   Horse.Exception,
+  System.Math,
 
   Loja.Model.Dao.Factory,
   Loja.Model.Bo.Factory;
@@ -275,6 +280,64 @@ begin
   Result := TLojaModelDaoFactory.New.Caixa
     .Caixa
     .ObterCaixaPorCodigo(ACodCaixa);
+end;
+
+function TLojaModelCaixa.ObterMovimentoCaixa(
+  ACodCaixa: Integer): TLojaModelEntityCaixaMovimentoLista;
+begin
+  if ACodCaixa <= 0
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('O código de caixa informado é inválido');
+
+  var LCaixa := TLojaModelDaoFactory.New.Caixa
+    .Caixa
+    .ObterCaixaPorCodigo(ACodCaixa);
+
+  if LCaixa = nil
+  then raise EHorseException.New
+    .Status(THTTPStatus.NotFound)
+    .&Unit(Self.UnitName)
+    .Error('O código de caixa informado não existe');
+  LCaixa.Free;
+
+  Result := TLojaModelDaoFactory.New.Caixa
+    .Movimento
+    .ObterMovimentoPorCaixa(ACodCaixa);
+end;
+
+function TLojaModelCaixa.ObterResumoCaixa(
+  ACodCaixa: Integer): TLojaModelDtoRespCaixaResumoCaixa;
+begin
+  var LMovimentos := ObterMovimentoCaixa(ACodCaixa);
+  var LCaixa := TLojaModelDaoFactory.New.Caixa
+    .Caixa
+    .ObterCaixaPorCodigo(ACodCaixa);
+
+  Result := TLojaModelDtoRespCaixaResumoCaixa.Create;
+  Result.CodCaixa := LCaixa.CodCaixa;
+  Result.CodSit := LCaixa.CodSit;
+  Result.MeiosPagto := TLojaModelDtoRespCaixaResumoCaixaMeioPagtoLista.Create;
+
+  for var LMeioPagto := Low(TLojaModelEntityCaixaMeioPagamento) to High(TLojaModelEntityCaixaMeioPagamento)
+  do begin
+    Result.MeiosPagto.Add(TLojaModelDtoRespCaixaResumoCaixaMeioPagto.Create);
+    Result.MeiosPagto.Last.CodMeioPagto := LMeioPagto;
+    Result.MeiosPagto.Last.VrTotal := 0;
+  end;
+
+  for var LMovimento in LMovimentos
+  do begin
+    var LVrMov := IfThen(LMovimento.CodTipoMov = movEntrada, LMovimento.VrMov, LMovimento.VrMov * -1 );
+
+    Result.VrSaldo := Result.VrSaldo + LVrMov;
+    Result.MeiosPagto[Integer(LMovimento.CodMeioPagto)].VrTotal :=
+      Result.MeiosPagto[Integer(LMovimento.CodMeioPagto)].VrTotal + LVrMov;
+  end;
+
+  LMovimentos.Free;
+  LCaixa.Free;
 end;
 
 end.

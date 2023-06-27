@@ -24,7 +24,8 @@ uses
   Loja.Model.Entity.Caixa.Movimento,
   Loja.Model.Dto.Req.Caixa.Abertura,
   Loja.Model.Dto.Req.Caixa.Fechamento,
-  Loja.Model.Dto.Req.Caixa.CriarMovimento;
+  Loja.Model.Dto.Req.Caixa.CriarMovimento,
+  Loja.Model.Dto.Resp.Caixa.ResumoCaixa;
 
 type
   ILojaModelItens = interface
@@ -56,8 +57,8 @@ type
     ['{D1CBDDA3-2034-49E7-929B-2B86FF2C925C}']
     function ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
     function ObterCaixaPorCodigo(ACodCaixa: Integer): TLojaModelEntityCaixaCaixa;
-    // obter resumo de caixa -- total por meio de pagamento
-    // obter movimentação de caixa -- movimentos específicos do caixa
+    function ObterResumoCaixa(ACodCaixa: Integer): TLojaModelDtoRespCaixaResumoCaixa;
+    function ObterMovimentoCaixa(ACodCaixa: Integer): TLojaModelEntityCaixaMovimentoLista;
     function AberturaCaixa(AAbertura: TLojaModelDtoReqCaixaAbertura): TLojaModelEntityCaixaCaixa;
     // fechar caixa
     function CriarReforcoCaixa(AMovimento: TLojaModelDtoReqCaixaCriarMovimento): TLojaModelEntityCaixaMovimento;

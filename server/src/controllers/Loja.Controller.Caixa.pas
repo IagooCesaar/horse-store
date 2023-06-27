@@ -60,14 +60,25 @@ end;
 
 procedure GetResumoCaixa(Req: THorseRequest; Resp: THorseResponse);
 begin
+  var LCodCaixa := Req.Params.Field('cod_caixa')
+    .InvalidFormatMessage('O valor informado não é um inteiro válido')
+    .AsInteger;
 
+  var LResumo := TLojaModelFactory.New.Caixa.ObterResumoCaixa(LCodCaixa);
+  Resp.Status(THTTPStatus.OK).Send(TJson.ObjectToClearJsonValue(LResumo));
+  LResumo.Free;
 end;
 
 procedure GetMovimentoCaixa(Req: THorseRequest; Resp: THorseResponse);
 begin
+  var LCodCaixa := Req.Params.Field('cod_caixa')
+    .InvalidFormatMessage('O valor informado não é um inteiro válido')
+    .AsInteger;
 
+  var LMovimentos := TLojaModelFactory.New.Caixa.ObterMovimentoCaixa(LCodCaixa);
+  Resp.Status(THTTPStatus.OK).Send(TJson.ObjectToClearJsonValue(LMovimentos));
+  LMovimentos.Free;
 end;
-
 procedure PostMovimentoSangria(Req: THorseRequest; Resp: THorseResponse);
 begin
   if Req.Body = ''
