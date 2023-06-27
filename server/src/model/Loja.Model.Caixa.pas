@@ -262,7 +262,7 @@ end;
 function TLojaModelCaixa.FechamentoCaixa(
   AFechamento: TLojaModelDtoReqCaixaFechamento): TLojaModelEntityCaixaCaixa;
 begin
-  if ACodCaixa <= 0
+  if AFechamento.CodCaixa <= 0
   then raise EHorseException.New
     .Status(THTTPStatus.BadRequest)
     .&Unit(Self.UnitName)
@@ -344,8 +344,9 @@ begin
     var LVrMov := IfThen(LMovimento.CodTipoMov = movEntrada, LMovimento.VrMov, LMovimento.VrMov * -1 );
 
     Result.VrSaldo := Result.VrSaldo + LVrMov;
-    Result.MeiosPagto[Integer(LMovimento.CodMeioPagto)].VrTotal :=
-      Result.MeiosPagto[Integer(LMovimento.CodMeioPagto)].VrTotal + LVrMov;
+
+    Result.MeiosPagto.Get(LMovimento.CodMeioPagto).VrTotal :=
+      Result.MeiosPagto.Get(LMovimento.CodMeioPagto).VrTotal + LVrMov;
   end;
 
   LMovimentos.Free;
