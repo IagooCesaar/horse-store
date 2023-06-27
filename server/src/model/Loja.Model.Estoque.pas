@@ -53,7 +53,7 @@ end;
 
 function TLojaModelEstoque.CriarAcertoEstoque(
   AAcertoEstoque: TLojaModelDtoReqEstoqueAcertoEstoque): TLojaModelEntityEstoqueMovimento;
-const C_MOT_MIN = 4; C_MOT_MAX = 40;
+const C_MOT_MIN = 4; C_MOT_MAX = 60;
 var
   LItem: TLojaModelEntityItensItem;
   LSaldo: Integer;
@@ -109,7 +109,7 @@ end;
 
 function TLojaModelEstoque.CriarNovoMovimento(
   ANovoMovimento: TLojaModelDtoReqEstoqueCriarMovimento): TLojaModelEntityEstoqueMovimento;
-const C_MOT_MIN = 4; C_MOT_MAX = 40;
+const C_MOT_MIN = 4; C_MOT_MAX = 60;
 var
   LItem: TLojaModelEntityItensItem;
   LSaldo: Integer;

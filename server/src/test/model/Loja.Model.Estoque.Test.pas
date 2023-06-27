@@ -343,7 +343,7 @@ begin
     LDTONovoMovimento.DatMov := Now;
     LDTONovoMovimento.CodTipoMov := TLojaModelEntityEstoqueTipoMovimento.movEntrada;
     LDTONovoMovimento.CodOrigMov := TLojaModelEntityEstoqueOrigemMovimento.orgAcerto;
-    LDTONovoMovimento.DscMot := '12345678901234567890123456789012345678901';
+    LDTONovoMovimento.DscMot := '1234567890123456789012345678901234567890112345678901234567890123456789012345678901';
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
