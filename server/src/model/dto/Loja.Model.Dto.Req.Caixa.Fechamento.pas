@@ -16,6 +16,7 @@ type
     FCodCaixa: Integer;
     FMeiosPagto: TLojaModelDtoRespCaixaResumoCaixaMeioPagtoLista;
   public
+    destructor Destroy; override;
     [SwagIgnore]
     property CodCaixa: Integer read FCodCaixa write FCodCaixa;
 
@@ -23,5 +24,15 @@ type
   end;
 
 implementation
+
+{ TLojaModelDtoReqCaixaFechamento }
+
+destructor TLojaModelDtoReqCaixaFechamento.Destroy;
+begin
+  if FMeiosPagto <> nil
+  then FreeAndNil(FMeiosPagto);
+
+  inherited;
+end;
 
 end.
