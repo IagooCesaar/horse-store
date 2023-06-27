@@ -65,7 +65,8 @@ uses
   Loja.Model.Entity.Caixa.Movimento in 'src\model\entity\caixa\Loja.Model.Entity.Caixa.Movimento.pas',
   Loja.Model.Entity.Caixa.Types in 'src\model\entity\caixa\Loja.Model.Entity.Caixa.Types.pas',
   Loja.Model.Dto.Req.Caixa.CriarMovimento in 'src\model\dto\Loja.Model.Dto.Req.Caixa.CriarMovimento.pas',
-  Loja.Controller.Caixa in 'src\controllers\Loja.Controller.Caixa.pas';
+  Loja.Controller.Caixa in 'src\controllers\Loja.Controller.Caixa.pas',
+  Loja.Model.Dto.Resp.Caixa.ResumoCaixa.MeioPagto in 'src\model\dto\Loja.Model.Dto.Resp.Caixa.ResumoCaixa.MeioPagto.pas';
 
 {$R *.res}
 

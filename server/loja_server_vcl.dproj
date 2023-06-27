@@ -194,6 +194,7 @@
         <DCCReference Include="src\model\entity\caixa\Loja.Model.Entity.Caixa.Types.pas"/>
         <DCCReference Include="src\model\dto\Loja.Model.Dto.Req.Caixa.CriarMovimento.pas"/>
         <DCCReference Include="src\controllers\Loja.Controller.Caixa.pas"/>
+        <DCCReference Include="src\model\dto\Loja.Model.Dto.Resp.Caixa.ResumoCaixa.MeioPagto.pas"/>
         <RcItem Include="boss.json">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>RCDATA</ResourceType>

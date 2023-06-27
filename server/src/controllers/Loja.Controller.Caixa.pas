@@ -79,6 +79,7 @@ begin
   Resp.Status(THTTPStatus.OK).Send(TJson.ObjectToClearJsonValue(LMovimentos));
   LMovimentos.Free;
 end;
+
 procedure PostMovimentoSangria(Req: THorseRequest; Resp: THorseResponse);
 begin
   if Req.Body = ''
@@ -148,7 +149,27 @@ end;
 
 procedure PatchFecharCaixa(Req: THorseRequest; Resp: THorseResponse);
 begin
+  var LCodCaixa := Req.Params.Field('cod_caixa')
+    .InvalidFormatMessage('O valor informado não é um inteiro válido')
+    .AsInteger;
 
+  if Req.Body = ''
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(C_UnitName)
+    .Error('O body não estava no formato esperado');
+
+  var LDto := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDtoReqCaixaFechamento>(Req.Body);
+
+  try
+    LDto.CodCaixa := LCodCaixa;
+    var LMovimento := TLojaModelFactory.New.Caixa.FechamentoCaixa(LDto);
+    Resp.Status(THttpStatus.Created).Send(TJson.ObjectToClearJsonValue(LMovimento));
+    LMovimento.Free;
+  finally
+    LDto.Free;
+  end;
 end;
 
 procedure Registry(const AContext: string);
@@ -245,6 +266,9 @@ begin
         .Description('Realiza o fechamento do caixa informado')
         .AddParamPath('cod_caixa', 'Código identificador do caixa')
           .Schema(SWAG_INTEGER)
+        .&End
+        .AddParamBody('Body')
+           .Schema(TLojaModelDtoReqCaixaFechamento)
         .&End
         .AddResponse(Integer(THTTPStatus.OK)).Schema(TLojaModelEntityCaixaCaixa).&End
         .AddResponse(Integer(THTTPStatus.NoContent)).&End

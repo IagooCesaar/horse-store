@@ -85,7 +85,8 @@ uses
   Loja.Controller.Caixa in 'src\controllers\Loja.Controller.Caixa.pas',
   Loja.Model.Dto.Req.Caixa.Abertura in 'src\model\dto\Loja.Model.Dto.Req.Caixa.Abertura.pas',
   Loja.Model.Dto.Req.Caixa.Fechamento in 'src\model\dto\Loja.Model.Dto.Req.Caixa.Fechamento.pas',
-  Loja.Model.Dto.Req.Caixa.CriarMovimento in 'src\model\dto\Loja.Model.Dto.Req.Caixa.CriarMovimento.pas';
+  Loja.Model.Dto.Req.Caixa.CriarMovimento in 'src\model\dto\Loja.Model.Dto.Req.Caixa.CriarMovimento.pas',
+  Loja.Model.Dto.Resp.Caixa.ResumoCaixa.MeioPagto in 'src\model\dto\Loja.Model.Dto.Resp.Caixa.ResumoCaixa.MeioPagto.pas';
 
 {$IFNDEF TESTINSIGHT}
 var

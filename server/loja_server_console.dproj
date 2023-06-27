@@ -177,6 +177,7 @@
         <DCCReference Include="src\model\dao\oficial\caixa\Loja.Model.Dao.Caixa.Factory.pas"/>
         <DCCReference Include="src\model\dao\oficial\caixa\Loja.Model.Dao.Caixa.Movimento.pas"/>
         <DCCReference Include="src\model\dto\Loja.Model.Dto.Req.Caixa.CriarMovimento.pas"/>
+        <DCCReference Include="src\model\dto\Loja.Model.Dto.Resp.Caixa.ResumoCaixa.MeioPagto.pas"/>
         <RcItem Include="boss.json">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>RCDATA</ResourceType>

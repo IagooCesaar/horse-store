@@ -7,12 +7,10 @@ uses
   System.Classes,
   System.Generics.Collections,
 
-  Loja.Model.Entity.Caixa.Types;
+  Loja.Model.Entity.Caixa.Types,
+  Loja.Model.Dto.Resp.Caixa.ResumoCaixa.MeioPagto;
 
 type
-  TLojaModelDtoRespCaixaResumoCaixaMeioPagto = class;
-  TLojaModelDtoRespCaixaResumoCaixaMeioPagtoLista = TObjectList<TLojaModelDtoRespCaixaResumoCaixaMeioPagto>;
-
   TLojaModelDtoRespCaixaResumoCaixa = class
   private
     FCodCaixa: Integer;
@@ -26,15 +24,6 @@ type
     property CodSit: TLojaModelEntityCaixaSituacao read FCodSit write FCodSit;
     property VrSaldo: Currency read FVrSaldo write FVrSaldo;
     property MeiosPagto: TLojaModelDtoRespCaixaResumoCaixaMeioPagtoLista read FMeiosPagto write FMeiosPagto;
-  end;
-
-  TLojaModelDtoRespCaixaResumoCaixaMeioPagto = class
-  private
-    FCodMeioPagto: TLojaModelEntityCaixaMeioPagamento;
-    FVrTotal: Currency;
-  public
-    property CodMeioPagto: TLojaModelEntityCaixaMeioPagamento read FCodMeioPagto write FCodMeioPagto;
-    property VrTotal: Currency read FVrTotal write FVrTotal;
   end;
 
   TLojaModelDtoRespCaixaResumoCaixaLista = TObjectList<TLojaModelDtoRespCaixaResumoCaixa>;

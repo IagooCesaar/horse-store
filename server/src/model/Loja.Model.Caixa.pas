@@ -13,7 +13,8 @@ uses
   Loja.Model.Dto.Req.Caixa.Abertura,
   Loja.Model.Dto.Req.Caixa.Fechamento,
   Loja.Model.Dto.Req.Caixa.CriarMovimento,
-  Loja.Model.Dto.Resp.Caixa.ResumoCaixa;
+  Loja.Model.Dto.Resp.Caixa.ResumoCaixa,
+  Loja.Model.Dto.Resp.Caixa.ResumoCaixa.MeioPagto;
 
 type
   TLojaModelCaixa = class(TInterfacedObject, ILojaModelCaixa)
@@ -28,6 +29,7 @@ type
     function ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
     function ObterCaixaPorCodigo(ACodCaixa: Integer): TLojaModelEntityCaixaCaixa;
     function AberturaCaixa(AAbertura: TLojaModelDtoReqCaixaAbertura): TLojaModelEntityCaixaCaixa;
+    function FechamentoCaixa(AFechamento: TLojaModelDtoReqCaixaFechamento): TLojaModelEntityCaixaCaixa;
 
     function CriarReforcoCaixa(AMovimento: TLojaModelDtoReqCaixaCriarMovimento): TLojaModelEntityCaixaMovimento;
     function CriarSangriaCaixa(AMovimento: TLojaModelDtoReqCaixaCriarMovimento): TLojaModelEntityCaixaMovimento;
@@ -255,6 +257,16 @@ destructor TLojaModelCaixa.Destroy;
 begin
 
   inherited;
+end;
+
+function TLojaModelCaixa.FechamentoCaixa(
+  AFechamento: TLojaModelDtoReqCaixaFechamento): TLojaModelEntityCaixaCaixa;
+begin
+  if ACodCaixa <= 0
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('O código de caixa informado é inválido');
 end;
 
 class function TLojaModelCaixa.New: ILojaModelCaixa;
