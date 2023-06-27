@@ -267,6 +267,30 @@ begin
     .Status(THTTPStatus.BadRequest)
     .&Unit(Self.UnitName)
     .Error('O código de caixa informado é inválido');
+
+  var LResumo := ObterResumoCaixa(AFechamento.CodCaixa);
+  try
+    if LResumo.CodSit = sitFechado
+    then raise EHorseException.New
+      .Status(THTTPStatus.PreconditionFailed)
+      .&Unit(Self.UnitName)
+      .Error('Este caixa já se encontra fechado');
+
+    for var LMeioPagto in LResumo.MeiosPagto
+    do begin
+      if LMeioPagto.VrTotal <> AFechamento.MeiosPagto.Get(LMeioPagto.CodMeioPagto).VrTotal
+      then raise EHorseException.New
+        .Status(THTTPStatus.BadRequest)
+        .&Unit(Self.UnitName)
+        .Error(Format('O valor informado para o meio de pagamento "%s" não confere. Verifique novamente',
+          [LMeioPagto.CodMeioPagto.Name]));
+    end;
+
+    // persistir - update (verbo patch)
+
+  finally
+    LResumo.Free;
+  end;
 end;
 
 class function TLojaModelCaixa.New: ILojaModelCaixa;

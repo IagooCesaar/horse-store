@@ -37,6 +37,7 @@ type
   TLojaModelEntityCaixaMeioPagamentoHelper = record helper for TLojaModelEntityCaixaMeioPagamento
   public
     function ToString: string;
+    function Name: string;
     constructor Create(AValue: string); overload;
   end;
 
@@ -76,6 +77,22 @@ begin
     2: Self := pagCartaoCredito;
     3: Self := pagCartaoDebito;
     4: Self := pagCheque;
+  end;
+end;
+
+function TLojaModelEntityCaixaMeioPagamentoHelper.Name: string;
+begin
+  case (Self) of
+    pagDinheiro:
+      Result := 'Dinheiro';
+    pagPix:
+      Result := 'Pix';
+    pagCartaoCredito:
+      Result := 'Cartão de Crédito';
+    pagCartaoDebito:
+      Result := 'Cartão de Débito';
+    pagCheque:
+      Result := 'Cheque';
   end;
 end;
 
