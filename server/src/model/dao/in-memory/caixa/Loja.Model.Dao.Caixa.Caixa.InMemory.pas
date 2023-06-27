@@ -30,11 +30,30 @@ type
     function ObterCaixaPorCodigo(ACodCaixa: Integer): TLojaModelEntityCaixaCaixa;
     function ObterUltimoCaixaFechado(ADatRef: TDateTime): TLojaModelEntityCaixaCaixa;
     function CriarNovoCaixa(ANovoCaixa: TLojaModelDtoReqCaixaAbertura): TLojaModelEntityCaixaCaixa;
+    function AtualizarFechamentoCaixa(ACodCaixa: Integer; ADatFecha: TDateTime;
+      AVrFecha: Currency): TLojaModelEntityCaixaCaixa;
   end;
 
 implementation
 
 { TLojaModelDaoCaixaCaixaInMemory }
+
+function TLojaModelDaoCaixaCaixaInMemory.AtualizarFechamentoCaixa(
+  ACodCaixa: Integer; ADatFecha: TDateTime;
+  AVrFecha: Currency): TLojaModelEntityCaixaCaixa;
+begin
+  Result := nil;
+  for var LCaixa in FRepository do
+    if LCaixa.CodCaixa = ACodCaixa
+    then begin
+      LCaixa.CodSit := sitFechado;
+      LCaixa.DatFecha := ADatFecha;
+      Lcaixa.VrFecha := AVrFecha;
+
+      Result := Clone(LCaixa);
+      Break;
+    end;
+end;
 
 function TLojaModelDaoCaixaCaixaInMemory.Clone(
   ASource: TLojaModelEntityCaixaCaixa): TLojaModelEntityCaixaCaixa;

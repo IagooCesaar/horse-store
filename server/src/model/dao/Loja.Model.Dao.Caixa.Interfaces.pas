@@ -16,6 +16,7 @@ type
     function ObterCaixaPorCodigo(ACodCaixa: Integer): TLojaModelEntityCaixaCaixa;
     function ObterUltimoCaixaFechado(ADatRef: TDateTime): TLojaModelEntityCaixaCaixa;
     function CriarNovoCaixa(ANovoCaixa: TLojaModelDtoReqCaixaAbertura): TLojaModelEntityCaixaCaixa;
+    function AtualizarFechamentoCaixa(ACodCaixa: Integer; ADatFecha: TDateTime; AVrFecha: Currency): TLojaModelEntityCaixaCaixa;
   end;
 
   ILojaModelDaoCaixaMovimento = interface

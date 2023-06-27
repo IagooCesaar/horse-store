@@ -27,6 +27,8 @@ type
     function ObterCaixaPorCodigo(ACodCaixa: Integer): TLojaModelEntityCaixaCaixa;
     function ObterUltimoCaixaFechado(ADatRef: TDateTime): TLojaModelEntityCaixaCaixa;
     function CriarNovoCaixa(ANovoCaixa: TLojaModelDtoReqCaixaAbertura): TLojaModelEntityCaixaCaixa;
+    function AtualizarFechamentoCaixa(ACodCaixa: Integer; ADatFecha: TDateTime;
+      AVrFecha: Currency): TLojaModelEntityCaixaCaixa;
   end;
 
 implementation
@@ -47,6 +49,31 @@ begin
   Result.VrAbert := ds.FieldByName('vr_abert').AsFloat;
   Result.DatFecha := ds.FieldByName('dat_fecha').AsDateTime;
   Result.VrFecha := ds.FieldByName('vr_fecha').AsFloat;
+end;
+
+function TLojaModelDaoCaixaCaixa.AtualizarFechamentoCaixa(ACodCaixa: Integer;
+  ADatFecha: TDateTime; AVrFecha: Currency): TLojaModelEntityCaixaCaixa;
+begin
+  Result := nil;
+  var LSql := #13#10
+  + 'update caixa set '
+  + '  cod_sit = :cod_sit, '
+  + '  dat_fecha = :dat_fecha, '
+  + '  vr_fecha = :vr_fecha '
+  + 'where cod_caixa = :cod_caixa '
+  ;
+
+  TDatabaseFactory.New.SQL
+    .SQL(LSql)
+    .ParamList
+      .AddInteger('cod_caixa', ACodCaixa)
+      .AddDateTime('dat_fecha', ADatFecha)
+      .AddFloat('vr_fecha', AVrFecha)
+      .AddString('cod_sit', sitFechado.ToString)
+      .&End
+    .ExecSQL();
+
+  Result := ObterCaixaPorCodigo(ACodCaixa);
 end;
 
 constructor TLojaModelDaoCaixaCaixa.Create;
