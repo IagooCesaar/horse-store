@@ -42,6 +42,15 @@ type
     [Test]
     procedure Test_CriarMovimento_SangriaCaixa;
 
+    [Test]
+    procedure Test_NaoCriarMovimento_CaixaInvalido;
+
+    [Test]
+    procedure Test_NaoCriarMovimento_CaixaInexistente;
+
+    [Test]
+    procedure Test_NaoCriarMovimento_CaixaFechado;
+
   end;
 
 implementation
@@ -100,7 +109,7 @@ procedure TLojaModelCaixaTest.Test_AberturaDeCaixa_NovaAbertura_ComReforco;
 begin
   var LResumo := TLojaModelFactory.New.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
   var VrFecha := LResumo.VrSaldo;
-  var VrDif := +4.00;
+  var VrDif := 4.00;
   LResumo.Free;
 
   var LCaixaFechado := TLojaModelDaoFactory.New.Caixa.Caixa.AtualizarFechamentoCaixa(
@@ -253,6 +262,54 @@ begin
   );
 
   LAbertura.Free;
+end;
+
+procedure TLojaModelCaixaTest.Test_NaoCriarMovimento_CaixaFechado;
+begin
+  var LResumo := TLojaModelFactory.New.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
+  var VrFecha := LResumo.VrSaldo;
+  LResumo.Free;
+
+  var LCaixaFechado := TLojaModelDaoFactory.New.Caixa.Caixa.AtualizarFechamentoCaixa(
+    FCaixa.CodCaixa,
+    Now,
+    VrFecha
+  );
+
+  var LAbertura := TLojaModelDtoReqCaixaAbertura.Create;
+  LAbertura.DatAbert := Now;
+  LAbertura.VrAbert := VrFecha;
+
+  FCaixa.Free;
+  FCaixa := TLojaModelFactory.New.Caixa.AberturaCaixa(LAbertura);
+  LAbertura.Free;
+
+
+  var LDtoMov := TLojaModelDtoReqCaixaCriarMovimento.Create;
+  LDtoMov.CodCaixa := LCaixaFechado.CodCaixa;
+  LDtoMov.VrMov := 20.00;
+  LDtoMov.DscObs := 'Teste Caixa Fechado';
+
+  Assert.WillRaiseWithMessageRegex(
+    procedure begin
+      TLojaModelFactory.New.Caixa.CriarReforcoCaixa(LDtoMov);
+    end,
+    EHorseException,
+    'O caixa informado não está na stuação "Aberto"'
+  );
+
+  LDtoMov.Free;
+  LCaixaFechado.Free;
+end;
+
+procedure TLojaModelCaixaTest.Test_NaoCriarMovimento_CaixaInexistente;
+begin
+
+end;
+
+procedure TLojaModelCaixaTest.Test_NaoCriarMovimento_CaixaInvalido;
+begin
+
 end;
 
 initialization
