@@ -150,6 +150,8 @@ begin
       .Estoque
       .CriarAcertoEstoque(LAcerto);
 
+    Assert.IsTrue(LMovimento <> nil);
+
     LMovimento.Free;
   finally
     LAcerto.Free;
@@ -172,6 +174,8 @@ begin
     var LMovimento := TLojaModelFactory.New
       .Estoque
       .CriarNovoMovimento(LDTONovoMovimento);
+
+    Assert.IsTrue(LMovimento <> nil);
 
     LMovimento.Free;
   finally
