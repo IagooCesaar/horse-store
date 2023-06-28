@@ -31,7 +31,10 @@ type
     procedure Test_NaoAbrirCaixa_ExiteCaixaAberto;
 
     [Test]
-    procedure Test_AberturaDeCaixa_NovaAbertura;
+    procedure Test_AberturaDeCaixa_NovaAbertura_ComSangria;
+
+    [Test]
+    procedure Test_AberturaDeCaixa_NovaAbertura_ComReforco;
 
   end;
 
@@ -87,17 +90,22 @@ begin
   LMovimentos.Free;
 end;
 
-procedure TLojaModelCaixaTest.Test_AberturaDeCaixa_NovaAbertura;
+procedure TLojaModelCaixaTest.Test_AberturaDeCaixa_NovaAbertura_ComReforco;
 begin
+  var LResumo := TLojaModelFactory.New.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
+  var VrFecha := LResumo.VrSaldo;
+  var VrDif := +4.00;
+  LResumo.Free;
+
   var LCaixaFechado := TLojaModelDaoFactory.New.Caixa.Caixa.AtualizarFechamentoCaixa(
     FCaixa.CodCaixa,
     Now,
-    10
+    VrFecha
   );
 
   var LAbertura := TLojaModelDtoReqCaixaAbertura.Create;
   LAbertura.DatAbert := Now;
-  LAbertura.VrAbert := 8;
+  LAbertura.VrAbert := VrFecha + VrDif;
 
   FCaixa.Free;
   FCaixa := TLojaModelFactory.New.Caixa.AberturaCaixa(LAbertura);
@@ -113,7 +121,50 @@ begin
 
   // Como novo caixa abriu com valor diferente do ultimo fechamento,
   // fará 2 movimentos para corrigir a diferença, neste caso com sangria
-  Assert.AreEqual(Double(2.00), Double(LMovimentos[1].VrMov));
+  Assert.AreEqual(Double(VrDif), Double(LMovimentos[1].VrMov));
+  Assert.IsTrue(LMovimentos[1].CodTipoMov = movEntrada);
+  Assert.IsTrue(LMovimentos[1].CodOrigMov = orgReforco);
+
+  LAbertura.Free;
+  LMovimentos.Free;
+
+  LCaixaFechado.Free;
+end;
+
+procedure TLojaModelCaixaTest.Test_AberturaDeCaixa_NovaAbertura_ComSangria;
+begin
+  var LResumo := TLojaModelFactory.New.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
+  var VrFecha := LResumo.VrSaldo;
+  var VrDif := 2.00;
+  LResumo.Free;
+
+  var LCaixaFechado := TLojaModelDaoFactory.New.Caixa.Caixa.AtualizarFechamentoCaixa(
+    FCaixa.CodCaixa,
+    Now,
+    VrFecha
+  );
+
+  var LAbertura := TLojaModelDtoReqCaixaAbertura.Create;
+  LAbertura.DatAbert := Now;
+  LAbertura.VrAbert := VrFecha - VrDif;
+
+  FCaixa.Free;
+  FCaixa := TLojaModelFactory.New.Caixa.AberturaCaixa(LAbertura);
+
+  Assert.AreEqual(LAbertura.VrAbert, FCaixa.VrAbert);
+  Assert.AreEqual(LAbertura.DatAbert, FCaixa.DatAbert);
+
+  var LMovimentos := TLojaModelFactory.New.Caixa.ObterMovimentoCaixa(FCaixa.CodCaixa);
+
+  // Mov 1: Saldo de fechamento do caixa anterior
+  // Mov 2: Ajuste pois novo caixa está abrindo com saldo <> do saldo do último fechamento
+  Assert.AreEqual(2, LMovimentos.Count);
+
+  // Como novo caixa abriu com valor diferente do ultimo fechamento,
+  // fará 2 movimentos para corrigir a diferença, neste caso com sangria
+  Assert.AreEqual(Double(VrDif), Double(LMovimentos[1].VrMov));
+  Assert.IsTrue(LMovimentos[1].CodTipoMov = movSaida);
+  Assert.IsTrue(LMovimentos[1].CodOrigMov = orgSangria);
 
   LAbertura.Free;
   LMovimentos.Free;
