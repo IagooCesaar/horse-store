@@ -89,13 +89,25 @@ begin
   then begin
     if LNovoCaixa.VrAbert <> LUltFechado.VrFecha
     then begin
+      // fazer dois movimentos, um com o ultimo fechamento e outro com a correção
+
       var LMovAbert := TLojaModelDtoReqCaixaCriarMovimento.Create;
       try
         LMovAbert.CodCaixa := LNovoCaixa.CodCaixa;
-        LMovAbert.DatMov := LNovoCaixa.DatAbert;
+        LMovAbert.DatMov := Now;
+        LMovAbert.DscObs := 'Saldo fechamento do caixa anterior';
+        LMovAbert.CodMeioPagto := pagDinheiro;
+        LMovAbert.VrMov := LUltFechado.VrFecha;
+
+        var LMov1 := CriarMovimentoCaixa(LMovAbert);
+        LMov1.Free;
+
+        LMovAbert.CodCaixa := LNovoCaixa.CodCaixa;
+        LMovAbert.DatMov := Now;
         LMovAbert.DscObs := 'Saldo abertura divergente do último fechamento';
         LMovAbert.CodMeioPagto := pagDinheiro;
         LMovAbert.VrMov := Abs(LNovoCaixa.VrAbert - LUltFechado.VrFecha);
+
         if LNovoCaixa.VrAbert > LUltFechado.VrFecha
         then begin
           LMovAbert.CodTipoMov := movEntrada;
@@ -106,8 +118,9 @@ begin
           LMovAbert.CodTipoMov := movSaida;
           LMovAbert.CodOrigMov := orgSangria;
         end;
-        var LMovimento := CriarMovimentoCaixa(LMovAbert);
-        LMovimento.Free;
+
+        var Mov2 := CriarMovimentoCaixa(LMovAbert);
+        Mov2.Free;
       finally
         LMovAbert.Free;
       end;

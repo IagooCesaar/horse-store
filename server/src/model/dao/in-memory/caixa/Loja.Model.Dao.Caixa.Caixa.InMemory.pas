@@ -77,7 +77,7 @@ function TLojaModelDaoCaixaCaixaInMemory.CriarNovoCaixa(
 var LId: Integer;
 begin
   if FRepository.Count > 0
-  then LId := FRepository.Last.CodCaixa
+  then LId := FRepository.Last.CodCaixa + 1
   else LId := 1;
 
   FRepository.Add(TLojaModelEntityCaixaCaixa.Create);
