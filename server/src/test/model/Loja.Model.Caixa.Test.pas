@@ -4,7 +4,7 @@ interface
 
 uses
   DUnitX.TestFramework,
-
+  System.SyncObjs,
 
   Loja.Model.Entity.Caixa.Types,
   Loja.Model.Entity.Caixa.Caixa,
@@ -15,11 +15,17 @@ type
   TLojaModelCaixaTest = class
   private
     FCaixa: TLojaModelEntityCaixaCaixa;
+    FCritical: TCriticalSection;
   public
     [SetupFixture]
     procedure SetupFixture;
     [TearDownFixture]
     procedure TearDownFixture;
+
+    [Setup]
+    procedure Setup;
+    [TearDown]
+    procedure TearDown;
 
     [Test]
     procedure Test_AberturaDeCaixa;
@@ -74,14 +80,26 @@ uses
 
 { TLojaModelCaixaTest }
 
+procedure TLojaModelCaixaTest.Setup;
+begin
+  FCritical.Acquire;
+end;
+
 procedure TLojaModelCaixaTest.SetupFixture;
 begin
   TLojaModelDaoFactory.InMemory := True;
+  FCritical := TCriticalSection.Create;
+end;
+
+procedure TLojaModelCaixaTest.TearDown;
+begin
+  FCritical.Release;
 end;
 
 procedure TLojaModelCaixaTest.TearDownFixture;
 begin
   FCaixa.Free;
+  FCritical.Free;
   TLojaModelDaoFactory.InMemory := False;
 end;
 
@@ -112,6 +130,8 @@ begin
   var VrDif := 4.00;
   LResumo.Free;
 
+  WriteLn(Format('Valor Fechamento: %8.2f', [VrFecha] ));
+
   var LCaixaFechado := TLojaModelDaoFactory.New.Caixa.Caixa.AtualizarFechamentoCaixa(
     FCaixa.CodCaixa,
     Now,
@@ -125,6 +145,8 @@ begin
   FCaixa.Free;
   FCaixa := TLojaModelFactory.New.Caixa.AberturaCaixa(LAbertura);
 
+  WriteLn(Format('Valor Abertura: %8.2f / Caixa: %d', [FCaixa.VrAbert, FCaixa.CodCaixa] ));
+
   Assert.AreEqual(LAbertura.VrAbert, FCaixa.VrAbert);
   Assert.AreEqual(LAbertura.DatAbert, FCaixa.DatAbert);
 
@@ -136,6 +158,9 @@ begin
 
   // Como novo caixa abriu com valor diferente do ultimo fechamento,
   // fará 2 movimentos para corrigir a diferença, neste caso com sangria
+
+  WriteLn(Format('Segundo movimento: %8.2f tipo %s', [LMovimentos[1].VrMov, LMovimentos[1].CodTipoMov.ToString] ));
+
   Assert.AreEqual(Double(VrDif), Double(LMovimentos[1].VrMov));
   Assert.IsTrue(LMovimentos[1].CodTipoMov = movEntrada);
   Assert.IsTrue(LMovimentos[1].CodOrigMov = orgReforco);
