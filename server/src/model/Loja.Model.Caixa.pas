@@ -257,7 +257,6 @@ begin
   AMovimento.CodOrigMov := orgReforco;
 
   Result := CriarMovimentoCaixa(AMovimento);
-  AMovimento.Free;
 end;
 
 function TLojaModelCaixa.CriarSangriaCaixa(
@@ -267,7 +266,6 @@ begin
   AMovimento.CodOrigMov := orgSangria;
 
   Result := CriarMovimentoCaixa(AMovimento);
-  AMovimento.Free;
 end;
 
 destructor TLojaModelCaixa.Destroy;

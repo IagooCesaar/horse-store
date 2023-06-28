@@ -36,6 +36,12 @@ type
     [Test]
     procedure Test_AberturaDeCaixa_NovaAbertura_ComReforco;
 
+    [Test]
+    procedure Test_CriarMovimento_ReforcoCaixa;
+
+    [Test]
+    procedure Test_CriarMovimento_SangriaCaixa;
+
   end;
 
 implementation
@@ -170,6 +176,49 @@ begin
   LMovimentos.Free;
 
   LCaixaFechado.Free;
+end;
+
+procedure TLojaModelCaixaTest.Test_CriarMovimento_ReforcoCaixa;
+begin
+  var LDtoMov := TLojaModelDtoReqCaixaCriarMovimento.Create;
+  LDtoMov.CodCaixa := FCaixa.CodCaixa;
+  LDtoMov.VrMov := 20.00;
+  LDtoMov.DscObs := 'Reforço de Caixa';
+
+  var LMovimento := TLojaModelFactory.New.Caixa.CriarReforcoCaixa(LDtoMov);
+
+  Assert.IsTrue(LMovimento.CodTipoMov = movEntrada);
+  Assert.IsTrue(LMovimento.CodOrigMov = orgReforco);
+  Assert.IsTrue(LMovimento.CodMeioPagto = pagDinheiro);
+  Assert.AreEqual(Double(LDtoMov.VrMov), Double(LMovimento.VrMov));
+
+  LDtoMov.Free;
+  LMovimento.Free;
+end;
+
+procedure TLojaModelCaixaTest.Test_CriarMovimento_SangriaCaixa;
+begin
+  var LResumo := TLojaModelFactory.New.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
+  var VrSaldo := LResumo.VrSaldo;
+  LResumo.Free;
+
+  if VrSaldo = 0
+  then raise Exception.Create('Saldo igual a zero');
+
+  var LDtoMov := TLojaModelDtoReqCaixaCriarMovimento.Create;
+  LDtoMov.CodCaixa := FCaixa.CodCaixa;
+  LDtoMov.VrMov := 0.50;
+  LDtoMov.DscObs := 'Sangria de Caixa';
+
+  var LMovimento := TLojaModelFactory.New.Caixa.CriarSangriaCaixa(LDtoMov);
+
+  Assert.IsTrue(LMovimento.CodTipoMov = movSaida);
+  Assert.IsTrue(LMovimento.CodOrigMov = orgSangria);
+  Assert.IsTrue(LMovimento.CodMeioPagto = pagDinheiro);
+  Assert.AreEqual(Double(LDtoMov.VrMov), Double(LMovimento.VrMov));
+
+  LDtoMov.Free;
+  LMovimento.Free;
 end;
 
 procedure TLojaModelCaixaTest.Test_NaoAbrirCaixa_ExiteCaixaAberto;
