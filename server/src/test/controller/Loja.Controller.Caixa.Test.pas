@@ -638,7 +638,69 @@ begin
 
   Assert.AreEqual(THttpStatus.Ok, THttpStatus(LResponseAberto.StatusCode));
 
+  // Obtêm resumo do caixa atual
+  var LResponseResumo := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/resumo')
+    .AddUrlSegment('cod_caixa', FCaixa.CodCaixa.ToString)
+    .Get();
 
+  Assert.AreEqual(THTTPStatus.OK, THTTPStatus(LResponseResumo.StatusCode));
+
+  var LResumo := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDtoRespCaixaResumoCaixa>(LResponseResumo.Content);
+  var VrFecha := LResumo.VrSaldo;
+
+  //Realiza fechamento do caixa atual para abrir um novo
+  var LFechamento := TLojaModelDtoReqCaixaFechamento.Create;
+  LFechamento.MeiosPagto := TLojaModelDtoRespCaixaResumoCaixaMeioPagtoLista.Create;
+
+  for var LMeioPagto in LResumo.MeiosPagto
+  do begin
+    LFechamento.MeiosPagto.Get(LMeioPagto.CodMeioPagto).VrTotal :=
+      LMeioPagto.VrTotal;
+  end;
+
+  var LResponseFecharCaixa := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/fechar-caixa')
+    .AddUrlSegment('cod_caixa', FCaixa.CodCaixa.ToString)
+    .AddBody(TJson.ObjectToClearJsonString(LFechamento))
+    .Patch();
+
+  Assert.AreEqual(THTTPStatus.OK, THTTPStatus(LResponseFecharCaixa.StatusCode), LResponseFecharCaixa.StatusText);
+
+  //Tenta obter caixa aberto, porém não há
+  var LResponseFechado := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/caixa-aberto')
+    .Get();
+
+  Assert.AreEqual(THttpStatus.NoContent, THttpStatus(LResponseFechado.StatusCode));
+
+  //Prepara nova abertura
+  var LAbertura := TLojaModelDtoReqCaixaAbertura.Create;
+  LAbertura.VrAbert := VrFecha;
+
+  var LResponseAbertura := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/abrir-caixa')
+    .AddBody(TJson.ObjectToClearJsonString(LAbertura))
+    .Post();
+
+  Assert.AreEqual(THttpStatus.Created, THttpStatus(LResponseAbertura.StatusCode));
+
+  FCaixa.Free;
+  FCaixa := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityCaixaCaixa>(LResponseAbertura.Content);
+
+  LAbertura.Free;
+  LFechamento.Free;
+  LResumo.Free;
 end;
 
 procedure TLojaControllerCaixaTest.Test_ObterCaixa_PorCodigo;
