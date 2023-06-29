@@ -57,6 +57,15 @@ type
     [Test]
     procedure Test_NaoCriarMovimento_CaixaFechado;
 
+    [Test]
+    procedure Test_NaoCriarMovimento_SemObservacao;
+
+    [Test]
+    procedure Test_NaoCriarMovimento_ObservacaoPequena;
+
+    [Test]
+    procedure Test_NaoCriarMovimento_ObservacaoGrande;
+
   end;
 
 implementation
@@ -129,6 +138,7 @@ begin
   var VrFecha := LResumo.VrSaldo;
   var VrDif := 4.00;
   LResumo.Free;
+  Sleep(1000);
 
   WriteLn(Format('Valor Fechamento: %8.2f', [VrFecha] ));
 
@@ -362,6 +372,61 @@ begin
 
   LDtoMov.Free;
 end;
+
+procedure TLojaModelCaixaTest.Test_NaoCriarMovimento_ObservacaoGrande;
+begin
+  var LDtoMov := TLojaModelDtoReqCaixaCriarMovimento.Create;
+  LDtoMov.CodCaixa := FCaixa.CodCaixa;
+  LDtoMov.VrMov := 20.00;
+  LDtoMov.DscObs := '0123456789012345678901234567890123456789012345678901234567890';
+
+  Assert.WillRaiseWithMessageRegex(
+    procedure begin
+      TLojaModelFactory.New.Caixa.CriarReforcoCaixa(LDtoMov);
+    end,
+    EHorseException,
+    'A observação deverá ter no máximo'
+  );
+
+  LDtoMov.Free;
+end;
+
+procedure TLojaModelCaixaTest.Test_NaoCriarMovimento_ObservacaoPequena;
+begin
+  var LDtoMov := TLojaModelDtoReqCaixaCriarMovimento.Create;
+  LDtoMov.CodCaixa := FCaixa.CodCaixa;
+  LDtoMov.VrMov := 20.00;
+  LDtoMov.DscObs := '012';
+
+  Assert.WillRaiseWithMessageRegex(
+    procedure begin
+      TLojaModelFactory.New.Caixa.CriarReforcoCaixa(LDtoMov);
+    end,
+    EHorseException,
+    'A observação deverá ter no mínimo'
+  );
+
+  LDtoMov.Free;
+end;
+
+procedure TLojaModelCaixaTest.Test_NaoCriarMovimento_SemObservacao;
+begin
+  var LDtoMov := TLojaModelDtoReqCaixaCriarMovimento.Create;
+  LDtoMov.CodCaixa := FCaixa.CodCaixa;
+  LDtoMov.VrMov := 20.00;
+  LDtoMov.DscObs := '';
+
+  Assert.WillRaiseWithMessageRegex(
+    procedure begin
+      TLojaModelFactory.New.Caixa.CriarReforcoCaixa(LDtoMov);
+    end,
+    EHorseException,
+    'Você deverá informar uma observação para este tipo de movimento'
+  );
+
+  LDtoMov.Free;
+end;
+
 
 initialization
   TDUnitX.RegisterTestFixture(TLojaModelCaixaTest);
