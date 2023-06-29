@@ -283,6 +283,17 @@ begin
     .&Unit(Self.UnitName)
     .Error('O código de caixa informado é inválido');
 
+  var LCaixa := TLojaModelDaoFactory.New.Caixa
+    .Caixa
+    .ObterCaixaPorCodigo(AFechamento.CodCaixa);
+
+  if LCaixa = nil
+  then raise EHorseException.New
+    .Status(THTTPStatus.NotFound)
+    .&Unit(Self.UnitName)
+    .Error('O código de caixa informado não existe');
+  LCaixa.Free;
+
   var LResumo := ObterResumoCaixa(AFechamento.CodCaixa);
   try
     if LResumo.CodSit = sitFechado

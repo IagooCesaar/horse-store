@@ -96,6 +96,21 @@ type
     [Test]
     procedure Test_NaoObterMovimento_CaixaInexistente;
 
+    [Test]
+    procedure Test_NaoFecharCaixa_CaixaInvalido;
+
+    [Test]
+    procedure Test_NaoFecharCaixa_CaixaInexistente;
+
+    [Test]
+    procedure Test_NaoFecharCaixa_ValorNaoConfere;
+
+    [Test]
+    procedure Test_NaoFecharCaixa_CaixaFechado;
+
+    [Test]
+    procedure Test_FecharCaixa;
+
   end;
 
 implementation
@@ -324,6 +339,37 @@ begin
   LResumo.Free;
 end;
 
+procedure TLojaModelCaixaTest.Test_FecharCaixa;
+begin
+  var LResumo := TLojaModelFactory.New.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
+
+  var LFechamento := TLojaModelDtoReqCaixaFechamento.Create;
+  LFechamento.CodCaixa := FCaixa.CodCaixa;
+  LFechamento.MeiosPagto := TLojaModelDtoRespCaixaResumoCaixaMeioPagtoLista.Create;
+
+  for var LMeioPagto in LResumo.MeiosPagto
+  do begin
+    LFechamento.MeiosPagto.Get(LMeioPagto.CodMeioPagto).VrTotal :=
+      LResumo.MeiosPagto.Get(LMeioPagto.CodMeioPagto).VrTotal;
+  end;
+
+  var LCaixaFechado := TLojaModelFactory.New.Caixa.FechamentoCaixa(LFechamento);
+
+  Assert.AreEqual(sitFechado, LCaixaFechado.CodSit);
+
+  var LAbertura := TLojaModelDtoReqCaixaAbertura.Create;
+  LAbertura.DatAbert := Now;
+  LAbertura.VrAbert := LResumo.VrSaldo;
+
+  FCaixa.Free;
+  FCaixa := TLojaModelFactory.New.Caixa.AberturaCaixa(LAbertura);
+
+  LFechamento.Free;
+  LResumo.Free;
+  LCaixaFechado.Free;
+  LAbertura.Free;
+end;
+
 procedure TLojaModelCaixaTest.Test_NaoAbrirCaixa_ExiteCaixaAberto;
 begin
   var LAbertura := TLojaModelDtoReqCaixaAbertura.Create;
@@ -525,6 +571,93 @@ begin
   LDtoMov.Free;
 end;
 
+
+procedure TLojaModelCaixaTest.Test_NaoFecharCaixa_CaixaFechado;
+begin
+  var LResumo := TLojaModelFactory.New.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
+  var LCaixaFechado := TLojaModelDaoFactory.New.Caixa.Caixa.AtualizarFechamentoCaixa(
+    FCaixa.CodCaixa,
+    Now,
+    LResumo.VrSaldo
+  );
+
+  var LAbertura := TLojaModelDtoReqCaixaAbertura.Create;
+  LAbertura.DatAbert := Now;
+  LAbertura.VrAbert := LResumo.VrSaldo;
+
+  FCaixa.Free;
+  FCaixa := TLojaModelFactory.New.Caixa.AberturaCaixa(LAbertura);
+
+  var LFechamento := TLojaModelDtoReqCaixaFechamento.Create;
+  LFechamento.CodCaixa := LCaixaFechado.CodCaixa;
+
+  Assert.WillRaiseWithMessageRegex(
+    procedure begin
+      TLojaModelFactory.New.Caixa.FechamentoCaixa(LFechamento);
+    end,
+    EHorseException,
+    'Este caixa já se encontra fechado'
+  );
+
+  LFechamento.Free;
+  LResumo.Free;
+  LCaixaFechado.Free;
+  LAbertura.Free;
+end;
+
+procedure TLojaModelCaixaTest.Test_NaoFecharCaixa_CaixaInexistente;
+begin
+  var LFechamento := TLojaModelDtoReqCaixaFechamento.Create;
+  LFechamento.CodCaixa := FCaixa.CodCaixa + 1;
+
+  Assert.WillRaiseWithMessageRegex(
+    procedure begin
+      TLojaModelFactory.New.Caixa.FechamentoCaixa(LFechamento);
+    end,
+    EHorseException,
+    'O código de caixa informado não existe'
+  );
+
+  LFechamento.Free;
+end;
+
+procedure TLojaModelCaixaTest.Test_NaoFecharCaixa_CaixaInvalido;
+begin
+  var LFechamento := TLojaModelDtoReqCaixaFechamento.Create;
+  LFechamento.CodCaixa := - 1;
+
+  Assert.WillRaiseWithMessageRegex(
+    procedure begin
+      TLojaModelFactory.New.Caixa.FechamentoCaixa(LFechamento);
+    end,
+    EHorseException,
+    'O código de caixa informado é inválido'
+  );
+
+  LFechamento.Free;
+end;
+
+procedure TLojaModelCaixaTest.Test_NaoFecharCaixa_ValorNaoConfere;
+begin
+  var LResumo := TLojaModelFactory.New.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
+
+  var LFechamento := TLojaModelDtoReqCaixaFechamento.Create;
+  LFechamento.CodCaixa := FCaixa.CodCaixa;
+  LFechamento.MeiosPagto := TLojaModelDtoRespCaixaResumoCaixaMeioPagtoLista.Create;
+
+  LFechamento.MeiosPagto.Get(pagDinheiro).VrTotal := LResumo.MeiosPagto.Get(pagDinheiro).VrTotal + 1;
+
+  Assert.WillRaiseWithMessageRegex(
+    procedure begin
+      TLojaModelFactory.New.Caixa.FechamentoCaixa(LFechamento);
+    end,
+    EHorseException,
+    'não confere. Verifique novamente'
+  );
+
+  LFechamento.Free;
+  LResumo.Free;
+end;
 
 procedure TLojaModelCaixaTest.Test_NaoObterCaixa_Aberto;
 begin

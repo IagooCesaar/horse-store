@@ -198,6 +198,11 @@
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>script_limpa_db</ResourceId>
         </RcItem>
+        <RcItem Include="code_coverage.bat">
+            <ContainerId>ResourceItem</ContainerId>
+            <ResourceType>RCDATA</ResourceType>
+            <ResourceId>code_coverage_script</ResourceId>
+        </RcItem>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -242,6 +247,12 @@
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="boss.json" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win64">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="code_coverage.bat" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win64">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
