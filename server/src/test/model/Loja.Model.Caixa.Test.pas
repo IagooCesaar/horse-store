@@ -111,6 +111,15 @@ type
     [Test]
     procedure Test_FecharCaixa;
 
+    [Test]
+    procedure Test_CaixasAbertos;
+
+    [Test]
+    procedure Test_NaoObterCaixasAbertos_SemRegistros;
+
+    [Test]
+    procedure Test_NaoObterCaixasAbertos_DataInvalida;
+
   end;
 
 implementation
@@ -265,6 +274,19 @@ begin
   LMovimentos.Free;
 
   LCaixaFechado.Free;
+end;
+
+procedure TLojaModelCaixaTest.Test_CaixasAbertos;
+var LDatIni, LDatFim: TDate;
+begin
+  LDatIni := Trunc(Now-1);
+  LDatFim := Trunc(Now+1);
+
+  var LCaixas := TLojaModelFactory.New.Caixa.ObterCaixasPorDataAbertura(LDatIni, LDatFim);
+
+  Assert.IsTrue(LCaixas.Count>0);
+
+  LCaixas.Free;
 end;
 
 procedure TLojaModelCaixaTest.Test_CriarMovimento_ReforcoCaixa;
@@ -657,6 +679,34 @@ begin
 
   LFechamento.Free;
   LResumo.Free;
+end;
+
+procedure TLojaModelCaixaTest.Test_NaoObterCaixasAbertos_DataInvalida;
+var LDatIni, LDatFim: TDate;
+begin
+  LDatIni := Trunc(Now+1);
+  LDatFim := Trunc(Now-1);
+
+  Assert.WillRaiseWithMessageRegex(
+    procedure begin
+      TLojaModelFactory.New.Caixa.ObterCaixasPorDataAbertura(LDatIni, LDatFim);
+    end,
+    EHorseException,
+    'A data inicial deve ser inferior à data final em pelo menos 1 dia'
+  );
+end;
+
+procedure TLojaModelCaixaTest.Test_NaoObterCaixasAbertos_SemRegistros;
+var LDatIni, LDatFim: TDate;
+begin
+  LDatIni := Trunc(Now+1);
+  LDatFim := Trunc(Now+2);
+
+  var LCaixas := TLojaModelFactory.New.Caixa.ObterCaixasPorDataAbertura(LDatIni, LDatFim);
+
+  Assert.IsTrue(LCaixas.Count=0);
+
+  LCaixas.Free;
 end;
 
 procedure TLojaModelCaixaTest.Test_NaoObterCaixa_Aberto;
