@@ -18,7 +18,7 @@ type
     [SetupFixture]
     procedure SetupFixture;
 
-    //[Test]
+    [Test]
     procedure Test_AberturaDeCaixa;
 
     //[Test]
@@ -129,7 +129,26 @@ end;
 
 procedure TLojaControllerCaixaTest.Test_AberturaDeCaixa;
 begin
+  var LAbertura := TLojaModelDtoReqCaixaAbertura.Create;
+  LAbertura.VrAbert := 10.00;
 
+  var LResponse := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/abrir-caixa')
+    .AddBody(TJson.ObjectToClearJsonString(LAbertura))
+    .Post();
+
+  Assert.AreEqual(201, LResponse.StatusCode);
+
+  var LCaixa := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityCaixaCaixa>(LResponse.Content);
+
+  Assert.AreEqual(Double(LAbertura.VrAbert), Double(LCaixa.VrAbert));
+  Assert.AreEqual(sitAberto, LCaixa.CodSit);
+
+  LCaixa.Free;
+  LAbertura.Free;
 end;
 
 procedure TLojaControllerCaixaTest.Test_AberturaDeCaixa_NovaAbertura_ComReforco;
