@@ -31,6 +31,9 @@ type
     procedure Test_NaoAbrirCaixa_ExiteCaixaAberto;
 
     [Test]
+    procedure Test_NaoAbrirCaixa_SemBody;
+
+    [Test]
     procedure Test_AberturaDeCaixa_NovaAbertura_ComSangria;
 
     [Test]
@@ -85,6 +88,12 @@ type
     procedure Test_NaoCriarMovimento_SaldoInsuficiente;
 
     [Test]
+    procedure Test_NaoCriarMovimento_SangriaSemBody;
+
+    [Test]
+    procedure Test_NaoCriarMovimento_ReforcoSemBody;
+
+    [Test]
     procedure Test_ObterCaixa_PorCodigo;
 
     [Test]
@@ -93,7 +102,7 @@ type
     //[Test]
     procedure Test_NaoObterCaixa_CodigoInvalido;
 
-    //[Test]
+    [Test]
     procedure Test_NaoObterCaixa_CodigoInexistente;
 
     //[Test]
@@ -116,6 +125,9 @@ type
 
     //[Test]
     procedure Test_NaoFecharCaixa_CaixaFechado;
+
+    [Test]
+    procedure Test_NaoFecharCaixa_SemBody;
 
     //[Test]
     procedure Test_FecharCaixa;
@@ -526,6 +538,24 @@ begin
   LAbertura.Free;
 end;
 
+procedure TLojaControllerCaixaTest.Test_NaoAbrirCaixa_SemBody;
+begin
+  var LResponseMovimento := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/abrir-caixa')
+    .AddBody('')
+    .Post();
+
+  Assert.AreEqual(THTTPStatus.BadRequest, THTTPStatus(LResponseMovimento.StatusCode));
+
+  var LErro := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDTORespApiError>(LResponseMovimento.Content);
+
+  ASsert.AreEqual('O body não estava no formato esperado', LErro.error);
+  LErro.Free;
+end;
+
 procedure TLojaControllerCaixaTest.Test_NaoAbrirCaixa_ValorNegativo;
 begin
   var LAbertura := TLojaModelDtoReqCaixaAbertura.Create;
@@ -579,9 +609,47 @@ begin
 
 end;
 
+procedure TLojaControllerCaixaTest.Test_NaoCriarMovimento_ReforcoSemBody;
+begin
+  var LResponseMovimento := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/movimento/reforco')
+    .AddUrlSegment('cod_caixa', FCaixa.CodCaixa.ToString)
+    .AddBody('')
+    .Post();
+
+  Assert.AreEqual(THTTPStatus.BadRequest, THTTPStatus(LResponseMovimento.StatusCode));
+
+  var LErro := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDTORespApiError>(LResponseMovimento.Content);
+
+  Assert.AreEqual('O body não estava no formato esperado', LErro.error);
+  LErro.Free;
+end;
+
 procedure TLojaControllerCaixaTest.Test_NaoCriarMovimento_SaldoInsuficiente;
 begin
 
+end;
+
+procedure TLojaControllerCaixaTest.Test_NaoCriarMovimento_SangriaSemBody;
+begin
+  var LResponseMovimento := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/movimento/sangria')
+    .AddUrlSegment('cod_caixa', FCaixa.CodCaixa.ToString)
+    .AddBody('')
+    .Post();
+
+  Assert.AreEqual(THTTPStatus.BadRequest, THTTPStatus(LResponseMovimento.StatusCode));
+
+  var LErro := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDTORespApiError>(LResponseMovimento.Content);
+
+  ASsert.AreEqual('O body não estava no formato esperado', LErro.error);
+  LErro.Free;
 end;
 
 procedure TLojaControllerCaixaTest.Test_NaoCriarMovimento_SemObservacao;
@@ -602,6 +670,25 @@ end;
 procedure TLojaControllerCaixaTest.Test_NaoFecharCaixa_CaixaInvalido;
 begin
 
+end;
+
+procedure TLojaControllerCaixaTest.Test_NaoFecharCaixa_SemBody;
+begin
+  var LResponseMovimento := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/fechar-caixa')
+    .AddUrlSegment('cod_caixa', FCaixa.CodCaixa.ToString)
+    .AddBody('')
+    .Patch();
+
+  Assert.AreEqual(THTTPStatus.BadRequest, THTTPStatus(LResponseMovimento.StatusCode), LResponseMovimento.StatusText);
+
+  var LErro := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDTORespApiError>(LResponseMovimento.Content);
+
+  Assert.AreEqual('O body não estava no formato esperado', LErro.error);
+  LErro.Free;
 end;
 
 procedure TLojaControllerCaixaTest.Test_NaoFecharCaixa_ValorNaoConfere;
@@ -656,7 +743,14 @@ end;
 
 procedure TLojaControllerCaixaTest.Test_NaoObterCaixa_CodigoInexistente;
 begin
+  var LResponse := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}')
+    .AddUrlSegment('cod_caixa', (FCaixa.CodCaixa + 10).ToString)
+    .Get();
 
+  Assert.AreEqual(THttpStatus.NoContent, THttpStatus(LResponse.StatusCode));
 end;
 
 procedure TLojaControllerCaixaTest.Test_NaoObterCaixa_CodigoInvalido;
