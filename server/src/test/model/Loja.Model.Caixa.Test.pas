@@ -49,6 +49,9 @@ type
     procedure Test_CriarMovimento_SangriaCaixa;
 
     [Test]
+    procedure Test_CriarMovimento_SangriaCaixa_Total;
+
+    [Test]
     procedure Test_NaoCriarMovimento_CaixaInvalido;
 
     [Test]
@@ -65,6 +68,24 @@ type
 
     [Test]
     procedure Test_NaoCriarMovimento_ObservacaoGrande;
+
+    [Test]
+    procedure Test_NaoCriarMovimento_MovimentoNegativo;
+
+    [Test]
+    procedure Test_NaoCriarMovimento_SaldoInsuficiente;
+
+    [Test]
+    procedure Test_ObterCaixa_PorCodigo;
+
+    [Test]
+    procedure Test_ObterCaixa_Aberto;
+
+    [Test]
+    procedure Test_NaoObterCaixa_CodigoInvalido;
+
+    [Test]
+    procedure Test_NaoObterCaixa_CodigoInexistente;
 
   end;
 
@@ -265,6 +286,35 @@ begin
   LMovimento.Free;
 end;
 
+procedure TLojaModelCaixaTest.Test_CriarMovimento_SangriaCaixa_Total;
+begin
+  var LResumo := TLojaModelFactory.New.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
+  var VrSaldo := LResumo.VrSaldo;
+  LResumo.Free;
+
+  if VrSaldo = 0
+  then raise Exception.Create('Saldo igual a zero');
+
+  var LDtoMov := TLojaModelDtoReqCaixaCriarMovimento.Create;
+  LDtoMov.CodCaixa := FCaixa.CodCaixa;
+  LDtoMov.VrMov := VrSaldo;
+  LDtoMov.DscObs := 'Sangria de Caixa';
+
+  var LMovimento := TLojaModelFactory.New.Caixa.CriarSangriaCaixa(LDtoMov);
+
+  Assert.IsTrue(LMovimento.CodTipoMov = movSaida);
+  Assert.IsTrue(LMovimento.CodOrigMov = orgSangria);
+  Assert.IsTrue(LMovimento.CodMeioPagto = pagDinheiro);
+  Assert.AreEqual(Double(LDtoMov.VrMov), Double(LMovimento.VrMov));
+
+  LResumo := TLojaModelFactory.New.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
+  Assert.AreEqual(Double(0), Double(LResumo.VrSaldo));
+
+  LDtoMov.Free;
+  LMovimento.Free;
+  LResumo.Free;
+end;
+
 procedure TLojaModelCaixaTest.Test_NaoAbrirCaixa_ExiteCaixaAberto;
 begin
   var LAbertura := TLojaModelDtoReqCaixaAbertura.Create;
@@ -373,6 +423,24 @@ begin
   LDtoMov.Free;
 end;
 
+procedure TLojaModelCaixaTest.Test_NaoCriarMovimento_MovimentoNegativo;
+begin
+  var LDtoMov := TLojaModelDtoReqCaixaCriarMovimento.Create;
+  LDtoMov.CodCaixa := FCaixa.CodCaixa;
+  LDtoMov.VrMov := -20.00;
+  LDtoMov.DscObs := 'Valor negativo';
+
+  Assert.WillRaiseWithMessageRegex(
+    procedure begin
+      TLojaModelFactory.New.Caixa.CriarSangriaCaixa(LDtoMov);
+    end,
+    EHorseException,
+    'O valor do movimento deverá ser superior a zero'
+  );
+
+  LDtoMov.Free;
+end;
+
 procedure TLojaModelCaixaTest.Test_NaoCriarMovimento_ObservacaoGrande;
 begin
   var LDtoMov := TLojaModelDtoReqCaixaCriarMovimento.Create;
@@ -409,6 +477,27 @@ begin
   LDtoMov.Free;
 end;
 
+procedure TLojaModelCaixaTest.Test_NaoCriarMovimento_SaldoInsuficiente;
+begin
+  var LDtoMov := TLojaModelDtoReqCaixaCriarMovimento.Create;
+  LDtoMov.CodCaixa := FCaixa.CodCaixa;
+  LDtoMov.DscObs := 'Saldo Insuficiente';
+
+  var LResumo := TLojaModelFactory.New.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
+  LDtoMov.VrMov := LResumo.VrSaldo + 1;
+  LResumo.Free;
+
+  Assert.WillRaiseWithMessageRegex(
+    procedure begin
+      TLojaModelFactory.New.Caixa.CriarSangriaCaixa(LDtoMov);
+    end,
+    EHorseException,
+    'Não há saldo disponível em dinheiro para realizar este tipo de movimento'
+  );
+
+  LDtoMov.Free;
+end;
+
 procedure TLojaModelCaixaTest.Test_NaoCriarMovimento_SemObservacao;
 begin
   var LDtoMov := TLojaModelDtoReqCaixaCriarMovimento.Create;
@@ -427,6 +516,37 @@ begin
   LDtoMov.Free;
 end;
 
+
+procedure TLojaModelCaixaTest.Test_NaoObterCaixa_CodigoInexistente;
+begin
+  var LCaixa := TLojaModelFactory.New.Caixa.ObterCaixaPorCodigo(FCaixa.CodCaixa+1);
+  Assert.IsNull(LCaixa);
+end;
+
+procedure TLojaModelCaixaTest.Test_NaoObterCaixa_CodigoInvalido;
+begin
+  Assert.WillRaiseWithMessageRegex(
+    procedure begin
+      TLojaModelFactory.New.Caixa.ObterCaixaPorCodigo(-1);
+    end,
+    EHorseException,
+    'O código de caixa informado é inválido'
+  );
+end;
+
+procedure TLojaModelCaixaTest.Test_ObterCaixa_Aberto;
+begin
+  var LCaixa := TLojaModelFactory.New.Caixa.ObterCaixaAberto;
+  Assert.IsTrue(LCaixa <> nil);
+  LCaixa.Free;
+end;
+
+procedure TLojaModelCaixaTest.Test_ObterCaixa_PorCodigo;
+begin
+  var LCaixa := TLojaModelFactory.New.Caixa.ObterCaixaPorCodigo(FCaixa.CodCaixa);
+  Assert.AreEqual(FCaixa.CodCaixa, LCaixa.CodCaixa);
+  LCaixa.Free;
+end;
 
 initialization
   TDUnitX.RegisterTestFixture(TLojaModelCaixaTest);
