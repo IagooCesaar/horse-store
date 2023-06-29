@@ -353,6 +353,12 @@ end;
 function TLojaModelCaixa.ObterCaixasPorDataAbertura(ADatIni,
   ADatFim: TDate): TLojaModelEntityCaixaCaixaLista;
 begin
+  if ADatIni > ADatFim
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('A data inicial deve ser inferior à data final em pelo menos 1 dia');
+
   Result := TLojaModelDaoFactory.New.Caixa
     .Caixa
     .ObterCaixasPorDataAbertura(ADatIni, ADatFim);
