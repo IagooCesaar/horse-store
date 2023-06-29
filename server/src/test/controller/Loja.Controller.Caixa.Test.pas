@@ -54,6 +54,12 @@ type
     [Test]
     procedure Test_CaixasAbertos;
 
+    [Test]
+    procedure Test_NaoObterCaixasAbertos_SemRegistros;
+
+    [Test]
+    procedure Test_NaoObterCaixasAbertos_DataInvalida;
+
     //[Test]
     procedure Test_NaoCriarMovimento_CaixaInvalido;
 
@@ -601,6 +607,46 @@ end;
 procedure TLojaControllerCaixaTest.Test_NaoFecharCaixa_ValorNaoConfere;
 begin
 
+end;
+
+procedure TLojaControllerCaixaTest.Test_NaoObterCaixasAbertos_DataInvalida;
+var LDatIni, LDatFim: TDate;
+begin
+  LDatIni := Trunc(Now+1);
+  LDatFim := Trunc(Now-1);
+
+  var LResponse := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa')
+    .AddParam('dat_ini', FormatDateTime('yyyy-mm-dd', LDatIni))
+    .AddParam('dat_fim', FormatDateTime('yyyy-mm-dd', LDatFim))
+    .Get();
+
+  Assert.AreEqual(THTTPStatus.BadRequest, THTTPStatus(LResponse.StatusCode));
+
+  var LErro := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDTORespApiError>(LResponse.Content);
+
+  Assert.AreEqual('A data inicial deve ser inferior à data final em pelo menos 1 dia', LErro.error);
+  LErro.Free;
+end;
+
+procedure TLojaControllerCaixaTest.Test_NaoObterCaixasAbertos_SemRegistros;
+var LDatIni, LDatFim: TDate;
+begin
+  LDatIni := Trunc(Now+1);
+  LDatFim := Trunc(Now+2);
+
+  var LResponse := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa')
+    .AddParam('dat_ini', FormatDateTime('yyyy-mm-dd', LDatIni))
+    .AddParam('dat_fim', FormatDateTime('yyyy-mm-dd', LDatFim))
+    .Get();
+
+  Assert.AreEqual(THTTPStatus.NoContent, THTTPStatus(LResponse.StatusCode));
 end;
 
 procedure TLojaControllerCaixaTest.Test_NaoObterCaixa_Aberto;
