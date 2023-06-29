@@ -329,12 +329,38 @@ end;
 
 procedure TLojaModelCaixaTest.Test_NaoCriarMovimento_CaixaInexistente;
 begin
+  var LDtoMov := TLojaModelDtoReqCaixaCriarMovimento.Create;
+  LDtoMov.CodCaixa := FCaixa.CodCaixa * 10;
+  LDtoMov.VrMov := 20.00;
+  LDtoMov.DscObs := 'Teste Caixa Invalido';
 
+  Assert.WillRaiseWithMessageRegex(
+    procedure begin
+      TLojaModelFactory.New.Caixa.CriarReforcoCaixa(LDtoMov);
+    end,
+    EHorseException,
+    'O código de caixa informado não existe'
+  );
+
+  LDtoMov.Free;
 end;
 
 procedure TLojaModelCaixaTest.Test_NaoCriarMovimento_CaixaInvalido;
 begin
+  var LDtoMov := TLojaModelDtoReqCaixaCriarMovimento.Create;
+  LDtoMov.CodCaixa := -1;
+  LDtoMov.VrMov := 20.00;
+  LDtoMov.DscObs := 'Teste Caixa Invalido';
 
+  Assert.WillRaiseWithMessageRegex(
+    procedure begin
+      TLojaModelFactory.New.Caixa.CriarReforcoCaixa(LDtoMov);
+    end,
+    EHorseException,
+    'O código de caixa informado é inválido'
+  );
+
+  LDtoMov.Free;
 end;
 
 initialization
