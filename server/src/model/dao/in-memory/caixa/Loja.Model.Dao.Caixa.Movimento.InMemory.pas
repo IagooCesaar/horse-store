@@ -71,7 +71,7 @@ begin
   FRepository.Last.DatMov := ANovoMovimento.DatMov;
   FRepository.Last.DscObs := ANovoMovimento.DscObs;
 
-  Result := Clone(FRepository.Last);
+  Result := ObterMovimentoPorCodigo(LId);
 end;
 
 destructor TLojaModelDaoCaixaMovimentoInMemory.Destroy;
