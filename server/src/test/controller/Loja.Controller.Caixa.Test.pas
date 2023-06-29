@@ -51,6 +51,9 @@ type
     [Test]
     procedure Test_ObterResumo;
 
+    [Test]
+    procedure Test_CaixasAbertos;
+
     //[Test]
     procedure Test_NaoCriarMovimento_CaixaInvalido;
 
@@ -75,10 +78,10 @@ type
     //[Test]
     procedure Test_NaoCriarMovimento_SaldoInsuficiente;
 
-    //[Test]
+    [Test]
     procedure Test_ObterCaixa_PorCodigo;
 
-    //[Test]
+    [Test]
     procedure Test_ObterCaixa_Aberto;
 
     //[Test]
@@ -327,6 +330,30 @@ begin
   LResumo.Free;
   LFechamento.Free;
   LMovimentos.Free;
+end;
+
+procedure TLojaControllerCaixaTest.Test_CaixasAbertos;
+var LDatIni, LDatFim: TDate;
+begin
+  LDatIni := Trunc(Now-1);
+  LDatFim := Trunc(Now+1);
+
+  var LResponse := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa')
+    .AddParam('dat_ini', FormatDateTime('yyyy-mm-dd', LDatIni))
+    .AddParam('dat_fim', FormatDateTime('yyyy-mm-dd', LDatFim))
+    .Get();
+
+  Assert.AreEqual(THTTPStatus.Ok, THTTPStatus(LResponse.StatusCode));
+
+  var LCaixas := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityCaixaCaixaLista>(LResponse.Content);
+
+  Assert.IsTrue(LCaixas.Count > 0);
+
+  LCaixas.Free;
 end;
 
 procedure TLojaControllerCaixaTest.Test_CriarMovimento_ReforcoCaixa;
@@ -603,12 +630,27 @@ end;
 
 procedure TLojaControllerCaixaTest.Test_ObterCaixa_Aberto;
 begin
+  var LResponseAberto := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/caixa-aberto')
+    .Get();
+
+  Assert.AreEqual(THttpStatus.Ok, THttpStatus(LResponseAberto.StatusCode));
+
 
 end;
 
 procedure TLojaControllerCaixaTest.Test_ObterCaixa_PorCodigo;
 begin
+  var LResponse := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}')
+    .AddUrlSegment('cod_caixa', FCaixa.CodCaixa.ToString)
+    .Get();
 
+  Assert.AreEqual(THttpStatus.Ok, THttpStatus(LResponse.StatusCode));
 end;
 
 procedure TLojaControllerCaixaTest.Test_ObterMovimentos;
