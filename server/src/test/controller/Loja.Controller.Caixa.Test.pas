@@ -45,6 +45,12 @@ type
     [Test]
     procedure Test_CriarMovimento_SangriaCaixa_Total;
 
+    [Test]
+    procedure Test_ObterMovimentos;
+
+    [Test]
+    procedure Test_ObterResumo;
+
     //[Test]
     procedure Test_NaoCriarMovimento_CaixaInvalido;
 
@@ -451,13 +457,12 @@ begin
 
   LResumo := TJson.ClearJsonAndConvertToObject
     <TLojaModelDtoRespCaixaResumoCaixa>(LResponseResumo.Content);
-  VrSaldo := LResumo.VrSaldo;
-  LResumo.Free;
 
   Assert.AreEqual(Double(0), Double(LResumo.VrSaldo));
 
   LMovimento.Free;
   LDtoMov.Free;
+  LResumo.Free;
 end;
 
 procedure TLojaControllerCaixaTest.Test_FecharCaixa;
@@ -604,6 +609,66 @@ end;
 procedure TLojaControllerCaixaTest.Test_ObterCaixa_PorCodigo;
 begin
 
+end;
+
+procedure TLojaControllerCaixaTest.Test_ObterMovimentos;
+begin
+  var LResponseMovimentos := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/movimento')
+    .AddUrlSegment('cod_caixa', FCaixa.CodCaixa.ToString)
+    .Get();
+
+  Assert.AreEqual(THttpStatus.Ok, THttpStatus(LResponseMovimentos.StatusCode));
+
+  var LMovimentos := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityCaixaMovimentoLista>(LResponseMovimentos.Content);
+
+  Assert.IsTrue(LMovimentos.Count > 0);
+
+  LMovimentos.Free;
+end;
+
+procedure TLojaControllerCaixaTest.Test_ObterResumo;
+begin
+  var LDtoMov := TLojaModelDtoReqCaixaCriarMovimento.Create;
+  for var I := 1 to 5
+  do begin
+    LDtoMov.CodCaixa := FCaixa.CodCaixa;
+    LDtoMov.VrMov := 10.00 * I;
+    LDtoMov.DscObs := 'Reforço de Caixa '+I.ToString;
+
+    var LResponseMovimento := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/caixa/{cod_caixa}/movimento/reforco')
+      .AddUrlSegment('cod_caixa', FCaixa.CodCaixa.ToString)
+      .AddBody(TJson.ObjectToClearJsonString(LDtoMov))
+      .Post();
+
+    Assert.AreEqual(THTTPStatus.Created, THTTPStatus(LResponseMovimento.StatusCode));
+  end;
+
+  var LResponseResumo := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/resumo')
+    .AddUrlSegment('cod_caixa', FCaixa.CodCaixa.ToString)
+    .Get();
+
+  Assert.AreEqual(THTTPStatus.OK, THTTPStatus(LResponseResumo.StatusCode));
+
+  var LResumo := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDtoRespCaixaResumoCaixa>(LResponseResumo.Content);
+
+  Assert.IsTrue(LResumo.VrSaldo > 0);
+  Assert.AreEqual(
+    Integer(High(TLojaModelEntityCaixaMeioPagamento))+1,
+    LResumo.MeiosPagto.Count);
+
+  LResumo.Free;
+  LDtoMov.Free;
 end;
 
 initialization
