@@ -79,8 +79,12 @@ begin
     .AddBasicSecurity.&End
     .Register
       .Response(Integer(THTTPStatus.NoContent)).Description('No Content').&End
-      .Response(Integer(THTTPStatus.BadRequest)).Description('Bad Request').Schema(TLojaModelDTORespApiError).&End
-      .Response(Integer(THTTPStatus.NotFound)).Description('Not Found').&End
+      .Response(Integer(THTTPStatus.BadRequest)).Description('Bad Request')
+        .Schema(TLojaModelDTORespApiError)
+        .&End
+      .Response(Integer(THTTPStatus.NotFound)).Description('Not Found')
+        .Schema(TLojaModelDTORespApiError)
+        .&End
       .Response(Integer(THTTPStatus.InternalServerError)).Description('Internal Server Error').&End
     .&End
     .AddProtocol(TGBSwaggerProtocol.gbHttp)

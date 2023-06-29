@@ -97,6 +97,8 @@ begin
         LMovAbert.DatMov := Now;
         LMovAbert.DscObs := 'Saldo fechamento do caixa anterior';
         LMovAbert.CodMeioPagto := pagDinheiro;
+        LMovAbert.CodTipoMov := movEntrada;
+        LMovAbert.CodOrigMov := orgReforco;
         LMovAbert.VrMov := LUltFechado.VrFecha;
 
         var LMov1 := CriarMovimentoCaixa(LMovAbert);

@@ -14,20 +14,23 @@ type
   TLojaControllerCaixaTest = class
   private
     FBaseURL, FUsarname, FPassword: String;
+    FCaixa: TLojaModelEntityCaixaCaixa;
   public
     [SetupFixture]
     procedure SetupFixture;
+    [TearDownFixture]
+    procedure TearDownFixture;
 
     [Test]
     procedure Test_AberturaDeCaixa;
 
-    //[Test]
+    [Test]
     procedure Test_NaoAbrirCaixa_ValorNegativo;
 
-    //[Test]
+    [Test]
     procedure Test_NaoAbrirCaixa_ExiteCaixaAberto;
 
-    //[Test]
+    [Test]
     procedure Test_AberturaDeCaixa_NovaAbertura_ComSangria;
 
     //[Test]
@@ -106,11 +109,13 @@ type
 implementation
 
 uses
+  System.SysUtils,
   RESTRequest4D,
   Horse,
   Horse.JsonInterceptor.Helpers,
 
   Loja.Controller.Api.Test,
+  Loja.Model.Dto.Resp.ApiError,
 
   Loja.Model.Dto.Req.Caixa.Abertura,
   Loja.Model.Dto.Req.Caixa.Fechamento,
@@ -127,6 +132,12 @@ begin
   FPassword := TLojaControllerApiTest.GetInstance.Password;
 end;
 
+procedure TLojaControllerCaixaTest.TearDownFixture;
+begin
+  if FCaixa <> nil
+  then FreeAndNil(FCaixa);
+end;
+
 procedure TLojaControllerCaixaTest.Test_AberturaDeCaixa;
 begin
   var LAbertura := TLojaModelDtoReqCaixaAbertura.Create;
@@ -139,15 +150,14 @@ begin
     .AddBody(TJson.ObjectToClearJsonString(LAbertura))
     .Post();
 
-  Assert.AreEqual(201, LResponse.StatusCode);
+  Assert.AreEqual(THttpStatus.Created, THttpStatus(LResponse.StatusCode));
 
-  var LCaixa := TJson.ClearJsonAndConvertToObject
+  FCaixa := TJson.ClearJsonAndConvertToObject
     <TLojaModelEntityCaixaCaixa>(LResponse.Content);
 
-  Assert.AreEqual(Double(LAbertura.VrAbert), Double(LCaixa.VrAbert));
-  Assert.AreEqual(sitAberto, LCaixa.CodSit);
+  Assert.AreEqual(Double(LAbertura.VrAbert), Double(FCaixa.VrAbert));
+  Assert.AreEqual(sitAberto, FCaixa.CodSit);
 
-  LCaixa.Free;
   LAbertura.Free;
 end;
 
@@ -158,7 +168,83 @@ end;
 
 procedure TLojaControllerCaixaTest.Test_AberturaDeCaixa_NovaAbertura_ComSangria;
 begin
+  // Obtêm resumo do caixa atual
+  var LResponseResumo := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/resumo')
+    .AddUrlSegment('cod_caixa', FCaixa.CodCaixa.ToString)
+    .Get();
 
+  Assert.AreEqual(THTTPStatus.OK, THTTPStatus(LResponseResumo.StatusCode));
+
+  var LResumo := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDtoRespCaixaResumoCaixa>(LResponseResumo.Content);
+
+  var VrFecha := LResumo.VrSaldo;
+  var VrDif := 2.00;
+
+  //Realiza fechamento do caixa atual para abrir um novo
+  var LFechamento := TLojaModelDtoReqCaixaFechamento.Create;
+  LFechamento.MeiosPagto := TLojaModelDtoRespCaixaResumoCaixaMeioPagtoLista.Create;
+
+  for var LMeioPagto in LResumo.MeiosPagto
+  do begin
+    LFechamento.MeiosPagto.Get(LMeioPagto.CodMeioPagto).VrTotal :=
+      LMeioPagto.VrTotal;
+  end;
+
+  var LResponseFecharCaixa := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/fechar-caixa')
+    .AddUrlSegment('cod_caixa', FCaixa.CodCaixa.ToString)
+    .AddBody(TJson.ObjectToClearJsonString(LFechamento))
+    .Patch();
+
+  Assert.AreEqual(THTTPStatus.OK, THTTPStatus(LResponseFecharCaixa.StatusCode), LResponseFecharCaixa.StatusText);
+
+  //Prepara nova abertura
+  var LAbertura := TLojaModelDtoReqCaixaAbertura.Create;
+  LAbertura.VrAbert := VrFecha - VrDif;
+
+  var LResponseAbertura := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/abrir-caixa')
+    .AddBody(TJson.ObjectToClearJsonString(LAbertura))
+    .Post();
+
+  Assert.AreEqual(THttpStatus.Created, THttpStatus(LResponseAbertura.StatusCode));
+
+  FCaixa.Free;
+  FCaixa := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityCaixaCaixa>(LResponseAbertura.Content);
+
+  Assert.AreEqual(Double(LAbertura.VrAbert), Double(FCaixa.VrAbert));
+  Assert.AreEqual(sitAberto, FCaixa.CodSit);
+
+  var LResponseMovimentos := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/movimento')
+    .AddUrlSegment('cod_caixa', FCaixa.CodCaixa.ToString)
+    .Get();
+
+  Assert.AreEqual(THttpStatus.Ok, THttpStatus(LResponseMovimentos.StatusCode));
+
+  var LMovimentos := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityCaixaMovimentoLista>(LResponseMovimentos.Content);
+
+  Assert.AreEqual(2, LMovimentos.Count);
+  Assert.AreEqual(Double(VrDif), Double(LMovimentos[1].VrMov));
+  Assert.IsTrue(LMovimentos[1].CodTipoMov = movSaida);
+  Assert.IsTrue(LMovimentos[1].CodOrigMov = orgSangria);
+
+  LAbertura.Free;
+  LResumo.Free;
+  LFechamento.Free;
+  LMovimentos.Free;
 end;
 
 procedure TLojaControllerCaixaTest.Test_CriarMovimento_ReforcoCaixa;
@@ -183,12 +269,48 @@ end;
 
 procedure TLojaControllerCaixaTest.Test_NaoAbrirCaixa_ExiteCaixaAberto;
 begin
+  var LAbertura := TLojaModelDtoReqCaixaAbertura.Create;
+  LAbertura.VrAbert := 11;
 
+  var LResponse := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/abrir-caixa')
+    .AddBody(TJson.ObjectToClearJsonString(LAbertura))
+    .Post();
+
+  Assert.AreEqual(THTTPStatus.PreconditionFailed, THTTPStatus(LResponse.StatusCode));
+
+  var LError := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDTORespApiError>(LResponse.Content);
+
+  Assert.StartsWith('Há um caixa aberto', LError.error);
+
+  LError.Free;
+  LAbertura.Free;
 end;
 
 procedure TLojaControllerCaixaTest.Test_NaoAbrirCaixa_ValorNegativo;
 begin
+  var LAbertura := TLojaModelDtoReqCaixaAbertura.Create;
+  LAbertura.VrAbert := -1;
 
+  var LResponse := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/abrir-caixa')
+    .AddBody(TJson.ObjectToClearJsonString(LAbertura))
+    .Post();
+
+  Assert.AreEqual(THTTPStatus.BadRequest, THTTPStatus(LResponse.StatusCode));
+
+  var LError := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDTORespApiError>(LResponse.Content);
+
+  Assert.AreEqual('O caixa não poderá ser aberto com valor negativo', LError.error);
+
+  LError.Free;
+  LAbertura.Free;
 end;
 
 procedure TLojaControllerCaixaTest.Test_NaoCriarMovimento_CaixaFechado;

@@ -165,7 +165,7 @@ begin
   try
     LDto.CodCaixa := LCodCaixa;
     var LMovimento := TLojaModelFactory.New.Caixa.FechamentoCaixa(LDto);
-    Resp.Status(THttpStatus.Created).Send(TJson.ObjectToClearJsonValue(LMovimento));
+    Resp.Status(THttpStatus.Ok).Send(TJson.ObjectToClearJsonValue(LMovimento));
     LMovimento.Free;
   finally
     LDto.Free;
