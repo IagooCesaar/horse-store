@@ -33,7 +33,7 @@ type
     [Test]
     procedure Test_AberturaDeCaixa_NovaAbertura_ComSangria;
 
-    //[Test]
+    [Test]
     procedure Test_AberturaDeCaixa_NovaAbertura_ComReforco;
 
     //[Test]
@@ -163,7 +163,83 @@ end;
 
 procedure TLojaControllerCaixaTest.Test_AberturaDeCaixa_NovaAbertura_ComReforco;
 begin
+  // Obtêm resumo do caixa atual
+  var LResponseResumo := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/resumo')
+    .AddUrlSegment('cod_caixa', FCaixa.CodCaixa.ToString)
+    .Get();
 
+  Assert.AreEqual(THTTPStatus.OK, THTTPStatus(LResponseResumo.StatusCode));
+
+  var LResumo := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDtoRespCaixaResumoCaixa>(LResponseResumo.Content);
+
+  var VrFecha := LResumo.VrSaldo;
+  var VrDif := 4.00;
+
+  //Realiza fechamento do caixa atual para abrir um novo
+  var LFechamento := TLojaModelDtoReqCaixaFechamento.Create;
+  LFechamento.MeiosPagto := TLojaModelDtoRespCaixaResumoCaixaMeioPagtoLista.Create;
+
+  for var LMeioPagto in LResumo.MeiosPagto
+  do begin
+    LFechamento.MeiosPagto.Get(LMeioPagto.CodMeioPagto).VrTotal :=
+      LMeioPagto.VrTotal;
+  end;
+
+  var LResponseFecharCaixa := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/fechar-caixa')
+    .AddUrlSegment('cod_caixa', FCaixa.CodCaixa.ToString)
+    .AddBody(TJson.ObjectToClearJsonString(LFechamento))
+    .Patch();
+
+  Assert.AreEqual(THTTPStatus.OK, THTTPStatus(LResponseFecharCaixa.StatusCode), LResponseFecharCaixa.StatusText);
+
+  //Prepara nova abertura
+  var LAbertura := TLojaModelDtoReqCaixaAbertura.Create;
+  LAbertura.VrAbert := VrFecha + VrDif;
+
+  var LResponseAbertura := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/abrir-caixa')
+    .AddBody(TJson.ObjectToClearJsonString(LAbertura))
+    .Post();
+
+  Assert.AreEqual(THttpStatus.Created, THttpStatus(LResponseAbertura.StatusCode));
+
+  FCaixa.Free;
+  FCaixa := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityCaixaCaixa>(LResponseAbertura.Content);
+
+  Assert.AreEqual(Double(LAbertura.VrAbert), Double(FCaixa.VrAbert));
+  Assert.AreEqual(sitAberto, FCaixa.CodSit);
+
+  var LResponseMovimentos := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/movimento')
+    .AddUrlSegment('cod_caixa', FCaixa.CodCaixa.ToString)
+    .Get();
+
+  Assert.AreEqual(THttpStatus.Ok, THttpStatus(LResponseMovimentos.StatusCode));
+
+  var LMovimentos := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityCaixaMovimentoLista>(LResponseMovimentos.Content);
+
+  Assert.AreEqual(2, LMovimentos.Count);
+  Assert.AreEqual(Double(VrDif), Double(LMovimentos[1].VrMov));
+  Assert.IsTrue(LMovimentos[1].CodTipoMov = movEntrada);
+  Assert.IsTrue(LMovimentos[1].CodOrigMov = orgReforco);
+
+  LAbertura.Free;
+  LResumo.Free;
+  LFechamento.Free;
+  LMovimentos.Free;
 end;
 
 procedure TLojaControllerCaixaTest.Test_AberturaDeCaixa_NovaAbertura_ComSangria;
