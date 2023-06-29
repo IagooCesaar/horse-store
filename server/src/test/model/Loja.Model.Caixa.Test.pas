@@ -87,6 +87,15 @@ type
     [Test]
     procedure Test_NaoObterCaixa_CodigoInexistente;
 
+    [Test]
+    procedure Test_NaoObterCaixa_Aberto;
+
+    [Test]
+    procedure Test_NaoObterMovimento_CaixaInvalido;
+
+    [Test]
+    procedure Test_NaoObterMovimento_CaixaInexistente;
+
   end;
 
 implementation
@@ -517,6 +526,32 @@ begin
 end;
 
 
+procedure TLojaModelCaixaTest.Test_NaoObterCaixa_Aberto;
+begin
+  var LResumo := TLojaModelFactory.New.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
+  var VrFecha := LResumo.VrSaldo;
+  LResumo.Free;
+
+  var LCaixaFechado := TLojaModelDaoFactory.New.Caixa.Caixa.AtualizarFechamentoCaixa(
+    FCaixa.CodCaixa,
+    Now,
+    VrFecha
+  );
+  LCaixaFechado.Free;
+
+  // Não haverá caixa aberto
+  var LCaixa := TLojaModelFactory.New.Caixa.ObterCaixaAberto;
+  Assert.IsNull(LCaixa);
+
+  var LAbertura := TLojaModelDtoReqCaixaAbertura.Create;
+  LAbertura.DatAbert := Now;
+  LAbertura.VrAbert := VrFecha;
+
+  FCaixa.Free;
+  FCaixa := TLojaModelFactory.New.Caixa.AberturaCaixa(LAbertura);
+  LAbertura.Free;
+end;
+
 procedure TLojaModelCaixaTest.Test_NaoObterCaixa_CodigoInexistente;
 begin
   var LCaixa := TLojaModelFactory.New.Caixa.ObterCaixaPorCodigo(FCaixa.CodCaixa+1);
@@ -546,6 +581,28 @@ begin
   var LCaixa := TLojaModelFactory.New.Caixa.ObterCaixaPorCodigo(FCaixa.CodCaixa);
   Assert.AreEqual(FCaixa.CodCaixa, LCaixa.CodCaixa);
   LCaixa.Free;
+end;
+
+procedure TLojaModelCaixaTest.Test_NaoObterMovimento_CaixaInexistente;
+begin
+  Assert.WillRaiseWithMessageRegex(
+    procedure begin
+      TLojaModelFactory.New.Caixa.ObterMovimentoCaixa(FCaixa.CodCaixa+1);
+    end,
+    EHorseException,
+    'O código de caixa informado não existe'
+  );
+end;
+
+procedure TLojaModelCaixaTest.Test_NaoObterMovimento_CaixaInvalido;
+begin
+  Assert.WillRaiseWithMessageRegex(
+    procedure begin
+      TLojaModelFactory.New.Caixa.ObterMovimentoCaixa(-1);
+    end,
+    EHorseException,
+    'O código de caixa informado é inválido'
+  );
 end;
 
 initialization
