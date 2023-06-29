@@ -25,6 +25,8 @@ type
     { ILojaModelDaoCaixaCaixa }
     function ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
     function ObterCaixaPorCodigo(ACodCaixa: Integer): TLojaModelEntityCaixaCaixa;
+    function ObterCaixasPorDataAbertura(ADatIni, ADatFim: TDate): TLojaModelEntityCaixaCaixaLista;
+
     function ObterUltimoCaixaFechado(ADatRef: TDateTime): TLojaModelEntityCaixaCaixa;
     function CriarNovoCaixa(ANovoCaixa: TLojaModelDtoReqCaixaAbertura): TLojaModelEntityCaixaCaixa;
     function AtualizarFechamentoCaixa(ACodCaixa: Integer; ADatFecha: TDateTime;
@@ -154,6 +156,30 @@ begin
   then Exit;
 
   Result := AtribuiCampos(ds);
+end;
+
+function TLojaModelDaoCaixaCaixa.ObterCaixasPorDataAbertura(ADatIni,
+  ADatFim: TDate): TLojaModelEntityCaixaCaixaLista;
+begin
+  Result := TLojaModelEntityCaixaCaixaLista.Create;
+  var LSql := #13#10
+  + 'select * from caixa c '
+  + 'where cast(c.dat_abert as date) between :dat_ini and :dat_fim '
+  ;
+
+  var ds := TDatabaseFactory.New.SQL
+    .SQL(LSql)
+    .ParamList
+      .AddDateTime('dat_ini', ADatIni)
+      .AddDateTime('dat_fim', ADatFim)
+      .&End
+    .Open;
+
+  while not ds.Eof
+  do begin
+    Result.Add(AtribuiCampos(ds));
+    ds.Next;
+  end;
 end;
 
 function TLojaModelDaoCaixaCaixa.ObterUltimoCaixaFechado(

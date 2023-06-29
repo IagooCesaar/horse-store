@@ -28,7 +28,26 @@ uses
 
 procedure GetCaixas(Req: THorseRequest; Resp: THorseResponse);
 begin
+  var LDatIni := Req.Query.Field('dat_ini')
+    .Required
+    .RequiredMessage('A data inicial é obrigatória')
+    .InvalidFormatMessage('O valor informado não é uma data válida')
+    .AsDate;
 
+  var LDatFim := Req.Query.Field('dat_fim')
+    .Required
+    .RequiredMessage('A data final é obrigatória')
+    .InvalidFormatMessage('O valor informado não é uma data válida')
+    .AsDate;
+
+  var LCaixas := TLojaModelFactory.New.Caixa
+    .ObterCaixasPorDataAbertura(LDatIni, LDatFim);
+
+  if LCaixas.Count = 0
+  then Resp.Status(THTTPStatus.NoContent)
+  else Resp.Status(THTTPStatus.OK).Send(TJson.ObjectToClearJsonValue(LCaixas));
+
+  LCaixas.Free;
 end;
 
 procedure GetCaixaAberto(Req: THorseRequest; Resp: THorseResponse);
@@ -38,9 +57,10 @@ begin
 
   if LCaixa = nil
   then Resp.Status(THTTPStatus.NoContent)
-  else Resp.Status(THTTPStatus.OK).Send(TJson.ObjectToClearJsonValue(LCaixa));
-
-  LCaixa.Free;
+  else begin
+    Resp.Status(THTTPStatus.OK).Send(TJson.ObjectToClearJsonValue(LCaixa));
+    LCaixa.Free;
+  end;
 end;
 
 procedure GetCaixaPorCodigo(Req: THorseRequest; Resp: THorseResponse);
@@ -53,9 +73,10 @@ begin
 
   if LCaixa = nil
   then Resp.Status(THTTPStatus.NoContent)
-  else Resp.Status(THTTPStatus.OK).Send(TJson.ObjectToClearJsonValue(LCaixa));
-
-  LCaixa.Free;
+  else begin
+    Resp.Status(THTTPStatus.OK).Send(TJson.ObjectToClearJsonValue(LCaixa));
+    LCaixa.Free;
+  end;
 end;
 
 procedure GetResumoCaixa(Req: THorseRequest; Resp: THorseResponse);

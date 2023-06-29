@@ -14,6 +14,8 @@ type
     ['{715AEB32-93A4-4C1C-A522-0E282059A1FA}']
     function ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
     function ObterCaixaPorCodigo(ACodCaixa: Integer): TLojaModelEntityCaixaCaixa;
+    function ObterCaixasPorDataAbertura(ADatIni, ADatFim: TDate): TLojaModelEntityCaixaCaixaLista;
+
     function ObterUltimoCaixaFechado(ADatRef: TDateTime): TLojaModelEntityCaixaCaixa;
     function CriarNovoCaixa(ANovoCaixa: TLojaModelDtoReqCaixaAbertura): TLojaModelEntityCaixaCaixa;
     function AtualizarFechamentoCaixa(ACodCaixa: Integer; ADatFecha: TDateTime; AVrFecha: Currency): TLojaModelEntityCaixaCaixa;

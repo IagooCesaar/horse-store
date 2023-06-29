@@ -57,6 +57,7 @@ type
     ['{D1CBDDA3-2034-49E7-929B-2B86FF2C925C}']
     function ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
     function ObterCaixaPorCodigo(ACodCaixa: Integer): TLojaModelEntityCaixaCaixa;
+    function ObterCaixasPorDataAbertura(ADatIni, ADatFim: TDate): TLojaModelEntityCaixaCaixaLista;
     function ObterResumoCaixa(ACodCaixa: Integer): TLojaModelDtoRespCaixaResumoCaixa;
     function ObterMovimentoCaixa(ACodCaixa: Integer): TLojaModelEntityCaixaMovimentoLista;
     function AberturaCaixa(AAbertura: TLojaModelDtoReqCaixaAbertura): TLojaModelEntityCaixaCaixa;

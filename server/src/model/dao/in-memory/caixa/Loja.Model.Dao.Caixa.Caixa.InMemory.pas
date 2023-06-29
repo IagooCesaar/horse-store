@@ -28,6 +28,8 @@ type
     { ILojaModelDaoCaixaMovimento }
     function ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
     function ObterCaixaPorCodigo(ACodCaixa: Integer): TLojaModelEntityCaixaCaixa;
+    function ObterCaixasPorDataAbertura(ADatIni, ADatFim: TDate): TLojaModelEntityCaixaCaixaLista;
+
     function ObterUltimoCaixaFechado(ADatRef: TDateTime): TLojaModelEntityCaixaCaixa;
     function CriarNovoCaixa(ANovoCaixa: TLojaModelDtoReqCaixaAbertura): TLojaModelEntityCaixaCaixa;
     function AtualizarFechamentoCaixa(ACodCaixa: Integer; ADatFecha: TDateTime;
@@ -123,6 +125,19 @@ begin
       Result := Clone(LCaixa);
       Break;
     end;
+end;
+
+function TLojaModelDaoCaixaCaixaInMemory.ObterCaixasPorDataAbertura(ADatIni,
+  ADatFim: TDate): TLojaModelEntityCaixaCaixaLista;
+begin
+  Result := TLojaModelEntityCaixaCaixaLista.Create;
+
+  for var LCaixa in FRepository
+  do begin
+    if  (Trunc(LCaixa.DatAbert) >= ADatIni)
+    and (Trunc(LCaixa.DatAbert) <= ADatFim)
+    then Result.Add(Clone(LCaixa));
+  end;
 end;
 
 function TLojaModelDaoCaixaCaixaInMemory.ObterUltimoCaixaFechado(

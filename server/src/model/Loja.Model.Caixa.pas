@@ -28,6 +28,8 @@ type
     { ILojaModelCaixa }
     function ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
     function ObterCaixaPorCodigo(ACodCaixa: Integer): TLojaModelEntityCaixaCaixa;
+    function ObterCaixasPorDataAbertura(ADatIni, ADatFim: TDate): TLojaModelEntityCaixaCaixaLista;
+
     function AberturaCaixa(AAbertura: TLojaModelDtoReqCaixaAbertura): TLojaModelEntityCaixaCaixa;
     function FechamentoCaixa(AFechamento: TLojaModelDtoReqCaixaFechamento): TLojaModelEntityCaixaCaixa;
 
@@ -346,6 +348,14 @@ begin
   Result := TLojaModelDaoFactory.New.Caixa
     .Caixa
     .ObterCaixaPorCodigo(ACodCaixa);
+end;
+
+function TLojaModelCaixa.ObterCaixasPorDataAbertura(ADatIni,
+  ADatFim: TDate): TLojaModelEntityCaixaCaixaLista;
+begin
+  Result := TLojaModelDaoFactory.New.Caixa
+    .Caixa
+    .ObterCaixasPorDataAbertura(ADatIni, ADatFim);
 end;
 
 function TLojaModelCaixa.ObterMovimentoCaixa(
