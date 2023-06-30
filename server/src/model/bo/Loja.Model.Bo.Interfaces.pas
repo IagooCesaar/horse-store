@@ -6,7 +6,9 @@ uses
   System.Classes,
   System.Generics.Collections,
 
-  Loja.Model.Entity.Caixa.Caixa;
+  Loja.Model.Entity.Caixa.Caixa,
+  Loja.Model.Entity.Caixa.Movimento,
+  Loja.Model.Dto.Req.Caixa.CriarMovimento;
 
 type
   ILojaModelBoEstoque = interface;
@@ -34,9 +36,7 @@ type
     ['{E34AC112-8645-4DDD-B2C4-C7140029A2EB}']
     //function PermiteMovimentoCaixa: Boolean;
     function ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
-    // permite abrir caixa
-    //function CriaMovimentoCaixa;
-    //function Saldo Real ($$)
+    function CriarMovimentoCaixa(AMovimento: TLojaModelDtoReqCaixaCriarMovimento): TLojaModelEntityCaixaMovimento;
   end;
 
   ILojaModelBoFactory = interface
