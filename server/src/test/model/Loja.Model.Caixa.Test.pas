@@ -372,7 +372,7 @@ begin
   for var LMeioPagto in LResumo.MeiosPagto
   do begin
     LFechamento.MeiosPagto.Get(LMeioPagto.CodMeioPagto).VrTotal :=
-      LResumo.MeiosPagto.Get(LMeioPagto.CodMeioPagto).VrTotal;
+      LMeioPagto.VrTotal;
   end;
 
   var LCaixaFechado := TLojaModelFactory.New.Caixa.FechamentoCaixa(LFechamento);

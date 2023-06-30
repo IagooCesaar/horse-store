@@ -93,16 +93,19 @@ begin
 
       var LMovAbert := TLojaModelDtoReqCaixaCriarMovimento.Create;
       try
-        LMovAbert.CodCaixa := LNovoCaixa.CodCaixa;
-        LMovAbert.DatMov := Now;
-        LMovAbert.DscObs := 'Saldo fechamento do caixa anterior';
-        LMovAbert.CodMeioPagto := pagDinheiro;
-        LMovAbert.CodTipoMov := movEntrada;
-        LMovAbert.CodOrigMov := orgReforco;
-        LMovAbert.VrMov := LUltFechado.VrFecha;
+        if LUltFechado.VrFecha > 0
+        then begin
+          LMovAbert.CodCaixa := LNovoCaixa.CodCaixa;
+          LMovAbert.DatMov := Now;
+          LMovAbert.DscObs := 'Saldo fechamento do caixa anterior';
+          LMovAbert.CodMeioPagto := pagDinheiro;
+          LMovAbert.CodTipoMov := movEntrada;
+          LMovAbert.CodOrigMov := orgReforco;
+          LMovAbert.VrMov := LUltFechado.VrFecha;
 
-        var LMov1 := TLojaModelBoFactory.New.Caixa.CriarMovimentoCaixa(LMovAbert);
-        LMov1.Free;
+          var LMov1 := TLojaModelBoFactory.New.Caixa.CriarMovimentoCaixa(LMovAbert);
+          LMov1.Free;
+        end;
 
         LMovAbert.CodCaixa := LNovoCaixa.CodCaixa;
         LMovAbert.DatMov := Now;
