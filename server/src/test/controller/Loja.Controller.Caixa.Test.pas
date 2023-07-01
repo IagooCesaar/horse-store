@@ -63,28 +63,28 @@ type
     [Test]
     procedure Test_NaoObterCaixasAbertos_DataInvalida;
 
-    //[Test]
+    [Test]
     procedure Test_NaoCriarMovimento_CaixaInvalido;
 
-    //[Test]
+    [Test]
     procedure Test_NaoCriarMovimento_CaixaInexistente;
 
-    //[Test]
+    [Test]
     procedure Test_NaoCriarMovimento_CaixaFechado;
 
-    //[Test]
+    [Test]
     procedure Test_NaoCriarMovimento_SemObservacao;
 
-    //[Test]
+    [Test]
     procedure Test_NaoCriarMovimento_ObservacaoPequena;
 
-    //[Test]
+    [Test]
     procedure Test_NaoCriarMovimento_ObservacaoGrande;
 
-    //[Test]
+    [Test]
     procedure Test_NaoCriarMovimento_MovimentoNegativo;
 
-    //[Test]
+    [Test]
     procedure Test_NaoCriarMovimento_SaldoInsuficiente;
 
     [Test]
@@ -634,32 +634,196 @@ end;
 
 procedure TLojaControllerCaixaTest.Test_NaoCriarMovimento_CaixaFechado;
 begin
+  // Obtêm resumo do caixa atual
+  var LResponseResumo := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/resumo')
+    .AddUrlSegment('cod_caixa', FCaixa.CodCaixa.ToString)
+    .Get();
 
+  Assert.AreEqual(THTTPStatus.OK, THTTPStatus(LResponseResumo.StatusCode));
+
+  var LResumo := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDtoRespCaixaResumoCaixa>(LResponseResumo.Content);
+
+  //Realiza fechamento do caixa atual para abrir um novo
+  var LFechamento := TLojaModelDtoReqCaixaFechamento.Create;
+  LFechamento.MeiosPagto := TLojaModelDtoRespCaixaResumoCaixaMeioPagtoLista.Create;
+
+  for var LMeioPagto in LResumo.MeiosPagto
+  do begin
+    LFechamento.MeiosPagto.Get(LMeioPagto.CodMeioPagto).VrTotal :=
+      LMeioPagto.VrTotal;
+  end;
+
+  var LResponseFecharCaixa := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/fechar-caixa')
+    .AddUrlSegment('cod_caixa', FCaixa.CodCaixa.ToString)
+    .AddBody(TJson.ObjectToClearJsonString(LFechamento))
+    .Patch();
+
+  Assert.AreEqual(THTTPStatus.OK, THTTPStatus(LResponseFecharCaixa.StatusCode), LResponseFecharCaixa.StatusText);
+
+  var LIdCaixaFechado := FCaixa.CodCaixa;
+
+  //Prepara nova abertura
+  var LAbertura := TLojaModelDtoReqCaixaAbertura.Create;
+  LAbertura.VrAbert := LResumo.VrSaldo;
+
+  var LResponseAbertura := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/abrir-caixa')
+    .AddBody(TJson.ObjectToClearJsonString(LAbertura))
+    .Post();
+
+  Assert.AreEqual(THttpStatus.Created, THttpStatus(LResponseAbertura.StatusCode));
+
+  FCaixa.Free;
+  FCaixa := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityCaixaCaixa>(LResponseAbertura.Content);
+
+  // Tenta realizar movimento em um caixa fechado
+  var LDtoMov := TLojaModelDtoReqCaixaCriarMovimento.Create;
+  LDtoMov.VrMov := 20.00;
+  LDtoMov.DscObs := 'Caixa fechado';
+
+  var LResponseMovimento := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/movimento/reforco')
+    .AddUrlSegment('cod_caixa', LIdCaixaFechado.ToString)
+    .AddBody(TJson.ObjectToClearJsonString(LDtoMov))
+    .Post();
+
+  Assert.AreEqual(THTTPStatus.PreconditionFailed, THTTPStatus(LResponseMovimento.StatusCode));
+
+  var LErro := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDTORespApiError>(LResponseMovimento.Content);
+
+  Assert.AreEqual('O caixa informado não está na stuação "Aberto"', LErro.error);
+
+  LErro.Free;
+  LDtoMov.Free;
+  LAbertura.Free;
+  LFechamento.Free;
+  LResumo.Free;
 end;
 
 procedure TLojaControllerCaixaTest.Test_NaoCriarMovimento_CaixaInexistente;
 begin
+  var LDtoMov := TLojaModelDtoReqCaixaCriarMovimento.Create;
+  LDtoMov.VrMov := 20.00;
+  LDtoMov.DscObs := 'Caixa inválido';
 
+  var LResponseMovimento := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/movimento/reforco')
+    .AddUrlSegment('cod_caixa', (FCaixa.CodCaixa + 1).ToString)
+    .AddBody(TJson.ObjectToClearJsonString(LDtoMov))
+    .Post();
+
+  Assert.AreEqual(THTTPStatus.NotFound, THTTPStatus(LResponseMovimento.StatusCode));
+
+  LDtoMov.Free;
 end;
 
 procedure TLojaControllerCaixaTest.Test_NaoCriarMovimento_CaixaInvalido;
 begin
+  var LDtoMov := TLojaModelDtoReqCaixaCriarMovimento.Create;
+  LDtoMov.VrMov := 20.00;
+  LDtoMov.DscObs := 'Caixa inválido';
 
+  var LResponseMovimento := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/movimento/reforco')
+    .AddUrlSegment('cod_caixa', (-1).ToString)
+    .AddBody(TJson.ObjectToClearJsonString(LDtoMov))
+    .Post();
+
+  Assert.AreEqual(THTTPStatus.PreconditionFailed, THTTPStatus(LResponseMovimento.StatusCode));
+
+  LDtoMov.Free;
 end;
 
 procedure TLojaControllerCaixaTest.Test_NaoCriarMovimento_MovimentoNegativo;
 begin
+  var LDtoMov := TLojaModelDtoReqCaixaCriarMovimento.Create;
+  LDtoMov.VrMov := -20.00;
+  LDtoMov.DscObs := 'Movimento Negativo';
 
+  var LResponseMovimento := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/movimento/reforco')
+    .AddUrlSegment('cod_caixa', FCaixa.CodCaixa.ToString)
+    .AddBody(TJson.ObjectToClearJsonString(LDtoMov))
+    .Post();
+
+  Assert.AreEqual(THTTPStatus.PreconditionFailed, THTTPStatus(LResponseMovimento.StatusCode));
+
+  var LErro := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDTORespApiError>(LResponseMovimento.Content);
+
+  Assert.AreEqual('O valor do movimento deverá ser superior a zero', LErro.error);
+
+  LErro.Free;
+  LDtoMov.Free;
 end;
 
 procedure TLojaControllerCaixaTest.Test_NaoCriarMovimento_ObservacaoGrande;
 begin
+  var LDtoMov := TLojaModelDtoReqCaixaCriarMovimento.Create;
+  LDtoMov.VrMov := 20.00;
+  LDtoMov.DscObs := '0123456789012345678901234567890123456789012345678901234567890';
 
+  var LResponseMovimento := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/movimento/reforco')
+    .AddUrlSegment('cod_caixa', FCaixa.CodCaixa.ToString)
+    .AddBody(TJson.ObjectToClearJsonString(LDtoMov))
+    .Post();
+
+  Assert.AreEqual(THTTPStatus.PreconditionFailed, THTTPStatus(LResponseMovimento.StatusCode));
+
+  var LErro := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDTORespApiError>(LResponseMovimento.Content);
+
+  Assert.StartsWith('A observação deverá ter no máximo', LErro.error);
+
+  LErro.Free;
+  LDtoMov.Free;
 end;
 
 procedure TLojaControllerCaixaTest.Test_NaoCriarMovimento_ObservacaoPequena;
 begin
+  var LDtoMov := TLojaModelDtoReqCaixaCriarMovimento.Create;
+  LDtoMov.VrMov := 20.00;
+  LDtoMov.DscObs := '123';
 
+  var LResponseMovimento := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/movimento/reforco')
+    .AddUrlSegment('cod_caixa', FCaixa.CodCaixa.ToString)
+    .AddBody(TJson.ObjectToClearJsonString(LDtoMov))
+    .Post();
+
+  Assert.AreEqual(THTTPStatus.PreconditionFailed, THTTPStatus(LResponseMovimento.StatusCode));
+
+  var LErro := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDTORespApiError>(LResponseMovimento.Content);
+
+  Assert.StartsWith('A observação deverá ter no mínimo', LErro.error);
+
+  LErro.Free;
+  LDtoMov.Free;
 end;
 
 procedure TLojaControllerCaixaTest.Test_NaoCriarMovimento_ReforcoSemBody;
@@ -683,7 +847,40 @@ end;
 
 procedure TLojaControllerCaixaTest.Test_NaoCriarMovimento_SaldoInsuficiente;
 begin
+  var LResponseResumo := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/resumo')
+    .AddUrlSegment('cod_caixa', FCaixa.CodCaixa.ToString)
+    .Get();
 
+  Assert.AreEqual(THTTPStatus.OK, THTTPStatus(LResponseResumo.StatusCode));
+
+  var LResumo := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDtoRespCaixaResumoCaixa>(LResponseResumo.Content);
+
+  var LDtoMov := TLojaModelDtoReqCaixaCriarMovimento.Create;
+  LDtoMov.VrMov := LResumo.VrSaldo + 10.00;
+  LDtoMov.DscObs := 'Saldo insuficiente';
+
+  var LResponseMovimento := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/movimento/sangria')
+    .AddUrlSegment('cod_caixa', FCaixa.CodCaixa.ToString)
+    .AddBody(TJson.ObjectToClearJsonString(LDtoMov))
+    .Post();
+
+  Assert.AreEqual(THTTPStatus.PreconditionFailed, THTTPStatus(LResponseMovimento.StatusCode));
+
+  var LErro := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDTORespApiError>(LResponseMovimento.Content);
+
+  Assert.AreEqual('Não há saldo disponível em dinheiro para realizar este tipo de movimento', LErro.error);
+
+  LErro.Free;
+  LDtoMov.Free;
+  LResumo.Free;
 end;
 
 procedure TLojaControllerCaixaTest.Test_NaoCriarMovimento_SangriaSemBody;
@@ -707,7 +904,27 @@ end;
 
 procedure TLojaControllerCaixaTest.Test_NaoCriarMovimento_SemObservacao;
 begin
+  var LDtoMov := TLojaModelDtoReqCaixaCriarMovimento.Create;
+  LDtoMov.VrMov := 20.00;
+  LDtoMov.DscObs := '';
 
+  var LResponseMovimento := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/movimento/reforco')
+    .AddUrlSegment('cod_caixa', FCaixa.CodCaixa.ToString)
+    .AddBody(TJson.ObjectToClearJsonString(LDtoMov))
+    .Post();
+
+  Assert.AreEqual(THTTPStatus.PreconditionFailed, THTTPStatus(LResponseMovimento.StatusCode));
+
+  var LErro := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDTORespApiError>(LResponseMovimento.Content);
+
+  Assert.AreEqual('Você deverá informar uma observação para este tipo de movimento', LErro.error);
+
+  LErro.Free;
+  LDtoMov.Free;
 end;
 
 procedure TLojaControllerCaixaTest.Test_NaoFecharCaixa_CaixaFechado;

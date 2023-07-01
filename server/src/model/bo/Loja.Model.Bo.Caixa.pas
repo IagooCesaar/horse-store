@@ -91,8 +91,8 @@ begin
     .Status(THTTPStatus.NotFound)
     .&Unit(Self.UnitName)
     .Error('O código de caixa informado não existe');
-  try
 
+  try
     if LCaixa.CodSit <> sitAberto
     then raise EHorseException.New
       .Status(THTTPStatus.PreconditionFailed)
