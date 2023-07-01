@@ -114,10 +114,10 @@ type
     [Test]
     procedure Test_NaoObterMovimento_CaixaInexistente;
 
-    //[Test]
+    [Test]
     procedure Test_NaoFecharCaixa_CaixaInvalido;
 
-    //[Test]
+    [Test]
     procedure Test_NaoFecharCaixa_CaixaInexistente;
 
     [Test]
@@ -1004,12 +1004,62 @@ end;
 
 procedure TLojaControllerCaixaTest.Test_NaoFecharCaixa_CaixaInexistente;
 begin
+  var LFechamento := TLojaModelDtoReqCaixaFechamento.Create;
+  LFechamento.MeiosPagto := TLojaModelDtoRespCaixaResumoCaixaMeioPagtoLista.Create;
 
+  for var LMeioPagto := Low(TLojaModelEntityCaixaMeioPagamento) to High(TLojaModelEntityCaixaMeioPagamento)
+  do begin
+    LFechamento.MeiosPagto.Add(TLojaModelDtoRespCaixaResumoCaixaMeioPagto.Create);
+    LFechamento.MeiosPagto.Last.CodMeioPagto := LMeioPagto;
+    LFechamento.MeiosPagto.Last.VrTotal := 0;
+  end;
+
+  var LResponse := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/fechar-caixa')
+    .AddUrlSegment('cod_caixa', (FCaixa.CodCaixa + 1).ToString)
+    .AddBody(TJson.ObjectToClearJsonString(LFechamento))
+    .Patch();
+
+  Assert.AreEqual(THttpStatus.NotFound, THttpStatus(LResponse.StatusCode), LResponse.StatusText);
+
+  var LErro := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDTORespApiError>(LResponse.Content);
+
+  Assert.AreEqual('O código de caixa informado não existe', LErro.error);
+  LErro.Free;
+  LFechamento.Free;
 end;
 
 procedure TLojaControllerCaixaTest.Test_NaoFecharCaixa_CaixaInvalido;
 begin
+  var LFechamento := TLojaModelDtoReqCaixaFechamento.Create;
+  LFechamento.MeiosPagto := TLojaModelDtoRespCaixaResumoCaixaMeioPagtoLista.Create;
 
+  for var LMeioPagto := Low(TLojaModelEntityCaixaMeioPagamento) to High(TLojaModelEntityCaixaMeioPagamento)
+  do begin
+    LFechamento.MeiosPagto.Add(TLojaModelDtoRespCaixaResumoCaixaMeioPagto.Create);
+    LFechamento.MeiosPagto.Last.CodMeioPagto := LMeioPagto;
+    LFechamento.MeiosPagto.Last.VrTotal := 0;
+  end;
+
+  var LResponse := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/fechar-caixa')
+    .AddUrlSegment('cod_caixa', (-1).ToString)
+    .AddBody(TJson.ObjectToClearJsonString(LFechamento))
+    .Patch();
+
+  Assert.AreEqual(THttpStatus.BadRequest, THttpStatus(LResponse.StatusCode), LResponse.StatusText);
+
+  var LErro := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDTORespApiError>(LResponse.Content);
+
+  Assert.AreEqual('O código de caixa informado é inválido', LErro.error);
+  LErro.Free;
+  LFechamento.Free;
 end;
 
 procedure TLojaControllerCaixaTest.Test_NaoFecharCaixa_SemBody;
