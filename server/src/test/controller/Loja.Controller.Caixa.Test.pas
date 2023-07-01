@@ -120,7 +120,7 @@ type
     //[Test]
     procedure Test_NaoFecharCaixa_CaixaInexistente;
 
-    //[Test]
+    [Test]
     procedure Test_NaoFecharCaixa_ValorNaoConfere;
 
     [Test]
@@ -816,7 +816,41 @@ end;
 
 procedure TLojaControllerCaixaTest.Test_NaoFecharCaixa_ValorNaoConfere;
 begin
+  // Obtêm resumo do caixa atual
+  var LResponseResumo := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/resumo')
+    .AddUrlSegment('cod_caixa', FCaixa.CodCaixa.ToString)
+    .Get();
 
+  Assert.AreEqual(THTTPStatus.OK, THTTPStatus(LResponseResumo.StatusCode));
+
+  var LResumo := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDtoRespCaixaResumoCaixa>(LResponseResumo.Content);
+
+  //Realiza fechamento do caixa atual para abrir um novo
+  var LFechamento := TLojaModelDtoReqCaixaFechamento.Create;
+  LFechamento.MeiosPagto := TLojaModelDtoRespCaixaResumoCaixaMeioPagtoLista.Create;
+
+  for var LMeioPagto in LResumo.MeiosPagto
+  do begin
+    LFechamento.MeiosPagto.Get(LMeioPagto.CodMeioPagto).VrTotal :=
+      LMeioPagto.VrTotal + 1.00;
+  end;
+
+  var LResponseFecharCaixa := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/fechar-caixa')
+    .AddUrlSegment('cod_caixa', FCaixa.CodCaixa.ToString)
+    .AddBody(TJson.ObjectToClearJsonString(LFechamento))
+    .Patch();
+
+  Assert.AreEqual(THTTPStatus.BadRequest, THTTPStatus(LResponseFecharCaixa.StatusCode), LResponseFecharCaixa.StatusText);
+
+  LResumo.Free;
+  LFechamento.Free;
 end;
 
 procedure TLojaControllerCaixaTest.Test_NaoObterCaixasAbertos_DataInvalida;
