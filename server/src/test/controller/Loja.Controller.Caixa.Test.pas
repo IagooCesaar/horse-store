@@ -849,8 +849,14 @@ begin
 
   Assert.AreEqual(THTTPStatus.BadRequest, THTTPStatus(LResponseFecharCaixa.StatusCode), LResponseFecharCaixa.StatusText);
 
+  var LErro := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDTORespApiError>(LResponseFecharCaixa.Content);
+
+  Assert.EndsWith('não confere. Verifique novamente', LErro.error);
+
   LResumo.Free;
   LFechamento.Free;
+  LErro.Free;
 end;
 
 procedure TLojaControllerCaixaTest.Test_NaoObterCaixasAbertos_DataInvalida;
