@@ -3,6 +3,8 @@ inherited ViewCaixa: TViewCaixa
   ClientHeight = 614
   ClientWidth = 870
   OnCreate = FormCreate
+  ExplicitWidth = 882
+  ExplicitHeight = 652
   TextHeight = 21
   inherited pModeloClient: TPanel
     Width = 870
@@ -63,11 +65,12 @@ inherited ViewCaixa: TViewCaixa
           Caption = 'pResumo'
           ShowCaption = False
           TabOrder = 1
+          ExplicitWidth = 858
           object GridPanel1: TGridPanel
             Left = 1
             Top = 1
             Width = 860
-            Height = 109
+            Height = 104
             Align = alClient
             Caption = 'GridPanel1'
             ColumnCollection = <
@@ -118,14 +121,14 @@ inherited ViewCaixa: TViewCaixa
               end>
             ShowCaption = False
             TabOrder = 0
-            ExplicitTop = -1
-            ExplicitHeight = 134
+            ExplicitWidth = 856
+            ExplicitHeight = 109
             inline FrameCaixaResumoMeioPagto1: TFrameCaixaResumoMeioPagto
               AlignWithMargins = True
               Left = 5
               Top = 5
               Width = 164
-              Height = 99
+              Height = 94
               Margins.Left = 4
               Margins.Top = 4
               Margins.Right = 4
@@ -141,17 +144,19 @@ inherited ViewCaixa: TViewCaixa
               StyleElements = []
               ExplicitLeft = 5
               ExplicitTop = 5
-              ExplicitWidth = 164
+              ExplicitWidth = 163
               ExplicitHeight = 99
               inherited pCliente: TPanel
                 Width = 164
-                Height = 99
+                Height = 94
+                ExplicitWidth = 163
+                ExplicitHeight = 99
                 inherited lbMeioPagto: TLabel
                   Width = 140
                 end
                 inherited lbValor: TLabel
                   Width = 140
-                  ExplicitTop = 55
+                  ExplicitLeft = 277
                 end
               end
             end
@@ -160,7 +165,7 @@ inherited ViewCaixa: TViewCaixa
               Left = 177
               Top = 5
               Width = 163
-              Height = 99
+              Height = 94
               Margins.Left = 4
               Margins.Top = 4
               Margins.Right = 4
@@ -174,19 +179,21 @@ inherited ViewCaixa: TViewCaixa
               ParentFont = False
               TabOrder = 1
               StyleElements = []
-              ExplicitLeft = 177
+              ExplicitLeft = 176
               ExplicitTop = 5
               ExplicitWidth = 163
               ExplicitHeight = 99
               inherited pCliente: TPanel
                 Width = 163
-                Height = 99
+                Height = 94
+                ExplicitWidth = 163
+                ExplicitHeight = 99
                 inherited lbMeioPagto: TLabel
                   Width = 139
                 end
                 inherited lbValor: TLabel
                   Width = 139
-                  ExplicitTop = 55
+                  ExplicitLeft = 276
                 end
               end
             end
@@ -195,7 +202,7 @@ inherited ViewCaixa: TViewCaixa
               Left = 348
               Top = 5
               Width = 164
-              Height = 99
+              Height = 94
               Margins.Left = 4
               Margins.Top = 4
               Margins.Right = 4
@@ -209,19 +216,21 @@ inherited ViewCaixa: TViewCaixa
               ParentFont = False
               TabOrder = 2
               StyleElements = []
-              ExplicitLeft = 348
+              ExplicitLeft = 347
               ExplicitTop = 5
-              ExplicitWidth = 164
+              ExplicitWidth = 162
               ExplicitHeight = 99
               inherited pCliente: TPanel
                 Width = 164
-                Height = 99
+                Height = 94
+                ExplicitWidth = 162
+                ExplicitHeight = 99
                 inherited lbMeioPagto: TLabel
                   Width = 140
                 end
                 inherited lbValor: TLabel
                   Width = 140
-                  ExplicitTop = 55
+                  ExplicitLeft = 277
                 end
               end
             end
@@ -230,7 +239,7 @@ inherited ViewCaixa: TViewCaixa
               Left = 520
               Top = 5
               Width = 163
-              Height = 99
+              Height = 94
               Margins.Left = 4
               Margins.Top = 4
               Margins.Right = 4
@@ -244,19 +253,21 @@ inherited ViewCaixa: TViewCaixa
               ParentFont = False
               TabOrder = 3
               StyleElements = []
-              ExplicitLeft = 520
+              ExplicitLeft = 517
               ExplicitTop = 5
               ExplicitWidth = 163
               ExplicitHeight = 99
               inherited pCliente: TPanel
                 Width = 163
-                Height = 99
+                Height = 94
+                ExplicitWidth = 163
+                ExplicitHeight = 99
                 inherited lbMeioPagto: TLabel
                   Width = 139
                 end
                 inherited lbValor: TLabel
                   Width = 139
-                  ExplicitTop = 55
+                  ExplicitLeft = 276
                 end
               end
             end
@@ -265,7 +276,7 @@ inherited ViewCaixa: TViewCaixa
               Left = 691
               Top = 5
               Width = 164
-              Height = 99
+              Height = 94
               Margins.Left = 4
               Margins.Top = 4
               Margins.Right = 4
@@ -279,34 +290,100 @@ inherited ViewCaixa: TViewCaixa
               ParentFont = False
               TabOrder = 4
               StyleElements = []
-              ExplicitLeft = 691
+              ExplicitLeft = 688
               ExplicitTop = 5
-              ExplicitWidth = 164
+              ExplicitWidth = 163
               ExplicitHeight = 99
               inherited pCliente: TPanel
                 Width = 164
-                Height = 99
+                Height = 94
+                ExplicitWidth = 163
+                ExplicitHeight = 99
                 inherited lbMeioPagto: TLabel
                   Width = 140
                 end
                 inherited lbValor: TLabel
                   Width = 140
-                  ExplicitTop = 55
+                  ExplicitLeft = 277
                 end
               end
             end
           end
           object pAcoes: TPanel
             Left = 1
-            Top = 110
+            Top = 105
             Width = 860
-            Height = 41
+            Height = 46
             Align = alBottom
             Caption = 'pAcoes'
             TabOrder = 1
-            ExplicitLeft = 336
-            ExplicitTop = 48
-            ExplicitWidth = 185
+            object Button1: TButton
+              AlignWithMargins = True
+              Left = 388
+              Top = 9
+              Width = 121
+              Height = 36
+              Cursor = crHandPoint
+              Margins.Left = 0
+              Margins.Top = 8
+              Margins.Right = 8
+              Margins.Bottom = 0
+              Align = alLeft
+              Caption = 'Sangria'
+              TabOrder = 3
+              ExplicitLeft = 259
+              ExplicitTop = 5
+            end
+            object Button2: TButton
+              AlignWithMargins = True
+              Left = 259
+              Top = 9
+              Width = 121
+              Height = 36
+              Cursor = crHandPoint
+              Margins.Left = 0
+              Margins.Top = 8
+              Margins.Right = 8
+              Margins.Bottom = 0
+              Align = alLeft
+              Caption = 'Refor'#231'o'
+              TabOrder = 2
+              ExplicitTop = 5
+            end
+            object Button3: TButton
+              AlignWithMargins = True
+              Left = 130
+              Top = 9
+              Width = 121
+              Height = 36
+              Cursor = crHandPoint
+              Margins.Left = 0
+              Margins.Top = 8
+              Margins.Right = 8
+              Margins.Bottom = 0
+              Align = alLeft
+              Caption = 'Fechamento'
+              TabOrder = 1
+              ExplicitLeft = 259
+              ExplicitTop = 5
+            end
+            object Button4: TButton
+              AlignWithMargins = True
+              Left = 1
+              Top = 9
+              Width = 121
+              Height = 36
+              Cursor = crHandPoint
+              Margins.Left = 0
+              Margins.Top = 8
+              Margins.Right = 8
+              Margins.Bottom = 0
+              Align = alLeft
+              Caption = 'Abertura'
+              TabOrder = 0
+              ExplicitLeft = 259
+              ExplicitTop = 5
+            end
           end
         end
         object pMovimentos: TPanel
@@ -328,8 +405,27 @@ inherited ViewCaixa: TViewCaixa
           Font.Style = []
           ParentFont = False
           TabOrder = 2
-          ExplicitLeft = 600
-          ExplicitTop = 129
+          ExplicitTop = 215
+          object dbgMovimentos: TDBGrid
+            AlignWithMargins = True
+            Left = 9
+            Top = 9
+            Width = 844
+            Height = 286
+            Margins.Left = 8
+            Margins.Top = 8
+            Margins.Right = 8
+            Margins.Bottom = 8
+            Align = alClient
+            DataSource = dsMovimentos
+            ReadOnly = True
+            TabOrder = 0
+            TitleFont.Charset = DEFAULT_CHARSET
+            TitleFont.Color = clWindowText
+            TitleFont.Height = -19
+            TitleFont.Name = 'Segoe UI'
+            TitleFont.Style = []
+          end
         end
       end
       object tsLista: TTabSheet
@@ -360,7 +456,7 @@ inherited ViewCaixa: TViewCaixa
             Caption = 'At'#233':'
             Layout = tlCenter
           end
-          object DateTimePicker1: TDateTimePicker
+          object edtDatIni: TDateTimePicker
             Left = 48
             Top = 16
             Width = 186
@@ -369,7 +465,7 @@ inherited ViewCaixa: TViewCaixa
             Time = 0.480846956015739100
             TabOrder = 0
           end
-          object DateTimePicker2: TDateTimePicker
+          object edtDatFim: TDateTimePicker
             Left = 48
             Top = 51
             Width = 186
@@ -377,6 +473,16 @@ inherited ViewCaixa: TViewCaixa
             Date = 45108.000000000000000000
             Time = 0.480846956015739100
             TabOrder = 1
+          end
+          object btnPesquisar: TButton
+            Left = 259
+            Top = 44
+            Width = 121
+            Height = 36
+            Cursor = crHandPoint
+            Caption = 'Pesquisar'
+            TabOrder = 2
+            OnClick = btnPesquisarClick
           end
         end
         object pCaixasGrid: TPanel
@@ -391,6 +497,7 @@ inherited ViewCaixa: TViewCaixa
           Margins.Bottom = 0
           Align = alClient
           Caption = 'Lista de Caixas'
+          ShowCaption = False
           TabOrder = 1
           object Panel3: TPanel
             Left = 1
@@ -418,6 +525,26 @@ inherited ViewCaixa: TViewCaixa
               ExplicitHeight = 21
             end
           end
+          object dbgCaixas: TDBGrid
+            AlignWithMargins = True
+            Left = 9
+            Top = 9
+            Width = 844
+            Height = 367
+            Margins.Left = 8
+            Margins.Top = 8
+            Margins.Right = 8
+            Margins.Bottom = 8
+            Align = alClient
+            DataSource = dsCaixas
+            ReadOnly = True
+            TabOrder = 1
+            TitleFont.Charset = DEFAULT_CHARSET
+            TitleFont.Color = clWindowText
+            TitleFont.Height = -16
+            TitleFont.Name = 'Segoe UI'
+            TitleFont.Style = []
+          end
         end
       end
     end
@@ -436,10 +563,12 @@ inherited ViewCaixa: TViewCaixa
       ExplicitWidth = 164
     end
   end
-  object dsCaixa: TDataSource
+  object dsCaixas: TDataSource
+    AutoEdit = False
     Left = 696
   end
   object dsMovimentos: TDataSource
+    AutoEdit = False
     Left = 776
   end
 end
