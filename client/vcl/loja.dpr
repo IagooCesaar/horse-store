@@ -30,7 +30,8 @@ uses
   Loja.View.Estoque.AcertoEstoque in 'view\Loja.View.Estoque.AcertoEstoque.pas' {ViewAcertoEstoque},
   Loja.View.Preco.ConsultaPreco in 'view\Loja.View.Preco.ConsultaPreco.pas' {ViewConsultaPrecoVenda},
   Loja.Controller.Preco.Venda in 'controller\preco\Loja.Controller.Preco.Venda.pas' {ControllerPrecoVenda: TDataModule},
-  Loja.Model.Preco.PrecoVenda in 'model\Loja.Model.Preco.PrecoVenda.pas';
+  Loja.Model.Preco.PrecoVenda in 'model\Loja.Model.Preco.PrecoVenda.pas',
+  Loja.View.Caixa in 'view\Loja.View.Caixa.pas' {ViewCaixa};
 
 {$R *.res}
 
@@ -42,6 +43,7 @@ begin
     ,TViewVender
     ,TViewItens
     ,TViewComprar
+    ,TViewCaixa
   ]);
 
   Application.Initialize;

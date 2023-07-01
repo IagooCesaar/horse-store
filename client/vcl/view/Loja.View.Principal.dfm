@@ -11,12 +11,12 @@ object ViewPrincipal: TViewPrincipal
   Font.Name = 'Segoe UI'
   Font.Style = []
   FormStyle = fsMDIForm
-  Menu = MainMenu1
+  Menu = menuPrinc
   WindowState = wsMaximized
   OnActivate = FormActivate
   OnCreate = FormCreate
   TextHeight = 21
-  object ToolBar1: TToolBar
+  object tbAcoes: TToolBar
     Left = 0
     Top = 0
     Width = 129
@@ -25,14 +25,13 @@ object ViewPrincipal: TViewPrincipal
     BorderWidth = 2
     ButtonHeight = 54
     ButtonWidth = 121
-    Caption = 'ToolBar1'
+    Caption = 'tbAcoes'
     DrawingStyle = dsGradient
     Flat = False
     Images = dmImagens.imgIco48
     List = True
     ShowCaptions = True
     TabOrder = 0
-    ExplicitHeight = 552
     object btnVender: TToolButton
       Left = 0
       Top = 0
@@ -40,23 +39,29 @@ object ViewPrincipal: TViewPrincipal
       Action = acVender
       Wrap = True
     end
-    object btnItens: TToolButton
+    object btnCaixa: TToolButton
       Left = 0
       Top = 54
+      Action = acCaixa
+      Wrap = True
+    end
+    object btnItens: TToolButton
+      Left = 0
+      Top = 108
       Cursor = crHandPoint
       Action = acItens
       Wrap = True
     end
     object btnComprar: TToolButton
       Left = 0
-      Top = 108
+      Top = 162
       Cursor = crHandPoint
       Action = acComprar
       Wrap = True
     end
     object btnLogon: TToolButton
       Left = 0
-      Top = 162
+      Top = 216
       Cursor = crHandPoint
       Action = acLogon
     end
@@ -67,8 +72,6 @@ object ViewPrincipal: TViewPrincipal
     Width = 876
     Height = 19
     Panels = <>
-    ExplicitTop = 552
-    ExplicitWidth = 872
   end
   object acmAcoes: TActionManager
     ActionBars = <
@@ -83,8 +86,8 @@ object ViewPrincipal: TViewPrincipal
       item
       end>
     Images = dmImagens.imgIco48
-    Left = 520
-    Top = 360
+    Left = 160
+    Top = 80
     StyleName = 'Platform Default'
     object acVender: TAction
       Category = 'ToolBar'
@@ -120,11 +123,17 @@ object ViewPrincipal: TViewPrincipal
       ImageIndex = 3
       OnExecute = acLogonExecute
     end
+    object acCaixa: TAction
+      Category = 'ToolBar'
+      Caption = 'Caixa'
+      ImageIndex = 6
+      OnExecute = acCaixaExecute
+    end
   end
-  object MainMenu1: TMainMenu
+  object menuPrinc: TMainMenu
     Images = dmImagens.imgIco16
-    Left = 408
-    Top = 360
+    Left = 160
+    Top = 8
     object mniSair: TMenuItem
       Action = acSair
     end

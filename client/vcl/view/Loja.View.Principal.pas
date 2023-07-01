@@ -12,9 +12,9 @@ type
   TViewPrincipal = class(TForm)
     acmAcoes: TActionManager;
     acVender: TAction;
-    ToolBar1: TToolBar;
+    tbAcoes: TToolBar;
     btnVender: TToolButton;
-    MainMenu1: TMainMenu;
+    menuPrinc: TMainMenu;
     acSair: TAction;
     mniSair: TMenuItem;
     acItens: TAction;
@@ -26,6 +26,8 @@ type
     acLogon: TAction;
     btnLogon: TToolButton;
     sbar1: TStatusBar;
+    acCaixa: TAction;
+    btnCaixa: TToolButton;
     procedure acVenderExecute(Sender: TObject);
     procedure acItensExecute(Sender: TObject);
     procedure acComprarExecute(Sender: TObject);
@@ -34,6 +36,7 @@ type
     procedure acLogonExecute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormActivate(Sender: TObject);
+    procedure acCaixaExecute(Sender: TObject);
   private
     { Private declarations }
     procedure OpenChild(sClassName: string);
@@ -57,6 +60,11 @@ uses
   Loja.Model.Infra.Usuario;
 
 {$R *.dfm}
+
+procedure TViewPrincipal.acCaixaExecute(Sender: TObject);
+begin
+  OpenChild('TViewCaixa');
+end;
 
 procedure TViewPrincipal.acComprarExecute(Sender: TObject);
 begin
