@@ -1,26 +1,20 @@
 inherited ViewCaixa: TViewCaixa
   Caption = 'ViewCaixa'
-  ClientHeight = 616
-  ClientWidth = 878
-  ExplicitWidth = 894
-  ExplicitHeight = 655
   TextHeight = 21
   inherited pModeloClient: TPanel
-    Width = 878
-    Height = 559
     ExplicitLeft = 0
     ExplicitTop = 57
-    ExplicitWidth = 878
-    ExplicitHeight = 559
+    ExplicitWidth = 874
+    ExplicitHeight = 558
   end
   inherited pModeloTop: TPanel
-    Width = 878
-    ExplicitWidth = 878
+    ExplicitWidth = 874
     inherited bvlModeloLinha: TBevel
-      Width = 878
+      Width = 874
+      ExplicitWidth = 878
     end
     inherited lbModeloTitulo: TLabel
-      Width = 838
+      Width = 834
       Height = 37
       Caption = 'Controle de Caixa'
       ExplicitWidth = 164
