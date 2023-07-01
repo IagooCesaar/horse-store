@@ -108,10 +108,10 @@ type
     [Test]
     procedure Test_NaoObterCaixa_Aberto;
 
-    //[Test]
+    [Test]
     procedure Test_NaoObterMovimento_CaixaInvalido;
 
-    //[Test]
+    [Test]
     procedure Test_NaoObterMovimento_CaixaInexistente;
 
     //[Test]
@@ -1213,12 +1213,38 @@ end;
 
 procedure TLojaControllerCaixaTest.Test_NaoObterMovimento_CaixaInexistente;
 begin
+  var LResponse := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/movimento')
+    .AddUrlSegment('cod_caixa', (FCaixa.CodCaixa + 1).ToString)
+    .Get();
 
+  Assert.AreEqual(THttpStatus.NotFound, THttpStatus(LResponse.StatusCode), LResponse.StatusText);
+
+  var LErro := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDTORespApiError>(LResponse.Content);
+
+  Assert.AreEqual('O código de caixa informado não existe', LErro.error);
+  LErro.Free;
 end;
 
 procedure TLojaControllerCaixaTest.Test_NaoObterMovimento_CaixaInvalido;
 begin
+  var LResponse := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/caixa/{cod_caixa}/movimento')
+    .AddUrlSegment('cod_caixa', (-1).ToString)
+    .Get();
 
+  Assert.AreEqual(THttpStatus.BadRequest, THttpStatus(LResponse.StatusCode), LResponse.StatusText);
+
+  var LErro := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDTORespApiError>(LResponse.Content);
+
+  Assert.AreEqual('O código de caixa informado é inválido', LErro.error);
+  LErro.Free;
 end;
 
 procedure TLojaControllerCaixaTest.Test_ObterCaixa_Aberto;
