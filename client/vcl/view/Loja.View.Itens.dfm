@@ -1,7 +1,7 @@
 inherited ViewItens: TViewItens
   Caption = 'Cadastro de Itens'
-  ClientHeight = 791
-  ClientWidth = 1218
+  ClientHeight = 790
+  ClientWidth = 1214
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
@@ -9,8 +9,8 @@ inherited ViewItens: TViewItens
   ExplicitHeight = 829
   TextHeight = 21
   inherited pModeloClient: TPanel
-    Width = 1218
-    Height = 734
+    Width = 1214
+    Height = 733
     ExplicitLeft = 0
     ExplicitTop = 57
     ExplicitWidth = 1214
@@ -194,15 +194,13 @@ inherited ViewItens: TViewItens
     object pGrid: TPanel
       Left = 0
       Top = 180
-      Width = 610
-      Height = 554
+      Width = 606
+      Height = 553
       Align = alClient
       BevelOuter = bvNone
       Caption = 'pGrid'
       ShowCaption = False
       TabOrder = 1
-      ExplicitWidth = 606
-      ExplicitHeight = 553
       object dbgrdItens: TDBGrid
         AlignWithMargins = True
         Left = 10
@@ -225,10 +223,10 @@ inherited ViewItens: TViewItens
     end
     object pManut: TPanel
       AlignWithMargins = True
-      Left = 610
+      Left = 606
       Top = 190
       Width = 598
-      Height = 534
+      Height = 533
       Margins.Left = 0
       Margins.Top = 10
       Margins.Right = 10
@@ -237,8 +235,6 @@ inherited ViewItens: TViewItens
       Caption = 'pManut'
       ShowCaption = False
       TabOrder = 2
-      ExplicitLeft = 606
-      ExplicitHeight = 533
       object Label1: TLabel
         Left = 17
         Top = 55
@@ -324,15 +320,14 @@ inherited ViewItens: TViewItens
     end
   end
   inherited pModeloTop: TPanel
-    Width = 1218
+    Width = 1214
     ExplicitWidth = 1214
     inherited bvlModeloLinha: TBevel
       Width = 1218
       ExplicitWidth = 1222
     end
     inherited lbModeloTitulo: TLabel
-      Width = 1178
-      Height = 37
+      Width = 162
       Caption = 'Cadastro de Itens'
       ExplicitWidth = 162
     end

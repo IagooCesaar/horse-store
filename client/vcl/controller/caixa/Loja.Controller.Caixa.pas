@@ -9,15 +9,14 @@ uses
   FireDAC.Comp.Client;
 
 type
-  TControllerBase1 = class(TControllerBase)
+  TControllerCaixa = class(TControllerBase)
+    mtCaixaAberto: TFDMemTable;
+    mtResumoCaixa: TFDMemTable;
   private
     { Private declarations }
   public
     { Public declarations }
   end;
-
-var
-  ControllerBase1: TControllerBase1;
 
 implementation
 

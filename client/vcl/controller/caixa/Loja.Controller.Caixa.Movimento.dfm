@@ -1,2 +1,2 @@
-inherited ControllerBase2: TControllerBase2
+inherited ControllerCaixaMovimento: TControllerCaixaMovimento
 end

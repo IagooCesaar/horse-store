@@ -9,15 +9,12 @@ uses
   FireDAC.Comp.Client;
 
 type
-  TControllerBase2 = class(TControllerBase)
+  TControllerCaixaMovimento = class(TControllerBase)
   private
     { Private declarations }
   public
     { Public declarations }
   end;
-
-var
-  ControllerBase2: TControllerBase2;
 
 implementation
 

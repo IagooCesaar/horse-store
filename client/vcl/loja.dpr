@@ -32,8 +32,9 @@ uses
   Loja.Controller.Preco.Venda in 'controller\preco\Loja.Controller.Preco.Venda.pas' {ControllerPrecoVenda: TDataModule},
   Loja.Model.Preco.PrecoVenda in 'model\Loja.Model.Preco.PrecoVenda.pas',
   Loja.View.Caixa in 'view\Loja.View.Caixa.pas' {ViewCaixa},
-  Loja.Controller.Caixa in 'controller\caixa\Loja.Controller.Caixa.pas' {ControllerBase1: TDataModule},
-  Loja.Controller.Caixa.Movimento in 'controller\caixa\Loja.Controller.Caixa.Movimento.pas' {ControllerBase2: TDataModule};
+  Loja.Controller.Caixa in 'controller\caixa\Loja.Controller.Caixa.pas' {ControllerCaixa: TDataModule},
+  Loja.Controller.Caixa.Movimento in 'controller\caixa\Loja.Controller.Caixa.Movimento.pas' {ControllerCaixaMovimento: TDataModule},
+  Loja.Frame.Caixa.ResumoMeioPagto in 'view\Loja.Frame.Caixa.ResumoMeioPagto.pas' {FrameCaixaResumoMeioPagto: TFrame};
 
 {$R *.res}
 
