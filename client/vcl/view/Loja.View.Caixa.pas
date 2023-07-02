@@ -63,7 +63,7 @@ type
     procedure btnPesquisarClick(Sender: TObject);
     procedure dbgCaixasDblClick(Sender: TObject);
     procedure sbVerCaixaAbertoClick(Sender: TObject);
-    procedure btnCriarSangriaClick(Sender: TObject);
+    procedure btnCriarMovimentoClick(Sender: TObject);
   private
     FControllerCaixa: TControllerCaixa;
     FControllerMovimento: TControllerCaixaMovimento;
@@ -134,7 +134,7 @@ begin
   end;
 end;
 
-procedure TViewCaixa.btnCriarSangriaClick(Sender: TObject);
+procedure TViewCaixa.btnCriarMovimentoClick(Sender: TObject);
 begin
   inherited;
   var LMovimento := TViewCaixaNovoMovimento.Exibir(Self);

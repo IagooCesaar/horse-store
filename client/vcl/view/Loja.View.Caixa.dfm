@@ -345,7 +345,7 @@ inherited ViewCaixa: TViewCaixa
               Align = alLeft
               Caption = 'Sangria'
               TabOrder = 3
-              OnClick = btnCriarSangriaClick
+              OnClick = btnCriarMovimentoClick
             end
             object btnCriarReforco: TButton
               AlignWithMargins = True
@@ -361,7 +361,7 @@ inherited ViewCaixa: TViewCaixa
               Align = alLeft
               Caption = 'Refor'#231'o'
               TabOrder = 2
-              OnClick = btnCriarSangriaClick
+              OnClick = btnCriarMovimentoClick
             end
             object Button3: TButton
               AlignWithMargins = True
@@ -692,7 +692,6 @@ inherited ViewCaixa: TViewCaixa
           Caption = 'Panel1'
           ShowCaption = False
           TabOrder = 0
-          ExplicitWidth = 1204
           object Label1: TLabel
             Left = 16
             Top = 16
@@ -752,12 +751,10 @@ inherited ViewCaixa: TViewCaixa
           Caption = 'Lista de Caixas'
           ShowCaption = False
           TabOrder = 1
-          ExplicitWidth = 1204
-          ExplicitHeight = 401
           object Panel3: TPanel
             Left = 1
-            Top = 368
-            Width = 1202
+            Top = 367
+            Width = 1198
             Height = 32
             Align = alBottom
             BevelOuter = bvNone
@@ -769,7 +766,7 @@ inherited ViewCaixa: TViewCaixa
               Left = 8
               Top = 0
               Width = 313
-              Height = 21
+              Height = 32
               Margins.Left = 8
               Margins.Top = 0
               Margins.Right = 0
@@ -777,14 +774,15 @@ inherited ViewCaixa: TViewCaixa
               Align = alLeft
               Caption = 'Duplo clique para visualizar detalhes do caixa'
               Layout = tlCenter
+              ExplicitHeight = 21
             end
           end
           object dbgCaixas: TDBGrid
             AlignWithMargins = True
             Left = 9
             Top = 9
-            Width = 1186
-            Height = 351
+            Width = 1182
+            Height = 350
             Margins.Left = 8
             Margins.Top = 8
             Margins.Right = 8
