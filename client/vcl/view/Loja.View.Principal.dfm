@@ -19,20 +19,21 @@ object ViewPrincipal: TViewPrincipal
   object tbAcoes: TToolBar
     Left = 0
     Top = 0
-    Width = 161
+    Width = 129
     Height = 553
     Align = alLeft
+    AutoSize = True
     BorderWidth = 2
     ButtonHeight = 54
     ButtonWidth = 121
     Caption = 'tbAcoes'
     DrawingStyle = dsGradient
-    Flat = False
     Images = dmImagens.imgIco48
     List = True
     ShowCaptions = True
     TabOrder = 0
     object btnVender: TToolButton
+      AlignWithMargins = True
       Left = 0
       Top = 0
       Cursor = crHandPoint
@@ -40,30 +41,35 @@ object ViewPrincipal: TViewPrincipal
       Wrap = True
     end
     object btnCaixa: TToolButton
+      AlignWithMargins = True
       Left = 0
       Top = 54
+      Cursor = crHandPoint
       Action = acCaixa
       Wrap = True
     end
-    object btnItens: TToolButton
+    object btnLogon: TToolButton
+      AlignWithMargins = True
       Left = 0
       Top = 108
       Cursor = crHandPoint
-      Action = acItens
+      Action = acLogon
       Wrap = True
     end
     object btnComprar: TToolButton
+      AlignWithMargins = True
       Left = 0
       Top = 162
       Cursor = crHandPoint
       Action = acComprar
       Wrap = True
     end
-    object btnLogon: TToolButton
+    object btnItens: TToolButton
+      AlignWithMargins = True
       Left = 0
       Top = 216
       Cursor = crHandPoint
-      Action = acLogon
+      Action = acItens
     end
   end
   object sbar1: TStatusBar

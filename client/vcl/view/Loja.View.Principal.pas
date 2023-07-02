@@ -116,6 +116,11 @@ procedure TViewPrincipal.FormCreate(Sender: TObject);
 begin
   // Aplicar o tema definido nas configurações
   TLojaModelInfraConfiguracoes.GetInstance.Tema := TLojaModelInfraConfiguracoes.GetInstance.Tema;
+
+  // Completar caption com caracteres à esquerda para TToobar ajustar largura
+  var LTexto := '';
+  for var i := 1 to 20 do LTexto := LTexto + ' ';
+  btnVender.Caption := btnVender.Caption + LTexto;
 end;
 
 procedure TViewPrincipal.OpenChild(sClassName: string);
