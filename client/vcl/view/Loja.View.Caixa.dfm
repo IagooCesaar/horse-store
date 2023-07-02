@@ -18,7 +18,7 @@ inherited ViewCaixa: TViewCaixa
       Top = 0
       Width = 870
       Height = 557
-      ActivePage = tsCaixa
+      ActivePage = tsLista
       Align = alClient
       TabOrder = 0
       ExplicitWidth = 866
@@ -426,7 +426,6 @@ inherited ViewCaixa: TViewCaixa
             TitleFont.Height = -16
             TitleFont.Name = 'Segoe UI'
             TitleFont.Style = []
-            OnDblClick = dbgMovimentosDblClick
           end
         end
       end

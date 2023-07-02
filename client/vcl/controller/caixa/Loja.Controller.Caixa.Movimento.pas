@@ -34,14 +34,23 @@ implementation
 
 procedure TControllerCaixaMovimento.ObterMovimentosCaixa(ACodCaixa: Integer);
 begin
-  var LResponse := PreparaRequest
-    .Resource('/caixa/{cod_caixa}/movimento')
-    .AddUrlSegment('cod_caixa', ACodCaixa.ToString)
-    .Get();
+  try
+    if mtDados.Active
+    then mtDados.Close;
 
-  if not(LResponse.StatusCode in [200])
-  then RaiseException(LResponse, 'Falha ao obter movimentos do caixa');
+    var LResponse := PreparaRequest
+      .Resource('/caixa/{cod_caixa}/movimento')
+      .AddUrlSegment('cod_caixa', ACodCaixa.ToString)
+      .Get();
 
-  Serializar(LResponse);
+    if not(LResponse.StatusCode in [200])
+    then RaiseException(LResponse, 'Falha ao obter movimentos do caixa');
+
+    Serializar(LResponse);
+  finally
+    if not mtDados.Active
+    then mtDados.CreateDataSet;
+  end;
 end;
+
 end.

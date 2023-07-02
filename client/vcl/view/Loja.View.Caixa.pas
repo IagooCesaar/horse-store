@@ -49,7 +49,6 @@ type
     procedure FormCreate(Sender: TObject);
     procedure btnPesquisarClick(Sender: TObject);
     procedure dbgCaixasDblClick(Sender: TObject);
-    procedure dbgMovimentosDblClick(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
   private
     FControllerCaixa: TControllerCaixa;
@@ -117,13 +116,10 @@ end;
 procedure TViewCaixa.dbgCaixasDblClick(Sender: TObject);
 begin
   inherited;
-  AbrirDetalhesCaixa(FControllerCaixa.mtCaixasCOD_CAIXA.AsInteger);
-end;
+  if FControllerCaixa.mtCaixas.IsEmpty
+  then Exit;
 
-procedure TViewCaixa.dbgMovimentosDblClick(Sender: TObject);
-begin
-  inherited;
-  ShowMessage(FControllerCaixa.mtResumoCaixa.FieldByName('MEIOS_PAGTO').AsString);
+  AbrirDetalhesCaixa(FControllerCaixa.mtCaixasCOD_CAIXA.AsInteger);
 end;
 
 procedure TViewCaixa.FormCreate(Sender: TObject);
@@ -139,9 +135,13 @@ begin
   dsCaixas.DataSet := FControllerCaixa.mtCaixas;
   dsMovimentos.DataSet := FControllerMovimento.mtDados;
 
-  FrameCaixaResumoMeioPagto1.Nome := 'Dinheiro';
-  FrameCaixaResumoMeioPagto1.Valor := 1234.56;
   FrameCaixaResumoMeioPagto1.Cor := clRed;
+  FrameCaixaResumoMeioPagto2.Cor := clRed;
+  FrameCaixaResumoMeioPagto3.Cor := clRed;
+  FrameCaixaResumoMeioPagto4.Cor := clRed;
+  FrameCaixaResumoMeioPagto5.Cor := clRed;
+
+  AbrirDetalhesCaixa(0);
 end;
 
 procedure TViewCaixa.SpeedButton1Click(Sender: TObject);

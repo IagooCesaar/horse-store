@@ -50,58 +50,95 @@ uses
 
 procedure TControllerCaixa.ObterCaixa(ACodCaixa: Integer);
 begin
-  var LResponse := PreparaRequest
-    .Resource('/caixa/{cod_caixa}')
-    .AddUrlSegment('cod_caixa', ACodCaixa.ToString)
-    .Get();
+  try
+    if mtDados.Active
+    then mtDados.Close;
 
-  if not(LResponse.StatusCode in [200])
-  then RaiseException(LResponse, 'Falha ao obter dados do caixa');
+    var LResponse := PreparaRequest
+      .Resource('/caixa/{cod_caixa}')
+      .AddUrlSegment('cod_caixa', ACodCaixa.ToString)
+      .Get();
 
-  Serializar(LResponse, mtDados);
+    if not(LResponse.StatusCode in [200])
+    then RaiseException(LResponse, 'Falha ao obter dados do caixa');
+
+    Serializar(LResponse, mtDados);
+  finally
+    if not mtDados.Active
+    then mtDados.CreateDataSet;
+  end;
 end;
 
 procedure TControllerCaixa.ObterCaixaAberto;
 begin
-  var LResponse := PreparaRequest
-    .Resource('/caixa/caixa-aberto')
-    .Get();
+  try
+    if mtDados.Active
+    then mtDados.Close;
+    var LResponse := PreparaRequest
+      .Resource('/caixa/caixa-aberto')
+      .Get();
 
-  if not(LResponse.StatusCode in [200])
-  then RaiseException(LResponse, 'Falha ao obter o caixa aberto atualmente');
+    if not(LResponse.StatusCode in [200])
+    then RaiseException(LResponse, 'Falha ao obter o caixa aberto atualmente');
 
-  Serializar(LResponse, mtDados);
+    Serializar(LResponse, mtDados);
+  finally
+    if not mtDados.Active
+    then mtDados.CreateDataSet;
+  end;
 end;
 
 procedure TControllerCaixa.ObterCaixas(ADatIni, ADatFim: TDate);
 begin
-  var LResponse := PreparaRequest
-    .Resource('/caixa')
-    .AddParam('dat_ini', FormatDateTime('yyyy-mm-dd', ADatIni))
-    .AddParam('dat_fim', FormatDateTime('yyyy-mm-dd', ADatFim))
-    .Get();
+  try
+    if mtCaixas.Active
+    then mtCaixas.Close;
 
-  if not(LResponse.StatusCode in [200])
-  then RaiseException(LResponse, 'Falha ao obter lista de caixas');
+    var LResponse := PreparaRequest
+      .Resource('/caixa')
+      .AddParam('dat_ini', FormatDateTime('yyyy-mm-dd', ADatIni))
+      .AddParam('dat_fim', FormatDateTime('yyyy-mm-dd', ADatFim))
+      .Get();
 
-  Serializar(LResponse, mtCaixas);
+    if not(LResponse.StatusCode in [200])
+    then RaiseException(LResponse, 'Falha ao obter lista de caixas');
+
+    Serializar(LResponse, mtCaixas);
+  finally
+    if not mtCaixas.Active
+    then mtCaixas.CreateDataSet;
+  end;
 end;
 
 procedure TControllerCaixa.ObterResumoCaixa(ACodCaixa: Integer);
 var LBody: TJSONObject;
 begin
-  var LResponse := PreparaRequest
-    .Resource('/caixa/{cod_caixa}/resumo')
-    .AddUrlSegment('cod_caixa', ACodCaixa.ToString)
-    .Get();
+  try
+    if mtResumoCaixa.Active
+    then mtResumoCaixa.Close;
 
-  if not(LResponse.StatusCode in [200])
-  then RaiseException(LResponse, 'Falha ao obter resumo do caixa');
+    if mtResumoMeiosPagto.Active
+    then mtResumoMeiosPagto.Close;
 
-  Serializar(LResponse, mtResumoCaixa);
+    var LResponse := PreparaRequest
+      .Resource('/caixa/{cod_caixa}/resumo')
+      .AddUrlSegment('cod_caixa', ACodCaixa.ToString)
+      .Get();
 
-  LBody := TJSONObject.ParseJSONValue(LResponse.Content) as TJSONObject;
-  Serializar(LBody.GetValue('meiosPagto'), mtResumoMeiosPagto);
+    if not(LResponse.StatusCode in [200])
+    then RaiseException(LResponse, 'Falha ao obter resumo do caixa');
+
+    Serializar(LResponse, mtResumoCaixa);
+
+    LBody := TJSONObject.ParseJSONValue(LResponse.Content) as TJSONObject;
+    Serializar(LBody.GetValue('meiosPagto'), mtResumoMeiosPagto);
+  finally
+    if not mtResumoCaixa.Active
+    then mtResumoCaixa.CreateDataSet;
+
+    if not mtResumoMeiosPagto.Active
+    then mtResumoMeiosPagto.CreateDataSet;
+  end;
 end;
 
 end.
