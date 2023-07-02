@@ -19,7 +19,7 @@ object ViewPrincipal: TViewPrincipal
   object tbAcoes: TToolBar
     Left = 0
     Top = 0
-    Width = 129
+    Width = 161
     Height = 553
     Align = alLeft
     BorderWidth = 2
@@ -72,6 +72,8 @@ object ViewPrincipal: TViewPrincipal
     Width = 876
     Height = 19
     Panels = <>
+    ExplicitTop = 552
+    ExplicitWidth = 872
   end
   object acmAcoes: TActionManager
     ActionBars = <
@@ -86,7 +88,7 @@ object ViewPrincipal: TViewPrincipal
       item
       end>
     Images = dmImagens.imgIco48
-    Left = 160
+    Left = 184
     Top = 80
     StyleName = 'Platform Default'
     object acVender: TAction
@@ -132,7 +134,7 @@ object ViewPrincipal: TViewPrincipal
   end
   object menuPrinc: TMainMenu
     Images = dmImagens.imgIco16
-    Left = 160
+    Left = 176
     Top = 8
     object mniSair: TMenuItem
       Action = acSair
