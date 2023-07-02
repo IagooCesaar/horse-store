@@ -39,8 +39,8 @@ type
     FrameCaixaResumoMeioPagto5: TFrameCaixaResumoMeioPagto;
     pAcoes: TPanel;
     btnPesquisar: TButton;
-    Button1: TButton;
-    Button2: TButton;
+    btnCriarSangria: TButton;
+    btnCriarReforco: TButton;
     Button3: TButton;
     Button4: TButton;
     dbgCaixas: TDBGrid;
@@ -63,16 +63,21 @@ type
     procedure btnPesquisarClick(Sender: TObject);
     procedure dbgCaixasDblClick(Sender: TObject);
     procedure sbVerCaixaAbertoClick(Sender: TObject);
+    procedure btnCriarSangriaClick(Sender: TObject);
   private
     FControllerCaixa: TControllerCaixa;
     FControllerMovimento: TControllerCaixaMovimento;
 
     procedure AbrirDetalhesCaixa(ACodCaixa: Integer);
+    procedure AtualizarResumoCaixa(ACodCaixa: Integer);
   public
 
   end;
 
 implementation
+
+uses
+  Loja.View.Caixa.NovoMovimento;
 
 {$R *.dfm}
 
@@ -91,6 +96,13 @@ begin
   end;
 
   FControllerMovimento.ObterMovimentosCaixa(ACodCaixa);
+  AtualizarResumoCaixa(ACodCaixa);
+
+  pcPrinc.ActivePage := tsCaixa;
+end;
+
+procedure TViewCaixa.AtualizarResumoCaixa(ACodCaixa: Integer);
+begin
   FControllerCaixa.ObterResumoCaixa(ACodCaixa);
 
   FControllerCaixa.mtResumoMeiosPagto.First;
@@ -120,8 +132,28 @@ begin
     end;
     FControllerCaixa.mtResumoMeiosPagto.Next;
   end;
+end;
 
-  pcPrinc.ActivePage := tsCaixa;
+procedure TViewCaixa.btnCriarSangriaClick(Sender: TObject);
+begin
+  inherited;
+  var LMovimento := TViewCaixaNovoMovimento.Exibir(Self);
+  if LMovimento = nil
+  then Exit;
+
+  try
+    if TButton(Sender) = btnCriarSangria
+    then FControllerMovimento.CriarMovimentoSangria(
+           FControllerCaixa.mtDadosCOD_CAIXA.AsInteger,
+           LMovimento)
+    else FControllerMovimento.CriarMovimentoReforco(
+           FControllerCaixa.mtDadosCOD_CAIXA.AsInteger,
+           LMovimento);
+
+    AtualizarResumoCaixa(FControllerCaixa.mtDadosCOD_CAIXA.AsInteger);
+  finally
+    LMovimento.Free;
+  end;
 end;
 
 procedure TViewCaixa.btnPesquisarClick(Sender: TObject);

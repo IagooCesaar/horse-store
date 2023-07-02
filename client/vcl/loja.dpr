@@ -33,8 +33,10 @@ uses
   Loja.Model.Preco.PrecoVenda in 'model\Loja.Model.Preco.PrecoVenda.pas',
   Loja.View.Caixa in 'view\Loja.View.Caixa.pas' {ViewCaixa},
   Loja.Controller.Caixa in 'controller\caixa\Loja.Controller.Caixa.pas' {ControllerCaixa: TDataModule},
-  Loja.Controller.Caixa.Movimento in 'controller\caixa\Loja.Controller.Caixa.Movimento.pas' {ControllerCaixaMovimento: TDataModule},
-  Loja.Frame.Caixa.ResumoMeioPagto in 'view\Loja.Frame.Caixa.ResumoMeioPagto.pas' {FrameCaixaResumoMeioPagto: TFrame};
+  Loja.Frame.Caixa.ResumoMeioPagto in 'view\Loja.Frame.Caixa.ResumoMeioPagto.pas' {FrameCaixaResumoMeioPagto: TFrame},
+  Loja.Model.Caixa.NovoMovimento in 'model\Loja.Model.Caixa.NovoMovimento.pas',
+  Loja.View.Caixa.NovoMovimento in 'view\Loja.View.Caixa.NovoMovimento.pas' {ViewCaixaNovoMovimento},
+  Loja.Controller.Caixa.Movimento in 'controller\caixa\Loja.Controller.Caixa.Movimento.pas';
 
 {$R *.res}
 

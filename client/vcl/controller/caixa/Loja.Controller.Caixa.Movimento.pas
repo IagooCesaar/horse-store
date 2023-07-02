@@ -6,7 +6,9 @@ uses
   System.SysUtils, System.Classes, Loja.Controller.Base, FireDAC.Stan.Intf,
   FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
   FireDAC.Phys.Intf, FireDAC.DApt.Intf, Data.DB, FireDAC.Comp.DataSet,
-  FireDAC.Comp.Client;
+  FireDAC.Comp.Client,
+
+  Loja.Model.Caixa.NovoMovimento;
 
 type
   TControllerCaixaMovimento = class(TControllerBase)
@@ -19,18 +21,50 @@ type
     mtDadosCOD_MOV: TIntegerField;
     mtDadosCOD_CAIXA: TIntegerField;
   private
-    { Private declarations }
+    procedure CriarMovimento(ATipoMov: string; ACodCaixa: Integer; AMovimento: TLojaModelCaixaNovoMovimento);
   public
     procedure ObterMovimentosCaixa(ACodCaixa: Integer);
+    procedure CriarMovimentoSangria(ACodCaixa: Integer; AMovimento: TLojaModelCaixaNovoMovimento);
+    procedure CriarMovimentoReforco(ACodCaixa: Integer; AMovimento: TLojaModelCaixaNovoMovimento);
   end;
 
 implementation
 
-{%CLASSGROUP 'Vcl.Controls.TControl'}
+uses
+  System.JSON,
+  Horse.JsonInterceptor.Helpers;
 
 {$R *.dfm}
 
 { TControllerCaixaMovimento }
+
+procedure TControllerCaixaMovimento.CriarMovimento(ATipoMov: string;
+  ACodCaixa: Integer; AMovimento: TLojaModelCaixaNovoMovimento);
+begin
+  var LResponse := PreparaRequest
+    .Resource('/caixa/{cod_caixa}/movimento/{tipo_mov}')
+    .AddUrlSegment('cod_caixa', ACodCaixa.ToString)
+    .AddUrlSegment('tipo_mov', ATipoMov)
+    .AddBody(TJson.ObjectToClearJsonString(AMovimento))
+    .Post();
+
+  if LResponse.StatusCode <> 201
+  then RaiseException(LResponse, 'Falha ao criar novo movimento de caixa');
+
+  Serializar(LResponse);
+end;
+
+procedure TControllerCaixaMovimento.CriarMovimentoReforco(ACodCaixa: Integer;
+  AMovimento: TLojaModelCaixaNovoMovimento);
+begin
+  CriarMovimento('reforco', ACodCaixa, AMovimento);
+end;
+
+procedure TControllerCaixaMovimento.CriarMovimentoSangria(ACodCaixa: Integer;
+  AMovimento: TLojaModelCaixaNovoMovimento);
+begin
+  CriarMovimento('sangria', ACodCaixa, AMovimento);
+end;
 
 procedure TControllerCaixaMovimento.ObterMovimentosCaixa(ACodCaixa: Integer);
 begin

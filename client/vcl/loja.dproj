@@ -222,16 +222,17 @@
             <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
-        <DCCReference Include="controller\caixa\Loja.Controller.Caixa.Movimento.pas">
-            <Form>ControllerCaixaMovimento</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TDataModule</DesignClass>
-        </DCCReference>
         <DCCReference Include="view\Loja.Frame.Caixa.ResumoMeioPagto.pas">
             <Form>FrameCaixaResumoMeioPagto</Form>
             <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
+        <DCCReference Include="model\Loja.Model.Caixa.NovoMovimento.pas"/>
+        <DCCReference Include="view\Loja.View.Caixa.NovoMovimento.pas">
+            <Form>ViewCaixaNovoMovimento</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="controller\caixa\Loja.Controller.Caixa.Movimento.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

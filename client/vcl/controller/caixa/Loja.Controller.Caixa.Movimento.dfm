@@ -1,5 +1,6 @@
 inherited ControllerCaixaMovimento: TControllerCaixaMovimento
   inherited mtDados: TFDMemTable
+    IndexFieldNames = 'DAT_MOV:D;COD_MOV:D'
     object mtDadosCOD_MEIO_PAGTO: TStringField
       Alignment = taCenter
       DisplayLabel = 'Meio Pagamento'
