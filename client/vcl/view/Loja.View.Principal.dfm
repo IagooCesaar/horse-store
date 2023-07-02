@@ -48,18 +48,10 @@ object ViewPrincipal: TViewPrincipal
       Action = acCaixa
       Wrap = True
     end
-    object btnLogon: TToolButton
-      AlignWithMargins = True
-      Left = 0
-      Top = 108
-      Cursor = crHandPoint
-      Action = acLogon
-      Wrap = True
-    end
     object btnComprar: TToolButton
       AlignWithMargins = True
       Left = 0
-      Top = 162
+      Top = 108
       Cursor = crHandPoint
       Action = acComprar
       Wrap = True
@@ -67,9 +59,17 @@ object ViewPrincipal: TViewPrincipal
     object btnItens: TToolButton
       AlignWithMargins = True
       Left = 0
-      Top = 216
+      Top = 162
       Cursor = crHandPoint
       Action = acItens
+      Wrap = True
+    end
+    object btnLogon: TToolButton
+      AlignWithMargins = True
+      Left = 0
+      Top = 216
+      Cursor = crHandPoint
+      Action = acLogon
     end
   end
   object sbar1: TStatusBar
@@ -140,7 +140,7 @@ object ViewPrincipal: TViewPrincipal
   end
   object menuPrinc: TMainMenu
     Images = dmImagens.imgIco16
-    Left = 176
+    Left = 184
     Top = 8
     object mniSair: TMenuItem
       Action = acSair

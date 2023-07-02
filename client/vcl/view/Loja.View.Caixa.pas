@@ -10,7 +10,7 @@ uses
   Loja.Frame.Caixa.ResumoMeioPagto,
 
   Loja.Controller.Caixa,
-  Loja.Controller.Caixa.Movimento, Vcl.Grids, Vcl.DBGrids;
+  Loja.Controller.Caixa.Movimento, Vcl.Grids, Vcl.DBGrids, Vcl.DBCtrls;
 
 type
   TViewCaixa = class(TViewModeloMdi)
@@ -24,8 +24,8 @@ type
     edtDatFim: TDateTimePicker;
     Label1: TLabel;
     Label2: TLabel;
-    Panel2: TPanel;
-    SpeedButton1: TSpeedButton;
+    pVerCaixaAberto: TPanel;
+    sbVerCaixaAberto: TSpeedButton;
     pResumo: TPanel;
     pMovimentos: TPanel;
     pCaixasGrid: TPanel;
@@ -46,10 +46,23 @@ type
     dbgCaixas: TDBGrid;
     dbgMovimentos: TDBGrid;
     dsCaixa: TDataSource;
+    pDados: TPanel;
+    Label4: TLabel;
+    dbtCOD_CAIXA: TDBText;
+    dbtCOD_SIT: TDBText;
+    Label5: TLabel;
+    Label6: TLabel;
+    dbtDAT_ABERT: TDBText;
+    Label7: TLabel;
+    dbtVR_ABERT: TDBText;
+    Label8: TLabel;
+    dbtDAT_FECHA: TDBText;
+    Label9: TLabel;
+    dbtVR_FECHA: TDBText;
     procedure FormCreate(Sender: TObject);
     procedure btnPesquisarClick(Sender: TObject);
     procedure dbgCaixasDblClick(Sender: TObject);
-    procedure SpeedButton1Click(Sender: TObject);
+    procedure sbVerCaixaAbertoClick(Sender: TObject);
   private
     FControllerCaixa: TControllerCaixa;
     FControllerMovimento: TControllerCaixaMovimento;
@@ -69,9 +82,13 @@ begin
   then begin
     FControllerCaixa.ObterCaixaAberto;
     ACodCaixa := FControllerCaixa.mtDadosCOD_CAIXA.AsInteger;
+    pVerCaixaAberto.Visible := False;
   end
   else
+  begin
     FControllerCaixa.ObterCaixa(ACodCaixa);
+    pVerCaixaAberto.Visible := True;
+  end;
 
   FControllerMovimento.ObterMovimentosCaixa(ACodCaixa);
   FControllerCaixa.ObterResumoCaixa(ACodCaixa);
@@ -135,16 +152,25 @@ begin
   dsCaixas.DataSet := FControllerCaixa.mtCaixas;
   dsMovimentos.DataSet := FControllerMovimento.mtDados;
 
-  FrameCaixaResumoMeioPagto1.Cor := clRed;
-  FrameCaixaResumoMeioPagto2.Cor := clRed;
-  FrameCaixaResumoMeioPagto3.Cor := clRed;
-  FrameCaixaResumoMeioPagto4.Cor := clRed;
-  FrameCaixaResumoMeioPagto5.Cor := clRed;
+  FrameCaixaResumoMeioPagto1.Cor := RGB(173, 146, 255);
+  FrameCaixaResumoMeioPagto1.CorFonte := RGB(000, 000, 000);
+
+  FrameCaixaResumoMeioPagto2.Cor := RGB(151, 255, 170);
+  FrameCaixaResumoMeioPagto2.CorFonte := RGB(000, 000, 000);
+
+  FrameCaixaResumoMeioPagto3.Cor := RGB(255, 220, 146);
+  FrameCaixaResumoMeioPagto3.CorFonte := RGB(000, 000, 000);
+
+  FrameCaixaResumoMeioPagto4.Cor := RGB(255, 179, 149);
+  FrameCaixaResumoMeioPagto4.CorFonte := RGB(000, 000, 000);
+
+  FrameCaixaResumoMeioPagto5.Cor := RGB(255, 156, 241);
+  FrameCaixaResumoMeioPagto5.CorFonte := RGB(000, 000, 000);
 
   AbrirDetalhesCaixa(0);
 end;
 
-procedure TViewCaixa.SpeedButton1Click(Sender: TObject);
+procedure TViewCaixa.sbVerCaixaAbertoClick(Sender: TObject);
 begin
   inherited;
   AbrirDetalhesCaixa(0);

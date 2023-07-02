@@ -1,51 +1,58 @@
 inherited ViewCaixa: TViewCaixa
-  Caption = 'ViewCaixa'
+  Caption = 'Controle de Caixa'
   ClientHeight = 614
-  ClientWidth = 870
+  ClientWidth = 1228
   OnCreate = FormCreate
-  ExplicitWidth = 882
+  ExplicitWidth = 1240
   ExplicitHeight = 652
   TextHeight = 21
   inherited pModeloClient: TPanel
-    Width = 870
+    Width = 1228
     Height = 557
     ExplicitLeft = 0
     ExplicitTop = 57
     ExplicitWidth = 866
     ExplicitHeight = 556
     object pcPrinc: TPageControl
-      Left = 0
-      Top = 0
-      Width = 870
-      Height = 557
-      ActivePage = tsLista
+      AlignWithMargins = True
+      Left = 8
+      Top = 8
+      Width = 1212
+      Height = 541
+      Margins.Left = 8
+      Margins.Top = 8
+      Margins.Right = 8
+      Margins.Bottom = 8
+      ActivePage = tsCaixa
       Align = alClient
       TabOrder = 0
+      ExplicitLeft = 0
+      ExplicitTop = 0
       ExplicitWidth = 866
       ExplicitHeight = 556
       object tsCaixa: TTabSheet
         Caption = ':: Caixa  '
-        object Panel2: TPanel
+        object pVerCaixaAberto: TPanel
           Left = 0
           Top = 0
-          Width = 862
+          Width = 1204
           Height = 49
           Align = alTop
-          Caption = 'Panel2'
+          Caption = 'pVerCaixaAberto'
           Color = clCream
           ParentBackground = False
           ShowCaption = False
           TabOrder = 0
           ExplicitWidth = 858
-          object SpeedButton1: TSpeedButton
+          object sbVerCaixaAberto: TSpeedButton
             Left = 1
             Top = 1
-            Width = 860
+            Width = 1202
             Height = 47
             Cursor = crHandPoint
             Align = alClient
             Caption = 'Visualizar dados do caixa aberto atualmente'
-            OnClick = SpeedButton1Click
+            OnClick = sbVerCaixaAbertoClick
             ExplicitLeft = 24
             ExplicitTop = 11
             ExplicitWidth = 305
@@ -56,22 +63,23 @@ inherited ViewCaixa: TViewCaixa
           AlignWithMargins = True
           Left = 0
           Top = 57
-          Width = 862
-          Height = 152
+          Width = 1204
+          Height = 192
           Margins.Left = 0
           Margins.Top = 8
           Margins.Right = 0
           Margins.Bottom = 0
           Align = alTop
+          BevelOuter = bvNone
           Caption = 'pResumo'
           ShowCaption = False
           TabOrder = 1
-          ExplicitWidth = 858
+          ExplicitWidth = 862
           object GridPanel1: TGridPanel
-            Left = 1
-            Top = 1
-            Width = 860
-            Height = 104
+            Left = 0
+            Top = 38
+            Width = 1204
+            Height = 108
             Align = alClient
             Caption = 'GridPanel1'
             ColumnCollection = <
@@ -122,13 +130,16 @@ inherited ViewCaixa: TViewCaixa
               end>
             ShowCaption = False
             TabOrder = 0
+            ExplicitLeft = 1
+            ExplicitTop = 1
             ExplicitWidth = 856
+            ExplicitHeight = 104
             inline FrameCaixaResumoMeioPagto1: TFrameCaixaResumoMeioPagto
               AlignWithMargins = True
               Left = 5
               Top = 5
-              Width = 164
-              Height = 94
+              Width = 232
+              Height = 98
               Margins.Left = 4
               Margins.Top = 4
               Margins.Right = 4
@@ -147,26 +158,25 @@ inherited ViewCaixa: TViewCaixa
               ExplicitWidth = 164
               ExplicitHeight = 94
               inherited pCliente: TPanel
-                Width = 164
-                Height = 94
+                Width = 232
+                Height = 98
                 ExplicitWidth = 164
                 ExplicitHeight = 94
                 inherited lbMeioPagto: TLabel
-                  Width = 140
+                  Width = 208
                 end
                 inherited lbValor: TLabel
-                  Left = 10
-                  Width = 140
+                  Width = 208
                   ExplicitLeft = 277
                 end
               end
             end
             inline FrameCaixaResumoMeioPagto2: TFrameCaixaResumoMeioPagto
               AlignWithMargins = True
-              Left = 177
+              Left = 245
               Top = 5
-              Width = 163
-              Height = 94
+              Width = 233
+              Height = 98
               Margins.Left = 4
               Margins.Top = 4
               Margins.Right = 4
@@ -185,26 +195,25 @@ inherited ViewCaixa: TViewCaixa
               ExplicitWidth = 163
               ExplicitHeight = 94
               inherited pCliente: TPanel
-                Width = 163
-                Height = 94
+                Width = 233
+                Height = 98
                 ExplicitWidth = 163
                 ExplicitHeight = 94
                 inherited lbMeioPagto: TLabel
-                  Width = 139
+                  Width = 209
                 end
                 inherited lbValor: TLabel
-                  Left = 10
-                  Width = 139
+                  Width = 209
                   ExplicitLeft = 276
                 end
               end
             end
             inline FrameCaixaResumoMeioPagto3: TFrameCaixaResumoMeioPagto
               AlignWithMargins = True
-              Left = 348
+              Left = 486
               Top = 5
-              Width = 164
-              Height = 94
+              Width = 232
+              Height = 98
               Margins.Left = 4
               Margins.Top = 4
               Margins.Right = 4
@@ -223,26 +232,25 @@ inherited ViewCaixa: TViewCaixa
               ExplicitWidth = 164
               ExplicitHeight = 94
               inherited pCliente: TPanel
-                Width = 164
-                Height = 94
+                Width = 232
+                Height = 98
                 ExplicitWidth = 164
                 ExplicitHeight = 94
                 inherited lbMeioPagto: TLabel
-                  Width = 140
+                  Width = 208
                 end
                 inherited lbValor: TLabel
-                  Left = 10
-                  Width = 140
+                  Width = 208
                   ExplicitLeft = 277
                 end
               end
             end
             inline FrameCaixaResumoMeioPagto4: TFrameCaixaResumoMeioPagto
               AlignWithMargins = True
-              Left = 520
+              Left = 726
               Top = 5
-              Width = 163
-              Height = 94
+              Width = 233
+              Height = 98
               Margins.Left = 4
               Margins.Top = 4
               Margins.Right = 4
@@ -261,26 +269,25 @@ inherited ViewCaixa: TViewCaixa
               ExplicitWidth = 163
               ExplicitHeight = 94
               inherited pCliente: TPanel
-                Width = 163
-                Height = 94
+                Width = 233
+                Height = 98
                 ExplicitWidth = 163
                 ExplicitHeight = 94
                 inherited lbMeioPagto: TLabel
-                  Width = 139
+                  Width = 209
                 end
                 inherited lbValor: TLabel
-                  Left = 10
-                  Width = 139
+                  Width = 209
                   ExplicitLeft = 276
                 end
               end
             end
             inline FrameCaixaResumoMeioPagto5: TFrameCaixaResumoMeioPagto
               AlignWithMargins = True
-              Left = 691
+              Left = 967
               Top = 5
-              Width = 164
-              Height = 94
+              Width = 232
+              Height = 98
               Margins.Left = 4
               Margins.Top = 4
               Margins.Right = 4
@@ -299,36 +306,39 @@ inherited ViewCaixa: TViewCaixa
               ExplicitWidth = 164
               ExplicitHeight = 94
               inherited pCliente: TPanel
-                Width = 164
-                Height = 94
+                Width = 232
+                Height = 98
                 ExplicitWidth = 164
                 ExplicitHeight = 94
                 inherited lbMeioPagto: TLabel
-                  Width = 140
+                  Width = 208
                 end
                 inherited lbValor: TLabel
-                  Left = 10
-                  Width = 140
+                  Width = 208
                   ExplicitLeft = 277
                 end
               end
             end
           end
           object pAcoes: TPanel
-            Left = 1
-            Top = 105
-            Width = 860
+            Left = 0
+            Top = 146
+            Width = 1204
             Height = 46
             Align = alBottom
+            BevelOuter = bvNone
             Caption = 'pAcoes'
+            ShowCaption = False
             TabOrder = 1
+            ExplicitLeft = 1
+            ExplicitTop = 105
             ExplicitWidth = 856
             object Button1: TButton
               AlignWithMargins = True
-              Left = 388
-              Top = 9
+              Left = 387
+              Top = 8
               Width = 121
-              Height = 36
+              Height = 38
               Cursor = crHandPoint
               Margins.Left = 0
               Margins.Top = 8
@@ -337,13 +347,16 @@ inherited ViewCaixa: TViewCaixa
               Align = alLeft
               Caption = 'Sangria'
               TabOrder = 3
+              ExplicitLeft = 388
+              ExplicitTop = 9
+              ExplicitHeight = 36
             end
             object Button2: TButton
               AlignWithMargins = True
-              Left = 259
-              Top = 9
+              Left = 258
+              Top = 8
               Width = 121
-              Height = 36
+              Height = 38
               Cursor = crHandPoint
               Margins.Left = 0
               Margins.Top = 8
@@ -352,13 +365,16 @@ inherited ViewCaixa: TViewCaixa
               Align = alLeft
               Caption = 'Refor'#231'o'
               TabOrder = 2
+              ExplicitLeft = 259
+              ExplicitTop = 9
+              ExplicitHeight = 36
             end
             object Button3: TButton
               AlignWithMargins = True
-              Left = 130
-              Top = 9
+              Left = 129
+              Top = 8
               Width = 121
-              Height = 36
+              Height = 38
               Cursor = crHandPoint
               Margins.Left = 0
               Margins.Top = 8
@@ -367,13 +383,16 @@ inherited ViewCaixa: TViewCaixa
               Align = alLeft
               Caption = 'Fechamento'
               TabOrder = 1
+              ExplicitLeft = 130
+              ExplicitTop = 9
+              ExplicitHeight = 36
             end
             object Button4: TButton
               AlignWithMargins = True
-              Left = 1
-              Top = 9
+              Left = 0
+              Top = 8
               Width = 121
-              Height = 36
+              Height = 38
               Cursor = crHandPoint
               Margins.Left = 0
               Margins.Top = 8
@@ -382,20 +401,276 @@ inherited ViewCaixa: TViewCaixa
               Align = alLeft
               Caption = 'Abertura'
               TabOrder = 0
+              ExplicitLeft = 1
+              ExplicitTop = 9
+              ExplicitHeight = 36
+            end
+          end
+          object pDados: TPanel
+            Left = 0
+            Top = 0
+            Width = 1204
+            Height = 38
+            Align = alTop
+            BevelOuter = bvNone
+            Caption = 'pDados'
+            ShowCaption = False
+            TabOrder = 2
+            ExplicitWidth = 846
+            object Label4: TLabel
+              AlignWithMargins = True
+              Left = 0
+              Top = 8
+              Width = 84
+              Height = 22
+              Margins.Left = 0
+              Margins.Top = 8
+              Margins.Right = 4
+              Margins.Bottom = 8
+              Align = alLeft
+              Caption = 'C'#243'd. Caixa:'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -16
+              Font.Name = 'Segoe UI'
+              Font.Style = [fsBold]
+              ParentFont = False
+              Layout = tlCenter
+              ExplicitLeft = 8
+              ExplicitTop = 1
+              ExplicitHeight = 21
+            end
+            object dbtCOD_CAIXA: TDBText
+              AlignWithMargins = True
+              Left = 88
+              Top = 8
+              Width = 106
+              Height = 22
+              Margins.Left = 0
+              Margins.Top = 8
+              Margins.Right = 4
+              Margins.Bottom = 8
+              Align = alLeft
+              AutoSize = True
+              DataField = 'COD_CAIXA'
+              DataSource = dsCaixa
+              ExplicitLeft = 98
+              ExplicitTop = 1
+              ExplicitHeight = 21
+            end
+            object dbtCOD_SIT: TDBText
+              AlignWithMargins = True
+              Left = 276
+              Top = 8
+              Width = 90
+              Height = 22
+              Margins.Left = 0
+              Margins.Top = 8
+              Margins.Right = 4
+              Margins.Bottom = 8
+              Align = alLeft
+              AutoSize = True
+              DataField = 'COD_SIT'
+              DataSource = dsCaixa
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -16
+              Font.Name = 'Segoe UI'
+              Font.Style = [fsBold]
+              ParentFont = False
+              ExplicitHeight = 21
+            end
+            object Label5: TLabel
+              AlignWithMargins = True
+              Left = 202
+              Top = 8
+              Width = 70
+              Height = 22
+              Margins.Left = 4
+              Margins.Top = 8
+              Margins.Right = 4
+              Margins.Bottom = 8
+              Align = alLeft
+              Caption = 'Situa'#231#227'o:'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -16
+              Font.Name = 'Segoe UI'
+              Font.Style = [fsBold]
+              ParentFont = False
+              Layout = tlCenter
+              ExplicitHeight = 21
+            end
+            object Label6: TLabel
+              AlignWithMargins = True
+              Left = 374
+              Top = 8
+              Width = 85
+              Height = 22
+              Margins.Left = 4
+              Margins.Top = 8
+              Margins.Right = 4
+              Margins.Bottom = 8
+              Align = alLeft
+              Caption = 'Dat. Abert.:'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -16
+              Font.Name = 'Segoe UI'
+              Font.Style = [fsBold]
+              ParentFont = False
+              Layout = tlCenter
+              ExplicitLeft = 368
+              ExplicitHeight = 21
+            end
+            object dbtDAT_ABERT: TDBText
+              AlignWithMargins = True
+              Left = 463
+              Top = 8
+              Width = 102
+              Height = 22
+              Margins.Left = 0
+              Margins.Top = 8
+              Margins.Right = 4
+              Margins.Bottom = 8
+              Align = alLeft
+              AutoSize = True
+              DataField = 'DAT_ABERT'
+              DataSource = dsCaixa
+              ExplicitLeft = 457
+              ExplicitHeight = 21
+            end
+            object Label7: TLabel
+              AlignWithMargins = True
+              Left = 573
+              Top = 8
+              Width = 73
+              Height = 22
+              Margins.Left = 4
+              Margins.Top = 8
+              Margins.Right = 4
+              Margins.Bottom = 8
+              Align = alLeft
+              Caption = 'Vr. Abert.:'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -16
+              Font.Name = 'Segoe UI'
+              Font.Style = [fsBold]
+              ParentFont = False
+              Layout = tlCenter
+              ExplicitLeft = 567
+              ExplicitHeight = 21
+            end
+            object dbtVR_ABERT: TDBText
+              AlignWithMargins = True
+              Left = 650
+              Top = 8
+              Width = 94
+              Height = 22
+              Margins.Left = 0
+              Margins.Top = 8
+              Margins.Right = 4
+              Margins.Bottom = 8
+              Align = alLeft
+              AutoSize = True
+              DataField = 'VR_ABERT'
+              DataSource = dsCaixa
+              ExplicitLeft = 644
+              ExplicitHeight = 21
+            end
+            object Label8: TLabel
+              AlignWithMargins = True
+              Left = 752
+              Top = 8
+              Width = 87
+              Height = 22
+              Margins.Left = 4
+              Margins.Top = 8
+              Margins.Right = 4
+              Margins.Bottom = 8
+              Align = alLeft
+              Caption = 'Dat. Fecha.:'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -16
+              Font.Name = 'Segoe UI'
+              Font.Style = [fsBold]
+              ParentFont = False
+              Layout = tlCenter
+              ExplicitLeft = 746
+              ExplicitHeight = 21
+            end
+            object dbtDAT_FECHA: TDBText
+              AlignWithMargins = True
+              Left = 843
+              Top = 8
+              Width = 105
+              Height = 22
+              Margins.Left = 0
+              Margins.Top = 8
+              Margins.Right = 4
+              Margins.Bottom = 8
+              Align = alLeft
+              AutoSize = True
+              DataField = 'DAT_FECHA'
+              DataSource = dsCaixa
+              ExplicitLeft = 828
+              ExplicitHeight = 21
+            end
+            object Label9: TLabel
+              AlignWithMargins = True
+              Left = 956
+              Top = 8
+              Width = 75
+              Height = 22
+              Margins.Left = 4
+              Margins.Top = 8
+              Margins.Right = 4
+              Margins.Bottom = 8
+              Align = alLeft
+              Caption = 'Vr. Fecha.:'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -16
+              Font.Name = 'Segoe UI'
+              Font.Style = [fsBold]
+              ParentFont = False
+              Layout = tlCenter
+              ExplicitLeft = 941
+              ExplicitHeight = 21
+            end
+            object dbtVR_FECHA: TDBText
+              AlignWithMargins = True
+              Left = 1035
+              Top = 8
+              Width = 97
+              Height = 22
+              Margins.Left = 0
+              Margins.Top = 8
+              Margins.Right = 4
+              Margins.Bottom = 8
+              Align = alLeft
+              AutoSize = True
+              DataField = 'VR_FECHA'
+              DataSource = dsCaixa
+              ExplicitLeft = 1029
+              ExplicitHeight = 21
             end
           end
         end
         object pMovimentos: TPanel
           AlignWithMargins = True
           Left = 0
-          Top = 217
-          Width = 862
-          Height = 304
+          Top = 257
+          Width = 1204
+          Height = 248
           Margins.Left = 0
           Margins.Top = 8
           Margins.Right = 0
           Margins.Bottom = 0
           Align = alClient
+          BevelOuter = bvNone
           Caption = 'Movimentos'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
@@ -404,14 +679,15 @@ inherited ViewCaixa: TViewCaixa
           Font.Style = []
           ParentFont = False
           TabOrder = 2
+          ExplicitTop = 217
           ExplicitWidth = 858
           ExplicitHeight = 303
           object dbgMovimentos: TDBGrid
             AlignWithMargins = True
-            Left = 9
-            Top = 9
-            Width = 844
-            Height = 286
+            Left = 8
+            Top = 8
+            Width = 1188
+            Height = 232
             Margins.Left = 8
             Margins.Top = 8
             Margins.Right = 8
@@ -435,17 +711,18 @@ inherited ViewCaixa: TViewCaixa
         object Panel1: TPanel
           Left = 0
           Top = 0
-          Width = 862
+          Width = 1204
           Height = 96
           Align = alTop
           Caption = 'Panel1'
           ShowCaption = False
           TabOrder = 0
+          ExplicitWidth = 862
           object Label1: TLabel
             Left = 16
             Top = 16
             Width = 22
-            Height = 21
+            Height = 29
             Caption = 'De:'
             Layout = tlCenter
           end
@@ -453,7 +730,7 @@ inherited ViewCaixa: TViewCaixa
             Left = 16
             Top = 51
             Width = 26
-            Height = 21
+            Height = 29
             Caption = 'At'#233':'
             Layout = tlCenter
           end
@@ -490,8 +767,8 @@ inherited ViewCaixa: TViewCaixa
           AlignWithMargins = True
           Left = 0
           Top = 104
-          Width = 862
-          Height = 417
+          Width = 1204
+          Height = 401
           Margins.Left = 0
           Margins.Top = 8
           Margins.Right = 0
@@ -500,16 +777,20 @@ inherited ViewCaixa: TViewCaixa
           Caption = 'Lista de Caixas'
           ShowCaption = False
           TabOrder = 1
+          ExplicitWidth = 862
+          ExplicitHeight = 417
           object Panel3: TPanel
             Left = 1
-            Top = 384
-            Width = 860
+            Top = 368
+            Width = 1202
             Height = 32
             Align = alBottom
             BevelOuter = bvNone
             Caption = 'Panel3'
             ShowCaption = False
             TabOrder = 0
+            ExplicitTop = 384
+            ExplicitWidth = 860
             object Label3: TLabel
               AlignWithMargins = True
               Left = 8
@@ -530,8 +811,8 @@ inherited ViewCaixa: TViewCaixa
             AlignWithMargins = True
             Left = 9
             Top = 9
-            Width = 844
-            Height = 367
+            Width = 1186
+            Height = 351
             Margins.Left = 8
             Margins.Top = 8
             Margins.Right = 8
@@ -553,14 +834,14 @@ inherited ViewCaixa: TViewCaixa
     end
   end
   inherited pModeloTop: TPanel
-    Width = 870
+    Width = 1228
     ExplicitWidth = 866
     inherited bvlModeloLinha: TBevel
-      Width = 870
+      Width = 1228
       ExplicitWidth = 878
     end
     inherited lbModeloTitulo: TLabel
-      Width = 830
+      Width = 1188
       Height = 37
       Caption = 'Controle de Caixa'
       ExplicitWidth = 164

@@ -15,10 +15,12 @@ type
     procedure setNome(const Value: string);
     procedure setValor(const Value: Currency);
     procedure setCor(const Value: TColor);
+    procedure setCorFonte(const Value: TColor);
   public
     property Nome: string write setNome;
     property Valor: Currency write setValor;
     property Cor: TColor write setCor;
+    property CorFonte: TColor write setCorFonte;
 
   end;
 
@@ -31,6 +33,12 @@ uses
 {$R *.dfm}
 
 { TFrameCaixaResumoMeioPagto }
+
+procedure TFrameCaixaResumoMeioPagto.setCorFonte(const Value: TColor);
+begin
+  lbMeioPagto.Color := Value;
+  lbValor.Color := Value;
+end;
 
 procedure TFrameCaixaResumoMeioPagto.setCor(const Value: TColor);
 begin
