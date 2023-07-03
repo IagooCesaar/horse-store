@@ -59,6 +59,7 @@ type
     dbtDAT_FECHA: TDBText;
     Label9: TLabel;
     dbtVR_FECHA: TDBText;
+    btnAtualizar: TButton;
     procedure FormCreate(Sender: TObject);
     procedure btnPesquisarClick(Sender: TObject);
     procedure dbgCaixasDblClick(Sender: TObject);
@@ -66,6 +67,7 @@ type
     procedure btnCriarMovimentoClick(Sender: TObject);
     procedure btnFechamentoClick(Sender: TObject);
     procedure btnAberturaClick(Sender: TObject);
+    procedure btnAtualizarClick(Sender: TObject);
   private
     FControllerCaixa: TControllerCaixa;
     FControllerMovimento: TControllerCaixaMovimento;
@@ -184,6 +186,9 @@ procedure TViewCaixa.btnPesquisarClick(Sender: TObject);
 begin
   inherited;
   FControllerCaixa.ObterCaixas(edtDatIni.Date, edtDatFim.Date);
+
+  if FControllerCaixa.mtCaixas.IsEmpty
+  then ShowMessage('A consulta não retornou dados');
 end;
 
 procedure TViewCaixa.btnAberturaClick(Sender: TObject);
@@ -248,6 +253,13 @@ begin
   end;
 end;
 
+procedure TViewCaixa.btnAtualizarClick(Sender: TObject);
+begin
+  inherited;
+  FControllerMovimento.ObterMovimentosCaixa(FControllerCaixa.mtDadosCOD_CAIXA.AsInteger);
+  AtualizarResumoCaixa(FControllerCaixa.mtDadosCOD_CAIXA.AsInteger);
+end;
+
 procedure TViewCaixa.dbgCaixasDblClick(Sender: TObject);
 begin
   inherited;
@@ -272,20 +284,34 @@ begin
 
   FrameCaixaResumoMeioPagto1.Cor := RGB(173, 146, 255);
   FrameCaixaResumoMeioPagto1.CorFonte := RGB(000, 000, 000);
+  FrameCaixaResumoMeioPagto1.Nome := 'Meio de Pagamento';
+  FrameCaixaResumoMeioPagto1.Valor := 0;
 
   FrameCaixaResumoMeioPagto2.Cor := RGB(151, 255, 170);
   FrameCaixaResumoMeioPagto2.CorFonte := RGB(000, 000, 000);
+  FrameCaixaResumoMeioPagto2.Nome := 'Meio de Pagamento';
+  FrameCaixaResumoMeioPagto2.Valor := 0;
 
   FrameCaixaResumoMeioPagto3.Cor := RGB(255, 220, 146);
   FrameCaixaResumoMeioPagto3.CorFonte := RGB(000, 000, 000);
+  FrameCaixaResumoMeioPagto3.Nome := 'Meio de Pagamento';
+  FrameCaixaResumoMeioPagto3.Valor := 0;
 
   FrameCaixaResumoMeioPagto4.Cor := RGB(255, 179, 149);
   FrameCaixaResumoMeioPagto4.CorFonte := RGB(000, 000, 000);
+  FrameCaixaResumoMeioPagto4.Nome := 'Meio de Pagamento';
+  FrameCaixaResumoMeioPagto4.Valor := 0;
 
   FrameCaixaResumoMeioPagto5.Cor := RGB(255, 156, 241);
   FrameCaixaResumoMeioPagto5.CorFonte := RGB(000, 000, 000);
+  FrameCaixaResumoMeioPagto5.Nome := 'Meio de Pagamento';
+  FrameCaixaResumoMeioPagto5.Valor := 0;
 
-  AbrirDetalhesCaixa(0);
+  try
+    AbrirDetalhesCaixa(0);
+  except
+
+  end;
 end;
 
 procedure TViewCaixa.sbVerCaixaAbertoClick(Sender: TObject);

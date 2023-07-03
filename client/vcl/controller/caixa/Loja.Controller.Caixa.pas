@@ -33,6 +33,7 @@ type
     mtResumoCaixaCOD_SIT: TStringField;
     mtResumoCaixaMEIOS_PAGTO: TMemoField;
     mtResumoCaixaVR_SALDO: TCurrencyField;
+    procedure DataModuleCreate(Sender: TObject);
   public
     procedure ObterCaixas(ADatIni, ADatFim: TDate);
     procedure ObterCaixaAberto;
@@ -66,6 +67,15 @@ begin
 
   if not(LResponse.StatusCode in [201])
   then RaiseException(LResponse, 'Falha ao abrir novo caixa');
+end;
+
+procedure TControllerCaixa.DataModuleCreate(Sender: TObject);
+begin
+  inherited;
+  mtDados.CreateDataSet;
+  mtCaixas.CreateDataSet;
+  mtResumoCaixa.CreateDataSet;
+  mtResumoMeiosPagto.CreateDataSet;
 end;
 
 procedure TControllerCaixa.FecharCaixa(ACodCaixa: Integer;
@@ -142,10 +152,11 @@ begin
       .AddParam('dat_fim', FormatDateTime('yyyy-mm-dd', ADatFim))
       .Get();
 
-    if not(LResponse.StatusCode in [200])
+    if not(LResponse.StatusCode in [200,204])
     then RaiseException(LResponse, 'Falha ao obter lista de caixas');
 
-    Serializar(LResponse, mtCaixas);
+    if LResponse.StatusCode = 200
+    then Serializar(LResponse, mtCaixas);
   finally
     if not mtCaixas.Active
     then mtCaixas.CreateDataSet;
