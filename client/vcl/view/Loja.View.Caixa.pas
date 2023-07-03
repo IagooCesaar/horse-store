@@ -237,6 +237,12 @@ begin
       end;
     until bOk;
 
+    if not bOk
+    then Exit;
+
+    FControllerCaixa.AbrirNovoCaixa(LValor);
+    AbrirDetalhesCaixa(0);
+
   finally
     FreeAndNil(ViewAbertura);
   end;

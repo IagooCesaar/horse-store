@@ -768,7 +768,7 @@ inherited ViewCaixa: TViewCaixa
               Left = 8
               Top = 0
               Width = 313
-              Height = 21
+              Height = 32
               Margins.Left = 8
               Margins.Top = 0
               Margins.Right = 0
@@ -776,6 +776,7 @@ inherited ViewCaixa: TViewCaixa
               Align = alLeft
               Caption = 'Duplo clique para visualizar detalhes do caixa'
               Layout = tlCenter
+              ExplicitHeight = 21
             end
           end
           object dbgCaixas: TDBGrid

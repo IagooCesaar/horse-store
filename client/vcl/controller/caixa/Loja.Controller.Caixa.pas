@@ -40,6 +40,8 @@ type
     procedure ObterResumoCaixa(ACodCaixa: Integer);
 
     procedure FecharCaixa(ACodCaixa: Integer; AFechamento: TLojaModelCaixaFechamento);
+    procedure AbrirNovoCaixa(AVrAbertura: Currency);
+
   end;
 
 implementation
@@ -51,6 +53,20 @@ uses
 {$R *.dfm}
 
 { TControllerCaixa }
+
+procedure TControllerCaixa.AbrirNovoCaixa(AVrAbertura: Currency);
+begin
+  var LBody := TJSONObject.Create;
+  LBody.AddPair('vrAbert', AVrAbertura);
+
+  var LResponse := PreparaRequest
+    .Resource('/caixa/abrir-caixa')
+    .AddBody(LBody)
+    .Post();
+
+  if not(LResponse.StatusCode in [201])
+  then RaiseException(LResponse, 'Falha ao abrir novo caixa');
+end;
 
 procedure TControllerCaixa.FecharCaixa(ACodCaixa: Integer;
   AFechamento: TLojaModelCaixaFechamento);

@@ -33,6 +33,7 @@ inherited ControllerCaixa: TControllerCaixa
     end
   end
   object mtCaixas: TFDMemTable
+    IndexFieldNames = 'DAT_ABERT:D;COD_CAIXA:D'
     FetchOptions.AssignedValues = [evMode]
     FetchOptions.Mode = fmAll
     ResourceOptions.AssignedValues = [rvSilentMode]
