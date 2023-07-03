@@ -6,7 +6,9 @@ uses
   System.SysUtils, System.Classes, Loja.Controller.Base, FireDAC.Stan.Intf,
   FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
   FireDAC.Phys.Intf, FireDAC.DApt.Intf, Data.DB, FireDAC.Comp.DataSet,
-  FireDAC.Comp.Client, Vcl.Dialogs;
+  FireDAC.Comp.Client, Vcl.Dialogs,
+
+  Loja.Model.Caixa.Fechamento;
 
 type
   TControllerCaixa = class(TControllerBase)
@@ -36,6 +38,8 @@ type
     procedure ObterCaixaAberto;
     procedure ObterCaixa(ACodCaixa: Integer);
     procedure ObterResumoCaixa(ACodCaixa: Integer);
+
+    procedure FecharCaixa(ACodCaixa: Integer; AFechamento: TLojaModelCaixaFechamento);
   end;
 
 implementation
@@ -47,6 +51,28 @@ uses
 {$R *.dfm}
 
 { TControllerCaixa }
+
+procedure TControllerCaixa.FecharCaixa(ACodCaixa: Integer;
+  AFechamento: TLojaModelCaixaFechamento);
+begin
+  try
+    if mtDados.Active
+    then mtDados.Close;
+     var LResponse := PreparaRequest
+      .Resource('/caixa/{cod_caixa}/fechar-caixa')
+      .AddUrlSegment('cod_caixa', ACodCaixa.ToString)
+      .AddBody(TJson.ObjectToClearJsonString(AFechamento))
+      .Get();
+
+    if not(LResponse.StatusCode in [200])
+    then RaiseException(LResponse, 'Falha ao fechar o caixa');
+
+    Serializar(LResponse, mtDados);
+  finally
+    if not mtDados.Active
+    then mtDados.CreateDataSet;
+  end;
+end;
 
 procedure TControllerCaixa.ObterCaixa(ACodCaixa: Integer);
 begin
