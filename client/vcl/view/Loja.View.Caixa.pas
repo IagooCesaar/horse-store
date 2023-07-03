@@ -31,7 +31,7 @@ type
     pCaixasGrid: TPanel;
     Panel3: TPanel;
     Label3: TLabel;
-    GridPanel1: TGridPanel;
+    grpResumo: TGridPanel;
     FrameCaixaResumoMeioPagto1: TFrameCaixaResumoMeioPagto;
     FrameCaixaResumoMeioPagto2: TFrameCaixaResumoMeioPagto;
     FrameCaixaResumoMeioPagto3: TFrameCaixaResumoMeioPagto;
@@ -41,7 +41,7 @@ type
     btnPesquisar: TButton;
     btnCriarSangria: TButton;
     btnCriarReforco: TButton;
-    Button3: TButton;
+    btnFechamento: TButton;
     Button4: TButton;
     dbgCaixas: TDBGrid;
     dbgMovimentos: TDBGrid;
@@ -64,6 +64,7 @@ type
     procedure dbgCaixasDblClick(Sender: TObject);
     procedure sbVerCaixaAbertoClick(Sender: TObject);
     procedure btnCriarMovimentoClick(Sender: TObject);
+    procedure btnFechamentoClick(Sender: TObject);
   private
     FControllerCaixa: TControllerCaixa;
     FControllerMovimento: TControllerCaixaMovimento;
@@ -78,6 +79,7 @@ implementation
 
 uses
   Loja.View.Caixa.NovoMovimento,
+  Loja.View.Caixa.Fechamento,
   Loja.Model.Caixa.Types;
 
 {$R *.dfm}
@@ -156,6 +158,23 @@ begin
     AtualizarResumoCaixa(FControllerCaixa.mtDadosCOD_CAIXA.AsInteger);
   finally
     LMovimento.Free;
+  end;
+end;
+
+procedure TViewCaixa.btnFechamentoClick(Sender: TObject);
+begin
+  inherited;
+  try
+    grpResumo.Visible := False;
+    if TViewCaixaFechamento.Exibir(Self,
+      FControllerCaixa.mtDadosCOD_CAIXA.AsInteger,
+      FControllerCaixa) = mrOK
+    then begin
+      ShowMessage('Caixa fechado com sucesso!');
+      AbrirDetalhesCaixa(FControllerCaixa.mtDadosCOD_CAIXA.AsInteger);
+    end;
+  finally
+    grpResumo.Visible := True;
   end;
 end;
 

@@ -62,7 +62,7 @@ begin
       .Resource('/caixa/{cod_caixa}/fechar-caixa')
       .AddUrlSegment('cod_caixa', ACodCaixa.ToString)
       .AddBody(TJson.ObjectToClearJsonString(AFechamento))
-      .Get();
+      .Patch();
 
     if not(LResponse.StatusCode in [200])
     then RaiseException(LResponse, 'Falha ao fechar o caixa');
