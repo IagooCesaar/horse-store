@@ -39,7 +39,8 @@ uses
   Loja.Controller.Caixa.Movimento in 'controller\caixa\Loja.Controller.Caixa.Movimento.pas',
   Loja.Model.Caixa.Types in 'model\Loja.Model.Caixa.Types.pas',
   Loja.Model.Caixa.ResumoMeioPagto in 'model\Loja.Model.Caixa.ResumoMeioPagto.pas',
-  Loja.Model.Caixa.Fechamento in 'model\Loja.Model.Caixa.Fechamento.pas';
+  Loja.Model.Caixa.Fechamento in 'model\Loja.Model.Caixa.Fechamento.pas',
+  Loja.View.Caixa.Fechamento in 'view\Loja.View.Caixa.Fechamento.pas' {ViewCaixaFechamento};
 
 {$R *.res}
 

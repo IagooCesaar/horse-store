@@ -813,7 +813,7 @@ inherited ViewCaixa: TViewCaixa
       Width = 1184
       Height = 37
       Caption = 'Controle de Caixa'
-      ExplicitWidth = 1184
+      ExplicitWidth = 164
     end
   end
   object dsCaixas: TDataSource

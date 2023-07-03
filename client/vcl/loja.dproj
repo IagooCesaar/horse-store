@@ -236,6 +236,10 @@
         <DCCReference Include="model\Loja.Model.Caixa.Types.pas"/>
         <DCCReference Include="model\Loja.Model.Caixa.ResumoMeioPagto.pas"/>
         <DCCReference Include="model\Loja.Model.Caixa.Fechamento.pas"/>
+        <DCCReference Include="view\Loja.View.Caixa.Fechamento.pas">
+            <Form>ViewCaixaFechamento</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
