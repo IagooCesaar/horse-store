@@ -379,7 +379,7 @@ inherited ViewCaixa: TViewCaixa
               TabOrder = 1
               OnClick = btnFechamentoClick
             end
-            object Button4: TButton
+            object btnAbertura: TButton
               AlignWithMargins = True
               Left = 0
               Top = 8
@@ -393,6 +393,7 @@ inherited ViewCaixa: TViewCaixa
               Align = alLeft
               Caption = 'Abertura'
               TabOrder = 0
+              OnClick = btnAberturaClick
             end
           end
           object pDados: TPanel

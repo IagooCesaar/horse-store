@@ -42,7 +42,7 @@ type
     btnCriarSangria: TButton;
     btnCriarReforco: TButton;
     btnFechamento: TButton;
-    Button4: TButton;
+    btnAbertura: TButton;
     dbgCaixas: TDBGrid;
     dbgMovimentos: TDBGrid;
     dsCaixa: TDataSource;
@@ -65,6 +65,7 @@ type
     procedure sbVerCaixaAbertoClick(Sender: TObject);
     procedure btnCriarMovimentoClick(Sender: TObject);
     procedure btnFechamentoClick(Sender: TObject);
+    procedure btnAberturaClick(Sender: TObject);
   private
     FControllerCaixa: TControllerCaixa;
     FControllerMovimento: TControllerCaixaMovimento;
@@ -80,6 +81,7 @@ implementation
 uses
   Loja.View.Caixa.NovoMovimento,
   Loja.View.Caixa.Fechamento,
+  Loja.View.ModeloModal,
   Loja.Model.Caixa.Types;
 
 {$R *.dfm}
@@ -170,8 +172,8 @@ begin
       FControllerCaixa.mtDadosCOD_CAIXA.AsInteger,
       FControllerCaixa) = mrOK
     then begin
-      ShowMessage('Caixa fechado com sucesso!');
       AbrirDetalhesCaixa(FControllerCaixa.mtDadosCOD_CAIXA.AsInteger);
+      ShowMessage('Caixa fechado com sucesso!');
     end;
   finally
     grpResumo.Visible := True;
@@ -182,6 +184,62 @@ procedure TViewCaixa.btnPesquisarClick(Sender: TObject);
 begin
   inherited;
   FControllerCaixa.ObterCaixas(edtDatIni.Date, edtDatFim.Date);
+end;
+
+procedure TViewCaixa.btnAberturaClick(Sender: TObject);
+begin
+  inherited;
+  var ViewAbertura := TViewModeloModal.Create(Self);
+  try
+    ViewAbertura.Width := 607;
+    ViewAbertura.Height := 154;
+    ViewAbertura.btnModeloOk.Caption := 'Ok';
+    ViewAbertura.btnModeloOk.ModalResult := mrOk;
+
+    //lbTexto
+    var lbTexto := TLabel.Create(ViewAbertura);
+    lbTexto.Name := 'lbTexto';
+    lbTexto.Parent := ViewAbertura.pModeloClient;
+    lbTexto.Left := 10;
+    lbTexto.Top := 15;
+    lbTexto.Width := 253;
+    lbTexto.Height := 21;
+    lbTexto.Caption := 'Informe o valor de abertura de caixa:';
+
+    //edtValor
+    var edtValor := TEdit.Create(ViewAbertura);
+    edtValor.Name := 'edtValor';
+    edtValor.Parent := ViewAbertura.pModeloClient;
+    edtValor.Left := 269;
+    edtValor.Top := 12;
+    edtValor.Width := 324;
+    edtValor.Height := 29;
+    edtValor.TabOrder := 0;
+    edtValor.Text := '0';
+
+    var bOk := False;
+    var LValor := 0.00;
+
+    repeat
+      if ViewAbertura.ShowModal = mrOk
+      then begin
+        try
+          LValor := StrToFloat(edtValor.Text);
+          bOk := True;
+        except
+          bOk := False;
+        end;
+      end
+      else
+      begin
+        bOk := True;
+        Exit;
+      end;
+    until bOk;
+
+  finally
+    FreeAndNil(ViewAbertura);
+  end;
 end;
 
 procedure TViewCaixa.dbgCaixasDblClick(Sender: TObject);
