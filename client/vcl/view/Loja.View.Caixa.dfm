@@ -201,7 +201,7 @@ inherited ViewCaixa: TViewCaixa
                 inherited lbValor: TLabel
                   Left = 10
                   Width = 207
-                  ExplicitLeft = 155
+                  ExplicitLeft = 153
                 end
               end
             end
@@ -277,7 +277,7 @@ inherited ViewCaixa: TViewCaixa
                 inherited lbValor: TLabel
                   Left = 10
                   Width = 207
-                  ExplicitLeft = 155
+                  ExplicitLeft = 153
                 end
               end
             end
@@ -766,7 +766,7 @@ inherited ViewCaixa: TViewCaixa
               Left = 8
               Top = 0
               Width = 313
-              Height = 32
+              Height = 21
               Margins.Left = 8
               Margins.Top = 0
               Margins.Right = 0
@@ -774,7 +774,6 @@ inherited ViewCaixa: TViewCaixa
               Align = alLeft
               Caption = 'Duplo clique para visualizar detalhes do caixa'
               Layout = tlCenter
-              ExplicitHeight = 21
             end
           end
           object dbgCaixas: TDBGrid
@@ -814,7 +813,7 @@ inherited ViewCaixa: TViewCaixa
       Width = 1184
       Height = 37
       Caption = 'Controle de Caixa'
-      ExplicitWidth = 164
+      ExplicitWidth = 1184
     end
   end
   object dsCaixas: TDataSource

@@ -77,7 +77,8 @@ type
 implementation
 
 uses
-  Loja.View.Caixa.NovoMovimento;
+  Loja.View.Caixa.NovoMovimento,
+  Loja.Model.Caixa.Types;
 
 {$R *.dfm}
 
@@ -108,26 +109,28 @@ begin
   FControllerCaixa.mtResumoMeiosPagto.First;
   while not FControllerCaixa.mtResumoMeiosPagto.Eof
   do begin
+    var LMeioPagto := TLojaModelCaixaMeioPagamento.Create(FControllerCaixa.mtResumoMeiosPagtoCOD_MEIO_PAGTO.AsString).Name;
+    var LVrTotal := FControllerCaixa.mtResumoMeiosPagtoVR_TOTAL.AsFloat;
     case FControllerCaixa.mtResumoMeiosPagto.RecNo of
       1: begin
-        FrameCaixaResumoMeioPagto1.Nome := FControllerCaixa.mtResumoMeiosPagtoCOD_MEIO_PAGTO.AsString;
-        FrameCaixaResumoMeioPagto1.Valor := FControllerCaixa.mtResumoMeiosPagtoVR_TOTAL.AsFloat;
+        FrameCaixaResumoMeioPagto1.Nome := LMeioPagto;
+        FrameCaixaResumoMeioPagto1.Valor := LVrTotal;
       end;
       2: begin
-        FrameCaixaResumoMeioPagto2.Nome := FControllerCaixa.mtResumoMeiosPagtoCOD_MEIO_PAGTO.AsString;
-        FrameCaixaResumoMeioPagto2.Valor := FControllerCaixa.mtResumoMeiosPagtoVR_TOTAL.AsFloat;
+        FrameCaixaResumoMeioPagto2.Nome := LMeioPagto;
+        FrameCaixaResumoMeioPagto2.Valor := LVrTotal;
       end;
       3: begin
-        FrameCaixaResumoMeioPagto3.Nome := FControllerCaixa.mtResumoMeiosPagtoCOD_MEIO_PAGTO.AsString;
-        FrameCaixaResumoMeioPagto3.Valor := FControllerCaixa.mtResumoMeiosPagtoVR_TOTAL.AsFloat;
+        FrameCaixaResumoMeioPagto3.Nome := LMeioPagto;
+        FrameCaixaResumoMeioPagto3.Valor := LVrTotal;
       end;
       4: begin
-        FrameCaixaResumoMeioPagto4.Nome := FControllerCaixa.mtResumoMeiosPagtoCOD_MEIO_PAGTO.AsString;
-        FrameCaixaResumoMeioPagto4.Valor := FControllerCaixa.mtResumoMeiosPagtoVR_TOTAL.AsFloat;
+        FrameCaixaResumoMeioPagto4.Nome := LMeioPagto;
+        FrameCaixaResumoMeioPagto4.Valor := LVrTotal;
       end;
       5: begin
-        FrameCaixaResumoMeioPagto5.Nome := FControllerCaixa.mtResumoMeiosPagtoCOD_MEIO_PAGTO.AsString;
-        FrameCaixaResumoMeioPagto5.Valor := FControllerCaixa.mtResumoMeiosPagtoVR_TOTAL.AsFloat;
+        FrameCaixaResumoMeioPagto5.Nome := LMeioPagto;
+        FrameCaixaResumoMeioPagto5.Valor := LVrTotal;
       end;
     end;
     FControllerCaixa.mtResumoMeiosPagto.Next;

@@ -1,17 +1,17 @@
 inherited ViewModeloModal: TViewModeloModal
   BorderStyle = bsDialog
   Caption = 'Modelo Modal'
-  ClientHeight = 492
-  ClientWidth = 915
+  ClientHeight = 491
+  ClientWidth = 911
   Position = poMainFormCenter
-  ExplicitWidth = 931
-  ExplicitHeight = 531
+  ExplicitWidth = 927
+  ExplicitHeight = 530
   TextHeight = 21
   object pModeloClient: TPanel
     Left = 0
     Top = 0
-    Width = 915
-    Height = 436
+    Width = 911
+    Height = 435
     Align = alClient
     BevelOuter = bvNone
     Caption = 'pModeloClient'
@@ -22,8 +22,8 @@ inherited ViewModeloModal: TViewModeloModal
   end
   object pModeloBotoes: TCategoryButtons
     Left = 0
-    Top = 436
-    Width = 915
+    Top = 435
+    Width = 911
     Height = 56
     Align = alBottom
     ButtonFlow = cbfVertical

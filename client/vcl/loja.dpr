@@ -36,7 +36,10 @@ uses
   Loja.Frame.Caixa.ResumoMeioPagto in 'view\Loja.Frame.Caixa.ResumoMeioPagto.pas' {FrameCaixaResumoMeioPagto: TFrame},
   Loja.Model.Caixa.NovoMovimento in 'model\Loja.Model.Caixa.NovoMovimento.pas',
   Loja.View.Caixa.NovoMovimento in 'view\Loja.View.Caixa.NovoMovimento.pas' {ViewCaixaNovoMovimento},
-  Loja.Controller.Caixa.Movimento in 'controller\caixa\Loja.Controller.Caixa.Movimento.pas';
+  Loja.Controller.Caixa.Movimento in 'controller\caixa\Loja.Controller.Caixa.Movimento.pas',
+  Loja.Model.Caixa.Types in 'model\Loja.Model.Caixa.Types.pas',
+  Loja.Model.Caixa.ResumoMeioPagto in 'model\Loja.Model.Caixa.ResumoMeioPagto.pas',
+  Loja.Model.Caixa.Fechamento in 'model\Loja.Model.Caixa.Fechamento.pas';
 
 {$R *.res}
 
