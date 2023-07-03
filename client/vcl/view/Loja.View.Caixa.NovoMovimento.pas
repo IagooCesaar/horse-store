@@ -32,9 +32,15 @@ implementation
 procedure TViewCaixaNovoMovimento.btnModeloOkClick(Sender: TObject);
 begin
   inherited;
+  var LValor := StrToFloatDef(edtValor.Text, 0);
+  if LValor <= 0
+  then raise Exception.Create('O valor do movimento deverá ser superior a zero');
+
+  if (Length(edtObservacao.Text) < 4) or (Length(edtObservacao.Text) > 60)
+  then raise Exception.Create('A observação do movimento deverá ter no mínimo 4 caracteres e no máximo 60');
 
   FMovimento := TLojaModelCaixaNovoMovimento.Create;
-  FMovimento.VrMov := StrToFloat(edtValor.Text);
+  FMovimento.VrMov := LValor;
   FMovimento.DscObs := edtObservacao.Text;
 
   Self.ModalResult := mrOk;

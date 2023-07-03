@@ -9,8 +9,8 @@ inherited ViewCaixaNovoMovimento: TViewCaixaNovoMovimento
   inherited pModeloClient: TPanel
     Width = 437
     Height = 153
-    ExplicitWidth = 915
-    ExplicitHeight = 436
+    ExplicitWidth = 433
+    ExplicitHeight = 152
     object Label1: TLabel
       Left = 10
       Top = 15
@@ -43,17 +43,18 @@ inherited ViewCaixaNovoMovimento: TViewCaixaNovoMovimento
   inherited pModeloBotoes: TCategoryButtons
     Top = 153
     Width = 437
-    ExplicitTop = 436
-    ExplicitWidth = 915
+    ExplicitTop = 152
+    ExplicitWidth = 433
     inherited btnModeloOk: TButton
       Left = 227
       Caption = 'Ok'
       OnClick = btnModeloOkClick
-      ExplicitLeft = 705
+      ExplicitLeft = 227
+      ExplicitTop = 9
     end
     inherited btnModeloCancelar: TButton
       Left = 330
-      ExplicitLeft = 808
+      ExplicitLeft = 326
     end
   end
 end
