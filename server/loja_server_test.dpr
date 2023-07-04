@@ -88,7 +88,11 @@ uses
   Loja.Model.Dto.Req.Caixa.CriarMovimento in 'src\model\dto\Loja.Model.Dto.Req.Caixa.CriarMovimento.pas',
   Loja.Model.Dto.Resp.Caixa.ResumoCaixa.MeioPagto in 'src\model\dto\Loja.Model.Dto.Resp.Caixa.ResumoCaixa.MeioPagto.pas',
   Loja.Model.Caixa.Test in 'src\test\model\Loja.Model.Caixa.Test.pas',
-  Loja.Controller.Caixa.Test in 'src\test\controller\Loja.Controller.Caixa.Test.pas';
+  Loja.Controller.Caixa.Test in 'src\test\controller\Loja.Controller.Caixa.Test.pas',
+  Loja.Model.Entity.Venda.Venda in 'src\model\entity\venda\Loja.Model.Entity.Venda.Venda.pas',
+  Loja.Model.Entity.Venda.Types in 'src\model\entity\venda\Loja.Model.Entity.Venda.Types.pas',
+  Loja.Model.Entity.Venda.Item in 'src\model\entity\venda\Loja.Model.Entity.Venda.Item.pas',
+  Loja.Model.Entity.Venda.MeioPagto in 'src\model\entity\venda\Loja.Model.Entity.Venda.MeioPagto.pas';
 
 {$IFNDEF TESTINSIGHT}
 var

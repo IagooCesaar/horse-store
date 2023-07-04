@@ -188,6 +188,10 @@
         <DCCReference Include="src\model\dto\Loja.Model.Dto.Resp.Caixa.ResumoCaixa.MeioPagto.pas"/>
         <DCCReference Include="src\test\model\Loja.Model.Caixa.Test.pas"/>
         <DCCReference Include="src\test\controller\Loja.Controller.Caixa.Test.pas"/>
+        <DCCReference Include="src\model\entity\venda\Loja.Model.Entity.Venda.Venda.pas"/>
+        <DCCReference Include="src\model\entity\venda\Loja.Model.Entity.Venda.Types.pas"/>
+        <DCCReference Include="src\model\entity\venda\Loja.Model.Entity.Venda.Item.pas"/>
+        <DCCReference Include="src\model\entity\venda\Loja.Model.Entity.Venda.MeioPagto.pas"/>
         <RcItem Include="boss.json">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>RCDATA</ResourceType>
