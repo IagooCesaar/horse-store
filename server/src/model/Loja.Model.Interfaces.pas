@@ -66,12 +66,17 @@ type
     function CriarSangriaCaixa(AMovimento: TLojaModelDtoReqCaixaCriarMovimento): TLojaModelEntityCaixaMovimento;
   end;
 
+  ILojaModelVenda = interface
+    ['{C36E1BEE-E9DB-451E-9872-C236CAE9A416}']
+  end;
+
   ILojaModelFactory = interface
     ['{FBA02FC1-F0C9-4969-BF2A-AA7662040FC8}']
     function Itens: ILojaModelItens;
     function Estoque: ILojaModelEstoque;
     function Preco: ILojaModelPreco;
     function Caixa: ILojaModelCaixa;
+    function Venda: ILojaModelVenda;
   end;
 
 implementation

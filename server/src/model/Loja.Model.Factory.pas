@@ -23,6 +23,7 @@ type
     function Estoque: ILojaModelEstoque;
     function Preco: ILojaModelPreco;
     function Caixa: ILojaModelCaixa;
+    function Venda: ILojaModelVenda;
   end;
 
 implementation
@@ -31,7 +32,8 @@ uses
   Loja.Model.Itens,
   Loja.Model.Estoque,
   Loja.Model.Preco,
-  Loja.Model.Caixa;
+  Loja.Model.Caixa,
+  Loja.Model.Venda;
 
 { TLojaModelFactory }
 
@@ -69,6 +71,11 @@ end;
 function TLojaModelFactory.Preco: ILojaModelPreco;
 begin
   Result := TlojaModelPreco.New;
+end;
+
+function TLojaModelFactory.Venda: ILojaModelVenda;
+begin
+  Result := TLojaModelVenda.New;
 end;
 
 end.

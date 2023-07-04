@@ -59,7 +59,6 @@ uses
   Loja.Model.Entity.Caixa.Caixa in 'src\model\entity\caixa\Loja.Model.Entity.Caixa.Caixa.pas',
   Loja.Model.Entity.Caixa.Movimento in 'src\model\entity\caixa\Loja.Model.Entity.Caixa.Movimento.pas',
   Loja.Model.Entity.Caixa.Types in 'src\model\entity\caixa\Loja.Model.Entity.Caixa.Types.pas',
-  Loja.Model.Caixa in 'src\model\Loja.Model.Caixa.pas',
   Loja.Model.Bo.Caixa in 'src\model\bo\Loja.Model.Bo.Caixa.pas',
   Loja.Model.Dao.Caixa.Interfaces in 'src\model\dao\Loja.Model.Dao.Caixa.Interfaces.pas',
   Loja.Model.Dao.Caixa.Caixa.InMemory in 'src\model\dao\in-memory\caixa\Loja.Model.Dao.Caixa.Caixa.InMemory.pas',
@@ -69,7 +68,14 @@ uses
   Loja.Model.Dao.Caixa.Factory in 'src\model\dao\oficial\caixa\Loja.Model.Dao.Caixa.Factory.pas',
   Loja.Model.Dao.Caixa.Movimento in 'src\model\dao\oficial\caixa\Loja.Model.Dao.Caixa.Movimento.pas',
   Loja.Model.Dto.Req.Caixa.CriarMovimento in 'src\model\dto\Loja.Model.Dto.Req.Caixa.CriarMovimento.pas',
-  Loja.Model.Dto.Resp.Caixa.ResumoCaixa.MeioPagto in 'src\model\dto\Loja.Model.Dto.Resp.Caixa.ResumoCaixa.MeioPagto.pas';
+  Loja.Model.Dto.Resp.Caixa.ResumoCaixa.MeioPagto in 'src\model\dto\Loja.Model.Dto.Resp.Caixa.ResumoCaixa.MeioPagto.pas',
+  Loja.Model.Entity.Venda.Item in 'src\model\entity\venda\Loja.Model.Entity.Venda.Item.pas',
+  Loja.Model.Caixa in 'src\model\Loja.Model.Caixa.pas',
+  Loja.Model.Venda in 'src\model\Loja.Model.Venda.pas',
+  Loja.Model.Dto.Resp.Venda.Item in 'src\model\dto\Loja.Model.Dto.Resp.Venda.Item.pas',
+  Loja.Model.Entity.Venda.MeioPagto in 'src\model\entity\venda\Loja.Model.Entity.Venda.MeioPagto.pas',
+  Loja.Model.Entity.Venda.Types in 'src\model\entity\venda\Loja.Model.Entity.Venda.Types.pas',
+  Loja.Model.Entity.Venda.Venda in 'src\model\entity\venda\Loja.Model.Entity.Venda.Venda.pas';
 
 begin
   var App := TApp.Create;

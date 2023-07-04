@@ -1,4 +1,4 @@
-unit Loja.Model.Entity.Venda.Item;
+unit Loja.Model.Dto.Resp.Venda.Item;
 
 interface
 
@@ -9,7 +9,7 @@ uses
   Loja.Model.Entity.Venda.Types;
 
 type
-  TLojaModelEntityVendaItem = class
+  TLojaModelDtoRespVendaItem = class
   private
     FNumVnda: Integer;
     FNumSeqItem: Integer;
@@ -20,10 +20,12 @@ type
     FVrDesc: Currency;
     FVrTotal: Currency;
     FCodSit: TLojaModelEntityVendaItemSituacao;
+    FNomItem: String;
   public
     property NumVnda: Integer read FNumVnda write FNumVnda;
     property NumSeqItem: Integer read FNumSeqItem write FNumSeqItem;
     property CodItem: Integer read FCodItem write FCodItem;
+    property NomItem: String read FNomItem write FNomItem;
     property CodSit: TLojaModelEntityVendaItemSituacao read FCodSit write FCodSit;
     property QtdItem: Integer read FQtdItem write FQtdItem;
     property VrPrecoUnit: Currency read FVrPrecoUnit write FVrPrecoUnit;
@@ -32,7 +34,7 @@ type
     property VrTotal: Currency read FVrTotal write FVrTotal;
   end;
 
-  TLojaModelEntityVendaItemLista = TObjectList<TLojaModelEntityVendaItem>;
+  TLojaModelDtoRespVendaItemLista = TObjectList<TLojaModelDtoRespVendaItem>;
 
 implementation
 

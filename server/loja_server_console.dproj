@@ -167,7 +167,6 @@
         <DCCReference Include="src\model\entity\caixa\Loja.Model.Entity.Caixa.Caixa.pas"/>
         <DCCReference Include="src\model\entity\caixa\Loja.Model.Entity.Caixa.Movimento.pas"/>
         <DCCReference Include="src\model\entity\caixa\Loja.Model.Entity.Caixa.Types.pas"/>
-        <DCCReference Include="src\model\Loja.Model.Caixa.pas"/>
         <DCCReference Include="src\model\bo\Loja.Model.Bo.Caixa.pas"/>
         <DCCReference Include="src\model\dao\Loja.Model.Dao.Caixa.Interfaces.pas"/>
         <DCCReference Include="src\model\dao\in-memory\caixa\Loja.Model.Dao.Caixa.Caixa.InMemory.pas"/>
@@ -178,6 +177,13 @@
         <DCCReference Include="src\model\dao\oficial\caixa\Loja.Model.Dao.Caixa.Movimento.pas"/>
         <DCCReference Include="src\model\dto\Loja.Model.Dto.Req.Caixa.CriarMovimento.pas"/>
         <DCCReference Include="src\model\dto\Loja.Model.Dto.Resp.Caixa.ResumoCaixa.MeioPagto.pas"/>
+        <DCCReference Include="src\model\entity\venda\Loja.Model.Entity.Venda.Item.pas"/>
+        <DCCReference Include="src\model\Loja.Model.Caixa.pas"/>
+        <DCCReference Include="src\model\Loja.Model.Venda.pas"/>
+        <DCCReference Include="src\model\dto\Loja.Model.Dto.Resp.Venda.Item.pas"/>
+        <DCCReference Include="src\model\entity\venda\Loja.Model.Entity.Venda.MeioPagto.pas"/>
+        <DCCReference Include="src\model\entity\venda\Loja.Model.Entity.Venda.Types.pas"/>
+        <DCCReference Include="src\model\entity\venda\Loja.Model.Entity.Venda.Venda.pas"/>
         <RcItem Include="boss.json">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>RCDATA</ResourceType>

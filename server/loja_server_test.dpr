@@ -92,7 +92,9 @@ uses
   Loja.Model.Entity.Venda.Venda in 'src\model\entity\venda\Loja.Model.Entity.Venda.Venda.pas',
   Loja.Model.Entity.Venda.Types in 'src\model\entity\venda\Loja.Model.Entity.Venda.Types.pas',
   Loja.Model.Entity.Venda.Item in 'src\model\entity\venda\Loja.Model.Entity.Venda.Item.pas',
-  Loja.Model.Entity.Venda.MeioPagto in 'src\model\entity\venda\Loja.Model.Entity.Venda.MeioPagto.pas';
+  Loja.Model.Entity.Venda.MeioPagto in 'src\model\entity\venda\Loja.Model.Entity.Venda.MeioPagto.pas',
+  Loja.Model.Dto.Resp.Venda.Item in 'src\model\dto\Loja.Model.Dto.Resp.Venda.Item.pas',
+  Loja.Model.Venda in 'src\model\Loja.Model.Venda.pas';
 
 {$IFNDEF TESTINSIGHT}
 var
