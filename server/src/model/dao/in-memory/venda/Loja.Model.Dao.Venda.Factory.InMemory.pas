@@ -27,6 +27,11 @@ type
 
 implementation
 
+uses
+  Loja.Model.Dao.Venda.Venda.InMemory,
+  Loja.Model.Dao.Venda.Item.InMemory,
+  Loja.Model.Dao.Venda.MeioPagto.InMemory;
+
 { TLojaModelDaoVendaFactoryInMemory }
 
 destructor TLojaModelDaoVendaFactoryInMemory.Destroy;
@@ -44,12 +49,12 @@ end;
 
 function TLojaModelDaoVendaFactoryInMemory.Item: ILojaModelDaoVendaItem;
 begin
-
+  Result := TLojaModelDaoVendaItemInMemory.GetInstance;
 end;
 
 function TLojaModelDaoVendaFactoryInMemory.MeioPagto: ILojaModelDaoVendaMeioPagto;
 begin
-
+  Result := TLojaModelDaoVendaMeioPagtoInMemory.GetInstance;
 end;
 
 class destructor TLojaModelDaoVendaFactoryInMemory.UnInitialize;
@@ -60,7 +65,7 @@ end;
 
 function TLojaModelDaoVendaFactoryInMemory.Venda: ILojaModelDaoVendaVenda;
 begin
-
+  Result := TLojaModelDaoVendaVendaInMemory.GetInstance;
 end;
 
 end.
