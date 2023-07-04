@@ -87,26 +87,25 @@ begin
 
   if LUltFechado <> nil
   then begin
-    if LNovoCaixa.VrAbert <> LUltFechado.VrFecha
-    then begin
-      // fazer dois movimentos, um com o ultimo fechamento e outro com a correção
+    var LMovAbert := TLojaModelDtoReqCaixaCriarMovimento.Create;
+    try
+      if LUltFechado.VrFecha > 0
+      then begin
+        LMovAbert.CodCaixa := LNovoCaixa.CodCaixa;
+        LMovAbert.DatMov := Now;
+        LMovAbert.DscObs := 'Saldo fechamento do caixa anterior';
+        LMovAbert.CodMeioPagto := pagDinheiro;
+        LMovAbert.CodTipoMov := movEntrada;
+        LMovAbert.CodOrigMov := orgReforco;
+        LMovAbert.VrMov := LUltFechado.VrFecha;
 
-      var LMovAbert := TLojaModelDtoReqCaixaCriarMovimento.Create;
-      try
-        if LUltFechado.VrFecha > 0
-        then begin
-          LMovAbert.CodCaixa := LNovoCaixa.CodCaixa;
-          LMovAbert.DatMov := Now;
-          LMovAbert.DscObs := 'Saldo fechamento do caixa anterior';
-          LMovAbert.CodMeioPagto := pagDinheiro;
-          LMovAbert.CodTipoMov := movEntrada;
-          LMovAbert.CodOrigMov := orgReforco;
-          LMovAbert.VrMov := LUltFechado.VrFecha;
+        var LMov1 := TLojaModelBoFactory.New.Caixa.CriarMovimentoCaixa(LMovAbert);
+        LMov1.Free;
+      end;
 
-          var LMov1 := TLojaModelBoFactory.New.Caixa.CriarMovimentoCaixa(LMovAbert);
-          LMov1.Free;
-        end;
-
+      if LNovoCaixa.VrAbert <> LUltFechado.VrFecha
+      then begin
+        // fazer segundo movimento para regularizar a diferença
         LMovAbert.CodCaixa := LNovoCaixa.CodCaixa;
         LMovAbert.DatMov := Now;
         LMovAbert.DscObs := 'Saldo abertura divergente do último fechamento';
@@ -126,9 +125,9 @@ begin
 
         var Mov2 := TLojaModelBoFactory.New.Caixa.CriarMovimentoCaixa(LMovAbert);
         Mov2.Free;
-      finally
-        LMovAbert.Free;
       end;
+    finally
+      LMovAbert.Free;
     end;
     LUltFechado.Free;
   end
