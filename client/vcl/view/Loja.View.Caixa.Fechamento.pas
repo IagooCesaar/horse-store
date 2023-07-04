@@ -25,6 +25,8 @@ type
     Label4: TLabel;
     edtCartaoDebito: TEdit;
     Label5: TLabel;
+    edtVoucher: TEdit;
+    Label6: TLabel;
     edtCheque: TEdit;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -50,6 +52,7 @@ begin
   var LPix := StrToFloatDef(edtPix.Text, 0);
   var LCartaoCredito := StrToFloatDef(edtCartaoCredito.Text, 0);
   var LCartaoDebito := StrToFloatDef(edtCartaoDebito.Text, 0);
+  var LVoucher := StrToFloatDef(edtVoucher.Text, 0);
   var LCheque := StrToFloatDef(edtCheque.Text, 0);
 
   edtDinheiro.Text := FloatToStr(LDinheiro);
@@ -62,6 +65,7 @@ begin
   FFechamento.MeiosPagto.Get(pagPix).VrTotal := LPix;
   FFechamento.MeiosPagto.Get(pagCartaoCredito).VrTotal := LCartaoCredito;
   FFechamento.MeiosPagto.Get(pagCartaoDebito).VrTotal := LCartaoDebito;
+  FFechamento.MeiosPagto.Get(pagVoucher).VrTotal := LVoucher;
   FFechamento.MeiosPagto.Get(pagCheque).VrTotal := LCheque;
 
   FController.FecharCaixa(FCodCaixa, FFechamento);

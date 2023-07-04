@@ -60,6 +60,7 @@ type
     Label9: TLabel;
     dbtVR_FECHA: TDBText;
     btnAtualizar: TButton;
+    FrameCaixaResumoMeioPagto6: TFrameCaixaResumoMeioPagto;
     procedure FormCreate(Sender: TObject);
     procedure btnPesquisarClick(Sender: TObject);
     procedure dbgCaixasDblClick(Sender: TObject);
@@ -137,6 +138,10 @@ begin
       5: begin
         FrameCaixaResumoMeioPagto5.Nome := LMeioPagto;
         FrameCaixaResumoMeioPagto5.Valor := LVrTotal;
+      end;
+      6: begin
+        FrameCaixaResumoMeioPagto6.Nome := LMeioPagto;
+        FrameCaixaResumoMeioPagto6.Valor := LVrTotal;
       end;
     end;
     FControllerCaixa.mtResumoMeiosPagto.Next;
@@ -302,10 +307,15 @@ begin
   FrameCaixaResumoMeioPagto4.Nome := 'Meio de Pagamento';
   FrameCaixaResumoMeioPagto4.Valor := 0;
 
-  FrameCaixaResumoMeioPagto5.Cor := RGB(255, 156, 241);
+  FrameCaixaResumoMeioPagto5.Cor := RGB(151, 211, 255);
   FrameCaixaResumoMeioPagto5.CorFonte := RGB(000, 000, 000);
   FrameCaixaResumoMeioPagto5.Nome := 'Meio de Pagamento';
   FrameCaixaResumoMeioPagto5.Valor := 0;
+
+  FrameCaixaResumoMeioPagto6.Cor := RGB(255, 156, 241);
+  FrameCaixaResumoMeioPagto6.CorFonte := RGB(000, 000, 000);
+  FrameCaixaResumoMeioPagto6.Nome := 'Meio de Pagamento';
+  FrameCaixaResumoMeioPagto6.Valor := 0;
 
   try
     AbrirDetalhesCaixa(0);

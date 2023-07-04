@@ -13,6 +13,7 @@ type
     pagPix,
     pagCartaoCredito,
     pagCartaoDebito,
+    pagVoucher,
     pagCheque
   );
 
@@ -43,6 +44,8 @@ begin
       Result := 'Cartão de Crédito';
     pagCartaoDebito:
       Result := 'Cartão de Débito';
+    pagVoucher:
+      Result := 'Voucher';
     pagCheque:
       Result := 'Cheque';
   end;

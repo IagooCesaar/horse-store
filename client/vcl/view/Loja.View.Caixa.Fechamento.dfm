@@ -1,17 +1,17 @@
 inherited ViewCaixaFechamento: TViewCaixaFechamento
   Caption = 'Fechamento de Caixa'
-  ClientHeight = 358
+  ClientHeight = 396
   ClientWidth = 640
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   ExplicitWidth = 652
-  ExplicitHeight = 396
+  ExplicitHeight = 434
   TextHeight = 21
   inherited pModeloClient: TPanel
     Width = 640
-    Height = 302
-    ExplicitWidth = 632
-    ExplicitHeight = 302
+    Height = 340
+    ExplicitWidth = 636
+    ExplicitHeight = 301
     object Label1: TLabel
       Left = 71
       Top = 96
@@ -45,8 +45,16 @@ inherited ViewCaixaFechamento: TViewCaixaFechamento
       Caption = 'Valor total compras no Cart'#227'o de D'#233'bito:'
     end
     object Label5: TLabel
-      Left = 78
+      Left = 73
       Top = 236
+      Width = 221
+      Height = 21
+      Alignment = taRightJustify
+      Caption = 'Valor total compras no Voucher:'
+    end
+    object Label6: TLabel
+      Left = 78
+      Top = 271
       Width = 216
       Height = 21
       Alignment = taRightJustify
@@ -62,9 +70,7 @@ inherited ViewCaixaFechamento: TViewCaixaFechamento
       Caption = 'aviso'
       ShowCaption = False
       TabOrder = 0
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 911
+      ExplicitWidth = 630
       object lbAviso: TLabel
         Left = 1
         Top = 1
@@ -78,7 +84,7 @@ inherited ViewCaixaFechamento: TViewCaixaFechamento
           ' o que est'#225' salvo no sistema'
         Layout = tlCenter
         WordWrap = True
-        ExplicitWidth = 1092
+        ExplicitWidth = 612
         ExplicitHeight = 42
       end
     end
@@ -114,7 +120,7 @@ inherited ViewCaixaFechamento: TViewCaixaFechamento
       TabOrder = 4
       Text = '0'
     end
-    object edtCheque: TEdit
+    object edtVoucher: TEdit
       Left = 300
       Top = 233
       Width = 332
@@ -122,21 +128,29 @@ inherited ViewCaixaFechamento: TViewCaixaFechamento
       TabOrder = 5
       Text = '0'
     end
+    object edtCheque: TEdit
+      Left = 300
+      Top = 268
+      Width = 332
+      Height = 29
+      TabOrder = 6
+      Text = '0'
+    end
   end
   inherited pModeloBotoes: TCategoryButtons
-    Top = 302
+    Top = 340
     Width = 640
-    ExplicitTop = 434
-    ExplicitWidth = 907
+    ExplicitTop = 301
+    ExplicitWidth = 636
     inherited btnModeloOk: TButton
       Left = 430
       Caption = 'OK'
       OnClick = btnModeloOkClick
-      ExplicitLeft = 697
+      ExplicitLeft = 426
     end
     inherited btnModeloCancelar: TButton
       Left = 533
-      ExplicitLeft = 800
+      ExplicitLeft = 529
     end
   end
 end
