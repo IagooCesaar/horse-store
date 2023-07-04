@@ -25,7 +25,10 @@ uses
   Loja.Model.Dto.Req.Caixa.Abertura,
   Loja.Model.Dto.Req.Caixa.Fechamento,
   Loja.Model.Dto.Req.Caixa.CriarMovimento,
-  Loja.Model.Dto.Resp.Caixa.ResumoCaixa;
+  Loja.Model.Dto.Resp.Caixa.ResumoCaixa,
+
+  Loja.Model.Entity.Venda.Venda,
+  Loja.Model.Dto.Resp.Venda.Item;
 
 type
   ILojaModelItens = interface
@@ -68,6 +71,7 @@ type
 
   ILojaModelVenda = interface
     ['{C36E1BEE-E9DB-451E-9872-C236CAE9A416}']
+    //TLojaModelDtoRespVendaItem
   end;
 
   ILojaModelFactory = interface
