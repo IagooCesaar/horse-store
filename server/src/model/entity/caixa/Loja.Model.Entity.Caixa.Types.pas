@@ -12,6 +12,7 @@ type
     pagPix,
     pagCartaoCredito,
     pagCartaoDebito,
+    pagVoucher,
     pagCheque
   );
 
@@ -71,12 +72,13 @@ implementation
 
 constructor TLojaModelEntityCaixaMeioPagamentoHelper.Create(AValue: string);
 begin
-  case AnsiIndexStr(AValue,['DN', 'PX', 'CC', 'CD', 'CH']) of
+  case AnsiIndexStr(AValue,['DN', 'PX', 'CC', 'CD', 'VO', 'CH']) of
     0: Self := pagDinheiro;
     1: Self := pagPix;
     2: Self := pagCartaoCredito;
     3: Self := pagCartaoDebito;
-    4: Self := pagCheque;
+    4: Self := pagVoucher;
+    5: Self := pagCheque;
   end;
 end;
 
@@ -91,6 +93,8 @@ begin
       Result := 'Cartão de Crédito';
     pagCartaoDebito:
       Result := 'Cartão de Débito';
+    pagVoucher:
+      Result := 'Voucher';
     pagCheque:
       Result := 'Cheque';
   end;
@@ -107,6 +111,8 @@ begin
       Result := 'CC';
     pagCartaoDebito:
       Result := 'CD';
+    pagVoucher:
+      Result := 'VO';
     pagCheque:
       Result := 'CH';
   end;
