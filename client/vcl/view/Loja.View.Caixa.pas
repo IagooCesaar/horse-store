@@ -287,12 +287,12 @@ begin
   dsCaixas.DataSet := FControllerCaixa.mtCaixas;
   dsMovimentos.DataSet := FControllerMovimento.mtDados;
 
-  FrameCaixaResumoMeioPagto1.Cor := RGB(173, 146, 255);
+  FrameCaixaResumoMeioPagto1.Cor := RGB(151, 255, 170);
   FrameCaixaResumoMeioPagto1.CorFonte := RGB(000, 000, 000);
   FrameCaixaResumoMeioPagto1.Nome := 'Meio de Pagamento';
   FrameCaixaResumoMeioPagto1.Valor := 0;
 
-  FrameCaixaResumoMeioPagto2.Cor := RGB(151, 255, 170);
+  FrameCaixaResumoMeioPagto2.Cor := RGB(173, 146, 255);
   FrameCaixaResumoMeioPagto2.CorFonte := RGB(000, 000, 000);
   FrameCaixaResumoMeioPagto2.Nome := 'Meio de Pagamento';
   FrameCaixaResumoMeioPagto2.Valor := 0;
