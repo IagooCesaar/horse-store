@@ -78,7 +78,10 @@ uses
   Loja.Model.Entity.Venda.Venda in 'src\model\entity\venda\Loja.Model.Entity.Venda.Venda.pas',
   Loja.Model.Dao.Venda.Interfaces in 'src\model\dao\Loja.Model.Dao.Venda.Interfaces.pas',
   Loja.Model.Dao.Venda.Factory in 'src\model\dao\oficial\venda\Loja.Model.Dao.Venda.Factory.pas',
-  Loja.Model.Dao.Venda.Factory.InMemory in 'src\model\dao\in-memory\venda\Loja.Model.Dao.Venda.Factory.InMemory.pas';
+  Loja.Model.Dao.Venda.Factory.InMemory in 'src\model\dao\in-memory\venda\Loja.Model.Dao.Venda.Factory.InMemory.pas',
+  Loja.Model.Dao.Venda.Venda.InMemory in 'src\model\dao\in-memory\venda\Loja.Model.Dao.Venda.Venda.InMemory.pas',
+  Loja.Model.Dao.Venda.Item.InMemory in 'src\model\dao\in-memory\venda\Loja.Model.Dao.Venda.Item.InMemory.pas',
+  Loja.Model.Dao.Venda.MeioPagto.InMemory in 'src\model\dao\in-memory\venda\Loja.Model.Dao.Venda.MeioPagto.InMemory.pas';
 
 begin
   var App := TApp.Create;

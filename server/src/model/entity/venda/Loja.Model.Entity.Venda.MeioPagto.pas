@@ -9,8 +9,6 @@ uses
   Loja.Model.Entity.Venda.Types,
   Loja.Model.Entity.Caixa.Types;
 
-implementation
-
 type
   TLojaModelEntityVendaMeioPagto = class
   private
@@ -28,5 +26,7 @@ type
   end;
 
   TLojaModelEntityVendaMeioPagtoLista = TObjectList<TLojaModelEntityVendaMeioPagto>;
+
+implementation
 
 end.
