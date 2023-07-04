@@ -190,6 +190,9 @@
         <DCCReference Include="src\model\dao\in-memory\venda\Loja.Model.Dao.Venda.Venda.InMemory.pas"/>
         <DCCReference Include="src\model\dao\in-memory\venda\Loja.Model.Dao.Venda.Item.InMemory.pas"/>
         <DCCReference Include="src\model\dao\in-memory\venda\Loja.Model.Dao.Venda.MeioPagto.InMemory.pas"/>
+        <DCCReference Include="src\model\dao\oficial\venda\Loja.Model.Dao.Venda.MeioPagto.pas"/>
+        <DCCReference Include="src\model\dao\oficial\venda\Loja.Model.Dao.Venda.Item.pas"/>
+        <DCCReference Include="src\model\dao\oficial\venda\Loja.Model.Dao.Venda.Venda.pas"/>
         <RcItem Include="boss.json">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>RCDATA</ResourceType>
