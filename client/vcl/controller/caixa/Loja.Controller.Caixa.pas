@@ -82,9 +82,7 @@ procedure TControllerCaixa.FecharCaixa(ACodCaixa: Integer;
   AFechamento: TLojaModelCaixaFechamento);
 begin
   try
-    if mtDados.Active
-    then mtDados.Close;
-     var LResponse := PreparaRequest
+    var LResponse := PreparaRequest
       .Resource('/caixa/{cod_caixa}/fechar-caixa')
       .AddUrlSegment('cod_caixa', ACodCaixa.ToString)
       .AddBody(TJson.ObjectToClearJsonString(AFechamento))
@@ -92,6 +90,9 @@ begin
 
     if not(LResponse.StatusCode in [200])
     then RaiseException(LResponse, 'Falha ao fechar o caixa');
+
+    if mtDados.Active
+    then mtDados.Close;
 
     Serializar(LResponse, mtDados);
   finally

@@ -1,15 +1,15 @@
 inherited ViewCaixaFechamento: TViewCaixaFechamento
   Caption = 'Fechamento de Caixa'
-  ClientHeight = 396
+  ClientHeight = 378
   ClientWidth = 640
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   ExplicitWidth = 652
-  ExplicitHeight = 434
+  ExplicitHeight = 416
   TextHeight = 21
   inherited pModeloClient: TPanel
     Width = 640
-    Height = 340
+    Height = 322
     ExplicitWidth = 636
     ExplicitHeight = 301
     object Label1: TLabel
@@ -138,7 +138,7 @@ inherited ViewCaixaFechamento: TViewCaixaFechamento
     end
   end
   inherited pModeloBotoes: TCategoryButtons
-    Top = 340
+    Top = 322
     Width = 640
     ExplicitTop = 301
     ExplicitWidth = 636
