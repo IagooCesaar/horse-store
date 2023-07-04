@@ -3,6 +3,8 @@
 ```pascal
 
 // DAO InMemory
+
+  
 type
   TLojaModelDaoCaixaMovimentoInMemory = class(TNoRefCountObject, ILojaModelDaoCaixaMovimento)
   private
@@ -19,6 +21,11 @@ type
    end;
 
 // DAO Factory InMemory
+uses
+  System.SysUtils,
+  System.Classes,
+  System.Generics.Collections,
+  
 type
   TLojaModelDaoCaixaFactoryInMemory = class(TNoRefCountObject, ILojaModelDaoCaixaFactory)
   private
@@ -44,6 +51,11 @@ type
   end;
   
 // DAO Factory Oficial
+uses
+  System.SysUtils,
+  System.Classes,
+  System.Generics.Collections,
+  
 type
   TLojaModelDaoCaixaFactory = class(TInterfacedObject, ILojaModelDaoCaixaFactory)
   public

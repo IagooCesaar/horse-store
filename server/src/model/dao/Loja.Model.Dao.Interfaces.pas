@@ -9,7 +9,8 @@ uses
   Loja.Model.Dao.Itens.Interfaces,
   Loja.Model.Dao.Estoque.Interfaces,
   Loja.Model.Dao.Preco.Interfaces,
-  Loja.Model.Dao.Caixa.Interfaces;
+  Loja.Model.Dao.Caixa.Interfaces,
+  Loja.Model.Dao.Venda.Interfaces;
 
 type
 
@@ -19,6 +20,7 @@ type
     function Estoque: ILojaModelDaoEstoqueFactory;
     function Preco: ILojaModelDaoPrecoFactory;
     function Caixa: ILojaModelDaoCaixaFactory;
+    function Venda: ILojaModelDaoVendaFactory;
   end;
 
 implementation

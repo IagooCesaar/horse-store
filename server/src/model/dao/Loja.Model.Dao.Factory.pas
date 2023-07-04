@@ -9,7 +9,8 @@ uses
   Loja.Model.Dao.Itens.Interfaces,
   Loja.Model.Dao.Estoque.Interfaces,
   Loja.Model.Dao.Preco.Interfaces,
-  Loja.Model.Dao.Caixa.Interfaces;
+  Loja.Model.Dao.Caixa.Interfaces,
+  Loja.Model.Dao.Venda.Interfaces;
 
 type
   TLojaModelDaoFactory = class(TNoRefCountObject, ILojaModelDaoFactory)
@@ -28,6 +29,7 @@ type
     function Estoque: ILojaModelDaoEstoqueFactory;
     function Preco: ILojaModelDaoPrecoFactory;
     function Caixa: ILojaModelDaoCaixaFactory;
+    function Venda: ILojaModelDaoVendaFactory;
   end;
 
 
@@ -41,7 +43,9 @@ uses
   Loja.Model.Dao.Preco.Factory,
   Loja.Model.Dao.Preco.Factory.InMemory,
   Loja.Model.Dao.Caixa.Factory,
-  Loja.Model.Dao.Caixa.Factory.InMemory;
+  Loja.Model.Dao.Caixa.Factory.InMemory,
+  Loja.Model.Dao.Venda.Factory,
+  Loja.Model.Dao.Venda.Factory.InMemory;
 
 { TLojaModelDaoFactory }
 
@@ -96,6 +100,13 @@ class destructor TLojaModelDaoFactory.UnInitialize;
 begin
   if Assigned(FFactory)
   then FreeAndNil(FFactory);
+end;
+
+function TLojaModelDaoFactory.Venda: ILojaModelDaoVendaFactory;
+begin
+  if not InMemory
+  then Result := TLojaModelDaoVendaFactory.New
+  else Result := TLojaModelDaoVendaFactoryInMemory.GetInstance;
 end;
 
 initialization
