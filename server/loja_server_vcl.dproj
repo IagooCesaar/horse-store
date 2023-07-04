@@ -179,7 +179,6 @@
         <DCCReference Include="src\model\dao\oficial\preco\Loja.Model.Dao.Preco.Venda.pas"/>
         <DCCReference Include="src\model\Loja.Model.Caixa.pas"/>
         <DCCReference Include="src\model\bo\Loja.Model.Bo.Caixa.pas"/>
-        <DCCReference Include="src\model\dao\Loja.Model.Dao.Caixa.Interfaces.pas"/>
         <DCCReference Include="src\model\dao\in-memory\caixa\Loja.Model.Dao.Caixa.Caixa.InMemory.pas"/>
         <DCCReference Include="src\model\dao\in-memory\caixa\Loja.Model.Dao.Caixa.Factory.InMemory.pas"/>
         <DCCReference Include="src\model\dao\in-memory\caixa\Loja.Model.Dao.Caixa.Movimento.InMemory.pas"/>
@@ -195,6 +194,22 @@
         <DCCReference Include="src\model\dto\Loja.Model.Dto.Req.Caixa.CriarMovimento.pas"/>
         <DCCReference Include="src\controllers\Loja.Controller.Caixa.pas"/>
         <DCCReference Include="src\model\dto\Loja.Model.Dto.Resp.Caixa.ResumoCaixa.MeioPagto.pas"/>
+        <DCCReference Include="src\model\entity\venda\Loja.Model.Entity.Venda.Item.pas"/>
+        <DCCReference Include="src\model\entity\venda\Loja.Model.Entity.Venda.MeioPagto.pas"/>
+        <DCCReference Include="src\model\entity\venda\Loja.Model.Entity.Venda.Types.pas"/>
+        <DCCReference Include="src\model\entity\venda\Loja.Model.Entity.Venda.Venda.pas"/>
+        <DCCReference Include="src\model\dao\Loja.Model.Dao.Caixa.Interfaces.pas"/>
+        <DCCReference Include="src\model\dao\in-memory\venda\Loja.Model.Dao.Venda.Factory.InMemory.pas"/>
+        <DCCReference Include="src\model\dao\in-memory\venda\Loja.Model.Dao.Venda.Item.InMemory.pas"/>
+        <DCCReference Include="src\model\dao\in-memory\venda\Loja.Model.Dao.Venda.MeioPagto.InMemory.pas"/>
+        <DCCReference Include="src\model\dao\in-memory\venda\Loja.Model.Dao.Venda.Venda.InMemory.pas"/>
+        <DCCReference Include="src\model\dao\oficial\venda\Loja.Model.Dao.Venda.Factory.pas"/>
+        <DCCReference Include="src\model\dao\oficial\venda\Loja.Model.Dao.Venda.Item.pas"/>
+        <DCCReference Include="src\model\dao\oficial\venda\Loja.Model.Dao.Venda.MeioPagto.pas"/>
+        <DCCReference Include="src\model\dao\oficial\venda\Loja.Model.Dao.Venda.Venda.pas"/>
+        <DCCReference Include="src\model\dto\Loja.Model.Dto.Resp.Venda.Item.pas"/>
+        <DCCReference Include="src\model\dao\Loja.Model.Dao.Venda.Interfaces.pas"/>
+        <DCCReference Include="src\model\Loja.Model.Venda.pas"/>
         <RcItem Include="boss.json">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>RCDATA</ResourceType>

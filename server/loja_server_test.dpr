@@ -74,7 +74,6 @@ uses
   Loja.Model.Entity.Caixa.Caixa in 'src\model\entity\caixa\Loja.Model.Entity.Caixa.Caixa.pas',
   Loja.Model.Dto.Resp.Caixa.ResumoCaixa in 'src\model\dto\Loja.Model.Dto.Resp.Caixa.ResumoCaixa.pas',
   Loja.Model.Caixa in 'src\model\Loja.Model.Caixa.pas',
-  Loja.Model.Dao.Caixa.Interfaces in 'src\model\dao\Loja.Model.Dao.Caixa.Interfaces.pas',
   Loja.Model.Dao.Caixa.Factory in 'src\model\dao\oficial\caixa\Loja.Model.Dao.Caixa.Factory.pas',
   Loja.Model.Dao.Caixa.Factory.InMemory in 'src\model\dao\in-memory\caixa\Loja.Model.Dao.Caixa.Factory.InMemory.pas',
   Loja.Model.Dao.Caixa.Caixa in 'src\model\dao\oficial\caixa\Loja.Model.Dao.Caixa.Caixa.pas',
@@ -89,12 +88,22 @@ uses
   Loja.Model.Dto.Resp.Caixa.ResumoCaixa.MeioPagto in 'src\model\dto\Loja.Model.Dto.Resp.Caixa.ResumoCaixa.MeioPagto.pas',
   Loja.Model.Caixa.Test in 'src\test\model\Loja.Model.Caixa.Test.pas',
   Loja.Controller.Caixa.Test in 'src\test\controller\Loja.Controller.Caixa.Test.pas',
-  Loja.Model.Entity.Venda.Venda in 'src\model\entity\venda\Loja.Model.Entity.Venda.Venda.pas',
-  Loja.Model.Entity.Venda.Types in 'src\model\entity\venda\Loja.Model.Entity.Venda.Types.pas',
+  Loja.Model.Dto.Resp.Venda.Item in 'src\model\dto\Loja.Model.Dto.Resp.Venda.Item.pas',
+  Loja.Model.Venda in 'src\model\Loja.Model.Venda.pas',
+  Loja.Model.Dao.Venda.Factory.InMemory in 'src\model\dao\in-memory\venda\Loja.Model.Dao.Venda.Factory.InMemory.pas',
+  Loja.Model.Dao.Venda.Item.InMemory in 'src\model\dao\in-memory\venda\Loja.Model.Dao.Venda.Item.InMemory.pas',
+  Loja.Model.Dao.Venda.MeioPagto.InMemory in 'src\model\dao\in-memory\venda\Loja.Model.Dao.Venda.MeioPagto.InMemory.pas',
+  Loja.Model.Dao.Venda.Venda.InMemory in 'src\model\dao\in-memory\venda\Loja.Model.Dao.Venda.Venda.InMemory.pas',
+  Loja.Model.Dao.Venda.Factory in 'src\model\dao\oficial\venda\Loja.Model.Dao.Venda.Factory.pas',
+  Loja.Model.Dao.Venda.Item in 'src\model\dao\oficial\venda\Loja.Model.Dao.Venda.Item.pas',
+  Loja.Model.Dao.Venda.MeioPagto in 'src\model\dao\oficial\venda\Loja.Model.Dao.Venda.MeioPagto.pas',
+  Loja.Model.Dao.Venda.Venda in 'src\model\dao\oficial\venda\Loja.Model.Dao.Venda.Venda.pas',
   Loja.Model.Entity.Venda.Item in 'src\model\entity\venda\Loja.Model.Entity.Venda.Item.pas',
   Loja.Model.Entity.Venda.MeioPagto in 'src\model\entity\venda\Loja.Model.Entity.Venda.MeioPagto.pas',
-  Loja.Model.Dto.Resp.Venda.Item in 'src\model\dto\Loja.Model.Dto.Resp.Venda.Item.pas',
-  Loja.Model.Venda in 'src\model\Loja.Model.Venda.pas';
+  Loja.Model.Entity.Venda.Types in 'src\model\entity\venda\Loja.Model.Entity.Venda.Types.pas',
+  Loja.Model.Entity.Venda.Venda in 'src\model\entity\venda\Loja.Model.Entity.Venda.Venda.pas',
+  Loja.Model.Dao.Caixa.Interfaces in 'src\model\dao\Loja.Model.Dao.Caixa.Interfaces.pas',
+  Loja.Model.Dao.Venda.Interfaces in 'src\model\dao\Loja.Model.Dao.Venda.Interfaces.pas';
 
 {$IFNDEF TESTINSIGHT}
 var
