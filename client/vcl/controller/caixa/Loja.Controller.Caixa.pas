@@ -125,14 +125,15 @@ end;
 procedure TControllerCaixa.ObterCaixaAberto;
 begin
   try
-    if mtDados.Active
-    then mtDados.Close;
     var LResponse := PreparaRequest
       .Resource('/caixa/caixa-aberto')
       .Get();
 
     if not(LResponse.StatusCode in [200])
     then RaiseException(LResponse, 'Falha ao obter o caixa aberto atualmente');
+
+    if mtDados.Active
+    then mtDados.Close;
 
     Serializar(LResponse, mtDados);
   finally
