@@ -81,7 +81,8 @@ uses
   Loja.Model.Dao.Venda.Venda in 'src\model\dao\oficial\venda\Loja.Model.Dao.Venda.Venda.pas',
   Loja.Model.Dto.Resp.Venda.Item in 'src\model\dto\Loja.Model.Dto.Resp.Venda.Item.pas',
   Loja.Model.Dao.Venda.Interfaces in 'src\model\dao\Loja.Model.Dao.Venda.Interfaces.pas',
-  Loja.Model.Venda in 'src\model\Loja.Model.Venda.pas';
+  Loja.Model.Venda in 'src\model\Loja.Model.Venda.pas',
+  Loja.Controller.Venda in 'src\controllers\Loja.Controller.Venda.pas';
 
 {$R *.res}
 

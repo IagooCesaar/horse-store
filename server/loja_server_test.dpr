@@ -103,7 +103,8 @@ uses
   Loja.Model.Entity.Venda.Types in 'src\model\entity\venda\Loja.Model.Entity.Venda.Types.pas',
   Loja.Model.Entity.Venda.Venda in 'src\model\entity\venda\Loja.Model.Entity.Venda.Venda.pas',
   Loja.Model.Dao.Caixa.Interfaces in 'src\model\dao\Loja.Model.Dao.Caixa.Interfaces.pas',
-  Loja.Model.Dao.Venda.Interfaces in 'src\model\dao\Loja.Model.Dao.Venda.Interfaces.pas';
+  Loja.Model.Dao.Venda.Interfaces in 'src\model\dao\Loja.Model.Dao.Venda.Interfaces.pas',
+  Loja.Controller.Venda in 'src\controllers\Loja.Controller.Venda.pas';
 
 {$IFNDEF TESTINSIGHT}
 var

@@ -18,7 +18,8 @@ uses
   Loja.Controller.Itens,
   Loja.Controller.Estoque,
   Loja.Controller.Preco,
-  Loja.Controller.Caixa;
+  Loja.Controller.Caixa,
+  Loja.Controller.Venda;
 
 procedure HealtCheck(Req: THorseRequest; Resp: THorseResponse);
 begin
@@ -37,6 +38,7 @@ begin
   Loja.Controller.Estoque.Registry(LContext);
   Loja.Controller.Preco.Registry(LContext);
   Loja.Controller.Caixa.Registry(LContext);
+  Loja.Controller.Venda.Registry(LContext);
 
   THorse
     .Get(LContext+'/healthcheck', HealtCheck)

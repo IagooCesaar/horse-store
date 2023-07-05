@@ -203,6 +203,7 @@
         <DCCReference Include="src\model\entity\venda\Loja.Model.Entity.Venda.Venda.pas"/>
         <DCCReference Include="src\model\dao\Loja.Model.Dao.Caixa.Interfaces.pas"/>
         <DCCReference Include="src\model\dao\Loja.Model.Dao.Venda.Interfaces.pas"/>
+        <DCCReference Include="src\controllers\Loja.Controller.Venda.pas"/>
         <RcItem Include="boss.json">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>RCDATA</ResourceType>
