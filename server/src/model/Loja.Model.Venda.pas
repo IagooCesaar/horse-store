@@ -10,12 +10,15 @@ uses
   Loja.Model.Entity.Venda.Types,
   Loja.Model.Entity.Venda.Venda,
   Loja.Model.Entity.Venda.Item,
-  Loja.Model.Dto.Resp.Venda.Item;
+  Loja.Model.Entity.Venda.MeioPagto,
+
+  Loja.Model.Dto.Resp.Venda.Item,
+  Loja.Model.Dto.Req.Venda.MeioPagto;
 
 type
   TLojaModelVenda = class(TInterfacedObject, ILojaModelVenda)
   private
-    function EntityToDto(ASource: TLojaModelEntityVendaItem): TLojaModelDtoRespVendaItem;
+    function EntityToDto(ASource: TLojaModelEntityVendaItem): TLojaModelDtoRespVendaItem; overload;
   public
     constructor Create;
     destructor Destroy; override;

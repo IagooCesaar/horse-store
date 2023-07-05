@@ -10,12 +10,12 @@ type
 
   ILojaModelDaoVendaItem = interface
     ['{FE32EC6C-3C0C-450B-B93F-9C8DE18A56DB}']
-
+    // Obter max num_seq por venda : Integer
   end;
 
   ILojaModelDaoVendaMeioPagto = interface
     ['{571BB48D-EEC9-462B-B1AE-07D7A52D69D0}']
-
+    // Obter max num_seq por venda : Integer
   end;
 
   ILojaModelDaoVendaFactory = interface

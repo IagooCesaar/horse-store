@@ -85,7 +85,10 @@ uses
   Loja.Model.Dao.Venda.MeioPagto in 'src\model\dao\oficial\venda\Loja.Model.Dao.Venda.MeioPagto.pas',
   Loja.Model.Dao.Venda.Item in 'src\model\dao\oficial\venda\Loja.Model.Dao.Venda.Item.pas',
   Loja.Model.Dao.Venda.Venda in 'src\model\dao\oficial\venda\Loja.Model.Dao.Venda.Venda.pas',
-  Loja.Controller.Venda in 'src\controllers\Loja.Controller.Venda.pas';
+  Loja.Controller.Venda in 'src\controllers\Loja.Controller.Venda.pas',
+  Loja.Model.Dto.Req.Venda.EfetivaVenda in 'src\model\dto\Loja.Model.Dto.Req.Venda.EfetivaVenda.pas',
+  Loja.Model.Dto.Req.Venda.MeioPagto in 'src\model\dto\Loja.Model.Dto.Req.Venda.MeioPagto.pas',
+  Loja.Model.Dto.Req.Venda.Item in 'src\model\dto\Loja.Model.Dto.Req.Venda.Item.pas';
 
 begin
   var App := TApp.Create;

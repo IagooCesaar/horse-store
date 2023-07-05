@@ -13,7 +13,7 @@ type
   private
     FNumVnda: Integer;
     FDatIncl: TDateTime;
-    FDatEfet: TDateTime;
+    FDatConcl: TDateTime;
     FVrBruto: Currency;
     FVrDesc: Currency;
     FVrTotal: Currency;
@@ -22,7 +22,7 @@ type
     property NumVnda: Integer read FNumVnda write FNumVnda;
     property CodSit: TLojaModelEntityVendaSituacao read FCodSit write FCodSit;
     property DatIncl: TDateTime read FDatIncl write FDatIncl;
-    property DatEfet: TDateTime read FDatEfet write FDatEfet;
+    property DatConcl: TDateTime read FDatConcl write FDatConcl;
     property VrBruto: Currency read FVrBruto write FVrBruto;
     property VrDesc: Currency read FVrDesc write FVrDesc;
     property VrTotal: Currency read FVrTotal write FVrTotal;

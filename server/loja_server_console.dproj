@@ -194,6 +194,9 @@
         <DCCReference Include="src\model\dao\oficial\venda\Loja.Model.Dao.Venda.Item.pas"/>
         <DCCReference Include="src\model\dao\oficial\venda\Loja.Model.Dao.Venda.Venda.pas"/>
         <DCCReference Include="src\controllers\Loja.Controller.Venda.pas"/>
+        <DCCReference Include="src\model\dto\Loja.Model.Dto.Req.Venda.EfetivaVenda.pas"/>
+        <DCCReference Include="src\model\dto\Loja.Model.Dto.Req.Venda.MeioPagto.pas"/>
+        <DCCReference Include="src\model\dto\Loja.Model.Dto.Req.Venda.Item.pas"/>
         <RcItem Include="boss.json">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>RCDATA</ResourceType>
