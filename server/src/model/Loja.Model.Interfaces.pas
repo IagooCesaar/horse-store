@@ -28,7 +28,11 @@ uses
   Loja.Model.Dto.Resp.Caixa.ResumoCaixa,
 
   Loja.Model.Entity.Venda.Venda,
-  Loja.Model.Dto.Resp.Venda.Item;
+  Loja.Model.Entity.Venda.MeioPagto,
+  Loja.Model.Dto.Resp.Venda.Item,
+  Loja.Model.Dto.Req.Venda.Item,
+  Loja.Model.Dto.Req.Venda.MeioPagto,
+  Loja.Model.Dto.Req.Venda.EfetivaVenda;
 
 type
   ILojaModelItens = interface
@@ -71,7 +75,21 @@ type
 
   ILojaModelVenda = interface
     ['{C36E1BEE-E9DB-451E-9872-C236CAE9A416}']
-    //TLojaModelDtoRespVendaItem
+    function ObterVendas(ADatInclIni, ADatInclFim: TDateTime;
+      AFlgApenasEfet: Boolean): TLojaModelEntityVendaVendaLista;
+    function NovaVenda: TLojaModelEntityVendaVenda;
+    function ObterVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
+    function EfetivarVenda(
+      AEfetivacao: TLojaModelDtoReqVendaEfetivaVenda): TLojaModelEntityVendaVenda;
+    function CancelarVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
+    function ObterItensVenda(ANumVnda: Integer): TLojaModelDtoRespVendaItemLista;
+    function InserirItemVenda(ANovoItem: TLojaModelDtoReqVendaItem): TLojaModelDtoRespVendaItem;
+    function AtualizarItemVenda(AItem: TLojaModelDtoReqVendaItem): TLojaModelDtoRespVendaItem;
+    function ObterMeiosPagtoVenda(ANumVnda: Integer): TLojaModelEntityVendaMeioPagtoLista;
+    function InserirMeiosPagtoVenda(
+      AMeiosPagto: TLojaModelEntityVendaMeioPagtoLista): TLojaModelEntityVendaMeioPagtoLista;
+    function AtualizarMeiosPagtoVenda(
+      AMeiosPagto: TLojaModelEntityVendaMeioPagtoLista): TLojaModelEntityVendaMeioPagtoLista;
   end;
 
   ILojaModelFactory = interface
