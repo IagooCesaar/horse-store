@@ -64,6 +64,21 @@ begin
       .&End
     .&End
 
+    .Path('/venda')
+    .Tag('Venda')
+      .POST('Iniciar uma nova venda')
+        .Description('Inicia uma nova venda')
+        .AddResponse(Integer(THTTPStatus.Created))
+          .Schema(TLojaModelEntityVendaVenda)
+        .&End
+        .AddResponse(Integer(THTTPStatus.NoContent)).&End
+        .AddResponse(Integer(THTTPStatus.BadRequest)).&End
+        .AddResponse(Integer(THTTPStatus.NotFound)).&End
+        .AddResponse(Integer(THTTPStatus.PreconditionFailed)).&End
+        .AddResponse(Integer(THTTPStatus.InternalServerError)).&End
+      .&End
+    .&End
+
     .Path('/venda/{num_vnda}')
     .Tag('Venda')
       .GET('Obtêm dados de uma venda por código')
