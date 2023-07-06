@@ -27,10 +27,102 @@ uses
   Loja.Model.Dto.Req.Venda.MeioPagto,
   Loja.Model.Dto.Req.Venda.Item;
 
-procedure Registry(const AContext: string);
+procedure GetVendas(Req: THorseRequest; Resp: THorseResponse);
+begin
+  var LDatInclIni := Req.Params.Field('dat_incl_ini')
+    .Required
+    .RequiredMessage('O filtro de data de inclusão inicial é obrigatório')
+    .InvalidFormatMessage('O valor informado não é uma data válida')
+    .AsDate;
+
+  var LDatInclFim := Req.Params.Field('dat_incl_fim')
+    .Required
+    .RequiredMessage('O filtro de data de inclusão final é obrigatório')
+    .InvalidFormatMessage('O valor informado não é uma data válida')
+    .AsDate;
+
+  var LFlgApenasEfet := Req.Params.Field('flg_apenas_efet')
+    .InvalidFormatMessage('O valor informado não é um booleano válido')
+    .AsBoolean;
+
+  var LVendas := TLojaModelFactory.New.Venda.ObterVendas(LDatInclIni, LDatInclFim, LFlgApenasEfet);
+
+  if LVendas.Count = 0
+  then Resp.Status(THTTPStatus.NoContent)
+  else Resp.Send(TJson.ObjectToClearJsonValue(LVendas)).Status(THTTPStatus.OK);
+
+  LVendas.Free;
+end;
+
+procedure PostIniciarVenda(Req: THorseRequest; Resp: THorseResponse);
 begin
 
+end;
+
+procedure GetVenda(Req: THorseRequest; Resp: THorseResponse);
+begin
+
+end;
+
+procedure PatchEfetivarVenda(Req: THorseRequest; Resp: THorseResponse);
+begin
+
+end;
+
+procedure PatchCancelarVenda(Req: THorseRequest; Resp: THorseResponse);
+begin
+
+end;
+
+procedure GetItensVenda(Req: THorseRequest; Resp: THorseResponse);
+begin
+
+end;
+
+procedure PostInserirItem(Req: THorseRequest; Resp: THorseResponse);
+begin
+
+end;
+
+procedure PutAtualizarItem(Req: THorseRequest; Resp: THorseResponse);
+begin
+
+end;
+
+procedure GetMeiosPagtoVenda(Req: THorseRequest; Resp: THorseResponse);
+begin
+
+end;
+
+procedure PostMeiosPagtoVenda(Req: THorseRequest; Resp: THorseResponse);
+begin
+
+end;
+
+procedure PutMeiosPagtoVenda(Req: THorseRequest; Resp: THorseResponse);
+begin
+
+end;
+
+procedure Registry(const AContext: string);
+begin
   ConfigSwagger;
+
+  THorse.Group.Prefix(AContext+'/venda')
+    .Get('/', GetVendas)
+    .Post('/', PostIniciarVenda)
+    .Get('/:num_vnda', GetVenda)
+    .Patch('/:num_vnda/efetivar', PatchEfetivarVenda)
+    .Patch('/:num_vnda/cancelar', PatchCancelarVenda)
+
+    .Get('/:num_vnda/itens', GetItensVenda)
+    .Post('/:num_vnda/itens', PostInserirItem)
+    .Put('/:num_vnda/itens/:num_seq_item', PutAtualizarItem)
+
+    .Get('/venda/:num_vnda/meios-pagamento', GetMeiosPagtoVenda)
+    .Post('/venda/:num_vnda/meios-pagamento', PostMeiosPagtoVenda)
+    .Put('/venda/:num_vnda/meios-pagamento', PutMeiosPagtoVenda)
+  ;
 end;
 
 procedure ConfigSwagger;

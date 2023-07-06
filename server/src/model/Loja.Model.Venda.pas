@@ -29,7 +29,7 @@ type
     class function New: ILojaModelVenda;
 
     { ILojaModelVenda }
-    function ObterVendas(ADatInclIni, ADatInclFim: TDateTime;
+    function ObterVendas(ADatInclIni, ADatInclFim: TDate;
       AFlgApenasEfet: Boolean): TLojaModelEntityVendaVendaLista;
 
     function NovaVenda: TLojaModelEntityVendaVenda;
@@ -165,7 +165,7 @@ begin
 
 end;
 
-function TLojaModelVenda.ObterVendas(ADatInclIni, ADatInclFim: TDateTime;
+function TLojaModelVenda.ObterVendas(ADatInclIni, ADatInclFim: TDate;
   AFlgApenasEfet: Boolean): TLojaModelEntityVendaVendaLista;
 begin
 

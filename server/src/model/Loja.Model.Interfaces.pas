@@ -75,7 +75,7 @@ type
 
   ILojaModelVenda = interface
     ['{C36E1BEE-E9DB-451E-9872-C236CAE9A416}']
-    function ObterVendas(ADatInclIni, ADatInclFim: TDateTime;
+    function ObterVendas(ADatInclIni, ADatInclFim: TDate;
       AFlgApenasEfet: Boolean): TLojaModelEntityVendaVendaLista;
     function NovaVenda: TLojaModelEntityVendaVenda;
     function ObterVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
