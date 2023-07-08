@@ -62,7 +62,6 @@ function TLojaModelDaoVendaItemInMemory.ObterUltimoNumSeq(
   ANumVnda: Integer): Integer;
 begin
   var LNumSeq := 0;
-
   for var LItem in FRepository
   do
     if LItem.NumVnda = ANumVnda
