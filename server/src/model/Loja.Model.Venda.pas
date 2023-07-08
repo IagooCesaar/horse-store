@@ -17,12 +17,16 @@ uses
   Loja.Model.Dto.Resp.Venda.Item,
   Loja.Model.Dto.Req.Venda.Item,
   Loja.Model.Dto.Req.Venda.MeioPagto,
-  Loja.Model.Dto.Req.Venda.EfetivaVenda;
+  Loja.Model.Dto.Req.Venda.EfetivaVenda,
+
+  Loja.Model.Bo.Factory,
+  Loja.Model.Entity.Caixa.Caixa;
 
 type
   TLojaModelVenda = class(TInterfacedObject, ILojaModelVenda)
   private
     function EntityToDto(ASource: TLojaModelEntityVendaItem): TLojaModelDtoRespVendaItem; overload;
+    function ObterEValidarCaixa: TLojaModelEntityCaixaCaixa;
   public
     constructor Create;
     destructor Destroy; override;
@@ -63,8 +67,7 @@ uses
   Horse.Exception,
   System.Math,
 
-  Loja.Model.Dao.Factory,
-  Loja.Model.Bo.Factory;
+  Loja.Model.Dao.Factory;
 
 { TLojaModelVenda }
 
@@ -100,7 +103,7 @@ end;
 function TLojaModelVenda.EfetivarVenda(
   AEfetivacao: TLojaModelDtoReqVendaEfetivaVenda): TLojaModelEntityVendaVenda;
 begin
-
+  var LCaixa := ObterEValidarCaixa;
 end;
 
 function TLojaModelVenda.EntityToDto(
@@ -144,7 +147,34 @@ end;
 
 function TLojaModelVenda.NovaVenda: TLojaModelEntityVendaVenda;
 begin
+  var LCaixa := ObterEValidarCaixa;
+  LCaixa.Free;
 
+end;
+
+function TLojaModelVenda.ObterEValidarCaixa: TLojaModelEntityCaixaCaixa;
+begin
+  Result := nil;
+
+  var LCaixa := TLojaModelBoFactory.New.Caixa.ObterCaixaAberto;
+
+  if LCaixa = nil
+  then raise EHorseException.New
+    .Status(THTTPStatus.PreconditionRequired)
+    .&Unit(Self.UnitName)
+    .Error('Não há caixa aberto');
+  try
+    if Trunc(LCaixa.DatAbert) < Trunc(Now)
+    then raise EHorseException.New
+      .Status(THTTPStatus.PreconditionRequired)
+      .&Unit(Self.UnitName)
+      .Error('O caixa atual não foi aberto hoje. Realize o fechamento e uma nova abertura');
+
+    Result := LCaixa;
+  except
+    LCaixa.Free;
+    raise;
+  end;
 end;
 
 function TLojaModelVenda.ObterItensVenda(
