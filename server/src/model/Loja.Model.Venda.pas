@@ -49,10 +49,10 @@ type
 
     function ObterMeiosPagtoVenda(ANumVnda: Integer): TLojaModelEntityVendaMeioPagtoLista;
 
-    function InserirMeiosPagtoVenda(
+    function InserirMeiosPagtoVenda(ANumVnda: Integer;
       AMeiosPagto: TLojaModelEntityVendaMeioPagtoLista): TLojaModelEntityVendaMeioPagtoLista;
 
-    function AtualizarMeiosPagtoVenda(
+    function AtualizarMeiosPagtoVenda(ANumVnda: Integer;
       AMeiosPagto: TLojaModelEntityVendaMeioPagtoLista): TLojaModelEntityVendaMeioPagtoLista;
   end;
 
@@ -74,7 +74,7 @@ begin
 
 end;
 
-function TLojaModelVenda.AtualizarMeiosPagtoVenda(
+function TLojaModelVenda.AtualizarMeiosPagtoVenda(ANumVnda: Integer;
   AMeiosPagto: TLojaModelEntityVendaMeioPagtoLista): TLojaModelEntityVendaMeioPagtoLista;
 begin
 
@@ -131,7 +131,7 @@ begin
 
 end;
 
-function TLojaModelVenda.InserirMeiosPagtoVenda(
+function TLojaModelVenda.InserirMeiosPagtoVenda(ANumVnda: Integer;
   AMeiosPagto: TLojaModelEntityVendaMeioPagtoLista): TLojaModelEntityVendaMeioPagtoLista;
 begin
 

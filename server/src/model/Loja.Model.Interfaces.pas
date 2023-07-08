@@ -82,13 +82,15 @@ type
     function EfetivarVenda(
       AEfetivacao: TLojaModelDtoReqVendaEfetivaVenda): TLojaModelEntityVendaVenda;
     function CancelarVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
+
     function ObterItensVenda(ANumVnda: Integer): TLojaModelDtoRespVendaItemLista;
     function InserirItemVenda(ANovoItem: TLojaModelDtoReqVendaItem): TLojaModelDtoRespVendaItem;
     function AtualizarItemVenda(AItem: TLojaModelDtoReqVendaItem): TLojaModelDtoRespVendaItem;
+
     function ObterMeiosPagtoVenda(ANumVnda: Integer): TLojaModelEntityVendaMeioPagtoLista;
-    function InserirMeiosPagtoVenda(
+    function InserirMeiosPagtoVenda(ANumVnda: Integer;
       AMeiosPagto: TLojaModelEntityVendaMeioPagtoLista): TLojaModelEntityVendaMeioPagtoLista;
-    function AtualizarMeiosPagtoVenda(
+    function AtualizarMeiosPagtoVenda(ANumVnda: Integer;
       AMeiosPagto: TLojaModelEntityVendaMeioPagtoLista): TLojaModelEntityVendaMeioPagtoLista;
   end;
 

@@ -56,52 +56,186 @@ end;
 
 procedure PostIniciarVenda(Req: THorseRequest; Resp: THorseResponse);
 begin
-
+  var LVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  Resp.Status(THTTPStatus.Created).Send(TJson.ObjectToClearJsonValue(LVenda));
+  LVenda.Free;
 end;
 
 procedure GetVenda(Req: THorseRequest; Resp: THorseResponse);
 begin
+  var LNumVnda := Req.Params.Field('num_vnda')
+    .Required
+    .RequiredMessage('o número identificador da venda é obrigatório')
+    .InvalidFormatMessage('O valor informado não é um inteiro válido')
+    .AsInteger;
 
+  var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNumVnda);
+  Resp.Status(THTTPStatus.OK).Send(TJson.ObjectToClearJsonValue(LVenda));
+  LVenda.Free;
 end;
 
 procedure PatchEfetivarVenda(Req: THorseRequest; Resp: THorseResponse);
 begin
+  var LNumVnda := Req.Params.Field('num_vnda')
+    .Required
+    .RequiredMessage('o número identificador da venda é obrigatório')
+    .InvalidFormatMessage('O valor informado não é um inteiro válido')
+    .AsInteger;
 
+  if Req.Body = ''
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(C_UnitName)
+    .Error('O body não estava no formato esperado');
+
+  var LEfetivar := TJson.ClearJsonAndConvertToObject
+   <TLojaModelDtoReqVendaEfetivaVenda>(Req.Body);
+
+  LEfetivar.NumVnda := LNumVnda;
+
+  var LVenda := TLojaModelFactory.New.Venda.EfetivarVenda(LEfetivar);
+  Resp.Status(THTTPStatus.OK).Send(TJson.ObjectToClearJsonValue(LVenda));
+  LVenda.Free;
 end;
 
 procedure PatchCancelarVenda(Req: THorseRequest; Resp: THorseResponse);
 begin
+  var LNumVnda := Req.Params.Field('num_vnda')
+    .Required
+    .RequiredMessage('o número identificador da venda é obrigatório')
+    .InvalidFormatMessage('O valor informado não é um inteiro válido')
+    .AsInteger;
 
+  var LVenda := TLojaModelFactory.New.Venda.CancelarVenda(LNumVnda);
+  Resp.Status(THTTPStatus.OK).Send(TJson.ObjectToClearJsonValue(LVenda));
+  LVenda.Free;
 end;
 
 procedure GetItensVenda(Req: THorseRequest; Resp: THorseResponse);
 begin
+  var LNumVnda := Req.Params.Field('num_vnda')
+    .Required
+    .RequiredMessage('o número identificador da venda é obrigatório')
+    .InvalidFormatMessage('O valor informado não é um inteiro válido')
+    .AsInteger;
 
+  var LItens := TLojaModelFactory.New.Venda.ObterItensVenda(LNumVnda);
+
+  if LItens.Count = 0
+  then Resp.Status(THTTPStatus.NoContent)
+  else Resp.Status(THTTPStatus.OK).Send(TJson.ObjectToClearJsonValue(LItens));
+  LItens.Free;
 end;
 
 procedure PostInserirItem(Req: THorseRequest; Resp: THorseResponse);
 begin
+  var LNumVnda := Req.Params.Field('num_vnda')
+    .Required
+    .RequiredMessage('o número identificador da venda é obrigatório')
+    .InvalidFormatMessage('O valor informado não é um inteiro válido')
+    .AsInteger;
 
+  var LNovoItem := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDtoReqVendaItem>(Req.Body);
+
+  LNovoItem.NumVnda := LNumVnda;
+
+  var LItem := TLojaModelFactory.New.Venda.InserirItemVenda(LNovoItem);
+
+  Resp.Status(THTTPStatus.Created).Send(TJson.ObjectToClearJsonValue(LItem));
+  LItem.Free;
 end;
 
 procedure PutAtualizarItem(Req: THorseRequest; Resp: THorseResponse);
 begin
+  var LNumVnda := Req.Params.Field('num_vnda')
+    .Required
+    .RequiredMessage('o número identificador da venda é obrigatório')
+    .InvalidFormatMessage('O valor informado não é um inteiro válido')
+    .AsInteger;
 
+  var LNumSeqItem := Req.Params.Field('num_seq_item')
+    .Required
+    .RequiredMessage('o número sequencial do item é obrigatório')
+    .InvalidFormatMessage('O valor informado não é um inteiro válido')
+    .AsInteger;
+
+  var LAtualizaItem := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDtoReqVendaItem>(Req.Body);
+
+  LAtualizaItem.NumVnda := LNumVnda;
+  LAtualizaItem.NumSeqItem := LNumSeqItem;
+
+  var LItem := TLojaModelFactory.New.Venda.AtualizarItemVenda(LAtualizaItem);
+
+  Resp.Status(THTTPStatus.Ok).Send(TJson.ObjectToClearJsonValue(LItem));
+  LItem.Free;
 end;
 
 procedure GetMeiosPagtoVenda(Req: THorseRequest; Resp: THorseResponse);
 begin
+  var LNumVnda := Req.Params.Field('num_vnda')
+    .Required
+    .RequiredMessage('o número identificador da venda é obrigatório')
+    .InvalidFormatMessage('O valor informado não é um inteiro válido')
+    .AsInteger;
 
+  var LMeiosPagto := TLojaModelFactory.New.Venda.ObterMeiosPagtoVenda(LNumVnda);
+
+  if LMeiosPagto.Count = 0
+  then Resp.Status(THTTPStatus.NoContent)
+  else Resp.Status(THTTPStatus.Ok).Send(TJson.ObjectToClearJsonValue(LMeiosPagto));
+  LMeiosPagto.Free;
 end;
 
 procedure PostMeiosPagtoVenda(Req: THorseRequest; Resp: THorseResponse);
 begin
+  var LNumVnda := Req.Params.Field('num_vnda')
+    .Required
+    .RequiredMessage('o número identificador da venda é obrigatório')
+    .InvalidFormatMessage('O valor informado não é um inteiro válido')
+    .AsInteger;
 
+  if Req.Body = ''
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(C_UnitName)
+    .Error('O body não estava no formato esperado');
+
+  var LNovosMeiosPagto := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityVendaMeioPagtoLista>(Req.Body);
+
+  var LMeiosPagto := TLojaModelFactory.New.Venda.InserirMeiosPagtoVenda(LNumVnda, LNovosMeiosPagto);
+
+  if LMeiosPagto.Count = 0
+  then Resp.Status(THTTPStatus.NoContent)
+  else Resp.Status(THTTPStatus.Created).Send(TJson.ObjectToClearJsonValue(LMeiosPagto));
+  LMeiosPagto.Free;
 end;
 
 procedure PutMeiosPagtoVenda(Req: THorseRequest; Resp: THorseResponse);
 begin
+  var LNumVnda := Req.Params.Field('num_vnda')
+    .Required
+    .RequiredMessage('o número identificador da venda é obrigatório')
+    .InvalidFormatMessage('O valor informado não é um inteiro válido')
+    .AsInteger;
 
+  if Req.Body = ''
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(C_UnitName)
+    .Error('O body não estava no formato esperado');
+
+  var LNovosMeiosPagto := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityVendaMeioPagtoLista>(Req.Body);
+
+  var LMeiosPagto := TLojaModelFactory.New.Venda.InserirMeiosPagtoVenda(LNumVnda, LNovosMeiosPagto);
+
+  if LMeiosPagto.Count = 0
+  then Resp.Status(THTTPStatus.NoContent)
+  else Resp.Status(THTTPStatus.Ok).Send(TJson.ObjectToClearJsonValue(LMeiosPagto));
+  LMeiosPagto.Free;
 end;
 
 procedure Registry(const AContext: string);
