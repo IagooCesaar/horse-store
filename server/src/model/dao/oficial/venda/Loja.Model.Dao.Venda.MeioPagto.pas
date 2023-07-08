@@ -37,7 +37,12 @@ uses
 function TLojaModelDaoVendaMeioPagto.AtribuiCampos(
   ds: TDataSet): TLojaModelEntityVendaMeioPagto;
 begin
-
+  Result := TLojaModelEntityVendaMeioPagto.Create;
+  Result.NumVnda := ds.FieldByName('num_vnda').AsInteger;
+  Result.NumSeqMeioPagto := ds.FieldByName('num_seq_meio_pagto').AsInteger;
+  Result.CodMeioPagto := TLojaModelEntityCaixaMeioPagamento.Create(ds.FieldByName('cod_meio_pagto').AsString);
+  Result.QtdParc := ds.FieldByName('qtd_parc').AsInteger;
+  Result.VrParc := ds.FieldByName('vr_parc').AsCurrency;
 end;
 
 constructor TLojaModelDaoVendaMeioPagto.Create;

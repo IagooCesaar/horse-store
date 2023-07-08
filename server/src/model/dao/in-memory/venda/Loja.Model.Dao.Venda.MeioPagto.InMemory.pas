@@ -38,7 +38,12 @@ implementation
 function TLojaModelDaoVendaMeioPagtoInMemory.Clone(
   ASource: TLojaModelEntityVendaMeioPagto): TLojaModelEntityVendaMeioPagto;
 begin
-
+  Result := TLojaModelEntityVendaMeioPagto.Create;
+  Result.NumVnda := ASource.NumVnda;
+  Result.NumSeqMeioPagto:= ASource.NumSeqMeioPagto;
+  Result.CodMeioPagto := ASource.CodMeioPagto;
+  Result.QtdParc := ASource.QtdParc;
+  Result.VrParc := ASource.VrParc;
 end;
 
 constructor TLojaModelDaoVendaMeioPagtoInMemory.Create;

@@ -78,7 +78,6 @@ begin
   + IfThen(AFlgApenasEfet, '  and v.cod_sit = :cod_sit ', '')
   ;
 
-
   var ds := TDatabaseFactory.New.SQL
     .SQL(LSql)
     .ParamList
