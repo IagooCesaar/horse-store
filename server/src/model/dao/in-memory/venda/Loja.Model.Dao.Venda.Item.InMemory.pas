@@ -36,7 +36,16 @@ implementation
 function TLojaModelDaoVendaItemInMemory.Clone(
   ASource: TLojaModelEntityVendaItem): TLojaModelEntityVendaItem;
 begin
-
+  Result := TLojaModelEntityVendaItem.Create;
+  Result.NumVnda := ASource.NumVnda;
+  Result.NumSeqItem := ASource.NumSeqItem;
+  Result.CodItem := ASource.CodItem;
+  Result.CodSit := ASource.CodSit;
+  Result.QtdItem := ASource.QtdItem;
+  Result.VrPrecoUnit := ASource.VrPrecoUnit;
+  Result.VrBruto := ASource.VrBruto;
+  Result.VrDesc := ASource.VrDesc;
+  Result.VrTotal := ASource.VrTotal;
 end;
 
 constructor TLojaModelDaoVendaItemInMemory.Create;
