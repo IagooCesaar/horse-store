@@ -41,7 +41,14 @@ uses
 function TLojaModelDaoVendaVenda.AtribuiCampos(
   ds: TDataSet): TLojaModelEntityVendaVenda;
 begin
-
+  Result := TLojaModelEntityVendaVenda.Create;
+  Result.NumVnda := ds.FieldByName('num_vnda').AsInteger;
+  Result.CodSit := TLojaModelEntityVendaSituacao.Create(ds.FieldByName('cod_sit').AsString);
+  Result.DatIncl := ds.FieldByName('dat_incl').AsDateTime;
+  Result.DatConcl := ds.FieldByName('dat_concl').AsDateTime;
+  Result.VrBruto := ds.FieldByName('vr_bruto').AsCurrency;
+  Result.VrDesc := ds.FieldByName('vr_desc').AsCurrency;
+  Result.VrTotal := ds.FieldByName('vr_total').AsCurrency
 end;
 
 constructor TLojaModelDaoVendaVenda.Create;

@@ -37,7 +37,14 @@ implementation
 function TLojaModelDaoVendaVendaInMemory.Clone(
   ASource: TLojaModelEntityVendaVenda): TLojaModelEntityVendaVenda;
 begin
-
+  Result := TLojaModelEntityVendaVenda.Create;
+  Result.NumVnda := ASource.NumVnda;
+  Result.CodSit := ASource.CodSit;
+  Result.DatIncl := ASource.DatIncl;
+  Result.DatConcl := ASource.DatConcl;
+  Result.VrBruto := ASource.VrBruto;
+  Result.VrDesc := ASource.VrDesc;
+  Result.VrTotal := ASource.VrTotal;
 end;
 
 constructor TLojaModelDaoVendaVendaInMemory.Create;
