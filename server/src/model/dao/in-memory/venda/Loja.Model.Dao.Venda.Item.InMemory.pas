@@ -25,6 +25,7 @@ type
     class destructor UnInitialize;
 
     { ILojaModelDaoVendaItem }
+    function ObterUltimoNumSeq(ANumVnda: Integer): Integer;
 
   end;
 
@@ -55,6 +56,20 @@ begin
   if FDao = nil
   then FDao := TLojaModelDaoVendaItemInMemory.Create;
   Result := FDao;
+end;
+
+function TLojaModelDaoVendaItemInMemory.ObterUltimoNumSeq(
+  ANumVnda: Integer): Integer;
+begin
+  var LNumSeq := 0;
+
+  for var LItem in FRepository
+  do
+    if LItem.NumVnda = ANumVnda
+    then begin
+      if LItem.NumSeqItem > LNumSeq
+      then LNumSeq := LItem.NumSeqItem;
+    end;
 end;
 
 class destructor TLojaModelDaoVendaItemInMemory.UnInitialize;

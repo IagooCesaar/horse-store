@@ -11,6 +11,7 @@ type
   ILojaModelDaoVendaItem = interface
     ['{FE32EC6C-3C0C-450B-B93F-9C8DE18A56DB}']
     // Obter max num_seq por venda : Integer
+    function ObterUltimoNumSeq(ANumVnda: Integer): Integer;
   end;
 
   ILojaModelDaoVendaMeioPagto = interface
