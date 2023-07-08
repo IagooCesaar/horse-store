@@ -88,7 +88,6 @@ uses
   Loja.Model.Dto.Resp.Caixa.ResumoCaixa.MeioPagto in 'src\model\dto\Loja.Model.Dto.Resp.Caixa.ResumoCaixa.MeioPagto.pas',
   Loja.Model.Caixa.Test in 'src\test\model\Loja.Model.Caixa.Test.pas',
   Loja.Controller.Caixa.Test in 'src\test\controller\Loja.Controller.Caixa.Test.pas',
-  Loja.Model.Dto.Resp.Venda.Item in 'src\model\dto\Loja.Model.Dto.Resp.Venda.Item.pas',
   Loja.Model.Venda in 'src\model\Loja.Model.Venda.pas',
   Loja.Model.Dao.Venda.Factory.InMemory in 'src\model\dao\in-memory\venda\Loja.Model.Dao.Venda.Factory.InMemory.pas',
   Loja.Model.Dao.Venda.Item.InMemory in 'src\model\dao\in-memory\venda\Loja.Model.Dao.Venda.Item.InMemory.pas',
@@ -104,7 +103,11 @@ uses
   Loja.Model.Entity.Venda.Venda in 'src\model\entity\venda\Loja.Model.Entity.Venda.Venda.pas',
   Loja.Model.Dao.Caixa.Interfaces in 'src\model\dao\Loja.Model.Dao.Caixa.Interfaces.pas',
   Loja.Model.Dao.Venda.Interfaces in 'src\model\dao\Loja.Model.Dao.Venda.Interfaces.pas',
-  Loja.Controller.Venda in 'src\controllers\Loja.Controller.Venda.pas';
+  Loja.Controller.Venda in 'src\controllers\Loja.Controller.Venda.pas',
+  Loja.Model.Dto.Req.Venda.EfetivaVenda in 'src\model\dto\Loja.Model.Dto.Req.Venda.EfetivaVenda.pas',
+  Loja.Model.Dto.Req.Venda.Item in 'src\model\dto\Loja.Model.Dto.Req.Venda.Item.pas',
+  Loja.Model.Dto.Req.Venda.MeioPagto in 'src\model\dto\Loja.Model.Dto.Req.Venda.MeioPagto.pas',
+  Loja.Model.Dto.Resp.Venda.Item in 'src\model\dto\Loja.Model.Dto.Resp.Venda.Item.pas';
 
 {$IFNDEF TESTINSIGHT}
 var
