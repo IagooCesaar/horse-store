@@ -23,7 +23,7 @@ type
 
     { ILojaModelDaoVendaVenda }
     function ObterVendas(ADatInclIni, ADatInclFim: TDate;
-      AFlgApenasEfet: Boolean): TLojaModelEntityVendaVendaLista;
+      ACodSit: TLojaModelEntityVendaSituacao): TLojaModelEntityVendaVendaLista;
 
     function ObterVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
 
@@ -119,14 +119,14 @@ begin
 end;
 
 function TLojaModelDaoVendaVenda.ObterVendas(ADatInclIni, ADatInclFim: TDate;
-  AFlgApenasEfet: Boolean): TLojaModelEntityVendaVendaLista;
+  ACodSit: TLojaModelEntityVendaSituacao): TLojaModelEntityVendaVendaLista;
 begin
   Result := TLojaModelEntityVendaVendaLista.Create;
 
   var LSql := #13#10
   + 'select * from venda v '
-  + 'where v.dat_incl between :dat_incl_ini and :dat_incl_fim '
-  + IfThen(AFlgApenasEfet, '  and v.cod_sit = :cod_sit ', '')
+  + 'where cast(v.dat_incl as date) between :dat_incl_ini and :dat_incl_fim '
+  + '  and v.cod_sit = :cod_sit '
   ;
 
   var ds := TDatabaseFactory.New.SQL
@@ -134,7 +134,7 @@ begin
     .ParamList
       .AddDateTime('dat_incl_ini', ADatInclIni)
       .AddDateTime('dat_incL_fim', ADatInclFim)
-      .AddString('cod_sit', sitEfetivada.ToString)
+      .AddString('cod_sit', ACodSit.ToString)
       .&End
     .Open;
 

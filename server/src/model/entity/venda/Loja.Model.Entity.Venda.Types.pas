@@ -4,7 +4,8 @@ interface
 
 uses
   System.Classes,
-  System.StrUtils;
+  System.StrUtils,
+  TypInfo;
 
 type
   TLojaModelEntityVendaSituacao = (
@@ -23,6 +24,7 @@ type
   public
     function ToString: string;
     constructor Create(AValue: string); overload;
+    constructor CreateByName(AValue: string); overload;
   end;
 
   TLojaModelEntityVendaItemSituacaoHelper = record helper for TLojaModelEntityVendaItemSituacao
@@ -42,6 +44,11 @@ begin
     1: Self := sitCancelada;
     2: Self := sitEfetivada;
   end;
+end;
+
+constructor TLojaModelEntityVendaSituacaoHelper.CreateByName(AValue: string);
+begin
+  Self := TLojaModelEntityVendaSituacao(GetEnumValue(TypeInfo(TLojaModelEntityVendaSituacao), AValue));
 end;
 
 function TLojaModelEntityVendaSituacaoHelper.ToString: string;

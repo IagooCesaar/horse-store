@@ -22,6 +22,7 @@ uses
   Loja.Model.Entity.Venda.Venda,
   Loja.Model.Dto.Resp.Venda.Item,
   Loja.Model.Entity.Venda.MeioPagto,
+  Loja.Model.Entity.Venda.Types,
 
   Loja.Model.Dto.Req.Venda.EfetivaVenda,
   Loja.Model.Dto.Req.Venda.MeioPagto,
@@ -29,23 +30,32 @@ uses
 
 procedure GetVendas(Req: THorseRequest; Resp: THorseResponse);
 begin
-  var LDatInclIni := Req.Params.Field('dat_incl_ini')
+  var LDatInclIni := Req.Query.Field('dat_incl_ini')
     .Required
     .RequiredMessage('O filtro de data de inclusão inicial é obrigatório')
     .InvalidFormatMessage('O valor informado não é uma data válida')
     .AsDate;
 
-  var LDatInclFim := Req.Params.Field('dat_incl_fim')
+  var LDatInclFim := Req.Query.Field('dat_incl_fim')
     .Required
     .RequiredMessage('O filtro de data de inclusão final é obrigatório')
     .InvalidFormatMessage('O valor informado não é uma data válida')
     .AsDate;
 
-  var LFlgApenasEfet := Req.Params.Field('flg_apenas_efet')
-    .InvalidFormatMessage('O valor informado não é um booleano válido')
-    .AsBoolean;
+  var LCodSitQuery := Req.Query.Field('cod_sit')
+    .Required
+    .RequiredMessage('O filtro de tipo de situação é obrigatório')
+    .AsString;
 
-  var LVendas := TLojaModelFactory.New.Venda.ObterVendas(LDatInclIni, LDatInclFim, LFlgApenasEfet);
+  var LCodSit := TLojaModelEntityVendaSituacao.CreateByName(LCodSitQuery);
+
+  if LCodSit.ToString = ''
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(C_UnitName)
+    .Error('O código de situação informado é inválido');
+
+  var LVendas := TLojaModelFactory.New.Venda.ObterVendas(LDatInclIni, LDatInclFim, LCodSit);
 
   if LVendas.Count = 0
   then Resp.Status(THTTPStatus.NoContent)
@@ -274,8 +284,9 @@ begin
           .Schema(SWAG_STRING, 'date')
           .Required(True)
         .&End
-        .AddParamQuery('flg_apenas_efet', 'Apenas vendas efetivadas')
-          .Schema('boolean')
+        .AddParamQuery('cod_sit', 'Filtro por situação da venda')
+          .Schema(SWAG_STRING)
+          .EnumValues(['sitPendente', 'sitCancelada', 'sitEfetivada'])
           .Required(True)
         .&End
         .AddResponse(Integer(THTTPStatus.OK))

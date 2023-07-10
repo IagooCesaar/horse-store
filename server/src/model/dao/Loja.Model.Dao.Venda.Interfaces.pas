@@ -3,6 +3,7 @@ unit Loja.Model.Dao.Venda.Interfaces;
 interface
 
 uses
+  Loja.Model.Entity.Venda.Types,
   Loja.Model.Entity.Venda.Venda,
   Loja.Model.Entity.Venda.MeioPagto,
   Loja.Model.Dto.Req.Venda.Item,
@@ -13,7 +14,7 @@ type
   ILojaModelDaoVendaVenda = interface
     ['{7EEF7952-CD8B-4896-A1E3-267EA929D485}']
     function ObterVendas(ADatInclIni, ADatInclFim: TDate;
-      AFlgApenasEfet: Boolean): TLojaModelEntityVendaVendaLista;
+      LCodSit: TLojaModelEntityVendaSituacao): TLojaModelEntityVendaVendaLista;
 
     function ObterVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
 

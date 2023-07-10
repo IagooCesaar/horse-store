@@ -26,7 +26,7 @@ type
 
     { ILojaModelDaoVendaVenda }
     function ObterVendas(ADatInclIni, ADatInclFim: TDate;
-      AFlgApenasEfet: Boolean): TLojaModelEntityVendaVendaLista;
+      ACodSit: TLojaModelEntityVendaSituacao): TLojaModelEntityVendaVendaLista;
 
     function ObterVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
 
@@ -104,7 +104,7 @@ begin
 end;
 
 function TLojaModelDaoVendaVendaInMemory.ObterVendas(ADatInclIni,
-  ADatInclFim: TDate; AFlgApenasEfet: Boolean): TLojaModelEntityVendaVendaLista;
+  ADatInclFim: TDate; ACodSit: TLojaModelEntityVendaSituacao): TLojaModelEntityVendaVendaLista;
 begin
   Result := TLojaModelEntityVendaVendaLista.Create;
 
@@ -112,12 +112,8 @@ begin
   do begin
     if  (Trunc(LVenda.DatIncl) >= ADatInclIni)
     and (Trunc(LVenda.DatIncl) <= ADatInclFim)
-    then
-      if AFlgApenasEfet and (LVenda.CodSit = sitEfetivada)
-      then Result.Add(Clone(LVenda))
-      else
-      if not AFlgApenasEfet
-      then Result.Add(Clone(LVenda));
+    and (LVenda.CodSit = ACodSit)
+    then Result.Add(Clone(LVenda));
   end;
 end;
 

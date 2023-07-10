@@ -34,7 +34,7 @@ type
 
     { ILojaModelVenda }
     function ObterVendas(ADatInclIni, ADatInclFim: TDate;
-      AFlgApenasEfet: Boolean): TLojaModelEntityVendaVendaLista;
+      ACodSit: TLojaModelEntityVendaSituacao): TLojaModelEntityVendaVendaLista;
 
     function NovaVenda: TLojaModelEntityVendaVenda;
 
@@ -223,9 +223,17 @@ begin
 end;
 
 function TLojaModelVenda.ObterVendas(ADatInclIni, ADatInclFim: TDate;
-  AFlgApenasEfet: Boolean): TLojaModelEntityVendaVendaLista;
+  ACodSit: TLojaModelEntityVendaSituacao): TLojaModelEntityVendaVendaLista;
 begin
+  if ADatInclIni > ADatInclFim
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('A data inicial deve ser inferior à data final em pelo menos 1 dia');
 
+  Result := TLojaModelDaoFactory.New.Venda
+    .Venda
+    .ObterVendas(ADatInclIni, ADatInclFim, ACodSit);
 end;
 
 end.
