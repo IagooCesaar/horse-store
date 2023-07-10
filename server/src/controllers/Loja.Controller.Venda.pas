@@ -301,6 +301,7 @@ begin
         .AddResponse(Integer(THTTPStatus.BadRequest)).&End
         .AddResponse(Integer(THTTPStatus.NotFound)).&End
         .AddResponse(Integer(THTTPStatus.PreconditionFailed)).&End
+        .AddResponse(Integer(THTTPStatus.PreconditionRequired)).&End
         .AddResponse(Integer(THTTPStatus.InternalServerError)).&End
       .&End
     .&End

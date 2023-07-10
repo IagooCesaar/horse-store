@@ -150,6 +150,19 @@ begin
   var LCaixa := ObterEValidarCaixa;
   LCaixa.Free;
 
+  var LNovaVenda := TLojaModelEntityVendaVenda.Create;
+  LNovaVenda.CodSit := sitPendente;
+  LNovaVenda.DatIncl := Now;
+  LNovaVenda.VrBruto := 0;
+  LNovaVenda.VrDesc := 0;
+  LNovaVenda.VrTotal := 0;
+
+  var LVenda := TLojaModelDaoFactory.New.Venda
+    .Venda
+    .NovaVenda(LNovaVenda);
+
+  Result := LVenda;
+  LNovaVenda.Free;
 end;
 
 function TLojaModelVenda.ObterEValidarCaixa: TLojaModelEntityCaixaCaixa;
@@ -192,7 +205,21 @@ end;
 function TLojaModelVenda.ObterVenda(
   ANumVnda: Integer): TLojaModelEntityVendaVenda;
 begin
+  if ANumVnda <= 0
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('O número de venda informado é inválido');
 
+  Result := TLojaModelDaoFactory.New.Venda
+    .Venda
+    .ObterVenda(ANumVnda);
+
+  if Result = nil
+  then raise EHorseException.New
+    .Status(THTTPStatus.NotFound)
+    .&Unit(Self.UnitName)
+    .Error('Não foi possível encontrar a venda pelo número informado');
 end;
 
 function TLojaModelVenda.ObterVendas(ADatInclIni, ADatInclFim: TDate;

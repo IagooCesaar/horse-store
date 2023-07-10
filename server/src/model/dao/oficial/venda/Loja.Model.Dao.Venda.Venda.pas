@@ -99,6 +99,8 @@ end;
 function TLojaModelDaoVendaVenda.ObterVenda(
   ANumVnda: Integer): TLojaModelEntityVendaVenda;
 begin
+  Result := nil;
+
   var LSql := #13#10
   + 'select * from venda where num_vnda = :num_vnda '
   ;
