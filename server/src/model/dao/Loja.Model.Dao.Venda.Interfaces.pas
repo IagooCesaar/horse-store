@@ -20,6 +20,8 @@ type
 
     function NovaVenda(ANovaVenda: TLojaModelEntityVendaVenda): TLojaModelEntityVendaVenda;
 
+    function CancelarVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
+
   end;
 
   ILojaModelDaoVendaItem = interface

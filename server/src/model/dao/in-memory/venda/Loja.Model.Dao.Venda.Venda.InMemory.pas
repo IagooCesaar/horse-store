@@ -32,11 +32,28 @@ type
 
     function NovaVenda(ANovaVenda: TLojaModelEntityVendaVenda): TLojaModelEntityVendaVenda;
 
+    function CancelarVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
+
   end;
 
 implementation
 
 { TLojaModelDaoVendaVendaInMemory }
+
+function TLojaModelDaoVendaVendaInMemory.CancelarVenda(
+  ANumVnda: Integer): TLojaModelEntityVendaVenda;
+begin
+  Result := nil;
+
+  for var LVenda in FRepository
+  do
+    if LVenda.NumVnda = ANumVnda
+    then begin
+      LVenda.CodSit := sitCancelada;
+      Result := Clone(LVenda);
+      Break;
+    end;
+end;
 
 function TLojaModelDaoVendaVendaInMemory.Clone(
   ASource: TLojaModelEntityVendaVenda): TLojaModelEntityVendaVenda;

@@ -28,6 +28,8 @@ type
     function ObterVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
 
     function NovaVenda(ANovaVenda: TLojaModelEntityVendaVenda): TLojaModelEntityVendaVenda;
+
+    function CancelarVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
   end;
 
 implementation
@@ -53,6 +55,27 @@ begin
   Result.VrBruto := ds.FieldByName('vr_bruto').AsCurrency;
   Result.VrDesc := ds.FieldByName('vr_desc').AsCurrency;
   Result.VrTotal := ds.FieldByName('vr_total').AsCurrency
+end;
+
+function TLojaModelDaoVendaVenda.CancelarVenda(
+  ANumVnda: Integer): TLojaModelEntityVendaVenda;
+begin
+  Result := nil;
+
+  var LSql := #13#10
+  + 'update venda set cod_sit = :cod_sit '
+  + 'where num_vnda = :num_vnda '
+  ;
+
+  var ds := TDatabaseFactory.New.SQL
+    .SQL(LSql)
+    .ParamList
+      .AddInteger('num_vnda', ANumVnda)
+      .AddString('cod_sit', sitCancelada.ToString)
+      .&End
+    .ExecSQL();
+
+  Result := ObterVenda(ANumVnda);
 end;
 
 constructor TLojaModelDaoVendaVenda.Create;
