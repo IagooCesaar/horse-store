@@ -24,6 +24,10 @@ type
     { ILojaModelDaoVendaVenda }
     function ObterVendas(ADatInclIni, ADatInclFim: TDate;
       AFlgApenasEfet: Boolean): TLojaModelEntityVendaVendaLista;
+
+    function ObterVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
+
+    function NovaVenda(ANovaVenda: TLojaModelEntityVendaVenda): TLojaModelEntityVendaVenda;
   end;
 
 implementation
@@ -65,6 +69,51 @@ end;
 class function TLojaModelDaoVendaVenda.New: ILojaModelDaoVendaVenda;
 begin
   Result := Self.Create;
+end;
+
+function TLojaModelDaoVendaVenda.NovaVenda(
+  ANovaVenda: TLojaModelEntityVendaVenda): TLojaModelEntityVendaVenda;
+begin
+  var LID := TDatabaseFactory.New.SQL.GeraProximoCodigo('GEN_VENDA_ID');
+
+  var LSql := #13#10
+  + 'insert into venda (num_vnda, cod_sit, dat_incl, vr_bruto, vr_desc, vr_total) '
+  + 'values (:num_vnda, :cod_sit, :dat_incl, :vr_bruto, :vr_desc, :vr_total) '
+  ;
+
+  var ds := TDatabaseFactory.New.SQL
+    .SQL(LSql)
+    .ParamList
+      .AddInteger('num_vnda', LID)
+      .AddString('cod_sit', ANovaVenda.CodSit.ToString)
+      .AddDateTime('dat_incl', ANovaVenda.DatIncl)
+      .AddFloat('vr_bruto', ANovaVenda.VrBruto)
+      .AddFloat('vr_desc', ANovaVenda.VrDesc)
+      .AddFloat('vr_total', ANovaVenda.VrTotal)
+      .&End
+    .ExecSQL();
+
+  Result := ObterVenda(LID);
+end;
+
+function TLojaModelDaoVendaVenda.ObterVenda(
+  ANumVnda: Integer): TLojaModelEntityVendaVenda;
+begin
+  var LSql := #13#10
+  + 'select * from venda where num_vnda = :num_vnda '
+  ;
+
+  var ds := TDatabaseFactory.New.SQL
+    .SQL(LSql)
+    .ParamList
+      .AddInteger('num_vnda', ANumVnda)
+      .&End
+    .Open();
+
+  if ds.IsEmpty
+  then Exit;
+
+  Result := AtribuiCampos(ds);
 end;
 
 function TLojaModelDaoVendaVenda.ObterVendas(ADatInclIni, ADatInclFim: TDate;

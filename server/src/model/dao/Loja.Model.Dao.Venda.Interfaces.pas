@@ -14,6 +14,11 @@ type
     ['{7EEF7952-CD8B-4896-A1E3-267EA929D485}']
     function ObterVendas(ADatInclIni, ADatInclFim: TDate;
       AFlgApenasEfet: Boolean): TLojaModelEntityVendaVendaLista;
+
+    function ObterVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
+
+    function NovaVenda(ANovaVenda: TLojaModelEntityVendaVenda): TLojaModelEntityVendaVenda;
+
   end;
 
   ILojaModelDaoVendaItem = interface

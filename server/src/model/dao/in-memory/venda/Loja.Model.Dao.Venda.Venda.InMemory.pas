@@ -28,6 +28,10 @@ type
     function ObterVendas(ADatInclIni, ADatInclFim: TDate;
       AFlgApenasEfet: Boolean): TLojaModelEntityVendaVendaLista;
 
+    function ObterVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
+
+    function NovaVenda(ANovaVenda: TLojaModelEntityVendaVenda): TLojaModelEntityVendaVenda;
+
   end;
 
 implementation
@@ -64,6 +68,39 @@ begin
   if FDao = nil
   then FDao := TLojaModelDaoVendaVendaInMemory.Create;
   Result := FDao;
+end;
+
+function TLojaModelDaoVendaVendaInMemory.NovaVenda(
+  ANovaVenda: TLojaModelEntityVendaVenda): TLojaModelEntityVendaVenda;
+begin
+  Result := nil;
+  var LID := 1;
+  if FRepository.Count > 0
+  then LID := FRepository.Last.NumVnda + 1;
+
+  FRepository.Add(TLojaModelEntityVendaVenda.Create);
+  FRepository.Last.NumVnda := LID;
+  FRepository.Last.CodSit := ANovaVenda.CodSit;
+  FRepository.Last.DatIncl := ANovaVenda.DatIncl;
+  FRepository.Last.DatConcl := ANovaVenda.DatConcl;
+  FRepository.Last.VrBruto := ANovaVenda.VrBruto;
+  FRepository.Last.VrDesc := ANovaVenda.VrDesc;
+  FRepository.Last.VrTotal := ANovaVenda.VrTotal;
+
+  Result := Clone(FRepository.Last);
+end;
+
+function TLojaModelDaoVendaVendaInMemory.ObterVenda(
+  ANumVnda: Integer): TLojaModelEntityVendaVenda;
+begin
+  Result := Nil;
+  for var LVenda in FRepository
+  do
+    if LVenda.NumVnda = ANumVnda
+    then begin
+      Result := Clone(LVenda);
+      Break;
+    end;
 end;
 
 function TLojaModelDaoVendaVendaInMemory.ObterVendas(ADatInclIni,
