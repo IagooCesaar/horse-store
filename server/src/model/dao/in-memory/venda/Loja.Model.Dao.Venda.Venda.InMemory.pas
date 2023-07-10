@@ -50,6 +50,7 @@ begin
     if LVenda.NumVnda = ANumVnda
     then begin
       LVenda.CodSit := sitCancelada;
+      LVenda.DatConcl := Now;
       Result := Clone(LVenda);
       Break;
     end;

@@ -63,7 +63,9 @@ begin
   Result := nil;
 
   var LSql := #13#10
-  + 'update venda set cod_sit = :cod_sit '
+  + 'update venda '
+  + 'set cod_sit = :cod_sit '
+  + 'and dat_concl = :dat_concl '
   + 'where num_vnda = :num_vnda '
   ;
 
@@ -71,6 +73,7 @@ begin
     .SQL(LSql)
     .ParamList
       .AddInteger('num_vnda', ANumVnda)
+      .AddDateTime('dat_concl', Now)
       .AddString('cod_sit', sitCancelada.ToString)
       .&End
     .ExecSQL();
