@@ -421,6 +421,8 @@ end;
 function TLojaModelVenda.ObterItensVenda(
   ANumVnda: Integer): TLojaModelDtoRespVendaItemLista;
 begin
+  Result := nil;
+
   if ANumVnda <= 0
   then raise EHorseException.New
     .Status(THTTPStatus.BadRequest)
@@ -436,6 +438,16 @@ begin
     .Status(THTTPStatus.NotFound)
     .&Unit(Self.UnitName)
     .Error('Não foi possível encontrar a venda pelo número informado');
+
+  var LItens := TLojaModelDaoFactory.New.Venda
+    .Item
+    .ObterItensVenda(ANumVnda);
+
+  Result := TLojaModelDtoRespVendaItemLista.Create;
+  for var LItem in LItens
+  do Result.Add(EntityToDto(LItem));
+
+  LItens.Free;
 end;
 
 function TLojaModelVenda.ObterMeiosPagtoVenda(
@@ -456,6 +468,10 @@ begin
     .Status(THTTPStatus.NotFound)
     .&Unit(Self.UnitName)
     .Error('Não foi possível encontrar a venda pelo número informado');
+
+  Result := TLojaModelDaoFactory.New.Venda
+    .MeioPagto
+    .ObterMeiosPagtoVenda(ANumVnda);
 end;
 
 function TLojaModelVenda.ObterVenda(
