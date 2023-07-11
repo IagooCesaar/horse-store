@@ -32,6 +32,7 @@ type
     function AddInteger(pNome: string; pValor: Integer): IDatabaseSQLParamList; overload;
     function AddInteger(pNome: string; pValor: variant): IDatabaseSQLParamList; overload;
     function AddFloat(pNome: string; pValor: Double): IDatabaseSQLParamList; overload;
+    function AddFloat(pNome: string; pValor: Currency): IDataBaseSQLParamList; overload;
     function AddFloat(pNome: string; pValor: variant): IDatabaseSQLParamList; overload;
     function AddDateTime(pNome: string; pValor: tdatetime): IDatabaseSQLParamList; overload;
     function AddDateTime(pNome: string; pValor: variant): IDatabaseSQLParamList; overload;

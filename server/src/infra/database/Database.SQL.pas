@@ -39,6 +39,8 @@ type
     procedure ValidaSQL(pSQL: string);
     function PreencherDataSet(PQuery: TQuery): TMemTable;
     function ConvertToParam(aColum: String): String;
+    procedure AddNull(pTipo: TFieldType; pNome: string; pValor: variant);
+    function VarVoidToNull(pValor: Variant): Variant;
 
   public
     constructor Create;
@@ -68,6 +70,7 @@ type
     function AddInteger(pNome: string; pValor: Integer): IDataBaseSQLParamList; overload;
     function AddInteger(pNome: string; pValor: variant): IDataBaseSQLParamList; overload;
     function AddFloat(pNome: string; pValor: Double): IDataBaseSQLParamList; overload;
+    function AddFloat(pNome: string; pValor: Currency): IDataBaseSQLParamList; overload;
     function AddFloat(pNome: string; pValor: variant): IDataBaseSQLParamList; overload;
     function AddDateTime(pNome: string; pValor: tdatetime): IDataBaseSQLParamList; overload;
     function AddDateTime(pNome: string; pValor: variant): IDataBaseSQLParamList; overload;
@@ -90,66 +93,101 @@ function TDatabaseSQL.AddDateTime(pNome: string;
   pValor: tdatetime): IDataBaseSQLParamList;
 begin
   Result := Self;
-  FParamList.AddDateTime(pNome, pValor);
+  if FQuery.FindParam(pNome) = nil then Exit;
+  FQuery.ParamByName(pNome).AsDateTime := pValor;
 end;
 
 function TDatabaseSQL.AddDateTime(pNome: string;
   pValor: variant): IDataBaseSQLParamList;
 begin
   Result := Self;
-  FParamList.AddDateTime(pNome, pValor);
+  if FQuery.FindParam(pNome) = nil then Exit;
+  pValor := VarVoidToNull(pValor);
+
+  if not(pValor = null)
+  then AddDateTime(pNome, StrToDateTime(pValor))
+  else AddNull(ftDateTime, pNome, pValor);
 end;
 
 function TDatabaseSQL.AddFloat(pNome: string;
   pValor: variant): IDataBaseSQLParamList;
 begin
   Result := Self;
-  FParamList.AddFloat(pNome, pValor);
+  if FQuery.FindParam(pNome) = nil then Exit;
+  if pValor > 0 then
+    AddFloat(pNome, Double(pValor))
+  else
+    AddNull(ftFloat, pNome, pValor);
 end;
 
 function TDatabaseSQL.AddFloat(pNome: string;
   pValor: Double): IDataBaseSQLParamList;
 begin
   Result := Self;
-  FParamList.AddFloat(pNome, pValor);
+  if FQuery.FindParam(pNome) = nil then Exit;
+  FQuery.ParamByName(pNome).AsFloat := pValor;
+end;
+
+function TDatabaseSQL.AddFloat(pNome: string;
+  pValor: Currency): IDataBaseSQLParamList;
+begin
+  Result := Self;
+  if FQuery.FindParam(pNome) = nil then Exit;
+  FQuery.ParamByName(pNome).AsCurrency := pValor;
 end;
 
 function TDatabaseSQL.AddInteger(pNome: string;
   pValor: Integer): IDataBaseSQLParamList;
 begin
   Result := Self;
-  FParamList.AddInteger(pNome, pValor);
+  if FQuery.FindParam(pNome) = nil then Exit;
+  FQuery.ParamByName(pNome).AsInteger := pValor;
 end;
 
 function TDatabaseSQL.AddInteger(pNome: string;
   pValor: variant): IDataBaseSQLParamList;
 begin
   Result := Self;
-  FParamList.AddInteger(pNome, pValor);
+  if FQuery.FindParam(pNome) = nil then Exit;
+  pValor := VarVoidToNull(pValor);
+
+  if not(pValor = null) then
+    AddFloat(pNome, Trunc(pValor))
+  else
+    AddNull(ftInteger, pNome, pValor);
 end;
 
-//procedure TDatabaseSQL.AddNull(pTipo: TFieldType; pNome: string;
-//  pValor: variant);
-//begin
-//  if not VarIsNull(pValor) then
-//    raise EHorseException.New
-//            .Error('O parâmetro ('+pNome+') deve ser, obrigatoriamento, do tipo Nulo ou '+ FieldTypeNames[pTipo])
-//            .&Unit(Self.UnitName);
-//  FQuery.ParamByName(pNome).DataType := pTipo;
-//  FQuery.ParamByName(pNome).Value := Null;
-//end;
+procedure TDatabaseSQL.AddNull(pTipo: TFieldType; pNome: string;
+  pValor: variant);
+begin
+  if not VarIsNull(pValor) then
+    raise EHorseException.New
+            .Error('O parâmetro ('+pNome+') deve ser, obrigatoriamento, do tipo Nulo ou '+ FieldTypeNames[pTipo])
+            .&Unit(Self.UnitName);
+  FQuery.ParamByName(pNome).DataType := pTipo;
+  FQuery.ParamByName(pNome).Value := Null;
+end;
 
 function TDatabaseSQL.AddString(pNome, pValor: string): IDataBaseSQLParamList;
 begin
   Result := Self;
-  FParamList.AddString(pNome, pValor);
+  if FQuery.FindParam(pNome) = nil then Exit;
+
+  FQuery.ParamByName(pNome).DataType := ftString;
+  FQuery.ParamByName(pNome).AsString := pValor;
 end;
 
 function TDatabaseSQL.AddString(pNome: string;
   pValor: variant): IDataBaseSQLParamList;
 begin
   Result := Self;
-  FParamList.AddString(pNome, pValor);
+  if FQuery.FindParam(pNome) = nil then Exit;
+  pValor := VarVoidToNull(pValor);
+
+  if not(pValor = null)  then
+    AddString(pNome, String(pValor))
+  else
+    AddNull(ftString, pNome, pValor);
 end;
 
 procedure TDatabaseSQL.Commit;
@@ -367,6 +405,27 @@ begin
     raise EHorseException.New
       .Error('Script SQL não informado!')
       .&Unit(Self.UnitName);
+  end;
+end;
+
+function TDatabaseSQL.VarVoidToNull(pValor: Variant): Variant;
+var i: integer;
+begin
+  i := VarType(pValor);
+
+  case VarType(pValor) of
+    varString, varUString:
+      if pValor = ''
+      then Result := null
+      else Result := pValor;
+
+   varDate, varInteger:
+     if pValor = 0
+     then Result := null
+     else Result := pValor;
+
+  else
+    Result := pValor;
   end;
 end;
 
