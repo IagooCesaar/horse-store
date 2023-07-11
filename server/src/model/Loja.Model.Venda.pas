@@ -5,10 +5,12 @@ interface
 uses
   System.SysUtils,
   System.Classes,
+  System.Generics.Collections,
 
   Loja.Model.Interfaces,
   Loja.Model.Entity.Venda.Types,
   Loja.Model.Entity.Caixa.Types,
+  Loja.Model.Entity.Estoque.Types,
 
   Loja.Model.Entity.Venda.Venda,
   Loja.Model.Entity.Venda.MeioPagto,
@@ -68,7 +70,10 @@ uses
   Horse.Exception,
   System.Math,
 
-  Loja.Model.Dao.Factory;
+  Loja.Model.Factory,
+  Loja.Model.Dao.Factory,
+  Loja.Model.Dto.Req.Caixa.CriarMovimento,
+  Loja.Model.Dto.Req.Estoque.CriarMovimento;
 
 { TLojaModelVenda }
 
@@ -175,46 +180,130 @@ begin
     .Item
     .ObterItensVenda(AEfetivacao.NumVnda);
 
-  if LItens.Count = 0
-  then raise EHorseException.New
-    .Status(THTTPStatus.BadRequest)
-    .&Unit(Self.UnitName)
-    .Error('Não há itens na venda');
-
-  var LEncontrou := False;
-  for var LItem in LItens
-  do
-    if Litem.CodSit = sitAtivo
-    then begin
-      LEncontrou := True;
-      Break;
-    end;
-
-  if not LEncontrou
-  then raise EHorseException.New
-    .Status(THTTPStatus.BadRequest)
-    .&Unit(Self.UnitName)
-    .Error('Não há itens ativos na venda');
-
   var LMeiosPagto := TLojaModelDaoFactory.New.Venda
     .MeioPagto
     .ObterMeiosPagtoVenda(AEfetivacao.NumVnda);
 
-  if LMeiosPagto.Count = 0
-  then raise EHorseException.New
-    .Status(THTTPStatus.BadRequest)
-    .&Unit(Self.UnitName)
-    .Error('Não há meios de pagamento definidos na venda');
-  LMeiosPagto.Free;
+  try
+    if LItens.Count = 0
+    then raise EHorseException.New
+      .Status(THTTPStatus.BadRequest)
+      .&Unit(Self.UnitName)
+      .Error('Não há itens na venda');
 
-  CalculaTotaisVenda(LVenda);
-  LVenda.DatConcl := Now;
-  LVenda.CodSit := sitEfetivada;
+    var LEncontrou := False;
+    for var LItem in LItens
+    do begin
+      if LItem.CodSit = sitAtivo
+      then begin
+        LEncontrou := True;
+        Break;
+      end;
+    end;
+    if not LEncontrou
+    then raise EHorseException.New
+      .Status(THTTPStatus.BadRequest)
+      .&Unit(Self.UnitName)
+      .Error('Não há itens ativos na venda');
 
-  Result := TLojaModelDaoFactory.New.Venda
-    .Venda
-    .AtualizarVenda(LVenda);
+    // Validar saldo estoque dos itens
+    var LQtdItens := TDictionary<Integer, Integer>.Create;
+    try
+      for var LItem in LItens
+      do begin
+        if LItem.CodSit <> sitAtivo
+        then continue;
 
+        var LQtd := 0;
+
+        if LQtdItens.ContainsKey(LItem.CodItem)
+        then LQtdItens.TryGetValue(LItem.CodItem, LQtd);
+
+        LQtd := LQtd + LItem.QtdItem;
+        LQtdItens.AddOrSetValue(LItem.CodItem, LQtd);
+      end;
+      LQtdItens.TrimExcess;
+
+      for var LKey in LQtdItens.Keys
+      do begin
+        var LSaldo := TLojaModelFactory.New.Estoque.ObterSaldoAtualItem(LKey);
+
+        if LSaldo.QtdSaldoAtu < LQtdItens.Items[LKey]
+        then raise EHorseException.New
+          .Status(THTTPStatus.BadRequest)
+          .&Unit(Self.UnitName)
+          .Error(Format('Não há saldo disponível para o item %d (Saldo atual %d, Qtd Venda %d)', [
+            LSaldo.CodItem, LSaldo.QtdSaldoAtu, LQtdItens.Items[LKey]
+          ]));
+
+        LSaldo.Free;
+      end;
+    finally
+      LQtdItens.Free;
+    end;
+
+    if LMeiosPagto.Count = 0
+    then raise EHorseException.New
+      .Status(THTTPStatus.BadRequest)
+      .&Unit(Self.UnitName)
+      .Error('Não há meios de pagamento definidos na venda');
+
+    // Efetiva venda
+    CalculaTotaisVenda(LVenda);
+    LVenda.DatConcl := Now;
+    LVenda.CodSit := sitEfetivada;
+
+    Result := TLojaModelDaoFactory.New.Venda
+      .Venda
+      .AtualizarVenda(LVenda);
+
+    // Fazer lançamento de caixa
+    var LMovCaixa := TLojaModelDtoReqCaixaCriarMovimento.Create;
+    LMovCaixa.CodCaixa := LCaixa.CodCaixa;
+    LMovCaixa.DatMov := LVenda.DatConcl;
+    LMovCaixa.CodTipoMov := TLojaModelEntityCaixaTipoMovimento.movEntrada;
+    LMovCaixa.CodOrigMov := TLojaModelEntityCaixaOrigemMovimento.orgVenda;
+    for var LMeioPagto in LMeiosPagto
+    do begin
+      LMovCaixa.DscObs := Format('Referente à venda %d - %d parcela(s) de %3.2f', [
+        LVenda.NumVnda, LMeioPagto.QtdParc, RoundTo(LMeioPagto.VrParc / LMeioPagto.QtdParc, -2)
+      ]);
+      LMovCaixa.VrMov := LMeioPagto.VrParc;
+
+      var LMovimento := TLojaModelBoFactory.New.Caixa.CriarMovimentoCaixa(LMovCaixa);
+      LMovimento.Free;
+
+    end;
+    LMovCaixa.Free;
+
+    // Gerar movimento de estoque
+    var LMovEstq := TLojaModelDtoReqEstoqueCriarMovimento.Create;
+    LMovEstq.DatMov := LVenda.DatConcl;
+    LMovEstq.CodTipoMov := TLojaModelEntityEstoqueTipoMovimento.movSaida;
+    LMovEstq.CodOrigMov := TLojaModelEntityEstoqueOrigemMovimento.orgVenda;
+    for var LItem in LItens
+    do begin
+      if LItem.CodSit <> sitAtivo
+      then Continue;
+
+      LMovEstq.CodItem := LItem.CodItem;
+      LMovEstq.QtdMov := Litem.QtdItem;
+      LMovEstq.DscMot := Format('Referente à Venda %d, Item Seq. %d',[
+        LItem.NumVnda, LItem.NumSeqItem]);
+
+      var LMovimento := TLojaModelFactory.New
+        .Estoque
+        .CriarNovoMovimento(LMovEstq);
+      LMovimento.Free;
+    end;
+    LMovEstq.Free;
+
+  finally
+    FreeAndNil(LCaixa);
+    FreeAndNil(LVenda);
+    FreeAndNil(LItens);
+    FreeAndNil(LMeiosPagto);
+  end;
 end;
 
 function TLojaModelVenda.EntityToDto(

@@ -8,10 +8,17 @@ uses
   System.StrUtils;
 
 type
-  TLojaModelEntityEstoqueTipoMovimento = ( movEntrada, movSaida );
+  TLojaModelEntityEstoqueTipoMovimento = (
+    movEntrada,
+    movSaida
+  );
 
   TLojaModelEntityEstoqueOrigemMovimento = (
-    orgCompra, orgVenda, orgAcerto, orgDevolucaoCompra, orgDevolucaoVenda
+    orgCompra,
+    orgVenda,
+    orgAcerto,
+    orgDevolucaoCompra,
+    orgDevolucaoVenda
   );
 
   type TLojaModelEntityEstoqueTipoMovimentoHelper = record helper for TLojaModelEntityEstoqueTipoMovimento
