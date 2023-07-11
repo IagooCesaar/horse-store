@@ -160,6 +160,61 @@ function TLojaModelVenda.EfetivarVenda(
   AEfetivacao: TLojaModelDtoReqVendaEfetivaVenda): TLojaModelEntityVendaVenda;
 begin
   var LCaixa := ObterEValidarCaixa;
+
+  var LVenda := TLojaModelDaoFactory.New.Venda
+    .Venda
+    .ObterVenda(AEfetivacao.NumVnda);
+
+  if LVenda = nil
+  then raise EHorseException.New
+    .Status(THTTPStatus.NotFound)
+    .&Unit(Self.UnitName)
+    .Error('Não foi possível encontrar a venda pelo número informado');
+
+  var LItens := TLojaModelDaoFactory.New.Venda
+    .Item
+    .ObterItensVenda(AEfetivacao.NumVnda);
+
+  if LItens.Count = 0
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('Não há itens na venda');
+
+  var LEncontrou := False;
+  for var LItem in LItens
+  do
+    if Litem.CodSit = sitAtivo
+    then begin
+      LEncontrou := True;
+      Break;
+    end;
+
+  if not LEncontrou
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('Não há itens ativos na venda');
+
+  var LMeiosPagto := TLojaModelDaoFactory.New.Venda
+    .MeioPagto
+    .ObterMeiosPagtoVenda(AEfetivacao.NumVnda);
+
+  if LMeiosPagto.Count = 0
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('Não há meios de pagamento definidos na venda');
+  LMeiosPagto.Free;
+
+  CalculaTotaisVenda(LVenda);
+  LVenda.DatConcl := Now;
+  LVenda.CodSit := sitEfetivada;
+
+  Result := TLojaModelDaoFactory.New.Venda
+    .Venda
+    .AtualizarVenda(LVenda);
+
 end;
 
 function TLojaModelVenda.EntityToDto(

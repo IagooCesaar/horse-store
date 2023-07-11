@@ -27,6 +27,8 @@ type
 
     { ILojaModelDaoVendaMeioPagto }
     function ObterUltimoNumSeq(ANumVnda: Integer): Integer;
+    function ObterMeiosPagtoVenda(ANumVnda: Integer): TLojaModelEntityVendaMeioPagtoLista;
+    function ObterMeioPagtoVenda(ANumVnda, ANumSeqMeioPagto: Integer): TLojaModelEntityVendaMeioPagto;
 
   end;
 
@@ -63,6 +65,30 @@ begin
   if FDao = nil
   then FDao := TLojaModelDaoVendaMeioPagtoInMemory.Create;
   Result := FDao;
+end;
+
+function TLojaModelDaoVendaMeioPagtoInMemory.ObterMeioPagtoVenda(ANumVnda,
+  ANumSeqMeioPagto: Integer): TLojaModelEntityVendaMeioPagto;
+begin
+  Result := nil;
+  for var LMeio in FRepository
+  do
+    if  (LMeio.NumVnda = ANumVnda)
+    and (LMeio.NumSeqMeioPagto = ANumSeqMeioPagto)
+    then begin
+      Result := Clone(LMeio);
+      Break;
+    end;
+end;
+
+function TLojaModelDaoVendaMeioPagtoInMemory.ObterMeiosPagtoVenda(
+  ANumVnda: Integer): TLojaModelEntityVendaMeioPagtoLista;
+begin
+  Result := TLojaModelEntityVendaMeioPagtoLista.Create;
+  for var LMeio in FRepository
+  do
+    if LMeio.NumVnda = ANumVnda
+    then Result.Add(Clone(LMeio));
 end;
 
 function TLojaModelDaoVendaMeioPagtoInMemory.ObterUltimoNumSeq(

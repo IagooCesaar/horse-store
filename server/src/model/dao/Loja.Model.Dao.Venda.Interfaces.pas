@@ -34,6 +34,8 @@ type
   ILojaModelDaoVendaMeioPagto = interface
     ['{571BB48D-EEC9-462B-B1AE-07D7A52D69D0}']
     function ObterUltimoNumSeq(ANumVnda: Integer): Integer;
+    function ObterMeiosPagtoVenda(ANumVnda: Integer): TLojaModelEntityVendaMeioPagtoLista;
+    function ObterMeioPagtoVenda(ANumVnda, ANumSeqMeioPagto: Integer): TLojaModelEntityVendaMeioPagto;
   end;
 
   ILojaModelDaoVendaFactory = interface
