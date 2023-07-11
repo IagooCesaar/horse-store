@@ -27,6 +27,7 @@ type
   private
     function EntityToDto(ASource: TLojaModelEntityVendaItem): TLojaModelDtoRespVendaItem; overload;
     function ObterEValidarCaixa: TLojaModelEntityCaixaCaixa;
+    function CalculaTotaisVenda(var AVenda: TLojaModelEntityVendaVenda): TLojaModelEntityVendaVenda;
   public
     constructor Create;
     destructor Destroy; override;
@@ -83,6 +84,29 @@ begin
 
 end;
 
+function TLojaModelVenda.CalculaTotaisVenda(
+  var AVenda: TLojaModelEntityVendaVenda): TLojaModelEntityVendaVenda;
+begin
+  var LItens := TLojaModelDaoFactory.New.Venda
+    .Item
+    .ObterItensVenda(AVenda.NumVnda);
+
+  AVenda.VrBruto := 0;
+
+  for var LItem in LItens
+  do begin
+    LItem.VrBruto := LItem.VrPrecoUnit * Litem.QtdItem;
+    LItem.VrTotal := LItem.VrBruto - LItem.VrDesc;
+
+    if LItem.CodSit = sitAtivo
+    then AVenda.VrBruto := AVenda.VrBruto + LItem.VrTotal;
+  end;
+
+  AVenda.VrTotal := AVenda.VrBruto - AVenda.VrDesc;
+
+  LItens.Free;
+end;
+
 function TLojaModelVenda.CancelarVenda(
   ANumVnda: Integer): TLojaModelEntityVendaVenda;
 begin
@@ -95,16 +119,30 @@ begin
   var LVenda := TLojaModelDaoFactory.New.Venda
     .Venda
     .ObterVenda(ANumVnda);
+
   if LVenda = nil
   then raise EHorseException.New
     .Status(THTTPStatus.NotFound)
     .&Unit(Self.UnitName)
     .Error('Não foi possível encontrar a venda pelo número informado');
-  LVenda.Free;
 
-  Result := TLojaModelDaoFactory.New.Venda
-    .Venda
-    .CancelarVenda(ANumVnda);
+  try
+    if LVenda.CodSit <> sitPendente
+    then raise EHorseException.New
+      .Status(THTTPStatus.BadRequest)
+      .&Unit(Self.UnitName)
+      .Error('A venda informada não está Pendente.');
+
+    CalculaTotaisVenda(LVenda);
+    LVenda.CodSit := sitCancelada;
+    LVenda.DatConcl := Now;
+
+    Result := TLojaModelDaoFactory.New.Venda
+      .Venda
+      .AtualizarVenda(LVenda);
+  finally
+    LVenda.Free;
+  end;
 end;
 
 constructor TLojaModelVenda.Create;

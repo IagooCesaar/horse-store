@@ -26,7 +26,7 @@ type
 
     { ILojaModelDaoVendaItem }
     function ObterUltimoNumSeq(ANumVnda: Integer): Integer;
-
+    function ObterItensVenda(ANumVnda: Integer): TLojaModelEntityVendaItemLista;
   end;
 
 implementation
@@ -65,6 +65,17 @@ begin
   if FDao = nil
   then FDao := TLojaModelDaoVendaItemInMemory.Create;
   Result := FDao;
+end;
+
+function TLojaModelDaoVendaItemInMemory.ObterItensVenda(
+  ANumVnda: Integer): TLojaModelEntityVendaItemLista;
+begin
+  Result := TLojaModelEntityVendaItemLista.Create;
+  for var LItem in FRepository
+  do begin
+    if LItem.NumVnda = ANumVnda
+    then Result.Add(Clone(LItem));
+  end;
 end;
 
 function TLojaModelDaoVendaItemInMemory.ObterUltimoNumSeq(

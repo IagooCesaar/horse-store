@@ -29,7 +29,7 @@ type
 
     function NovaVenda(ANovaVenda: TLojaModelEntityVendaVenda): TLojaModelEntityVendaVenda;
 
-    function CancelarVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
+    function AtualizarVenda(AVenda: TLojaModelEntityVendaVenda): TLojaModelEntityVendaVenda;
   end;
 
 implementation
@@ -57,28 +57,36 @@ begin
   Result.VrTotal := ds.FieldByName('vr_total').AsCurrency
 end;
 
-function TLojaModelDaoVendaVenda.CancelarVenda(
-  ANumVnda: Integer): TLojaModelEntityVendaVenda;
+function TLojaModelDaoVendaVenda.AtualizarVenda(
+  AVenda: TLojaModelEntityVendaVenda): TLojaModelEntityVendaVenda;
 begin
   Result := nil;
 
   var LSql := #13#10
   + 'update venda '
-  + 'set cod_sit = :cod_sit '
-  + 'and dat_concl = :dat_concl '
+  + 'set cod_sit = :cod_sit, '
+  + '   dat_incl = :dat_incl, '
+  + '   dat_concl = :dat_concl, '
+  + '   vr_bruto = :vr_bruto, '
+  + '   vr_desc = :vr_desc, '
+  + '   vr_total = :vr_total '
   + 'where num_vnda = :num_vnda '
   ;
 
   var ds := TDatabaseFactory.New.SQL
     .SQL(LSql)
     .ParamList
-      .AddInteger('num_vnda', ANumVnda)
-      .AddDateTime('dat_concl', Now)
-      .AddString('cod_sit', sitCancelada.ToString)
+      .AddInteger('num_vnda', AVenda.NumVnda)
+      .AddString('cod_sit', AVenda.CodSit.ToString)
+      .AddDateTime('dat_incl', AVenda.DatIncl)
+      .AddDateTime('dat_concl', Variant(AVenda.DatConcl))
+      .AddFloat('vr_bruto', Double(AVenda.VrBruto))
+      .AddFloat('vr_desc', AVenda.VrDesc)
+      .AddFloat('vr_total', AVenda.VrTotal)
       .&End
     .ExecSQL();
 
-  Result := ObterVenda(ANumVnda);
+  Result := ObterVenda(AVenda.NumVnda);
 end;
 
 constructor TLojaModelDaoVendaVenda.Create;

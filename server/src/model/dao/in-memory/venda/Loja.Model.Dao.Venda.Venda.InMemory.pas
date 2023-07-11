@@ -32,7 +32,7 @@ type
 
     function NovaVenda(ANovaVenda: TLojaModelEntityVendaVenda): TLojaModelEntityVendaVenda;
 
-    function CancelarVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
+    function AtualizarVenda(AVenda: TLojaModelEntityVendaVenda): TLojaModelEntityVendaVenda;
 
   end;
 
@@ -40,17 +40,21 @@ implementation
 
 { TLojaModelDaoVendaVendaInMemory }
 
-function TLojaModelDaoVendaVendaInMemory.CancelarVenda(
-  ANumVnda: Integer): TLojaModelEntityVendaVenda;
+function TLojaModelDaoVendaVendaInMemory.AtualizarVenda(
+  AVenda: TLojaModelEntityVendaVenda): TLojaModelEntityVendaVenda;
 begin
-  Result := nil;
-
+  Result := Nil;
   for var LVenda in FRepository
   do
-    if LVenda.NumVnda = ANumVnda
+    if LVenda.NumVnda = AVenda.NumVnda
     then begin
-      LVenda.CodSit := sitCancelada;
-      LVenda.DatConcl := Now;
+      LVenda.CodSit := AVenda.CodSit;
+      LVenda.DatIncl := AVenda.DatIncl;
+      LVenda.DatConcl := AVenda.DatConcl;
+      LVenda.VrBruto := AVenda.VrBruto;
+      LVenda.VrDesc := AVenda.VrDesc;
+      LVenda.VrTotal := AVenda.VrTotal;
+
       Result := Clone(LVenda);
       Break;
     end;

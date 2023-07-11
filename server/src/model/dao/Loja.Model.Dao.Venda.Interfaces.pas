@@ -5,7 +5,9 @@ interface
 uses
   Loja.Model.Entity.Venda.Types,
   Loja.Model.Entity.Venda.Venda,
+  Loja.Model.Entity.Venda.Item,
   Loja.Model.Entity.Venda.MeioPagto,
+
   Loja.Model.Dto.Req.Venda.Item,
   Loja.Model.Dto.Req.Venda.MeioPagto,
   Loja.Model.Dto.Req.Venda.EfetivaVenda;
@@ -15,18 +17,15 @@ type
     ['{7EEF7952-CD8B-4896-A1E3-267EA929D485}']
     function ObterVendas(ADatInclIni, ADatInclFim: TDate;
       LCodSit: TLojaModelEntityVendaSituacao): TLojaModelEntityVendaVendaLista;
-
     function ObterVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
-
     function NovaVenda(ANovaVenda: TLojaModelEntityVendaVenda): TLojaModelEntityVendaVenda;
-
-    function CancelarVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
-
+    function AtualizarVenda(AVenda: TLojaModelEntityVendaVenda): TLojaModelEntityVendaVenda;
   end;
 
   ILojaModelDaoVendaItem = interface
     ['{FE32EC6C-3C0C-450B-B93F-9C8DE18A56DB}']
     function ObterUltimoNumSeq(ANumVnda: Integer): Integer;
+    function ObterItensVenda(ANumVnda: Integer): TLojaModelEntityVendaItemLista;
   end;
 
   ILojaModelDaoVendaMeioPagto = interface

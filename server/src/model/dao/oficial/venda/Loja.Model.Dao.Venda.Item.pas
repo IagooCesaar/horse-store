@@ -23,6 +23,7 @@ type
 
     { ILojaModelDaoVendaItem }
     function ObterUltimoNumSeq(ANumVnda: Integer): Integer;
+    function ObterItensVenda(ANumVnda: Integer): TLojaModelEntityVendaItemLista;
 
   end;
 
@@ -63,6 +64,31 @@ end;
 class function TLojaModelDaoVendaItem.New: ILojaModelDaoVendaItem;
 begin
   Result := Self.Create;
+end;
+
+function TLojaModelDaoVendaItem.ObterItensVenda(
+  ANumVnda: Integer): TLojaModelEntityVendaItemLista;
+begin
+  Result := TLojaModelEntityVendaItemLista.Create;
+
+  var LSql := #13#10
+  + 'select * from venda_item vi '
+  + 'where vi.num_vnda = :num_vnda '
+  + 'order by vi.num_seq_item '
+  ;
+
+  var ds := TDatabaseFactory.New.SQL
+    .SQL(LSql)
+    .ParamList
+      .AddInteger('num_vnda', ANumVnda)
+      .&End
+    .Open;
+
+  while not ds.Eof
+  do begin
+    Result.Add(AtribuiCampos(ds));
+    ds.Next;
+  end;
 end;
 
 function TLojaModelDaoVendaItem.ObterUltimoNumSeq(ANumVnda: Integer): Integer;
