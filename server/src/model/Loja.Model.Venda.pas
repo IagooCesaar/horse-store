@@ -38,26 +38,18 @@ type
     { ILojaModelVenda }
     function ObterVendas(ADatInclIni, ADatInclFim: TDate;
       ACodSit: TLojaModelEntityVendaSituacao): TLojaModelEntityVendaVendaLista;
-
     function NovaVenda: TLojaModelEntityVendaVenda;
-
     function ObterVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
-
     function EfetivarVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
-
     function CancelarVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
 
     function ObterItensVenda(ANumVnda: Integer): TLojaModelDtoRespVendaItemLista;
-
     function InserirItemVenda(ANovoItem: TLojaModelDtoReqVendaItem): TLojaModelDtoRespVendaItem;
-
     function AtualizarItemVenda(AItem: TLojaModelDtoReqVendaItem): TLojaModelDtoRespVendaItem;
 
     function ObterMeiosPagtoVenda(ANumVnda: Integer): TLojaModelEntityVendaMeioPagtoLista;
-
     function InserirMeiosPagtoVenda(ANumVnda: Integer;
       AMeiosPagto: TLojaModelEntityVendaMeioPagtoLista): TLojaModelEntityVendaMeioPagtoLista;
-
     function AtualizarMeiosPagtoVenda(ANumVnda: Integer;
       AMeiosPagto: TLojaModelEntityVendaMeioPagtoLista): TLojaModelEntityVendaMeioPagtoLista;
   end;
@@ -79,7 +71,27 @@ uses
 function TLojaModelVenda.AtualizarItemVenda(
   AItem: TLojaModelDtoReqVendaItem): TLojaModelDtoRespVendaItem;
 begin
+  if AItem.NumVnda <= 0
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('O número de venda informado é inválido');
 
+  var LVenda := TLojaModelDaoFactory.New.Venda
+    .Venda
+    .ObterVenda(AItem.NumVnda);
+
+  if LVenda = nil
+  then raise EHorseException.New
+    .Status(THTTPStatus.NotFound)
+    .&Unit(Self.UnitName)
+    .Error('Não foi possível encontrar a venda pelo número informado');
+
+  if LVenda.CodSit <> sitPendente
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('A venda informada não está Pendente.');
 end;
 
 function TLojaModelVenda.AtualizarMeiosPagtoVenda(ANumVnda: Integer;
@@ -100,6 +112,12 @@ begin
     .Status(THTTPStatus.NotFound)
     .&Unit(Self.UnitName)
     .Error('Não foi possível encontrar a venda pelo número informado');
+
+  if LVenda.CodSit <> sitPendente
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('A venda informada não está Pendente.');
 end;
 
 function TLojaModelVenda.CalculaTotaisVenda(
@@ -111,6 +129,7 @@ begin
 
   AVenda.VrBruto := 0;
   AVenda.VrDesc := 0;
+  AVenda.VrTotal := 0;
 
   for var LItem in LItens
   do begin
@@ -119,12 +138,11 @@ begin
 
     if LItem.CodSit = sitAtivo
     then begin
-      AVenda.VrBruto := AVenda.VrBruto + LItem.VrTotal;
+      AVenda.VrBruto := AVenda.VrBruto + LItem.VrBruto;
       AVenda.VrDesc := AVenda.VrDesc + LItem.VrDesc;
+      AVenda.VrTotal := AVenda.VrTotal + LItem.VrTotal;
     end;
   end;
-
-  AVenda.VrTotal := AVenda.VrBruto - AVenda.VrDesc;
 
   LItens.Free;
 end;
@@ -347,7 +365,66 @@ end;
 function TLojaModelVenda.InserirItemVenda(
   ANovoItem: TLojaModelDtoReqVendaItem): TLojaModelDtoRespVendaItem;
 begin
+  if ANovoItem.NumVnda <= 0
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('O número de venda informado é inválido');
 
+  var LVenda := TLojaModelDaoFactory.New.Venda
+    .Venda
+    .ObterVenda(ANovoItem.NumVnda);
+
+  if LVenda = nil
+  then raise EHorseException.New
+    .Status(THTTPStatus.NotFound)
+    .&Unit(Self.UnitName)
+    .Error('Não foi possível encontrar a venda pelo número informado');
+
+  if LVenda.CodSit <> sitPendente
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('A venda informada não está Pendente.');
+
+  var LPrecoVnda :=  TLojaModelDaoFactory.New.Preco.Venda.ObterPrecoVendaAtual(ANovoItem.CodItem);
+
+  var LItem := TLojaModelEntityVendaItem.Create;
+  try
+    LItem.NumVnda := ANovoItem.NumVnda;
+    LItem.CodItem := ANovoItem.CodItem;
+    LItem.NumSeqItem := TLojaModelDaoFactory.New.Venda.Item.ObterUltimoNumSeq(LItem.NumVnda) + 1;
+    LItem.CodSit := sitAtivo;
+    LItem.QtdItem := ANovoItem.QtdItem;
+    LItem.VrPrecoUnit := LPrecoVnda.VrVnda;
+    LItem.VrBruto := RoundTo(LItem.QtdItem * LItem.VrPrecoUnit, -2);
+    LItem.VrDesc := ANovoItem.VrDesc;
+    LItem.VrTotal := LItem.VrBruto - LItem.VrDesc;
+
+    if LItem.VrTotal < 0
+    then raise EHorseException.New
+      .Status(THTTPStatus.BadRequest)
+      .&Unit(Self.UnitName)
+      .Error('O valor total do item não pode ser negativo');
+
+    var LItemInserido := TLojaModelDaoFactory.New.Venda
+      .Item
+      .InserirItem(LItem);
+
+    Result := EntityToDto(LItemInserido);
+    LItemInserido.Free;
+
+    CalculaTotaisVenda(LVenda);
+    var LVendaAtualizada := TLojaModelDaoFactory.New.Venda
+      .Venda
+      .AtualizarVenda(LVenda);
+    LVendaAtualizada.Free;
+
+  finally
+    LVenda.Free;
+    LPrecoVnda.Free;
+    LItem.Free;
+  end;
 end;
 
 function TLojaModelVenda.InserirMeiosPagtoVenda(ANumVnda: Integer;
@@ -368,6 +445,12 @@ begin
     .Status(THTTPStatus.NotFound)
     .&Unit(Self.UnitName)
     .Error('Não foi possível encontrar a venda pelo número informado');
+
+  if LVenda.CodSit <> sitPendente
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('A venda informada não está Pendente.');
 end;
 
 class function TLojaModelVenda.New: ILojaModelVenda;
@@ -485,15 +568,21 @@ begin
     .&Unit(Self.UnitName)
     .Error('O número de venda informado é inválido');
 
-  Result := TLojaModelDaoFactory.New.Venda
+  var LVenda := TLojaModelDaoFactory.New.Venda
     .Venda
     .ObterVenda(ANumVnda);
 
-  if Result = nil
+  if LVenda = nil
   then raise EHorseException.New
     .Status(THTTPStatus.NotFound)
     .&Unit(Self.UnitName)
     .Error('Não foi possível encontrar a venda pelo número informado');
+
+  CalculaTotaisVenda(LVenda);
+  Result := TLojaModelDaoFactory.New.Venda
+    .Venda
+    .AtualizarVenda(LVenda);
+  LVenda.Free;
 end;
 
 function TLojaModelVenda.ObterVendas(ADatInclIni, ADatInclFim: TDate;

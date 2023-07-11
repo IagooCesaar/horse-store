@@ -17,10 +17,7 @@ type
     FNumSeqItem: Integer;
     FCodItem: Integer;
     FQtdItem: Integer;
-    FVrPrecoUnit: Currency;
-    FVrBruto: Currency;
     FVrDesc: Currency;
-    FVrTotal: Currency;
     FCodSit: TLojaModelEntityVendaItemSituacao;
   public
     [SwagIgnore]
@@ -31,10 +28,7 @@ type
     property CodItem: Integer read FCodItem write FCodItem;
     property CodSit: TLojaModelEntityVendaItemSituacao read FCodSit write FCodSit;
     property QtdItem: Integer read FQtdItem write FQtdItem;
-    property VrPrecoUnit: Currency read FVrPrecoUnit write FVrPrecoUnit;
-    property VrBruto: Currency read FVrBruto write FVrBruto;
     property VrDesc: Currency read FVrDesc write FVrDesc;
-    property VrTotal: Currency read FVrTotal write FVrTotal;
   end;
 
   TLojaModelDtoReqVendaItemLista = TObjectList<TLojaModelDtoReqVendaItem>;
