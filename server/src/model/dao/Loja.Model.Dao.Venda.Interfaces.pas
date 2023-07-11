@@ -26,6 +26,8 @@ type
     ['{FE32EC6C-3C0C-450B-B93F-9C8DE18A56DB}']
     function ObterUltimoNumSeq(ANumVnda: Integer): Integer;
     function ObterItensVenda(ANumVnda: Integer): TLojaModelEntityVendaItemLista;
+    function ObterItem(ANumVnda, ANumSeqItem: Integer): TLojaModelEntityVendaItem;
+    function AtulizarItem(AItem: TLojaModelEntityVendaItem): TLojaModelEntityVendaItem;
   end;
 
   ILojaModelDaoVendaMeioPagto = interface

@@ -24,7 +24,8 @@ type
     { ILojaModelDaoVendaItem }
     function ObterUltimoNumSeq(ANumVnda: Integer): Integer;
     function ObterItensVenda(ANumVnda: Integer): TLojaModelEntityVendaItemLista;
-
+    function ObterItem(ANumVnda, ANumSeqItem: Integer): TLojaModelEntityVendaItem;
+    function AtulizarItem(AItem: TLojaModelEntityVendaItem): TLojaModelEntityVendaItem;
   end;
 
 implementation
@@ -50,6 +51,40 @@ begin
   Result.VrTotal := ds.FieldByName('vr_total').AsCurrency;
 end;
 
+function TLojaModelDaoVendaItem.AtulizarItem(
+  AItem: TLojaModelEntityVendaItem): TLojaModelEntityVendaItem;
+begin
+  Result := nil;
+  var LSql := #13#10
+  + 'update venda_item '
+  + 'set cod_item = :cod_item, '
+  + '    cod_sit = :cod_sit, '
+  + '    qtd_item = :qtd_item, '
+  + '    vr_preco_unit = :vr_preco_unit, '
+  + '    vr_bruto = :vr_bruto, '
+  + '    vr_desc = :vr_desc, '
+  + '    vr_total = :vr_total '
+  + 'where num_vnda = :num_vnda '
+  + '  and num_seq_item = :num_seq_item '
+  ;
+
+  var ds := TDatabaseFactory.New.SQL
+    .SQL(LSql)
+    .ParamList
+      .AddInteger('num_vnda', AItem.NumVnda)
+      .AddInteger('num_seq_item', AItem.NumSeqItem)
+      .AddInteger('cod_item', AItem.CodItem)
+      .AddInteger('qtd_item', AItem.QtdItem)
+      .AddFloat('vr_preco_unit', AItem.VrPrecoUnit)
+      .AddFloat('vr_bruto', AItem.VrBruto)
+      .AddFloat('vr_desc', AItem.VrDesc)
+      .AddFloat('vr_total', AItem.VrTotal)
+      .&End
+    .ExecSQL();
+
+  Result := ObterItem(AItem.NumVnda, AItem.NumSeqItem);
+end;
+
 constructor TLojaModelDaoVendaItem.Create;
 begin
 
@@ -64,6 +99,31 @@ end;
 class function TLojaModelDaoVendaItem.New: ILojaModelDaoVendaItem;
 begin
   Result := Self.Create;
+end;
+
+function TLojaModelDaoVendaItem.ObterItem(ANumVnda,
+  ANumSeqItem: Integer): TLojaModelEntityVendaItem;
+begin
+  Result := nil;
+  var LSql := #13#10
+  + 'select * from venda_item vi '
+  + 'where vi.num_vnda = :num_vnda '
+  + '  and vi.num_seq_item = :num_seq_item '
+  + 'order by vi.num_seq_item '
+  ;
+
+  var ds := TDatabaseFactory.New.SQL
+    .SQL(LSql)
+    .ParamList
+      .AddInteger('num_vnda', ANumVnda)
+      .AddInteger('num_seq_item', ANumSeqItem)
+      .&End
+    .Open;
+
+  if ds.IsEmpty
+  then Exit;
+
+  Result := AtribuiCampos(ds);
 end;
 
 function TLojaModelDaoVendaItem.ObterItensVenda(
