@@ -86,7 +86,21 @@ end;
 function TLojaModelVenda.AtualizarMeiosPagtoVenda(ANumVnda: Integer;
   AMeiosPagto: TLojaModelEntityVendaMeioPagtoLista): TLojaModelEntityVendaMeioPagtoLista;
 begin
+  if ANumVnda <= 0
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('O número de venda informado é inválido');
 
+  var LVenda := TLojaModelDaoFactory.New.Venda
+    .Venda
+    .ObterVenda(ANumVnda);
+
+  if LVenda = nil
+  then raise EHorseException.New
+    .Status(THTTPStatus.NotFound)
+    .&Unit(Self.UnitName)
+    .Error('Não foi possível encontrar a venda pelo número informado');
 end;
 
 function TLojaModelVenda.CalculaTotaisVenda(
@@ -337,7 +351,21 @@ end;
 function TLojaModelVenda.InserirMeiosPagtoVenda(ANumVnda: Integer;
   AMeiosPagto: TLojaModelEntityVendaMeioPagtoLista): TLojaModelEntityVendaMeioPagtoLista;
 begin
+  if ANumVnda <= 0
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('O número de venda informado é inválido');
 
+  var LVenda := TLojaModelDaoFactory.New.Venda
+    .Venda
+    .ObterVenda(ANumVnda);
+
+  if LVenda = nil
+  then raise EHorseException.New
+    .Status(THTTPStatus.NotFound)
+    .&Unit(Self.UnitName)
+    .Error('Não foi possível encontrar a venda pelo número informado');
 end;
 
 class function TLojaModelVenda.New: ILojaModelVenda;
@@ -393,13 +421,41 @@ end;
 function TLojaModelVenda.ObterItensVenda(
   ANumVnda: Integer): TLojaModelDtoRespVendaItemLista;
 begin
+  if ANumVnda <= 0
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('O número de venda informado é inválido');
 
+  var LVenda := TLojaModelDaoFactory.New.Venda
+    .Venda
+    .ObterVenda(ANumVnda);
+
+  if LVenda = nil
+  then raise EHorseException.New
+    .Status(THTTPStatus.NotFound)
+    .&Unit(Self.UnitName)
+    .Error('Não foi possível encontrar a venda pelo número informado');
 end;
 
 function TLojaModelVenda.ObterMeiosPagtoVenda(
   ANumVnda: Integer): TLojaModelEntityVendaMeioPagtoLista;
 begin
+  if ANumVnda <= 0
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('O número de venda informado é inválido');
 
+  var LVenda := TLojaModelDaoFactory.New.Venda
+    .Venda
+    .ObterVenda(ANumVnda);
+
+  if LVenda = nil
+  then raise EHorseException.New
+    .Status(THTTPStatus.NotFound)
+    .&Unit(Self.UnitName)
+    .Error('Não foi possível encontrar a venda pelo número informado');
 end;
 
 function TLojaModelVenda.ObterVenda(
