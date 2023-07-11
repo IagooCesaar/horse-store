@@ -25,6 +25,7 @@ type
     function ObterUltimoNumSeq(ANumVnda: Integer): Integer;
     function ObterItensVenda(ANumVnda: Integer): TLojaModelEntityVendaItemLista;
     function ObterItem(ANumVnda, ANumSeqItem: Integer): TLojaModelEntityVendaItem;
+    function InserirItem(ANovoItem: TLojaModelEntityVendaItem): TLojaModelEntityVendaItem;
     function AtulizarItem(AItem: TLojaModelEntityVendaItem): TLojaModelEntityVendaItem;
   end;
 
@@ -94,6 +95,36 @@ destructor TLojaModelDaoVendaItem.Destroy;
 begin
 
   inherited;
+end;
+
+function TLojaModelDaoVendaItem.InserirItem(
+  ANovoItem: TLojaModelEntityVendaItem): TLojaModelEntityVendaItem;
+begin
+  Result := nil;
+  var LSql := #13#10
+  + 'insert into venda_item ( '
+  + '  num_vnda, num_seq_item, cod_item, cod_sit, qtd_item, vr_preco_unit, '
+  + '  vr_bruto, vr_desc, vr_total) '
+  + 'values ( '
+  + '  :num_vnda, :num_seq_item, :cod_item, :cod_sit, :qtd_item, :vr_preco_unit, '
+  + '  :vr_bruto, :vr_desc, :vr_total) '
+  ;
+
+  var ds := TDatabaseFactory.New.SQL
+    .SQL(LSql)
+    .ParamList
+      .AddInteger('num_vnda', ANovoItem.NumVnda)
+      .AddInteger('num_seq_item', ANovoItem.NumSeqItem)
+      .AddInteger('cod_item', ANovoItem.CodItem)
+      .AddInteger('qtd_item', ANovoItem.QtdItem)
+      .AddFloat('vr_preco_unit', ANovoItem.VrPrecoUnit)
+      .AddFloat('vr_bruto', ANovoItem.VrBruto)
+      .AddFloat('vr_desc', ANovoItem.VrDesc)
+      .AddFloat('vr_total', ANovoItem.VrTotal)
+      .&End
+    .ExecSQL();
+
+  Result := ObterItem(ANovoItem.NumVnda, ANovoItem.NumSeqItem);
 end;
 
 class function TLojaModelDaoVendaItem.New: ILojaModelDaoVendaItem;

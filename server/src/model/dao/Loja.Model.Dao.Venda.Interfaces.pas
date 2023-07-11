@@ -27,6 +27,7 @@ type
     function ObterUltimoNumSeq(ANumVnda: Integer): Integer;
     function ObterItensVenda(ANumVnda: Integer): TLojaModelEntityVendaItemLista;
     function ObterItem(ANumVnda, ANumSeqItem: Integer): TLojaModelEntityVendaItem;
+    function InserirItem(ANovoItem: TLojaModelEntityVendaItem): TLojaModelEntityVendaItem;
     function AtulizarItem(AItem: TLojaModelEntityVendaItem): TLojaModelEntityVendaItem;
   end;
 

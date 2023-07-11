@@ -28,6 +28,7 @@ type
     function ObterUltimoNumSeq(ANumVnda: Integer): Integer;
     function ObterItensVenda(ANumVnda: Integer): TLojaModelEntityVendaItemLista;
     function ObterItem(ANumVnda, ANumSeqItem: Integer): TLojaModelEntityVendaItem;
+    function InserirItem(ANovoItem: TLojaModelEntityVendaItem): TLojaModelEntityVendaItem;
     function AtulizarItem(AItem: TLojaModelEntityVendaItem): TLojaModelEntityVendaItem;
   end;
 
@@ -90,6 +91,23 @@ begin
   if FDao = nil
   then FDao := TLojaModelDaoVendaItemInMemory.Create;
   Result := FDao;
+end;
+
+function TLojaModelDaoVendaItemInMemory.InserirItem(
+  ANovoItem: TLojaModelEntityVendaItem): TLojaModelEntityVendaItem;
+begin
+  FRepository.Add(TLojaModelEntityVendaItem.Create);
+  FRepository.Last.NumVnda := ANovoItem.NumVnda;
+  FRepository.Last.NumSeqItem := ANovoItem.NumSeqItem;
+  FRepository.Last.CodItem := ANovoItem.CodItem;
+  FRepository.Last.CodSit := ANovoItem.CodSit;
+  FRepository.Last.QtdItem := ANovoItem.QtdItem;
+  FRepository.Last.VrPrecoUnit := ANovoItem.VrPrecoUnit;
+  FRepository.Last.VrBruto := ANovoItem.VrBruto;
+  FRepository.Last.VrDesc := ANovoItem.VrDesc;
+  FRepository.Last.VrTotal := ANovoItem.VrTotal;
+
+  Clone(FRepository.Last);
 end;
 
 function TLojaModelDaoVendaItemInMemory.ObterItem(ANumVnda,
