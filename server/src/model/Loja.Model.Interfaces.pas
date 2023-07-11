@@ -80,8 +80,7 @@ type
       ACodSit: TLojaModelEntityVendaSituacao): TLojaModelEntityVendaVendaLista;
     function NovaVenda: TLojaModelEntityVendaVenda;
     function ObterVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
-    function EfetivarVenda(
-      AEfetivacao: TLojaModelDtoReqVendaEfetivaVenda): TLojaModelEntityVendaVenda;
+    function EfetivarVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
     function CancelarVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
 
     function ObterItensVenda(ANumVnda: Integer): TLojaModelDtoRespVendaItemLista;

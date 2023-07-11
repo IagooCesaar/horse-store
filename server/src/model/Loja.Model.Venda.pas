@@ -43,8 +43,7 @@ type
 
     function ObterVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
 
-    function EfetivarVenda(
-      AEfetivacao: TLojaModelDtoReqVendaEfetivaVenda): TLojaModelEntityVendaVenda;
+    function EfetivarVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
 
     function CancelarVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
 
@@ -111,6 +110,7 @@ begin
     .ObterItensVenda(AVenda.NumVnda);
 
   AVenda.VrBruto := 0;
+  AVenda.VrDesc := 0;
 
   for var LItem in LItens
   do begin
@@ -118,7 +118,10 @@ begin
     LItem.VrTotal := LItem.VrBruto - LItem.VrDesc;
 
     if LItem.CodSit = sitAtivo
-    then AVenda.VrBruto := AVenda.VrBruto + LItem.VrTotal;
+    then begin
+      AVenda.VrBruto := AVenda.VrBruto + LItem.VrTotal;
+      AVenda.VrDesc := AVenda.VrDesc + LItem.VrDesc;
+    end;
   end;
 
   AVenda.VrTotal := AVenda.VrBruto - AVenda.VrDesc;
@@ -175,14 +178,13 @@ begin
   inherited;
 end;
 
-function TLojaModelVenda.EfetivarVenda(
-  AEfetivacao: TLojaModelDtoReqVendaEfetivaVenda): TLojaModelEntityVendaVenda;
+function TLojaModelVenda.EfetivarVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
 begin
   var LCaixa := ObterEValidarCaixa;
 
   var LVenda := TLojaModelDaoFactory.New.Venda
     .Venda
-    .ObterVenda(AEfetivacao.NumVnda);
+    .ObterVenda(ANumVnda);
 
   if LVenda = nil
   then raise EHorseException.New
@@ -192,11 +194,11 @@ begin
 
   var LItens := TLojaModelDaoFactory.New.Venda
     .Item
-    .ObterItensVenda(AEfetivacao.NumVnda);
+    .ObterItensVenda(ANumVnda);
 
   var LMeiosPagto := TLojaModelDaoFactory.New.Venda
     .MeioPagto
-    .ObterMeiosPagtoVenda(AEfetivacao.NumVnda);
+    .ObterMeiosPagtoVenda(ANumVnda);
 
   try
     if LItens.Count = 0

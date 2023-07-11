@@ -24,7 +24,6 @@ uses
   Loja.Model.Entity.Venda.MeioPagto,
   Loja.Model.Entity.Venda.Types,
 
-  Loja.Model.Dto.Req.Venda.EfetivaVenda,
   Loja.Model.Dto.Req.Venda.MeioPagto,
   Loja.Model.Dto.Req.Venda.Item;
 
@@ -92,18 +91,7 @@ begin
     .InvalidFormatMessage('O valor informado não é um inteiro válido')
     .AsInteger;
 
-  if Req.Body = ''
-  then raise EHorseException.New
-    .Status(THTTPStatus.BadRequest)
-    .&Unit(C_UnitName)
-    .Error('O body não estava no formato esperado');
-
-  var LEfetivar := TJson.ClearJsonAndConvertToObject
-   <TLojaModelDtoReqVendaEfetivaVenda>(Req.Body);
-
-  LEfetivar.NumVnda := LNumVnda;
-
-  var LVenda := TLojaModelFactory.New.Venda.EfetivarVenda(LEfetivar);
+  var LVenda := TLojaModelFactory.New.Venda.EfetivarVenda(LNumVnda);
   Resp.Status(THTTPStatus.OK).Send(TJson.ObjectToClearJsonValue(LVenda));
   LVenda.Free;
 end;
@@ -263,9 +251,9 @@ begin
     .Post('/:num_vnda/itens', PostInserirItem)
     .Put('/:num_vnda/itens/:num_seq_item', PutAtualizarItem)
 
-    .Get('/venda/:num_vnda/meios-pagamento', GetMeiosPagtoVenda)
-    .Post('/venda/:num_vnda/meios-pagamento', PostMeiosPagtoVenda)
-    .Put('/venda/:num_vnda/meios-pagamento', PutMeiosPagtoVenda)
+    .Get('/:num_vnda/meios-pagamento', GetMeiosPagtoVenda)
+    .Post('/:num_vnda/meios-pagamento', PostMeiosPagtoVenda)
+    .Put('/:num_vnda/meios-pagamento', PutMeiosPagtoVenda)
   ;
 end;
 
@@ -343,9 +331,6 @@ begin
         .AddParamPath('num_vnda', 'Código identificador da venda')
           .Schema(SWAG_INTEGER)
           .Required(True)
-        .&End
-        .AddParamBody('body')
-          .Schema(TLojaModelDtoReqVendaEfetivaVenda)
         .&End
         .AddResponse(Integer(THTTPStatus.OK))
           .Schema(TLojaModelEntityVendaVenda)
