@@ -23,9 +23,10 @@ type
     class function New: ILojaModelDaoVendaMeioPagto;
 
     { ILojaModelDaoVendaMeioPagto }
-    function ObterUltimoNumSeq(ANumVnda: Integer): Integer;
     function ObterMeiosPagtoVenda(ANumVnda: Integer): TLojaModelEntityVendaMeioPagtoLista;
     function ObterMeioPagtoVenda(ANumVnda, ANumSeqMeioPagto: Integer): TLojaModelEntityVendaMeioPagto;
+    procedure RemoverMeiosPagtoVenda(ANumVnda: Integer);
+    function InserirMeioPagto(ANovoMeioPagto: TLojaModelEntityVendaMeioPagto): TLojaModelEntityVendaMeioPagto;
 
   end;
 
@@ -56,6 +57,30 @@ destructor TLojaModelDaoVendaMeioPagto.Destroy;
 begin
 
   inherited;
+end;
+
+function TLojaModelDaoVendaMeioPagto.InserirMeioPagto(
+  ANovoMeioPagto: TLojaModelEntityVendaMeioPagto): TLojaModelEntityVendaMeioPagto;
+begin
+  Result := nil;
+  var LSql := #13#10
+  + 'insert into venda_meio_pagto ( '
+  + '  num_vnda, num_seq_meio_pagto, cod_meio_pagto, qtd_parc, vr_parc) '
+  + 'values ( '
+  + '  :num_vnda, :num_seq_meio_pagto, :cod_meio_pagto, :qtd_parc, :vr_parc) '
+  ;
+  var ds := TDatabaseFactory.New.SQL
+    .SQL(LSql)
+    .ParamList
+      .AddInteger('num_vnda',ANovoMeioPagto.NumVnda)
+      .AddInteger('num_seq_meio_pagto',ANovoMeioPagto.NumSeqMeioPagto)
+      .AddString('cod_meio_pagto',ANovoMeioPagto.CodMeioPagto.ToString)
+      .AddInteger('qtd_parc',ANovoMeioPagto.QtdParc)
+      .AddFloat('vr_parc',ANovoMeioPagto.VrParc)
+      .&End
+    .ExecSQL();
+
+  Result := ObterMeioPagtoVenda(ANovoMeioPagto.NumVnda, ANovoMeioPagto.NumSeqMeioPagto);
 end;
 
 class function TLojaModelDaoVendaMeioPagto.New: ILojaModelDaoVendaMeioPagto;
@@ -114,12 +139,11 @@ begin
   end;
 end;
 
-function TLojaModelDaoVendaMeioPagto.ObterUltimoNumSeq(
-  ANumVnda: Integer): Integer;
+procedure TLojaModelDaoVendaMeioPagto.RemoverMeiosPagtoVenda(
+  ANumVnda: Integer);
 begin
-  Result := 0;
   var LSql := #13#10
-  + 'select max(num_seq_meio_pagto) as num_seq_meio_pagto from venda_meio_pagto where num_vnda = :num_vnda '
+  + 'delete from venda_meio_pagto where num_vnda = :num_vnda '
   ;
 
   var ds := TDatabaseFactory.New.SQL
@@ -127,9 +151,7 @@ begin
     .ParamList
       .AddInteger('num_vnda', ANumVnda)
       .&End
-    .Open;
-  if not ds.IsEmpty
-  then Result := ds.FieldByName('num_seq_meio_pagto').AsInteger;
+    .ExecSQL;
 end;
 
 end.

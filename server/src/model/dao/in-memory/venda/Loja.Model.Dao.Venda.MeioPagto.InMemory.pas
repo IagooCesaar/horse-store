@@ -26,9 +26,10 @@ type
     class destructor UnInitialize;
 
     { ILojaModelDaoVendaMeioPagto }
-    function ObterUltimoNumSeq(ANumVnda: Integer): Integer;
     function ObterMeiosPagtoVenda(ANumVnda: Integer): TLojaModelEntityVendaMeioPagtoLista;
     function ObterMeioPagtoVenda(ANumVnda, ANumSeqMeioPagto: Integer): TLojaModelEntityVendaMeioPagto;
+    procedure RemoverMeiosPagtoVenda(ANumVnda: Integer);
+    function InserirMeioPagto(ANovoMeioPagto: TLojaModelEntityVendaMeioPagto): TLojaModelEntityVendaMeioPagto;
 
   end;
 
@@ -67,6 +68,19 @@ begin
   Result := FDao;
 end;
 
+function TLojaModelDaoVendaMeioPagtoInMemory.InserirMeioPagto(
+  ANovoMeioPagto: TLojaModelEntityVendaMeioPagto): TLojaModelEntityVendaMeioPagto;
+begin
+  Result := nil;
+  FRepository.Add(TLojaModelEntityVendaMeioPagto.Create);
+  FRepository.Last.NumVnda := ANovoMeioPagto.NumVnda;
+  FRepository.Last.NumSeqMeioPagto := ANovoMeioPagto.NumSeqMeioPagto;
+  FRepository.Last.CodMeioPagto := ANovoMeioPagto.CodMeioPagto;
+  FRepository.Last.QtdParc := ANovoMeioPagto.QtdParc;
+  FRepository.Last.VrParc := ANovoMeioPagto.VrParc;
+  Result := Clone(FRepository.Last);
+end;
+
 function TLojaModelDaoVendaMeioPagtoInMemory.ObterMeioPagtoVenda(ANumVnda,
   ANumSeqMeioPagto: Integer): TLojaModelEntityVendaMeioPagto;
 begin
@@ -91,17 +105,13 @@ begin
     then Result.Add(Clone(LMeio));
 end;
 
-function TLojaModelDaoVendaMeioPagtoInMemory.ObterUltimoNumSeq(
-  ANumVnda: Integer): Integer;
+procedure TLojaModelDaoVendaMeioPagtoInMemory.RemoverMeiosPagtoVenda(
+  ANumVnda: Integer);
 begin
-  var LNumSeq := 0;
   for var LMeioPagto in FRepository
   do
     if LMeioPagto.NumVnda = ANumVnda
-    then begin
-      if LMeioPagto.NumSeqMeioPagto > LNumSeq
-      then LNumSeq := LMeioPagto.NumSeqMeioPagto;
-    end;
+    then FRepository.Remove(LMeioPagto);
 end;
 
 class destructor TLojaModelDaoVendaMeioPagtoInMemory.UnInitialize;
