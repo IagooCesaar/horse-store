@@ -209,7 +209,7 @@ begin
   var LNovosMeiosPagto := TJson.ClearJsonAndConvertToObject
     <TLojaModelEntityVendaMeioPagtoLista>(Req.Body);
   try
-    var LMeiosPagto := TLojaModelFactory.New.Venda.AtualizarMeiosPagtoVenda(LNumVnda, LNovosMeiosPagto);
+    var LMeiosPagto := TLojaModelFactory.New.Venda.DefinirMeiosPagtoVenda(LNumVnda, LNovosMeiosPagto);
 
     if LMeiosPagto.Count = 0
     then Resp.Status(THTTPStatus.NoContent)

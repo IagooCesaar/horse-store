@@ -304,6 +304,12 @@ begin
     .&Unit(Self.UnitName)
     .Error('Não foi possível encontrar a venda pelo número informado');
 
+  if LVenda.CodSit <> sitPendente
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('A venda informada não está Pendente.');
+
   var LItens := TLojaModelDaoFactory.New.Venda
     .Item
     .ObterItensVenda(ANumVnda);
@@ -370,14 +376,29 @@ begin
       LQtdItens.Free;
     end;
 
+    CalculaTotaisVenda(LVenda);
+
     if LMeiosPagto.Count = 0
     then raise EHorseException.New
       .Status(THTTPStatus.BadRequest)
       .&Unit(Self.UnitName)
       .Error('Não há meios de pagamento definidos na venda');
 
+    var LTotalMeioPagto := 0.00;
+
+    for var LMeioPagto in LMeiosPagto
+    do LTotalMeioPagto := LTotalMeioPagto + LMeioPagto.VrParc;
+
+    if LTotalMeioPagto <> LVenda.VrTotal
+    then raise EHorseException.New
+      .Status(THTTPStatus.BadRequest)
+      .&Unit(Self.UnitName)
+      .Error(Format(
+        'Os valores informados nos meios de pagamentos (R$ %8.2f) não coincidem com o total da venda (R$ %8.2f)',
+        [LTotalMeioPagto, LVenda.VrTotal]
+      ));
+
     // Efetiva venda
-    CalculaTotaisVenda(LVenda);
     LVenda.DatConcl := Now;
     LVenda.CodSit := sitEfetivada;
 
@@ -397,6 +418,7 @@ begin
         LVenda.NumVnda, LMeioPagto.QtdParc, RoundTo(LMeioPagto.VrParc / LMeioPagto.QtdParc, -2)
       ]);
       LMovCaixa.VrMov := LMeioPagto.VrParc;
+      LMovCaixa.CodMeioPagto := LMeioPagto.CodMeioPagto;
 
       var LMovimento := TLojaModelBoFactory.New.Caixa.CriarMovimentoCaixa(LMovCaixa);
       LMovimento.Free;
