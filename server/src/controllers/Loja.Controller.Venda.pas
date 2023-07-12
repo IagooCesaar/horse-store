@@ -5,7 +5,6 @@ interface
 uses
   Horse,
   Horse.Commons,
-  Web.HTTPApp,
   Horse.JsonInterceptor.Helpers;
 
 procedure Registry(const AContext: string);
@@ -193,7 +192,7 @@ begin
   LMeiosPagto.Free;
 end;
 
-procedure PostPutMeiosPagtoVenda(Req: THorseRequest; Resp: THorseResponse);
+procedure PostMeiosPagtoVenda(Req: THorseRequest; Resp: THorseResponse);
 begin
   var LNumVnda := Req.Params.Field('num_vnda')
     .Required
@@ -214,12 +213,8 @@ begin
 
     if LMeiosPagto.Count = 0
     then Resp.Status(THTTPStatus.NoContent)
-    else
-    if Req.MethodType = mtPost
-    then Resp.Status(THTTPStatus.Created).Send(TJson.ObjectToClearJsonValue(LMeiosPagto))
-    else Resp.Status(THTTPStatus.Ok).Send(TJson.ObjectToClearJsonValue(LMeiosPagto));
+    else Resp.Status(THTTPStatus.Created).Send(TJson.ObjectToClearJsonValue(LMeiosPagto));
 
-    Resp.Status(THTTPStatus.Created).Send(TJson.ObjectToClearJsonValue(LMeiosPagto));
     LMeiosPagto.Free;
   finally
     LNovosMeiosPagto.Free;
@@ -242,8 +237,7 @@ begin
     .Put('/:num_vnda/itens/:num_seq_item', PutAtualizarItem)
 
     .Get('/:num_vnda/meios-pagamento', GetMeiosPagtoVenda)
-    .Post('/:num_vnda/meios-pagamento', PostPutMeiosPagtoVenda)
-    .Put('/:num_vnda/meios-pagamento', PostPutMeiosPagtoVenda)
+    .Post('/:num_vnda/meios-pagamento', PostMeiosPagtoVenda)
   ;
 end;
 
@@ -443,7 +437,7 @@ begin
     .Path('/venda/{num_vnda}/meios-pagamento')
     .Tag('Venda')
       .POST('Criar relação de Meios de Pagamento')
-        .Description('Defini a distribuição do valor da venda entre os meios de pagamento configurados')
+        .Description('(Re)Define a distribuição do valor da venda entre os meios de pagamento configurados')
         .AddParamPath('num_vnda', 'Código identificador da venda')
           .Schema(SWAG_INTEGER)
           .Required(True)
@@ -453,30 +447,6 @@ begin
           .IsArray(True)
         .&End
         .AddResponse(Integer(THTTPStatus.Created))
-          .Schema(TLojaModelEntityVendaMeioPagto)
-          .IsArray(True)
-        .&End
-        .AddResponse(Integer(THTTPStatus.NoContent)).&End
-        .AddResponse(Integer(THTTPStatus.BadRequest)).&End
-        .AddResponse(Integer(THTTPStatus.NotFound)).&End
-        .AddResponse(Integer(THTTPStatus.PreconditionFailed)).&End
-        .AddResponse(Integer(THTTPStatus.InternalServerError)).&End
-      .&End
-    .&End
-
-    .Path('/venda/{num_vnda}/meios-pagamento')
-    .Tag('Venda')
-      .PUT('Atualiza toda a relação de Meios de Pagamento')
-        .Description('Atualiza toda a distribuição do valor da venda entre os meios de pagamento configurados')
-        .AddParamPath('num_vnda', 'Código identificador da venda')
-          .Schema(SWAG_INTEGER)
-          .Required(True)
-        .&End
-        .AddParamBody('body')
-          .Schema(TLojaModelDtoReqVendaMeioPagamento)
-          .IsArray(True)
-        .&End
-        .AddResponse(Integer(THTTPStatus.OK))
           .Schema(TLojaModelEntityVendaMeioPagto)
           .IsArray(True)
         .&End
