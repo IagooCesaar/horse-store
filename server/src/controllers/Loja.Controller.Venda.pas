@@ -135,13 +135,16 @@ begin
 
   var LNovoItem := TJson.ClearJsonAndConvertToObject
     <TLojaModelDtoReqVendaItem>(Req.Body);
+  try
+    LNovoItem.NumVnda := LNumVnda;
 
-  LNovoItem.NumVnda := LNumVnda;
+    var LItem := TLojaModelFactory.New.Venda.InserirItemVenda(LNovoItem);
 
-  var LItem := TLojaModelFactory.New.Venda.InserirItemVenda(LNovoItem);
-
-  Resp.Status(THTTPStatus.Created).Send(TJson.ObjectToClearJsonValue(LItem));
-  LItem.Free;
+    Resp.Status(THTTPStatus.Created).Send(TJson.ObjectToClearJsonValue(LItem));
+    LItem.Free;
+  finally
+    LNovoItem.Free;
+  end;
 end;
 
 procedure PutAtualizarItem(Req: THorseRequest; Resp: THorseResponse);
@@ -160,14 +163,17 @@ begin
 
   var LAtualizaItem := TJson.ClearJsonAndConvertToObject
     <TLojaModelDtoReqVendaItem>(Req.Body);
+  try
+    LAtualizaItem.NumVnda := LNumVnda;
+    LAtualizaItem.NumSeqItem := LNumSeqItem;
 
-  LAtualizaItem.NumVnda := LNumVnda;
-  LAtualizaItem.NumSeqItem := LNumSeqItem;
+    var LItem := TLojaModelFactory.New.Venda.AtualizarItemVenda(LAtualizaItem);
 
-  var LItem := TLojaModelFactory.New.Venda.AtualizarItemVenda(LAtualizaItem);
-
-  Resp.Status(THTTPStatus.Ok).Send(TJson.ObjectToClearJsonValue(LItem));
-  LItem.Free;
+    Resp.Status(THTTPStatus.Ok).Send(TJson.ObjectToClearJsonValue(LItem));
+    LItem.Free;
+  finally
+    LAtualizaItem.Free;
+  end;
 end;
 
 procedure GetMeiosPagtoVenda(Req: THorseRequest; Resp: THorseResponse);
@@ -202,13 +208,16 @@ begin
 
   var LNovosMeiosPagto := TJson.ClearJsonAndConvertToObject
     <TLojaModelEntityVendaMeioPagtoLista>(Req.Body);
+  try
+    var LMeiosPagto := TLojaModelFactory.New.Venda.InserirMeiosPagtoVenda(LNumVnda, LNovosMeiosPagto);
 
-  var LMeiosPagto := TLojaModelFactory.New.Venda.InserirMeiosPagtoVenda(LNumVnda, LNovosMeiosPagto);
-
-  if LMeiosPagto.Count = 0
-  then Resp.Status(THTTPStatus.NoContent)
-  else Resp.Status(THTTPStatus.Created).Send(TJson.ObjectToClearJsonValue(LMeiosPagto));
-  LMeiosPagto.Free;
+    if LMeiosPagto.Count = 0
+    then Resp.Status(THTTPStatus.NoContent)
+    else Resp.Status(THTTPStatus.Created).Send(TJson.ObjectToClearJsonValue(LMeiosPagto));
+    LMeiosPagto.Free;
+  finally
+    LNovosMeiosPagto.Free;
+  end;
 end;
 
 procedure PutMeiosPagtoVenda(Req: THorseRequest; Resp: THorseResponse);
@@ -227,13 +236,16 @@ begin
 
   var LNovosMeiosPagto := TJson.ClearJsonAndConvertToObject
     <TLojaModelEntityVendaMeioPagtoLista>(Req.Body);
+  try
+    var LMeiosPagto := TLojaModelFactory.New.Venda.InserirMeiosPagtoVenda(LNumVnda, LNovosMeiosPagto);
 
-  var LMeiosPagto := TLojaModelFactory.New.Venda.InserirMeiosPagtoVenda(LNumVnda, LNovosMeiosPagto);
-
-  if LMeiosPagto.Count = 0
-  then Resp.Status(THTTPStatus.NoContent)
-  else Resp.Status(THTTPStatus.Ok).Send(TJson.ObjectToClearJsonValue(LMeiosPagto));
-  LMeiosPagto.Free;
+    if LMeiosPagto.Count = 0
+    then Resp.Status(THTTPStatus.NoContent)
+    else Resp.Status(THTTPStatus.Ok).Send(TJson.ObjectToClearJsonValue(LMeiosPagto));
+    LMeiosPagto.Free;
+  finally
+    LNovosMeiosPagto.Free;
+  end;
 end;
 
 procedure Registry(const AContext: string);
