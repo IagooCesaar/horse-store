@@ -88,9 +88,7 @@ type
     function AtualizarItemVenda(AItem: TLojaModelDtoReqVendaItem): TLojaModelDtoRespVendaItem;
 
     function ObterMeiosPagtoVenda(ANumVnda: Integer): TLojaModelEntityVendaMeioPagtoLista;
-    function InserirMeiosPagtoVenda(ANumVnda: Integer;
-      AMeiosPagto: TLojaModelEntityVendaMeioPagtoLista): TLojaModelEntityVendaMeioPagtoLista;
-    function AtualizarMeiosPagtoVenda(ANumVnda: Integer;
+    function DefinirMeiosPagtoVenda(ANumVnda: Integer;
       AMeiosPagto: TLojaModelEntityVendaMeioPagtoLista): TLojaModelEntityVendaMeioPagtoLista;
   end;
 

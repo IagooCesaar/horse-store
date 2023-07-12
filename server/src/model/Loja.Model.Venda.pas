@@ -48,9 +48,7 @@ type
     function AtualizarItemVenda(AItem: TLojaModelDtoReqVendaItem): TLojaModelDtoRespVendaItem;
 
     function ObterMeiosPagtoVenda(ANumVnda: Integer): TLojaModelEntityVendaMeioPagtoLista;
-    function InserirMeiosPagtoVenda(ANumVnda: Integer;
-      AMeiosPagto: TLojaModelEntityVendaMeioPagtoLista): TLojaModelEntityVendaMeioPagtoLista;
-    function AtualizarMeiosPagtoVenda(ANumVnda: Integer;
+    function DefinirMeiosPagtoVenda(ANumVnda: Integer;
       AMeiosPagto: TLojaModelEntityVendaMeioPagtoLista): TLojaModelEntityVendaMeioPagtoLista;
   end;
 
@@ -155,7 +153,7 @@ begin
   end;
 end;
 
-function TLojaModelVenda.AtualizarMeiosPagtoVenda(ANumVnda: Integer;
+function TLojaModelVenda.DefinirMeiosPagtoVenda(ANumVnda: Integer;
   AMeiosPagto: TLojaModelEntityVendaMeioPagtoLista): TLojaModelEntityVendaMeioPagtoLista;
 begin
   if ANumVnda <= 0
@@ -173,12 +171,47 @@ begin
     .Status(THTTPStatus.NotFound)
     .&Unit(Self.UnitName)
     .Error('Não foi possível encontrar a venda pelo número informado');
+  try
+    if LVenda.CodSit <> sitPendente
+    then raise EHorseException.New
+      .Status(THTTPStatus.BadRequest)
+      .&Unit(Self.UnitName)
+      .Error('A venda informada não está Pendente.');
 
-  if LVenda.CodSit <> sitPendente
-  then raise EHorseException.New
-    .Status(THTTPStatus.BadRequest)
-    .&Unit(Self.UnitName)
-    .Error('A venda informada não está Pendente.');
+    if AMeiosPagto.Count = 0
+    then raise EHorseException.New
+      .Status(THTTPStatus.BadRequest)
+      .&Unit(Self.UnitName)
+      .Error('É necessário informar ao menos um meio de pagamento');
+
+    TLojaModelDaoFactory.New.Venda
+      .MeioPagto
+      .RemoverMeiosPagtoVenda(ANumVnda);
+
+    var LNumSeq := 0;
+    Result := TLojaModelEntityVendaMeioPagtoLista.Create;
+
+    for var LMeioPagto in AMeiosPagto
+    do begin
+      if LMeioPagto.VrParc <= 0
+      then Continue;
+
+      if LMeioPagto.QtdParc <= 0
+      then Continue;
+
+      Inc(LNumSeq);
+      LMeioPagto.NumSeqMeioPagto := LNumSeq;
+      LMeioPagto.NumVnda := ANumVnda;
+
+      var LNovo := TLojaModelDaoFactory.New.Venda
+        .MeioPagto
+        .InserirMeioPagto(LMeioPagto);
+
+      Result.Add(LNovo);
+    end;
+  finally
+    FreeAndNil(LVenda);
+  end;
 end;
 
 function TLojaModelVenda.CalculaTotaisVenda(
@@ -492,32 +525,6 @@ begin
     LPrecoVnda.Free;
     LItem.Free;
   end;
-end;
-
-function TLojaModelVenda.InserirMeiosPagtoVenda(ANumVnda: Integer;
-  AMeiosPagto: TLojaModelEntityVendaMeioPagtoLista): TLojaModelEntityVendaMeioPagtoLista;
-begin
-  if ANumVnda <= 0
-  then raise EHorseException.New
-    .Status(THTTPStatus.BadRequest)
-    .&Unit(Self.UnitName)
-    .Error('O número de venda informado é inválido');
-
-  var LVenda := TLojaModelDaoFactory.New.Venda
-    .Venda
-    .ObterVenda(ANumVnda);
-
-  if LVenda = nil
-  then raise EHorseException.New
-    .Status(THTTPStatus.NotFound)
-    .&Unit(Self.UnitName)
-    .Error('Não foi possível encontrar a venda pelo número informado');
-
-  if LVenda.CodSit <> sitPendente
-  then raise EHorseException.New
-    .Status(THTTPStatus.BadRequest)
-    .&Unit(Self.UnitName)
-    .Error('A venda informada não está Pendente.');
 end;
 
 class function TLojaModelVenda.New: ILojaModelVenda;
