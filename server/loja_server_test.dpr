@@ -107,7 +107,9 @@ uses
   Loja.Model.Dto.Req.Venda.EfetivaVenda in 'src\model\dto\Loja.Model.Dto.Req.Venda.EfetivaVenda.pas',
   Loja.Model.Dto.Req.Venda.Item in 'src\model\dto\Loja.Model.Dto.Req.Venda.Item.pas',
   Loja.Model.Dto.Req.Venda.MeioPagto in 'src\model\dto\Loja.Model.Dto.Req.Venda.MeioPagto.pas',
-  Loja.Model.Dto.Resp.Venda.Item in 'src\model\dto\Loja.Model.Dto.Resp.Venda.Item.pas';
+  Loja.Model.Dto.Resp.Venda.Item in 'src\model\dto\Loja.Model.Dto.Resp.Venda.Item.pas',
+  Loja.Model.Venda.Test in 'src\test\model\Loja.Model.Venda.Test.pas',
+  Loja.Controller.Venda.Test in 'src\test\controller\Loja.Controller.Venda.Test.pas';
 
 {$IFNDEF TESTINSIGHT}
 var
