@@ -111,7 +111,7 @@ begin
   LDBDriverParams.VendorLib := ''; // Path para fbclient.dll
 
   LDBParams.ConnectionDefName := 'bd_loja';
-  LDBParams.Server := 'localhost';
+  LDBParams.Server := '127.0.0.1';
   LDBParams.Database := 'C:\#DEV\#Projetos\loja\server\database\loja-bd.fbd';
   LDBParams.UserName := 'SYSDBA';
   LDBParams.Password := 'masterkey';
