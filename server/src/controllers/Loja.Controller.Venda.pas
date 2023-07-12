@@ -5,6 +5,7 @@ interface
 uses
   Horse,
   Horse.Commons,
+  Web.HTTPApp,
   Horse.JsonInterceptor.Helpers;
 
 procedure Registry(const AContext: string);
@@ -192,7 +193,7 @@ begin
   LMeiosPagto.Free;
 end;
 
-procedure PostMeiosPagtoVenda(Req: THorseRequest; Resp: THorseResponse);
+procedure PostPutMeiosPagtoVenda(Req: THorseRequest; Resp: THorseResponse);
 begin
   var LNumVnda := Req.Params.Field('num_vnda')
     .Required
@@ -209,39 +210,16 @@ begin
   var LNovosMeiosPagto := TJson.ClearJsonAndConvertToObject
     <TLojaModelEntityVendaMeioPagtoLista>(Req.Body);
   try
-    var LMeiosPagto := TLojaModelFactory.New.Venda.InserirMeiosPagtoVenda(LNumVnda, LNovosMeiosPagto);
+    var LMeiosPagto := TLojaModelFactory.New.Venda.AtualizarMeiosPagtoVenda(LNumVnda, LNovosMeiosPagto);
 
     if LMeiosPagto.Count = 0
     then Resp.Status(THTTPStatus.NoContent)
-    else Resp.Status(THTTPStatus.Created).Send(TJson.ObjectToClearJsonValue(LMeiosPagto));
-    LMeiosPagto.Free;
-  finally
-    LNovosMeiosPagto.Free;
-  end;
-end;
-
-procedure PutMeiosPagtoVenda(Req: THorseRequest; Resp: THorseResponse);
-begin
-  var LNumVnda := Req.Params.Field('num_vnda')
-    .Required
-    .RequiredMessage('o número identificador da venda é obrigatório')
-    .InvalidFormatMessage('O valor informado não é um inteiro válido')
-    .AsInteger;
-
-  if Req.Body = ''
-  then raise EHorseException.New
-    .Status(THTTPStatus.BadRequest)
-    .&Unit(C_UnitName)
-    .Error('O body não estava no formato esperado');
-
-  var LNovosMeiosPagto := TJson.ClearJsonAndConvertToObject
-    <TLojaModelEntityVendaMeioPagtoLista>(Req.Body);
-  try
-    var LMeiosPagto := TLojaModelFactory.New.Venda.InserirMeiosPagtoVenda(LNumVnda, LNovosMeiosPagto);
-
-    if LMeiosPagto.Count = 0
-    then Resp.Status(THTTPStatus.NoContent)
+    else
+    if Req.MethodType = mtPost
+    then Resp.Status(THTTPStatus.Created).Send(TJson.ObjectToClearJsonValue(LMeiosPagto))
     else Resp.Status(THTTPStatus.Ok).Send(TJson.ObjectToClearJsonValue(LMeiosPagto));
+
+    Resp.Status(THTTPStatus.Created).Send(TJson.ObjectToClearJsonValue(LMeiosPagto));
     LMeiosPagto.Free;
   finally
     LNovosMeiosPagto.Free;
@@ -264,8 +242,8 @@ begin
     .Put('/:num_vnda/itens/:num_seq_item', PutAtualizarItem)
 
     .Get('/:num_vnda/meios-pagamento', GetMeiosPagtoVenda)
-    .Post('/:num_vnda/meios-pagamento', PostMeiosPagtoVenda)
-    .Put('/:num_vnda/meios-pagamento', PutMeiosPagtoVenda)
+    .Post('/:num_vnda/meios-pagamento', PostPutMeiosPagtoVenda)
+    .Put('/:num_vnda/meios-pagamento', PostPutMeiosPagtoVenda)
   ;
 end;
 
