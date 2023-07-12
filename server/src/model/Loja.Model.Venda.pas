@@ -387,6 +387,12 @@ begin
     .&Unit(Self.UnitName)
     .Error('A venda informada não está Pendente.');
 
+  if ANovoItem.QtdItem <= 0
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(Self.UnitName)
+    .Error('A quantidade do item vendido deverá ser superior a zero');
+
   var LPrecoVnda :=  TLojaModelDaoFactory.New.Preco.Venda.ObterPrecoVendaAtual(ANovoItem.CodItem);
 
   var LItem := TLojaModelEntityVendaItem.Create;
