@@ -249,11 +249,11 @@ begin
       .GET('Obtêm lista de vendas')
         .Description('Obtêm uma lista de vendas que ocorreram em determinado período')
         .AddParamQuery('dat_incl_ini', 'Data inclusão inicial')
-          .Schema(SWAG_STRING, 'date')
+          .Schema(SWAG_STRING, SWAG_STRING_FORMAT_DATE)
           .Required(True)
         .&End
         .AddParamQuery('dat_incl_fim', 'Data inclusão final')
-          .Schema(SWAG_STRING, 'date')
+          .Schema(SWAG_STRING, SWAG_STRING_FORMAT_DATE)
           .Required(True)
         .&End
         .AddParamQuery('cod_sit', 'Filtro por situação da venda')

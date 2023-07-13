@@ -217,11 +217,11 @@ begin
       .GET('Obtêm lista de caixas')
         .Description('Obtêm uma lista de caixas que foram abertos no periodo especificado')
         .AddParamQuery('dat_ini', 'Data inicial')
-          .Schema(SWAG_STRING, 'date')
+          .Schema(SWAG_STRING, SWAG_STRING_FORMAT_DATE)
           .Required(True)
         .&End
         .AddParamQuery('dat_fim', 'Data final')
-          .Schema(SWAG_STRING, 'date')
+          .Schema(SWAG_STRING, SWAG_STRING_FORMAT_DATE)
           .Required(True)
         .&End
         .AddResponse(Integer(THTTPStatus.OK))
