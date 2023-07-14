@@ -209,29 +209,10 @@ end;
 function TLojaModelVenda.CancelarVenda(
   ANumVnda: Integer): TLojaModelEntityVendaVenda;
 begin
-  if ANumVnda <= 0
-  then raise EHorseException.New
-    .Status(THTTPStatus.BadRequest)
-    .&Unit(Self.UnitName)
-    .Error('O número de venda informado é inválido');
-
-  var LVenda := TLojaModelDaoFactory.New.Venda
-    .Venda
-    .ObterVenda(ANumVnda);
-
-  if LVenda = nil
-  then raise EHorseException.New
-    .Status(THTTPStatus.NotFound)
-    .&Unit(Self.UnitName)
-    .Error('Não foi possível encontrar a venda pelo número informado');
+  Result := nil;
+  var LVenda := ObterEValidarVenda(ANumVnda, True);
 
   try
-    if LVenda.CodSit <> sitPendente
-    then raise EHorseException.New
-      .Status(THTTPStatus.BadRequest)
-      .&Unit(Self.UnitName)
-      .Error('A venda informada não está Pendente');
-
     CalculaTotaisVenda(LVenda);
     LVenda.CodSit := sitCancelada;
     LVenda.DatConcl := Now;
@@ -557,12 +538,17 @@ begin
     .&Unit(Self.UnitName)
     .Error('Não foi possível encontrar a venda pelo número informado');
 
-  if  AValidarPendente
-  and (LVenda.CodSit <> sitPendente)
-  then raise EHorseException.New
-    .Status(THTTPStatus.BadRequest)
-    .&Unit(Self.UnitName)
-    .Error('A venda informada não está Pendente');
+  try
+    if  AValidarPendente
+    and (LVenda.CodSit <> sitPendente)
+    then raise EHorseException.New
+      .Status(THTTPStatus.BadRequest)
+      .&Unit(Self.UnitName)
+      .Error('A venda informada não está Pendente');
+  except
+    LVenda.Free;
+    raise;
+  end;
 
   Result := LVenda;
 end;
