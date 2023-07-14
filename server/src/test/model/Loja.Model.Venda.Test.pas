@@ -54,6 +54,9 @@ type
     [Test]
     procedure Test_NaoCancelarVenda_NaoPendente;
 
+    [Test]
+    procedure Test_InserirItemVenda;
+
   end;
 
 
@@ -71,6 +74,9 @@ uses
   Loja.Model.Entity.Venda.Venda,
   Loja.Model.Entity.Venda.Item,
   Loja.Model.Entity.Venda.MeioPagto,
+
+  Loja.Model.Dto.Req.Venda.MeioPagto,
+  Loja.Model.Dto.Req.Venda.Item,
 
   Loja.Model.Entity.Caixa.Types,
 
@@ -213,6 +219,42 @@ begin
   Assert.IsNotNull(LNovaVenda);
   Assert.AreEqual(TLojaModelEntityVendaSituacao.sitPendente.ToString, LNovaVenda.CodSit.ToString);
   LNovaVenda.Free;
+end;
+
+procedure TLojaModelVendaTest.Test_InserirItemVenda;
+begin
+  FecharCaixaAtual;
+  AbrirCaixa(0);
+
+  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LItem := CriarItem('Teste inserir na venda','');
+  var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
+  RealizarAcertoEstoque(LItem.CodItem, 2);
+
+  try
+    var LDto := TLojaModelDtoReqVendaItem.Create;
+    LDto.NumVnda := LNovaVenda.NumVnda;
+    LDto.CodItem := LItem.CodItem;
+    LDto.QtdItem := 2;
+        
+    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
+
+    Assert.AreEqual(Double(20), Double(LItemVenda.VrTotal));
+    Assert.AreEqual(TLojaModelEntityVendaItemSituacao.sitAtivo.ToString, 
+      LItemVenda.CodSit.ToString);
+
+    var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+
+    Assert.AreEqual(Double(20), Double(LVenda.VrTotal));    
+
+    LDto.Free;
+    LItemVenda.Free;
+    LVenda.Free;
+  finally
+    LNovaVenda.Free;
+    LItem.Free;
+    LPreco.Free;
+  end;
 end;
 
 procedure TLojaModelVendaTest.Test_NaoCancelarVenda_Inexistente;

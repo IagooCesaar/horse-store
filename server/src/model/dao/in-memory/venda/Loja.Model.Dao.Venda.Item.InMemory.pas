@@ -107,7 +107,7 @@ begin
   FRepository.Last.VrDesc := ANovoItem.VrDesc;
   FRepository.Last.VrTotal := ANovoItem.VrTotal;
 
-  Clone(FRepository.Last);
+  Result := Clone(FRepository.Last);
 end;
 
 function TLojaModelDaoVendaItemInMemory.ObterItem(ANumVnda,
