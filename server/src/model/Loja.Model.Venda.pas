@@ -265,7 +265,7 @@ begin
     then raise EHorseException.New
       .Status(THTTPStatus.BadRequest)
       .&Unit(Self.UnitName)
-      .Error('A venda informada não está Pendente.');
+      .Error('A venda informada não está Pendente');
 
     CalculaTotaisVenda(LVenda);
     LVenda.CodSit := sitCancelada;
@@ -308,7 +308,7 @@ begin
   then raise EHorseException.New
     .Status(THTTPStatus.BadRequest)
     .&Unit(Self.UnitName)
-    .Error('A venda informada não está Pendente.');
+    .Error('A venda informada não está Pendente');
 
   var LItens := TLojaModelDaoFactory.New.Venda
     .Item
@@ -501,7 +501,7 @@ begin
   then raise EHorseException.New
     .Status(THTTPStatus.BadRequest)
     .&Unit(Self.UnitName)
-    .Error('A venda informada não está Pendente.');
+    .Error('A venda informada não está Pendente');
 
   if ANovoItem.QtdItem <= 0
   then raise EHorseException.New
