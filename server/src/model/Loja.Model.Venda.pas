@@ -238,6 +238,8 @@ end;
 
 function TLojaModelVenda.EfetivarVenda(ANumVnda: Integer): TLojaModelEntityVendaVenda;
 begin
+  Result := nil;
+
   var LVenda := ObterEValidarVenda(ANumVnda, True);
 
   var LCaixa := ObterEValidarCaixa;
@@ -391,6 +393,8 @@ end;
 function TLojaModelVenda.EntityToDto(
   ASource: TLojaModelEntityVendaItem): TLojaModelDtoRespVendaItem;
 begin
+  Result := nil;
+
   var LItem := TLojaModelDaoFactory.New.Itens
     .Item
     .ObterPorCodigo(ASource.CodItem);
@@ -413,6 +417,8 @@ end;
 function TLojaModelVenda.InserirItemVenda(
   ANovoItem: TLojaModelDtoReqVendaItem): TLojaModelDtoRespVendaItem;
 begin
+  Result := nil;
+
   var LVenda := ObterEValidarVenda(ANovoItem.NumVnda, True);
 
   if ANovoItem.NumVnda <= 0
@@ -474,6 +480,8 @@ end;
 
 function TLojaModelVenda.NovaVenda: TLojaModelEntityVendaVenda;
 begin
+  Result := nil;
+
   var LCaixa := ObterEValidarCaixa;
   LCaixa.Free;
 
@@ -586,6 +594,8 @@ end;
 function TLojaModelVenda.ObterMeiosPagtoVenda(
   ANumVnda: Integer): TLojaModelEntityVendaMeioPagtoLista;
 begin
+  Result := nil;
+
   var LVenda := ObterEValidarVenda(ANumVnda, False);
 
   Result := TLojaModelDaoFactory.New.Venda
@@ -596,6 +606,8 @@ end;
 function TLojaModelVenda.ObterVenda(
   ANumVnda: Integer): TLojaModelEntityVendaVenda;
 begin
+  Result := nil;
+
   var LVenda := ObterEValidarVenda(ANumVnda, False);
 
   CalculaTotaisVenda(LVenda);
