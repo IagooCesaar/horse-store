@@ -523,6 +523,7 @@ begin
       LDatIni, LDatFim);
 
     Assert.IsTrue(LMovEstoque.Count = 2);
+    LMovEstoque.Free;
 
     //Certificar que houve movimento de caixa
     var LResumoCaixa := TLojaModelFactory.New.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
