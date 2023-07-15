@@ -393,12 +393,12 @@ begin
     var LDtoMeiosPagto := TLojaModelEntityVendaMeioPagtoLista.Create;
     LDtoMeiosPagto.Add(TLojaModelEntityVendaMeioPagto.Create);
     LDtoMeiosPagto.Last.CodMeioPagto := TLojaModelEntityCaixaMeioPagamento.pagCartaoCredito;
-    LDtoMeiosPagto.Last.VrParc := 10;
+    LDtoMeiosPagto.Last.VrTotal := 10;
     LDtoMeiosPagto.Last.QtdParc := 2;
 
     LDtoMeiosPagto.Add(TLojaModelEntityVendaMeioPagto.Create);
     LDtoMeiosPagto.Last.CodMeioPagto := TLojaModelEntityCaixaMeioPagamento.pagPix;
-    LDtoMeiosPagto.Last.VrParc := 10;
+    LDtoMeiosPagto.Last.VrTotal := 10;
     LDtoMeiosPagto.Last.QtdParc := 1;
 
     var LMeiosPagto := TLojaModelFactory.New.Venda
@@ -786,7 +786,7 @@ begin
     LDtoMeiosPagto.Add(TLojaModelEntityVendaMeioPagto.Create);
     LDtoMeiosPagto.Last.CodMeioPagto := TLojaModelEntityCaixaMeioPagamento.pagDinheiro;
     LDtoMeiosPagto.Last.QtdParc := 0;
-    LDtoMeiosPagto.Last.VrParc := 20;
+    LDtoMeiosPagto.Last.VrTotal := 20;
 
     var LMeiosPagto := TLojaModelFactory.New.Venda
       .DefinirMeiosPagtoVenda(LVenda.NumVnda, LDtoMeiosPagto);
@@ -825,7 +825,7 @@ begin
     LDtoMeiosPagto.Add(TLojaModelEntityVendaMeioPagto.Create);
     LDtoMeiosPagto.Last.CodMeioPagto := TLojaModelEntityCaixaMeioPagamento.pagDinheiro;
     LDtoMeiosPagto.Last.QtdParc := 1;
-    LDtoMeiosPagto.Last.VrParc := 0;
+    LDtoMeiosPagto.Last.VrTotal := 0;
 
     var LMeiosPagto := TLojaModelFactory.New.Venda
       .DefinirMeiosPagtoVenda(LVenda.NumVnda, LDtoMeiosPagto);

@@ -15,14 +15,14 @@ type
     FNumVnda: Integer;
     FCodMeioPagto: TLojaModelEntityCaixaMeioPagamento;
     FQtdParc: Integer;
-    FVrParc: Currency;
+    FVrTotal: Currency;
     FNumSeqMeioPagto: Integer;
   public
     property NumVnda: Integer read FNumVnda write FNumVnda;
     property NumSeqMeioPagto: Integer read FNumSeqMeioPagto write FNumSeqMeioPagto;
     property CodMeioPagto: TLojaModelEntityCaixaMeioPagamento read FCodMeioPagto write FCodMeioPagto;
     property QtdParc: Integer read FQtdParc write FQtdParc;
-    property VrParc: Currency read FVrParc write FVrParc;
+    property VrTotal: Currency read FVrTotal write FVrTotal;
   end;
 
   TLojaModelEntityVendaMeioPagtoLista = TObjectList<TLojaModelEntityVendaMeioPagto>;

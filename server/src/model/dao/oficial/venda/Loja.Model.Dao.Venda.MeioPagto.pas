@@ -45,7 +45,7 @@ begin
   Result.NumSeqMeioPagto := ds.FieldByName('num_seq_meio_pagto').AsInteger;
   Result.CodMeioPagto := TLojaModelEntityCaixaMeioPagamento.Create(ds.FieldByName('cod_meio_pagto').AsString);
   Result.QtdParc := ds.FieldByName('qtd_parc').AsInteger;
-  Result.VrParc := ds.FieldByName('vr_parc').AsCurrency;
+  Result.VrTotal := ds.FieldByName('vr_total').AsCurrency;
 end;
 
 constructor TLojaModelDaoVendaMeioPagto.Create;
@@ -65,9 +65,9 @@ begin
   Result := nil;
   var LSql := #13#10
   + 'insert into venda_meio_pagto ( '
-  + '  num_vnda, num_seq_meio_pagto, cod_meio_pagto, qtd_parc, vr_parc) '
+  + '  num_vnda, num_seq_meio_pagto, cod_meio_pagto, qtd_parc, vr_total) '
   + 'values ( '
-  + '  :num_vnda, :num_seq_meio_pagto, :cod_meio_pagto, :qtd_parc, :vr_parc) '
+  + '  :num_vnda, :num_seq_meio_pagto, :cod_meio_pagto, :qtd_parc, :vr_total) '
   ;
   var ds := TDatabaseFactory.New.SQL
     .SQL(LSql)
@@ -76,7 +76,7 @@ begin
       .AddInteger('num_seq_meio_pagto',ANovoMeioPagto.NumSeqMeioPagto)
       .AddString('cod_meio_pagto',ANovoMeioPagto.CodMeioPagto.ToString)
       .AddInteger('qtd_parc',ANovoMeioPagto.QtdParc)
-      .AddFloat('vr_parc',ANovoMeioPagto.VrParc)
+      .AddFloat('vr_total',ANovoMeioPagto.VrTotal)
       .&End
     .ExecSQL();
 
@@ -93,8 +93,7 @@ function TLojaModelDaoVendaMeioPagto.ObterMeioPagtoVenda(ANumVnda,
 begin
   Result := nil;
   var LSql := #13#10
-  + 'select num_vnda, num_seq_meio_pagto, '
-  + '       cod_meio_pagto, qtd_parc, vr_parc '
+  + 'select * '
   + 'from venda_meio_pagto '
   + 'where num_vnda = :num_vnda '
   + '  and num_seq_meio_pagto = :num_seq_meio_pagto '
@@ -119,8 +118,7 @@ function TLojaModelDaoVendaMeioPagto.ObterMeiosPagtoVenda(
 begin
   Result := TLojaModelEntityVendaMeioPagtoLista.Create;
   var LSql := #13#10
-  + 'select num_vnda, num_seq_meio_pagto, '
-  + '       cod_meio_pagto, qtd_parc, vr_parc '
+  + 'select * '
   + 'from venda_meio_pagto '
   + 'where num_vnda = :num_vnda '
   ;

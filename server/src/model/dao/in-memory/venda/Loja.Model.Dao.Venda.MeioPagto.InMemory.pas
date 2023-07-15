@@ -46,7 +46,7 @@ begin
   Result.NumSeqMeioPagto:= ASource.NumSeqMeioPagto;
   Result.CodMeioPagto := ASource.CodMeioPagto;
   Result.QtdParc := ASource.QtdParc;
-  Result.VrParc := ASource.VrParc;
+  Result.VrTotal := ASource.VrTotal;
 end;
 
 constructor TLojaModelDaoVendaMeioPagtoInMemory.Create;
@@ -77,7 +77,7 @@ begin
   FRepository.Last.NumSeqMeioPagto := ANovoMeioPagto.NumSeqMeioPagto;
   FRepository.Last.CodMeioPagto := ANovoMeioPagto.CodMeioPagto;
   FRepository.Last.QtdParc := ANovoMeioPagto.QtdParc;
-  FRepository.Last.VrParc := ANovoMeioPagto.VrParc;
+  FRepository.Last.VrTotal := ANovoMeioPagto.VrTotal;
   Result := Clone(FRepository.Last);
 end;
 

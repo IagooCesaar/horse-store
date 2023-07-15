@@ -350,7 +350,7 @@ begin
     var LTotalMeioPagto := 0.00;
 
     for var LMeioPagto in LMeiosPagto
-    do LTotalMeioPagto := LTotalMeioPagto + LMeioPagto.VrParc;
+    do LTotalMeioPagto := LTotalMeioPagto + LMeioPagto.VrTotal;
 
     if LTotalMeioPagto <> LVenda.VrTotal
     then raise EHorseException.New
@@ -378,9 +378,9 @@ begin
     for var LMeioPagto in LMeiosPagto
     do begin
       LMovCaixa.DscObs := Format('Referente à venda %d - %d parcela(s) de %3.2f', [
-        LVenda.NumVnda, LMeioPagto.QtdParc, RoundTo(LMeioPagto.VrParc / LMeioPagto.QtdParc, -2)
+        LVenda.NumVnda, LMeioPagto.QtdParc, RoundTo(LMeioPagto.VrTotal / LMeioPagto.QtdParc, -2)
       ]);
-      LMovCaixa.VrMov := LMeioPagto.VrParc;
+      LMovCaixa.VrMov := LMeioPagto.VrTotal;
       LMovCaixa.CodMeioPagto := LMeioPagto.CodMeioPagto;
 
       var LMovimento := TLojaModelBoFactory.New.Caixa.CriarMovimentoCaixa(LMovCaixa);
@@ -625,7 +625,7 @@ begin
 
     for var LMeioPagto in AMeiosPagto
     do begin
-      if LMeioPagto.VrParc <= 0
+      if LMeioPagto.VrTotal <= 0
       then Continue;
 
       if LMeioPagto.QtdParc <= 0
