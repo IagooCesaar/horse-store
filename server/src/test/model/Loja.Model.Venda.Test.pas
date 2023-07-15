@@ -57,6 +57,21 @@ type
     [Test]
     procedure Test_InserirItemVenda;
 
+    [Test]
+    procedure Test_NaoInserirItemVenda_QuantidadeInvalida;
+
+    [Test]
+    procedure Test_NaoInserirItemVenda_ItemInexistente;
+
+    [Test]
+    procedure Test_NaoInserirItemVenda_SemPrecoImplantado;
+
+    [Test]
+    procedure Test_NaoInserirItemVenda_ValorTotalNegativo;
+
+    [Test]
+    procedure Test_NaoInserirItemVenda_VendaNaoPendente;
+
   end;
 
 
@@ -236,16 +251,16 @@ begin
     LDto.NumVnda := LNovaVenda.NumVnda;
     LDto.CodItem := LItem.CodItem;
     LDto.QtdItem := 2;
-        
+
     var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
 
     Assert.AreEqual(Double(20), Double(LItemVenda.VrTotal));
-    Assert.AreEqual(TLojaModelEntityVendaItemSituacao.sitAtivo.ToString, 
+    Assert.AreEqual(TLojaModelEntityVendaItemSituacao.sitAtivo.ToString,
       LItemVenda.CodSit.ToString);
 
     var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
 
-    Assert.AreEqual(Double(20), Double(LVenda.VrTotal));    
+    Assert.AreEqual(Double(20), Double(LVenda.VrTotal));
 
     LDto.Free;
     LItemVenda.Free;
@@ -312,6 +327,163 @@ begin
     EHorseException,
     'Não há caixa aberto'
   );
+end;
+
+procedure TLojaModelVendaTest.Test_NaoInserirItemVenda_ItemInexistente;
+begin
+  FecharCaixaAtual;
+  AbrirCaixa(0);
+
+  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+
+  try
+    var LDto := TLojaModelDtoReqVendaItem.Create;
+    LDto.NumVnda := LNovaVenda.NumVnda;
+    LDto.CodItem := MaxInt;
+    LDto.QtdItem := 1;
+
+    Assert.WillRaiseWithMessageRegex(
+      procedure begin
+        TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
+      end,
+      EHorseException,
+      'Não foi possível encontrar o item informado'
+    );
+
+    LDto.Free;
+  finally
+    LNovaVenda.Free;
+  end;
+end;
+
+procedure TLojaModelVendaTest.Test_NaoInserirItemVenda_QuantidadeInvalida;
+begin
+  FecharCaixaAtual;
+  AbrirCaixa(0);
+
+  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LItem := CriarItem('Teste inserir na venda','');
+  var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
+  RealizarAcertoEstoque(LItem.CodItem, 2);
+
+  try
+    var LDto := TLojaModelDtoReqVendaItem.Create;
+    LDto.NumVnda := LNovaVenda.NumVnda;
+    LDto.CodItem := LItem.CodItem;
+    LDto.QtdItem := -1;
+
+    Assert.WillRaiseWithMessageRegex(
+      procedure begin
+        TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
+      end,
+      EHorseException,
+      'A quantidade do item vendido deverá ser superior a zero'
+    );
+
+    LDto.Free;
+  finally
+    LNovaVenda.Free;
+    LItem.Free;
+    LPreco.Free;
+  end;
+end;
+
+procedure TLojaModelVendaTest.Test_NaoInserirItemVenda_SemPrecoImplantado;
+begin
+  FecharCaixaAtual;
+  AbrirCaixa(0);
+
+  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LItem := CriarItem('Teste inserir na venda','');
+
+  try
+    var LDto := TLojaModelDtoReqVendaItem.Create;
+    LDto.NumVnda := LNovaVenda.NumVnda;
+    LDto.CodItem := LItem.CodItem;
+    LDto.QtdItem := 1;
+
+    Assert.WillRaiseWithMessageRegex(
+      procedure begin
+        TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
+      end,
+      EHorseException,
+      'Não há preço de venda implantado para o item'
+    );
+
+    LDto.Free;
+  finally
+    LNovaVenda.Free;
+    LItem.Free;
+  end;
+end;
+
+procedure TLojaModelVendaTest.Test_NaoInserirItemVenda_ValorTotalNegativo;
+begin
+  FecharCaixaAtual;
+  AbrirCaixa(0);
+
+  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LItem := CriarItem('Teste inserir na venda','');
+  var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
+  RealizarAcertoEstoque(LItem.CodItem, 2);
+
+  try
+    var LDto := TLojaModelDtoReqVendaItem.Create;
+    LDto.NumVnda := LNovaVenda.NumVnda;
+    LDto.CodItem := LItem.CodItem;
+    LDto.QtdItem := 1;
+    LDto.VrDesc := 100;
+
+    Assert.WillRaiseWithMessageRegex(
+      procedure begin
+        TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
+      end,
+      EHorseException,
+      'O valor total do item não pode ser negativo'
+    );
+
+    LDto.Free;
+  finally
+    LNovaVenda.Free;
+    LItem.Free;
+    LPreco.Free;
+  end;
+end;
+
+procedure TLojaModelVendaTest.Test_NaoInserirItemVenda_VendaNaoPendente;
+begin
+  FecharCaixaAtual;
+  AbrirCaixa(0);
+
+  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LItem := CriarItem('Teste inserir na venda','');
+  var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
+  RealizarAcertoEstoque(LItem.CodItem, 2);
+
+  var LCancelada := TLojaModelFactory.New.Venda.CancelarVenda(LNovaVenda.NumVnda);
+  LCancelada.Free;
+
+  try
+    var LDto := TLojaModelDtoReqVendaItem.Create;
+    LDto.NumVnda := LNovaVenda.NumVnda;
+    LDto.CodItem := LItem.CodItem;
+    LDto.QtdItem := 1;
+    LDto.VrDesc := 0;
+
+    Assert.WillRaiseWithMessageRegex(
+      procedure begin
+        TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
+      end,
+      EHorseException,
+      'A venda informada não está Pendente'
+    );
+
+    LDto.Free;
+  finally
+    LNovaVenda.Free;
+    LItem.Free;
+    LPreco.Free;
+  end;
 end;
 
 initialization
