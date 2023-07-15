@@ -120,6 +120,12 @@ type
     [Test]
     procedure Test_NaoDefinirMeiosPagamento_ParcelasNaoDefinidas;
 
+    [Test]
+    procedure Test_ObterMeiosPagamento;
+
+    [Test]
+    procedure Test_EfetivarVenda;
+
   end;
 
 
@@ -416,6 +422,135 @@ begin
     LNovaVenda.Free;
     LItem.Free;
     LPreco.Free;
+  end;
+end;
+
+procedure TLojaModelVendaTest.Test_EfetivarVenda;
+var LDatIni, LDatFim: TDateTime;
+begin
+  LDatIni := StartOfTheDay(Now);
+  LDatFim := EndOfTheDay(Now);
+
+  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LItem1 := CriarItem('Item 1','');
+  RealizarAcertoEstoque(LItem1.CodItem, 2);
+
+  var LItem2 := CriarItem('Item 2','');
+  RealizarAcertoEstoque(LItem2.CodItem, 3);
+
+  var LPreco := CriarPrecoVenda(LItem1.CodItem, 10, Now);
+  LPreco.Free;
+  LPreco := CriarPrecoVenda(LItem2.CodItem, 15, Now);
+  LPreco.Free;
+
+  try
+    var LDtoItem := TLojaModelDtoReqVendaItem.Create;
+    LDtoItem.NumVnda := LNovaVenda.NumVnda;
+    LDtoItem.CodItem := LItem1.CodItem;
+    LDtoItem.QtdItem := 2;
+    // Inserir primeiro item, 2 * 10 = 20,00
+    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
+
+    Assert.AreEqual(Double(20), Double(LItemVenda.VrTotal));
+    Assert.AreEqual(TLojaModelEntityVendaItemSituacao.sitAtivo.ToString,
+      LItemVenda.CodSit.ToString);
+
+    LItemVenda.Free;
+
+    LDtoItem.CodItem := LItem2.CodItem;
+    LDtoItem.QtdItem := 3;
+    LDtoItem.VrDesc := 5;
+
+    // Inserir segundo item, 3 * 15 - 5 = 40,00
+    LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
+
+    Assert.AreEqual(Double(40), Double(LItemVenda.VrTotal));
+    Assert.AreEqual(TLojaModelEntityVendaItemSituacao.sitAtivo.ToString,
+      LItemVenda.CodSit.ToString);
+
+    LItemVenda.Free;
+
+    // Certificando Total da Venda
+    var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+
+    Assert.AreEqual(Double(60), Double(LVenda.VrTotal));
+    Assert.AreEqual(Double(5), Double(LVenda.VrDesc));
+
+
+    // Defini forma de pagamento
+    var LDtoMeiosPagto := TLojaModelEntityVendaMeioPagtoLista.Create;
+    LDtoMeiosPagto.Add(TLojaModelEntityVendaMeioPagto.Create);
+    LDtoMeiosPagto.Last.CodMeioPagto := TLojaModelEntityCaixaMeioPagamento.pagCartaoCredito;
+    LDtoMeiosPagto.Last.VrTotal := 40;
+    LDtoMeiosPagto.Last.QtdParc := 2;
+
+    LDtoMeiosPagto.Add(TLojaModelEntityVendaMeioPagto.Create);
+    LDtoMeiosPagto.Last.CodMeioPagto := TLojaModelEntityCaixaMeioPagamento.pagDinheiro;
+    LDtoMeiosPagto.Last.VrTotal := 10;
+    LDtoMeiosPagto.Last.QtdParc := 1;
+
+    LDtoMeiosPagto.Add(TLojaModelEntityVendaMeioPagto.Create);
+    LDtoMeiosPagto.Last.CodMeioPagto := TLojaModelEntityCaixaMeioPagamento.pagPix;
+    LDtoMeiosPagto.Last.VrTotal := 10;
+    LDtoMeiosPagto.Last.QtdParc := 1;
+
+    var LMeiosPagto := TLojaModelFactory.New.Venda
+      .DefinirMeiosPagtoVenda(LVenda.NumVnda, LDtoMeiosPagto);
+
+    Assert.AreEqual(3, LMeiosPagto.Count);
+
+    var LEfetivada := TLojaModelFactory.New.Venda.EfetivarVenda(LVenda.NumVnda);
+
+    Assert.AreEqual(TLojaModelEntityVendaSituacao.sitEfetivada,
+      LEfetivada.CodSit);
+
+    //Certificar que o saldo do item foi consumido
+    var LSaldo := TLojaModelFactory.New.Estoque.ObterSaldoAtualItem(LItem1.CodItem);
+    Assert.AreEqual(0, LSaldo.QtdSaldoAtu);
+    LSaldo.Free;
+
+    LSaldo := TLojaModelFactory.New.Estoque.ObterSaldoAtualItem(LItem2.CodItem);
+    Assert.AreEqual(0, LSaldo.QtdSaldoAtu);
+    LSaldo.Free;
+
+    var LMovEstoque := TLojaModelFactory.New.Estoque.ObterHistoricoMovimento(LItem1.CodItem,
+      LDatIni, LDatFim);
+
+    Assert.IsTrue(LMovEstoque.Count = 2);
+    LMovEstoque.Free;
+
+    LMovEstoque := TLojaModelFactory.New.Estoque.ObterHistoricoMovimento(LItem2.CodItem,
+      LDatIni, LDatFim);
+
+    Assert.IsTrue(LMovEstoque.Count = 2);
+
+    //Certificar que houve movimento de caixa
+    var LResumoCaixa := TLojaModelFactory.New.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
+
+    Assert.AreEqual(Double(40),
+      Double(LResumoCaixa.MeiosPagto.Get(pagCartaoCredito).VrTotal)
+    );
+    Assert.AreEqual(Double(10),
+      Double(LResumoCaixa.MeiosPagto.Get(pagDinheiro).VrTotal)
+    );
+    Assert.AreEqual(Double(10),
+      Double(LResumoCaixa.MeiosPagto.Get(pagPix).VrTotal)
+    );
+
+    var LMovCaixa := TLojaModelFactory.New.Caixa.ObterMovimentoCaixa(FCaixa.CodCaixa);
+    Assert.IsTrue(LMovCaixa.Count >= 3);
+
+    LDtoItem.Free;
+    LVenda.Free;
+    LDtoMeiosPagto.Free;
+    LMeiosPagto.Free;
+    LEfetivada.Free;
+    LResumoCaixa.Free;
+    LMovCaixa.Free;
+  finally
+    LNovaVenda.Free;
+    LItem1.Free;
+    LItem2.Free;
   end;
 end;
 
@@ -1051,6 +1186,54 @@ begin
 
     LDto.Free;
     LItens.Free;
+  finally
+    LNovaVenda.Free;
+    LItem.Free;
+    LPreco.Free;
+  end;
+end;
+
+procedure TLojaModelVendaTest.Test_ObterMeiosPagamento;
+begin
+  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LItem := CriarItem('Teste inserir na venda','');
+  var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
+  RealizarAcertoEstoque(LItem.CodItem, 2);
+
+  try
+    var LDtoItem := TLojaModelDtoReqVendaItem.Create;
+    LDtoItem.NumVnda := LNovaVenda.NumVnda;
+    LDtoItem.CodItem := LItem.CodItem;
+    LDtoItem.QtdItem := 2;
+
+    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
+
+    var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+
+    var LDtoMeiosPagto := TLojaModelEntityVendaMeioPagtoLista.Create;
+    LDtoMeiosPagto.Add(TLojaModelEntityVendaMeioPagto.Create);
+    LDtoMeiosPagto.Last.CodMeioPagto := TLojaModelEntityCaixaMeioPagamento.pagCartaoCredito;
+    LDtoMeiosPagto.Last.VrTotal := 10;
+    LDtoMeiosPagto.Last.QtdParc := 2;
+
+    LDtoMeiosPagto.Add(TLojaModelEntityVendaMeioPagto.Create);
+    LDtoMeiosPagto.Last.CodMeioPagto := TLojaModelEntityCaixaMeioPagamento.pagPix;
+    LDtoMeiosPagto.Last.VrTotal := 10;
+    LDtoMeiosPagto.Last.QtdParc := 1;
+
+    var LMeiosPagtoDinidos := TLojaModelFactory.New.Venda
+      .DefinirMeiosPagtoVenda(LVenda.NumVnda, LDtoMeiosPagto);
+
+    var LMeiosPagto := TLojaModelFactory.New.Venda.ObterMeiosPagtoVenda(LVenda.NumVnda);
+
+    Assert.AreEqual(2, LMeiosPagto.Count);
+
+    LDtoItem.Free;
+    LItemVenda.Free;
+    LVenda.Free;
+    LDtoMeiosPagto.Free;
+    LMeiosPagtoDinidos.Free;
+    LMeiosPagto.Free;
   finally
     LNovaVenda.Free;
     LItem.Free;

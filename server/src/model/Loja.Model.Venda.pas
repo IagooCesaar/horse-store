@@ -601,6 +601,8 @@ begin
   Result := TLojaModelDaoFactory.New.Venda
     .MeioPagto
     .ObterMeiosPagtoVenda(ANumVnda);
+
+  LVenda.Free;
 end;
 
 function TLojaModelVenda.DefinirMeiosPagtoVenda(ANumVnda: Integer;
