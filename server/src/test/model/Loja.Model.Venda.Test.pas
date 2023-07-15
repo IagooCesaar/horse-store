@@ -96,6 +96,12 @@ type
     [Test]
     procedure Test_NaoAtualizarItemVenda_ValorTotalNegativo;
 
+    [Test]
+    procedure Test_ObterItensVenda;
+
+    [Test]
+    procedure Test_NaoObterItensVenda_VendaInexistente;
+
   end;
 
 
@@ -804,6 +810,48 @@ begin
     );
 
     LDto.Free;
+  finally
+    LNovaVenda.Free;
+    LItem.Free;
+    LPreco.Free;
+  end;
+end;
+
+procedure TLojaModelVendaTest.Test_NaoObterItensVenda_VendaInexistente;
+begin
+  Assert.WillRaiseWithMessageRegex(
+    procedure begin
+      TLojaModelFactory.New.Venda.ObterItensVenda(MaxInt);
+    end,
+    EHorseException,
+    'Não foi possível encontrar a venda pelo número informado'
+  );
+end;
+
+procedure TLojaModelVendaTest.Test_ObterItensVenda;
+begin
+  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LItem := CriarItem('Teste inserir na venda','');
+  var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
+  RealizarAcertoEstoque(LItem.CodItem, 2);
+
+  try
+    var LDto := TLojaModelDtoReqVendaItem.Create;
+    LDto.NumVnda := LNovaVenda.NumVnda;
+    LDto.CodItem := LItem.CodItem;
+    LDto.QtdItem := 2;
+
+    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
+    LItemVenda.Free;
+
+    LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
+    LItemVenda.Free;
+
+    var LItens := TLojaModelFactory.New.Venda.ObterItensVenda(LNovaVenda.NumVnda);
+    Assert.AreEqual(2, LItens.Count);
+
+    LDto.Free;
+    LItens.Free;
   finally
     LNovaVenda.Free;
     LItem.Free;

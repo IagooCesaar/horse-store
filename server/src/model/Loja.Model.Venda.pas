@@ -426,18 +426,6 @@ begin
 
   var LVenda := ObterEValidarVenda(ANumVnda, False);
 
-  if ANumVnda <= 0
-  then raise EHorseException.New
-    .Status(THTTPStatus.BadRequest)
-    .&Unit(Self.UnitName)
-    .Error('O número de venda informado é inválido');
-
-  if LVenda = nil
-  then raise EHorseException.New
-    .Status(THTTPStatus.NotFound)
-    .&Unit(Self.UnitName)
-    .Error('Não foi possível encontrar a venda pelo número informado');
-
   var LItens := TLojaModelDaoFactory.New.Venda
     .Item
     .ObterItensVenda(ANumVnda);
@@ -447,6 +435,7 @@ begin
   do Result.Add(EntityToDto(LItem));
 
   LItens.Free;
+  LVenda.Free;
 end;
 
 function TLojaModelVenda.InserirItemVenda(
