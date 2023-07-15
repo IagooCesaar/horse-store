@@ -72,6 +72,9 @@ type
     [Test]
     procedure Test_NaoInserirItemVenda_VendaNaoPendente;
 
+    [Test]
+    procedure Test_AtualizarItemVenda;
+
   end;
 
 
@@ -202,6 +205,7 @@ begin
 
   FCaixa := nil;
   FecharCaixaAtual;
+  AbrirCaixa(0);
 end;
 
 procedure TLojaModelVendaTest.TearDownFixture;
@@ -211,10 +215,55 @@ begin
   TLojaModelDaoFactory.InMemory := False;
 end;
 
+procedure TLojaModelVendaTest.Test_AtualizarItemVenda;
+begin
+  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LItem := CriarItem('Teste atualizar na venda','');
+  var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
+  RealizarAcertoEstoque(LItem.CodItem, 2);
+
+  try
+    var LDto := TLojaModelDtoReqVendaItem.Create;
+    LDto.NumVnda := LNovaVenda.NumVnda;
+    LDto.CodItem := LItem.CodItem;
+    LDto.QtdItem := 2;
+
+    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
+
+    Assert.AreEqual(Double(20), Double(LItemVenda.VrTotal));
+    Assert.AreEqual(TLojaModelEntityVendaItemSituacao.sitAtivo.ToString,
+      LItemVenda.CodSit.ToString);
+
+    var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+
+    Assert.AreEqual(Double(20), Double(LVenda.VrTotal));
+
+    LDto.NumSeqItem := LItemVenda.NumSeqItem;
+    LDto.QtdItem := 3;
+
+    var LItemAtualizado := TLojaModelFactory.New.Venda.AtualizarItemVenda(LDto);
+    Assert.AreEqual(Double(30), Double(LItemAtualizado.VrTotal));
+    Assert.AreEqual(TLojaModelEntityVendaItemSituacao.sitAtivo.ToString,
+      LItemAtualizado.CodSit.ToString);
+
+    var LVendaAtualizada := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+    Assert.AreEqual(Double(30), Double(LVendaAtualizada.VrTotal));
+
+    LDto.Free;
+    LItemVenda.Free;
+    LVenda.Free;
+    LItemAtualizado.Free;
+    LVendaAtualizada.Free;
+
+  finally
+    LNovaVenda.Free;
+    LItem.Free;
+    LPreco.Free;
+  end;
+end;
+
 procedure TLojaModelVendaTest.Test_CancelarVenda;
 begin
-  FecharCaixaAtual;
-  AbrirCaixa(0);
   var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
   try
     var LCancelada := TLojaModelFactory.New.Venda.CancelarVenda(LNovaVenda.NumVnda);
@@ -227,9 +276,6 @@ end;
 
 procedure TLojaModelVendaTest.Test_IniciarVenda;
 begin
-  FecharCaixaAtual;
-  AbrirCaixa(0);
-
   var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
   Assert.IsNotNull(LNovaVenda);
   Assert.AreEqual(TLojaModelEntityVendaSituacao.sitPendente.ToString, LNovaVenda.CodSit.ToString);
@@ -238,9 +284,6 @@ end;
 
 procedure TLojaModelVendaTest.Test_InserirItemVenda;
 begin
-  FecharCaixaAtual;
-  AbrirCaixa(0);
-
   var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
   var LItem := CriarItem('Teste inserir na venda','');
   var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
@@ -285,9 +328,6 @@ end;
 
 procedure TLojaModelVendaTest.Test_NaoCancelarVenda_NaoPendente;
 begin
-  FecharCaixaAtual;
-  AbrirCaixa(0);
-
   var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
   try
     var LCancelada := TLojaModelFactory.New.Venda.CancelarVenda(LNovaVenda.NumVnda);
@@ -327,13 +367,12 @@ begin
     EHorseException,
     'Não há caixa aberto'
   );
+
+  AbrirCaixa(0);
 end;
 
 procedure TLojaModelVendaTest.Test_NaoInserirItemVenda_ItemInexistente;
 begin
-  FecharCaixaAtual;
-  AbrirCaixa(0);
-
   var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
 
   try
@@ -358,9 +397,6 @@ end;
 
 procedure TLojaModelVendaTest.Test_NaoInserirItemVenda_QuantidadeInvalida;
 begin
-  FecharCaixaAtual;
-  AbrirCaixa(0);
-
   var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
   var LItem := CriarItem('Teste inserir na venda','');
   var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
@@ -390,8 +426,6 @@ end;
 
 procedure TLojaModelVendaTest.Test_NaoInserirItemVenda_SemPrecoImplantado;
 begin
-  FecharCaixaAtual;
-  AbrirCaixa(0);
 
   var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
   var LItem := CriarItem('Teste inserir na venda','');
@@ -419,9 +453,6 @@ end;
 
 procedure TLojaModelVendaTest.Test_NaoInserirItemVenda_ValorTotalNegativo;
 begin
-  FecharCaixaAtual;
-  AbrirCaixa(0);
-
   var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
   var LItem := CriarItem('Teste inserir na venda','');
   var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
@@ -452,9 +483,6 @@ end;
 
 procedure TLojaModelVendaTest.Test_NaoInserirItemVenda_VendaNaoPendente;
 begin
-  FecharCaixaAtual;
-  AbrirCaixa(0);
-
   var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
   var LItem := CriarItem('Teste inserir na venda','');
   var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
