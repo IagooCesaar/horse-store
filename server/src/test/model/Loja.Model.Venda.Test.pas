@@ -102,6 +102,24 @@ type
     [Test]
     procedure Test_NaoObterItensVenda_VendaInexistente;
 
+    [Test]
+    procedure Test_ObterVendas;
+
+    [Test]
+    procedure Test_NaoObterVendas_PeriodoInvalido;
+
+    [Test]
+    procedure Test_DefinirMeiosPagamento;
+
+    [Test]
+    procedure Test_NaoDefinirMeiosPagamento_MeiosNaoInformados;
+
+    [Test]
+    procedure Test_NaoDefinirMeiosPagamento_ValorNaoDefinido;
+
+    [Test]
+    procedure Test_NaoDefinirMeiosPagamento_ParcelasNaoDefinidas;
+
   end;
 
 
@@ -346,6 +364,58 @@ begin
     LCancelada.Free;
   finally
     LNovaVenda.Free;
+  end;
+end;
+
+procedure TLojaModelVendaTest.Test_DefinirMeiosPagamento;
+begin
+  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LItem := CriarItem('Teste inserir na venda','');
+  var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
+  RealizarAcertoEstoque(LItem.CodItem, 2);
+
+  try
+    var LDtoItem := TLojaModelDtoReqVendaItem.Create;
+    LDtoItem.NumVnda := LNovaVenda.NumVnda;
+    LDtoItem.CodItem := LItem.CodItem;
+    LDtoItem.QtdItem := 2;
+
+    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
+
+    Assert.AreEqual(Double(20), Double(LItemVenda.VrTotal));
+    Assert.AreEqual(TLojaModelEntityVendaItemSituacao.sitAtivo.ToString,
+      LItemVenda.CodSit.ToString);
+
+    var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+
+    Assert.AreEqual(Double(20), Double(LVenda.VrTotal));
+
+    var LDtoMeiosPagto := TLojaModelEntityVendaMeioPagtoLista.Create;
+    LDtoMeiosPagto.Add(TLojaModelEntityVendaMeioPagto.Create);
+    LDtoMeiosPagto.Last.CodMeioPagto := TLojaModelEntityCaixaMeioPagamento.pagCartaoCredito;
+    LDtoMeiosPagto.Last.VrParc := 10;
+    LDtoMeiosPagto.Last.QtdParc := 2;
+
+    LDtoMeiosPagto.Add(TLojaModelEntityVendaMeioPagto.Create);
+    LDtoMeiosPagto.Last.CodMeioPagto := TLojaModelEntityCaixaMeioPagamento.pagPix;
+    LDtoMeiosPagto.Last.VrParc := 10;
+    LDtoMeiosPagto.Last.QtdParc := 1;
+
+    var LMeiosPagto := TLojaModelFactory.New.Venda
+      .DefinirMeiosPagtoVenda(LVenda.NumVnda, LDtoMeiosPagto);
+
+    Assert.AreEqual(2, LMeiosPagto.Count);
+
+
+    LDtoItem.Free;
+    LItemVenda.Free;
+    LVenda.Free;
+    LDtoMeiosPagto.Free;
+    LMeiosPagto.Free;
+  finally
+    LNovaVenda.Free;
+    LItem.Free;
+    LPreco.Free;
   end;
 end;
 
@@ -659,6 +729,120 @@ begin
   );
 end;
 
+procedure TLojaModelVendaTest.Test_NaoDefinirMeiosPagamento_MeiosNaoInformados;
+begin
+  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LItem := CriarItem('Teste inserir na venda','');
+  var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
+  RealizarAcertoEstoque(LItem.CodItem, 2);
+
+  try
+    var LDtoItem := TLojaModelDtoReqVendaItem.Create;
+    LDtoItem.NumVnda := LNovaVenda.NumVnda;
+    LDtoItem.CodItem := LItem.CodItem;
+    LDtoItem.QtdItem := 2;
+
+    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
+    var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+    var LDtoMeiosPagto := TLojaModelEntityVendaMeioPagtoLista.Create;
+
+    Assert.WillRaiseWithMessageRegex(
+      procedure begin
+        TLojaModelFactory.New.Venda
+          .DefinirMeiosPagtoVenda(LVenda.NumVnda, LDtoMeiosPagto);
+      end,
+      EHorseException,
+      'É necessário informar ao menos um meio de pagamento'
+    );
+
+    LDtoItem.Free;
+    LItemVenda.Free;
+    LVenda.Free;
+    LDtoMeiosPagto.Free;
+  finally
+    LNovaVenda.Free;
+    LItem.Free;
+    LPreco.Free;
+  end;
+end;
+
+procedure TLojaModelVendaTest.Test_NaoDefinirMeiosPagamento_ParcelasNaoDefinidas;
+begin
+  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LItem := CriarItem('Teste inserir na venda','');
+  var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
+  RealizarAcertoEstoque(LItem.CodItem, 2);
+
+  try
+    var LDtoItem := TLojaModelDtoReqVendaItem.Create;
+    LDtoItem.NumVnda := LNovaVenda.NumVnda;
+    LDtoItem.CodItem := LItem.CodItem;
+    LDtoItem.QtdItem := 2;
+
+    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
+    var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+    var LDtoMeiosPagto := TLojaModelEntityVendaMeioPagtoLista.Create;
+
+    LDtoMeiosPagto.Add(TLojaModelEntityVendaMeioPagto.Create);
+    LDtoMeiosPagto.Last.CodMeioPagto := TLojaModelEntityCaixaMeioPagamento.pagDinheiro;
+    LDtoMeiosPagto.Last.QtdParc := 0;
+    LDtoMeiosPagto.Last.VrParc := 20;
+
+    var LMeiosPagto := TLojaModelFactory.New.Venda
+      .DefinirMeiosPagtoVenda(LVenda.NumVnda, LDtoMeiosPagto);
+
+    Assert.AreEqual(0, LMeiosPagto.Count);
+
+    LDtoItem.Free;
+    LItemVenda.Free;
+    LVenda.Free;
+    LDtoMeiosPagto.Free;
+    LMeiosPagto.Free;
+  finally
+    LNovaVenda.Free;
+    LItem.Free;
+    LPreco.Free;
+  end;
+end;
+
+procedure TLojaModelVendaTest.Test_NaoDefinirMeiosPagamento_ValorNaoDefinido;
+begin
+  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LItem := CriarItem('Teste inserir na venda','');
+  var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
+  RealizarAcertoEstoque(LItem.CodItem, 2);
+
+  try
+    var LDtoItem := TLojaModelDtoReqVendaItem.Create;
+    LDtoItem.NumVnda := LNovaVenda.NumVnda;
+    LDtoItem.CodItem := LItem.CodItem;
+    LDtoItem.QtdItem := 2;
+
+    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
+    var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+    var LDtoMeiosPagto := TLojaModelEntityVendaMeioPagtoLista.Create;
+
+    LDtoMeiosPagto.Add(TLojaModelEntityVendaMeioPagto.Create);
+    LDtoMeiosPagto.Last.CodMeioPagto := TLojaModelEntityCaixaMeioPagamento.pagDinheiro;
+    LDtoMeiosPagto.Last.QtdParc := 1;
+    LDtoMeiosPagto.Last.VrParc := 0;
+
+    var LMeiosPagto := TLojaModelFactory.New.Venda
+      .DefinirMeiosPagtoVenda(LVenda.NumVnda, LDtoMeiosPagto);
+
+    Assert.AreEqual(0, LMeiosPagto.Count);
+
+    LDtoItem.Free;
+    LItemVenda.Free;
+    LVenda.Free;
+    LDtoMeiosPagto.Free;
+    LMeiosPagto.Free;
+  finally
+    LNovaVenda.Free;
+    LItem.Free;
+    LPreco.Free;
+  end;
+end;
 procedure TLojaModelVendaTest.Test_NaoIniciarVenda_SemCaixa;
 begin
   FecharCaixaAtual;
@@ -828,6 +1012,21 @@ begin
   );
 end;
 
+procedure TLojaModelVendaTest.Test_NaoObterVendas_PeriodoInvalido;
+var LDatIni, LDatFim : TDate;
+begin
+  LDatIni := Trunc(Now);
+  LDatFim := Trunc(Now-1);
+
+  Assert.WillRaiseWithMessageRegex(
+    procedure begin
+      TLojaModelFactory.New.Venda.ObterVendas(LDatIni, LDatFim,
+        TLojaModelEntityVendaSituacao.sitPendente);
+    end,
+    EHorseException,
+    'A data inicial deve ser inferior à data final em pelo menos 1 dia'
+  );
+end;
 procedure TLojaModelVendaTest.Test_ObterItensVenda;
 begin
   var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
@@ -857,6 +1056,29 @@ begin
     LItem.Free;
     LPreco.Free;
   end;
+end;
+
+procedure TLojaModelVendaTest.Test_ObterVendas;
+var LDatIni, LDatFim : TDate;
+begin
+  // Insere pelo menos uma venda
+  Test_IniciarVenda;
+  Test_CancelarVenda;
+
+  LDatIni := Trunc(Now);
+  LDatFim := Trunc(Now+1);
+
+  var LVendasPendentes := TLojaModelFactory.New.Venda.ObterVendas(LDatIni, LDatFim,
+    TLojaModelEntityVendaSituacao.sitPendente);
+
+  Assert.IsTrue(LVendasPendentes.Count >= 1);
+  LVendasPendentes.Free;
+
+  var LVendasCanceladas := TLojaModelFactory.New.Venda.ObterVendas(LDatIni, LDatFim,
+    TLojaModelEntityVendaSituacao.sitCancelada);
+
+  Assert.IsTrue(LVendasCanceladas.Count >= 1);
+  LVendasCanceladas.Free;
 end;
 
 initialization
