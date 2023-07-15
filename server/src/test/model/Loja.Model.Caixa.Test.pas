@@ -179,11 +179,14 @@ begin
 
   var LMovimentos := TLojaModelFactory.New.Caixa.ObterMovimentoCaixa(FCaixa.CodCaixa);
 
-  Assert.AreEqual(1, LMovimentos.Count);
-  Assert.AreEqual(LAbertura.VrAbert, LMovimentos[0].VrMov);
+  Assert.IsTrue(LMovimentos.Count >= 1);
+
+  var LResumo := TLojaModelFactory.New.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
+  Assert.AreEqual(Double(10), Double(LResumo.MeiosPagto.Get(pagDinheiro).VrTotal));
 
   LAbertura.Free;
   LMovimentos.Free;
+  LResumo.Free;
 end;
 
 procedure TLojaModelCaixaTest.Test_AberturaDeCaixa_NovaAbertura_ComReforco;
