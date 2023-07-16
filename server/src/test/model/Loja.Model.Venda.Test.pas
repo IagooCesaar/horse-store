@@ -135,6 +135,12 @@ type
     [Test]
     procedure Test_NaoEfetivarVenda_ItemSaldoInsuficiente;
 
+    [Test]
+    procedure Test_NaoEfetivarVenda_SemMeiosPagto;
+
+    [Test]
+    procedure Test_NaoEfetivarVenda_MeiosPagtoInsuficiente;
+
   end;
 
 
@@ -1035,6 +1041,67 @@ begin
   end;
 end;
 
+procedure TLojaModelVendaTest.Test_NaoEfetivarVenda_MeiosPagtoInsuficiente;
+begin
+  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LItem1 := CriarItem('Item 1','');
+  RealizarAcertoEstoque(LItem1.CodItem, 2);
+
+  var LPreco := CriarPrecoVenda(LItem1.CodItem, 10, Now);
+  LPreco.Free;
+
+  try
+    var LDtoItem := TLojaModelDtoReqVendaItem.Create;
+    LDtoItem.NumVnda := LNovaVenda.NumVnda;
+    LDtoItem.CodItem := LItem1.CodItem;
+    LDtoItem.QtdItem := 2;
+
+    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
+    LItemVenda.Free;
+
+    var LDtoMeiosPagto := TLojaModelEntityVendaMeioPagtoLista.Create;
+    LDtoMeiosPagto.Add(TLojaModelEntityVendaMeioPagto.Create);
+    LDtoMeiosPagto.Last.CodMeioPagto := TLojaModelEntityCaixaMeioPagamento.pagCartaoCredito;
+    LDtoMeiosPagto.Last.VrTotal := 19.99;
+    LDtoMeiosPagto.Last.QtdParc := 1;
+
+    var LMeiosPagto := TLojaModelFactory.New.Venda
+      .DefinirMeiosPagtoVenda(LNovaVenda.NumVnda, LDtoMeiosPagto);
+    Assert.AreEqual(1, LMeiosPagto.Count);
+    LMeiosPagto.Free;
+
+    Assert.WillRaiseWithMessageRegex(
+      procedure begin
+        TLojaModelFactory.New.Venda.EfetivarVenda(LNovaVenda.NumVnda);
+      end,
+      EHorseException,
+      'Os valores informados nos meios de pagamentos'
+    );
+
+
+    LDtoMeiosPagto.Last.VrTotal := 20.01;
+    LMeiosPagto := TLojaModelFactory.New.Venda
+      .DefinirMeiosPagtoVenda(LNovaVenda.NumVnda, LDtoMeiosPagto);
+    Assert.AreEqual(1, LMeiosPagto.Count);
+    LMeiosPagto.Free;
+
+    Assert.WillRaiseWithMessageRegex(
+      procedure begin
+        TLojaModelFactory.New.Venda.EfetivarVenda(LNovaVenda.NumVnda);
+      end,
+      EHorseException,
+      'Os valores informados nos meios de pagamentos'
+    );
+
+
+    LDtoItem.Free;
+    LDtoMeiosPagto.Free;
+  finally
+    LNovaVenda.Free;
+    LItem1.Free;
+  end;
+end;
+
 procedure TLojaModelVendaTest.Test_NaoEfetivarVenda_SemItens;
 begin
   var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
@@ -1084,6 +1151,39 @@ begin
       end,
       EHorseException,
       'Não há itens ativos na venda'
+    );
+
+    LDtoItem.Free;
+  finally
+    LNovaVenda.Free;
+    LItem1.Free;
+  end;
+end;
+
+procedure TLojaModelVendaTest.Test_NaoEfetivarVenda_SemMeiosPagto;
+begin
+  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LItem1 := CriarItem('Item 1','');
+  RealizarAcertoEstoque(LItem1.CodItem, 2);
+
+  var LPreco := CriarPrecoVenda(LItem1.CodItem, 10, Now);
+  LPreco.Free;
+
+  try
+    var LDtoItem := TLojaModelDtoReqVendaItem.Create;
+    LDtoItem.NumVnda := LNovaVenda.NumVnda;
+    LDtoItem.CodItem := LItem1.CodItem;
+    LDtoItem.QtdItem := 2;
+
+    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
+    LItemVenda.Free;
+
+    Assert.WillRaiseWithMessageRegex(
+      procedure begin
+        TLojaModelFactory.New.Venda.EfetivarVenda(LNovaVenda.NumVnda);
+      end,
+      EHorseException,
+      'Não há meios de pagamento definidos na venda'
     );
 
     LDtoItem.Free;
