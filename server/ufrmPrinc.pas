@@ -152,22 +152,28 @@ begin
 end;
 
 procedure TfrmPrinc.chbAutoIniciarClick(Sender: TObject);
-var LRegistro : TRegistry;
 begin
-   LRegistro := TRegistry.create;
-   try
-      LRegistro.RootKey := HKEY_LOCAL_MACHINE;
-      LRegistro.Access  := LRegistro.Access or KEY_WOW64_64KEY;
-      if LRegistro.OpenKey('\SOFTWARE\Microsoft\Windows\CurrentVersion\Run',True)
-      then begin
-         if not chbAutoIniciar.Checked
-         then LRegistro.WriteString(Self.Caption,Application.ExeName)
-         else LRegistro.DeleteValue(Self.Caption);
-      end;
-      LRegistro.CloseKey;
-   finally
-      LRegistro.Free;
-   end;
+  var LRegistro := TRegistry.create;
+  try
+    LRegistro.RootKey := HKEY_LOCAL_MACHINE;
+    LRegistro.Access  := LRegistro.Access or KEY_WOW64_64KEY;
+    if LRegistro.OpenKey('\SOFTWARE\Microsoft\Windows\CurrentVersion\Run',True)
+    then begin
+      if not chbAutoIniciar.Checked
+      then LRegistro.WriteString(Self.Caption,Application.ExeName)
+      else LRegistro.DeleteValue(Self.Caption);
+    end
+    else
+    if chbAutoIniciar.Checked
+    then begin
+      ShowMessage('Sem permissão para alterar registros (HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run)');
+      chbAutoIniciar.Checked := False;
+    end;
+
+    LRegistro.CloseKey;
+  finally
+    LRegistro.Free;
+  end;
 end;
 
 procedure TfrmPrinc.FormCreate(Sender: TObject);
@@ -182,6 +188,24 @@ begin
   edtDBPoolMaxItems.Text := IntToStr(FApp.DBPoolParams.PoolMaximumItems);
   edtedtDBPoolCleanup.Text := IntToStr(FApp.DBPoolParams.PoolCleanupTimeout);
   edtDBPoolExpire.Text := IntToStr(FApp.DBPoolParams.PoolExpireTimeout);
+
+  var LRegistro := TRegistry.create;
+  try
+    LRegistro.RootKey := HKEY_LOCAL_MACHINE;
+    LRegistro.Access  := LRegistro.Access or KEY_WOW64_64KEY;
+    if LRegistro.OpenKey('\SOFTWARE\Microsoft\Windows\CurrentVersion\Run',True)
+    then chbAutoIniciar.Checked := LRegistro.KeyExists(Self.Caption)
+    else chbAutoIniciar.Checked := False;
+    LRegistro.CloseKey;
+  finally
+    LRegistro.Free;
+  end;
+
+  if chbAutoIniciar.Checked //or true
+  then begin
+    acIniciarAPI.Execute;
+    Application.Minimize;
+  end;
 
 end;
 

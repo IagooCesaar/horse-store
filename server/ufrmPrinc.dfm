@@ -335,6 +335,7 @@ object frmPrinc: TfrmPrinc
           Top = 32
           Width = 121
           Height = 17
+          Cursor = crHandPoint
           Caption = 'Auto Iniciar'
           TabOrder = 0
           OnClick = chbAutoIniciarClick
