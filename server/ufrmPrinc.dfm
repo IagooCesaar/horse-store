@@ -24,7 +24,7 @@ object frmPrinc: TfrmPrinc
     Margins.Top = 8
     Margins.Right = 8
     Margins.Bottom = 8
-    ActivePage = tsAPI
+    ActivePage = tsBancoDados
     Align = alClient
     TabOrder = 0
     ExplicitLeft = 0

@@ -32,7 +32,7 @@ type
     function GetBaseURL: string;
 
     procedure LoadBossConfig;
-    procedure LoadDatabaseConfig;
+
     function GetVersion: string;
     function GetDescription: string;
     function GetEmExecucao: Boolean;
@@ -41,6 +41,9 @@ type
   public
     constructor Create;
     destructor Destroy; override;
+
+    procedure LoadDatabaseConfig;
+    procedure SaveDatabaseConfig;
 
     procedure Start(APort: Integer);
     procedure Stop;
@@ -68,6 +71,7 @@ uses
   System.DateUtils,
   System.StrUtils,
   System.Types,
+  System.IniFiles,
 
   Horse,
   Horse.Jhonson,
@@ -119,6 +123,8 @@ end;
 
 procedure TApp.ConfigDatabase;
 begin
+  SaveDatabaseConfig;
+
   TDatabaseFactory.New
     .Conexao
     .SetConnectionDefDriverParams(FDBDriverParams)
@@ -248,25 +254,59 @@ begin
 end;
 
 procedure TApp.LoadDatabaseConfig;
+var LIniFile: TIniFile;
 begin
   FDBParams := Default(TConnectionDefParams);
   FDBDriverParams := Default(TConnectionDefDriverParams);
   FDBPoolParams := Default(TConnectionDefPoolParams);
 
+  // Parâmetros fixos
   FDBParams.ConnectionDefName := 'bd_loja';
-  FDBParams.Server := '127.0.0.1';
-  FDBParams.Database := 'C:\#DEV\#Projetos\loja\server\database\loja-bd.fbd';
-  FDBParams.UserName := 'SYSDBA';
-  FDBParams.Password := 'masterkey';
-  FDBParams.LocalConnection := True;
-
   FDBDriverParams.DriverDefName := 'FB_DRIVER';
-  FDBDriverParams.VendorLib := ''; // Path para fbclient.dll
-
+  FDBParams.LocalConnection := False;
   FDBPoolParams.Pooled := True;
-  FDBPoolParams.PoolMaximumItems := 50;
-  FDBPoolParams.PoolCleanupTimeout := 30000;
-  FDBPoolParams.PoolExpireTimeout := 60000;
+
+  // Parâmetros dinâmicos
+  LIniFile := TIniFile.Create(
+    IncludeTrailingPathDelimiter(ExtractFilePath(ParamStr(0)))+
+    'loja_database_config.ini');
+  try
+
+    FDBParams.Server := LIniFile.ReadString('DBParam', 'Server', '127.0.0.1');
+    FDBParams.Database := LIniFile.ReadString('DBParam', 'Databae','C:\#DEV\#Projetos\loja\server\database\loja-bd.fbd');
+    FDBParams.UserName := LIniFile.ReadString('DBParam', 'UserName','SYSDBA');
+    FDBParams.Password := LIniFile.ReadString('DBParam', 'Password','masterkey');
+
+    FDBDriverParams.VendorLib := LIniFile.ReadString('DBDriverParams', 'VendorLib', '');
+
+    FDBPoolParams.PoolMaximumItems := LIniFile.ReadInteger('DBPoolParams', 'PoolMaximumItems', 50);
+    FDBPoolParams.PoolCleanupTimeout := LIniFile.ReadInteger('DBPoolParams', 'PoolCleanupTimeout', 30000);
+    FDBPoolParams.PoolExpireTimeout := LIniFile.ReadInteger('DBPoolParams', 'PoolExpireTimeout', 60000);
+  finally
+    LIniFile.Free;
+  end;
+end;
+
+procedure TApp.SaveDatabaseConfig;
+var LIniFile: TIniFile;
+begin
+  LIniFile := TIniFile.Create(
+    IncludeTrailingPathDelimiter(ExtractFilePath(ParamStr(0)))+
+    'loja_database_config.ini');
+  try
+     LIniFile.WriteString('DBParam', 'Server', FDBParams.Server);
+     LIniFile.WriteString('DBParam', 'Databae',FDBParams.Database);
+     LIniFile.WriteString('DBParam', 'UserName',FDBParams.UserName);
+     LIniFile.WriteString('DBParam', 'Password',FDBParams.Password);
+
+     LIniFile.WriteString('DBDriverParams', 'VendorLib', FDBDriverParams.VendorLib);
+
+     LIniFile.WriteInt64('DBPoolParams', 'PoolMaximumItems', FDBPoolParams.PoolMaximumItems);
+     LIniFile.WriteInt64('DBPoolParams', 'PoolCleanupTimeout', FDBPoolParams.PoolCleanupTimeout);
+     LIniFile.WriteInt64('DBPoolParams', 'PoolExpireTimeout', FDBPoolParams.PoolExpireTimeout);
+  finally
+    LIniFile.Free;
+  end;
 end;
 
 procedure TApp.Start(APort: Integer);

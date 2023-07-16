@@ -90,6 +90,8 @@ begin
   FApp.DBPoolParams.PoolMaximumItems := StrToInt(edtDBPoolMaxItems.Text);
   FApp.DBPoolParams.PoolCleanupTimeout := StrToInt(edtedtDBPoolCleanup.Text);
   FApp.DBPoolParams.PoolExpireTimeout := StrToInt(edtDBPoolExpire.Text);
+
+  FApp.SaveDatabaseConfig;
 end;
 
 procedure TfrmPrinc.acDefinirSenhaExecute(Sender: TObject);
