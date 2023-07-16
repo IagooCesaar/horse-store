@@ -2,8 +2,8 @@ object frmPrinc: TfrmPrinc
   Left = 0
   Top = 0
   Caption = 'LOJA API SERVER'
-  ClientHeight = 442
-  ClientWidth = 628
+  ClientHeight = 597
+  ClientWidth = 610
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -12,99 +12,119 @@ object frmPrinc: TfrmPrinc
   Font.Style = []
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnShow = FormShow
   TextHeight = 21
-  object Label1: TLabel
-    Left = 8
-    Top = 8
-    Width = 36
-    Height = 21
-    Caption = 'Porta'
-  end
-  object edtPorta: TEdit
-    Left = 8
-    Top = 35
-    Width = 121
-    Height = 29
-    NumbersOnly = True
+  object pcPrinc: TPageControl
+    Left = 0
+    Top = 0
+    Width = 610
+    Height = 597
+    ActivePage = tsBancoDados
+    Align = alClient
     TabOrder = 0
-    Text = '9000'
-  end
-  object btnIniciar: TButton
-    Left = 135
-    Top = 35
-    Width = 98
-    Height = 29
-    Cursor = crHandPoint
-    Action = acIniciarAPI
-    TabOrder = 1
-  end
-  object btnParar: TButton
-    Left = 239
-    Top = 35
-    Width = 98
-    Height = 29
-    Cursor = crHandPoint
-    Action = acPararAPI
-    TabOrder = 2
-  end
-  object grpAutenticacao: TGroupBox
-    Left = 8
-    Top = 104
-    Width = 361
-    Height = 105
-    Caption = 'Autentica'#231#227'o API'
-    TabOrder = 3
-    object Label2: TLabel
-      Left = 3
-      Top = 31
-      Width = 54
-      Height = 21
-      Caption = 'Usu'#225'rio'
+    ExplicitWidth = 867
+    object tsAPI: TTabSheet
+      Caption = ':: Configura'#231#245'es da API  '
+      object Label1: TLabel
+        Left = 8
+        Top = 8
+        Width = 36
+        Height = 21
+        Caption = 'Porta'
+      end
+      object edtPorta: TEdit
+        Left = 8
+        Top = 35
+        Width = 121
+        Height = 29
+        NumbersOnly = True
+        TabOrder = 0
+        Text = '9000'
+      end
+      object btnIniciar: TButton
+        Left = 135
+        Top = 35
+        Width = 98
+        Height = 29
+        Cursor = crHandPoint
+        Action = acIniciarAPI
+        TabOrder = 1
+      end
+      object btnParar: TButton
+        Left = 239
+        Top = 35
+        Width = 98
+        Height = 29
+        Cursor = crHandPoint
+        Action = acPararAPI
+        TabOrder = 2
+      end
+      object grpAutenticacao: TGroupBox
+        Left = 8
+        Top = 70
+        Width = 361
+        Height = 105
+        Caption = 'Autentica'#231#227'o API'
+        TabOrder = 3
+        object Label2: TLabel
+          Left = 3
+          Top = 31
+          Width = 54
+          Height = 21
+          Caption = 'Usu'#225'rio'
+        end
+        object Label3: TLabel
+          Left = 3
+          Top = 58
+          Width = 43
+          Height = 21
+          Caption = 'Senha'
+        end
+        object edtUsuario: TEdit
+          Left = 96
+          Top = 28
+          Width = 121
+          Height = 29
+          TabOrder = 0
+          Text = 'admin'
+        end
+        object edtSenha: TEdit
+          Left = 96
+          Top = 63
+          Width = 121
+          Height = 29
+          PasswordChar = '*'
+          TabOrder = 1
+          Text = 'admin'
+        end
+        object btnDefinirSenha: TButton
+          Left = 223
+          Top = 63
+          Width = 122
+          Height = 26
+          Cursor = crHandPoint
+          Action = acDefinirSenha
+          TabOrder = 2
+        end
+      end
+      object btnSwagger: TButton
+        Left = 343
+        Top = 35
+        Width = 106
+        Height = 29
+        Cursor = crHandPoint
+        Action = acSwagger
+        TabOrder = 4
+      end
     end
-    object Label3: TLabel
-      Left = 3
-      Top = 58
-      Width = 43
-      Height = 21
-      Caption = 'Senha'
+    object tsBancoDados: TTabSheet
+      Caption = ':: Acesso ao Banco de Dados  '
+      ImageIndex = 1
     end
-    object edtUsuario: TEdit
-      Left = 96
-      Top = 28
-      Width = 121
-      Height = 29
-      TabOrder = 0
-      Text = 'admin'
-    end
-    object edtSenha: TEdit
-      Left = 96
-      Top = 63
-      Width = 121
-      Height = 29
-      PasswordChar = '*'
-      TabOrder = 1
-      Text = 'admin'
-    end
-    object btnDefinirSenha: TButton
-      Left = 223
-      Top = 63
-      Width = 122
-      Height = 26
-      Action = acDefinirSenha
-      TabOrder = 2
-    end
-  end
-  object btnSwagger: TButton
-    Left = 343
-    Top = 35
-    Width = 106
-    Height = 29
-    Action = acSwagger
-    TabOrder = 4
   end
   object aclPrinc: TActionList
-    Left = 576
-    Top = 24
+    Left = 24
+    Top = 368
     object acIniciarAPI: TAction
       Category = 'API'
       Caption = 'Iniciar'
@@ -128,7 +148,14 @@ object frmPrinc: TfrmPrinc
   end
   object ApplicationEvents1: TApplicationEvents
     OnIdle = ApplicationEvents1Idle
-    Left = 576
-    Top = 88
+    OnMinimize = ApplicationEvents1Minimize
+    Left = 120
+    Top = 368
+  end
+  object trayPrinc: TTrayIcon
+    Hint = 'LOJA API SERVER'
+    OnDblClick = trayPrincDblClick
+    Left = 224
+    Top = 368
   end
 end

@@ -6,27 +6,32 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
 
-  App, Vcl.WinXCtrls, Vcl.StdCtrls, System.Actions, Vcl.ActnList, Vcl.AppEvnts;
+  App, Vcl.WinXCtrls, Vcl.StdCtrls, System.Actions, Vcl.ActnList, Vcl.AppEvnts,
+  Vcl.ComCtrls, Vcl.ExtCtrls;
 
 type
   TfrmPrinc = class(TForm)
-    Label1: TLabel;
-    edtPorta: TEdit;
-    btnIniciar: TButton;
-    btnParar: TButton;
     aclPrinc: TActionList;
     acIniciarAPI: TAction;
     acPararAPI: TAction;
     ApplicationEvents1: TApplicationEvents;
     acDefinirSenha: TAction;
+    acSwagger: TAction;
+    pcPrinc: TPageControl;
+    tsAPI: TTabSheet;
+    Label1: TLabel;
+    edtPorta: TEdit;
+    btnIniciar: TButton;
+    btnParar: TButton;
     grpAutenticacao: TGroupBox;
-    edtUsuario: TEdit;
     Label2: TLabel;
-    edtSenha: TEdit;
     Label3: TLabel;
+    edtUsuario: TEdit;
+    edtSenha: TEdit;
     btnDefinirSenha: TButton;
     btnSwagger: TButton;
-    acSwagger: TAction;
+    tsBancoDados: TTabSheet;
+    trayPrinc: TTrayIcon;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure acIniciarAPIExecute(Sender: TObject);
@@ -34,6 +39,9 @@ type
     procedure ApplicationEvents1Idle(Sender: TObject; var Done: Boolean);
     procedure acDefinirSenhaExecute(Sender: TObject);
     procedure acSwaggerExecute(Sender: TObject);
+    procedure ApplicationEvents1Minimize(Sender: TObject);
+    procedure trayPrincDblClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     FApp: TApp;
   public
@@ -85,6 +93,13 @@ begin
   end;
 end;
 
+procedure TfrmPrinc.ApplicationEvents1Minimize(Sender: TObject);
+begin
+  Hide();
+  Self.WindowState := wsMinimized;
+  trayPrinc.Visible := True;
+end;
+
 procedure TfrmPrinc.FormCreate(Sender: TObject);
 begin
   FApp := TApp.Create;
@@ -93,6 +108,17 @@ end;
 procedure TfrmPrinc.FormDestroy(Sender: TObject);
 begin
   FreeAndNil(FApp);
+end;
+
+procedure TfrmPrinc.FormShow(Sender: TObject);
+begin
+  pcPrinc.ActivePage := tsAPI;
+end;
+
+procedure TfrmPrinc.trayPrincDblClick(Sender: TObject);
+begin
+  Show();
+  trayPrinc.Visible := False;
 end;
 
 end.
