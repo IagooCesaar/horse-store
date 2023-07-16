@@ -1003,7 +1003,7 @@ procedure TLojaModelVendaTest.Test_NaoEfetivarVenda_ItemSaldoInsuficiente;
 begin
   var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
   var LItem1 := CriarItem('Item 1','');
-  RealizarAcertoEstoque(LItem1.CodItem, 1);
+  RealizarAcertoEstoque(LItem1.CodItem, 3);
 
   var LPreco := CriarPrecoVenda(LItem1.CodItem, 10, Now);
   LPreco.Free;
@@ -1015,10 +1015,9 @@ begin
     LDtoItem.QtdItem := 2;
 
     var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
-    Assert.AreEqual(Double(20), Double(LItemVenda.VrTotal));
+    LItemVenda.Free;
 
-    LDtoItem.CodSit := TLojaModelEntityVendaItemSituacao.sitRemovido;
-    LDtoItem.NumSeqItem := LItemVenda.NumSeqItem;
+    LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
     LItemVenda.Free;
 
     Assert.WillRaiseWithMessageRegex(
