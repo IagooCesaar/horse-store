@@ -329,7 +329,8 @@ end;
 
 procedure TApp.Stop;
 begin
-  THorse.StopListen;
+  while THorse.IsRunning
+  do THorse.StopListen;
 end;
 
 function TApp.ValidarLogin(const AUsername, APassword: string): Boolean;
