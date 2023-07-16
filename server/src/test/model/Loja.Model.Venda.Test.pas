@@ -126,6 +126,12 @@ type
     [Test]
     procedure Test_EfetivarVenda;
 
+    [Test]
+    procedure Test_NaoEfetivarVenda_SemItens;
+
+    [Test]
+    procedure Test_NaoEfetivarVenda_SemItensAtivos;
+
   end;
 
 
@@ -428,6 +434,9 @@ end;
 procedure TLojaModelVendaTest.Test_EfetivarVenda;
 var LDatIni, LDatFim: TDateTime;
 begin
+  FecharCaixaAtual;
+  AbrirCaixa(0);
+
   LDatIni := StartOfTheDay(Now);
   LDatFim := EndOfTheDay(Now);
 
@@ -979,6 +988,64 @@ begin
     LPreco.Free;
   end;
 end;
+procedure TLojaModelVendaTest.Test_NaoEfetivarVenda_SemItens;
+begin
+  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  try
+    Assert.WillRaiseWithMessageRegex(
+      procedure begin
+        TLojaModelFactory.New.Venda.EfetivarVenda(LNovaVenda.NumVnda);
+      end,
+      EHorseException,
+      'Não há itens na venda'
+    );
+  finally
+    LNovaVenda.Free;
+  end;
+end;
+
+procedure TLojaModelVendaTest.Test_NaoEfetivarVenda_SemItensAtivos;
+begin
+  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LItem1 := CriarItem('Item 1','');
+  RealizarAcertoEstoque(LItem1.CodItem, 2);
+
+  var LPreco := CriarPrecoVenda(LItem1.CodItem, 10, Now);
+  LPreco.Free;
+
+  try
+    var LDtoItem := TLojaModelDtoReqVendaItem.Create;
+    LDtoItem.NumVnda := LNovaVenda.NumVnda;
+    LDtoItem.CodItem := LItem1.CodItem;
+    LDtoItem.QtdItem := 2;
+
+    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
+    Assert.AreEqual(Double(20), Double(LItemVenda.VrTotal));
+
+    LDtoItem.CodSit := TLojaModelEntityVendaItemSituacao.sitRemovido;
+    LDtoItem.NumSeqItem := LItemVenda.NumSeqItem;
+    LItemVenda.Free;
+
+    LItemVenda := TLojaModelFactory.New.Venda.AtualizarItemVenda(LDtoItem);
+    Assert.AreEqual(TLojaModelEntityVendaItemSituacao.sitRemovido.ToString,
+      LItemVenda.CodSit.ToString);
+    LItemVenda.Free;
+
+    Assert.WillRaiseWithMessageRegex(
+      procedure begin
+        TLojaModelFactory.New.Venda.EfetivarVenda(LNovaVenda.NumVnda);
+      end,
+      EHorseException,
+      'Não há itens ativos na venda'
+    );
+
+    LDtoItem.Free;
+  finally
+    LNovaVenda.Free;
+    LItem1.Free;
+  end;
+end;
+
 procedure TLojaModelVendaTest.Test_NaoIniciarVenda_SemCaixa;
 begin
   FecharCaixaAtual;
@@ -1248,6 +1315,7 @@ begin
   // Insere pelo menos uma venda
   Test_IniciarVenda;
   Test_CancelarVenda;
+  Test_EfetivarVenda;
 
   LDatIni := Trunc(Now);
   LDatFim := Trunc(Now+1);
@@ -1263,6 +1331,12 @@ begin
 
   Assert.IsTrue(LVendasCanceladas.Count >= 1);
   LVendasCanceladas.Free;
+
+  var LVendasEfetivadas := TLojaModelFactory.New.Venda.ObterVendas(LDatIni, LDatFim,
+    TLojaModelEntityVendaSituacao.sitCancelada);
+
+  Assert.IsTrue(LVendasEfetivadas.Count >= 1);
+  LVendasEfetivadas.Free;
 end;
 
 initialization
