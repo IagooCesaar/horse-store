@@ -32,6 +32,27 @@ type
     btnSwagger: TButton;
     tsBancoDados: TTabSheet;
     trayPrinc: TTrayIcon;
+    grpDBParams: TGroupBox;
+    Label4: TLabel;
+    Label5: TLabel;
+    edtDBParamServidor: TEdit;
+    edtDBParamBanco: TEdit;
+    Label6: TLabel;
+    edtDBParamUsuario: TEdit;
+    Label7: TLabel;
+    edtDBParamSenha: TEdit;
+    grpDBDriverParams: TGroupBox;
+    Label9: TLabel;
+    edtDBDriverPath: TEdit;
+    grpDBPoolParams: TGroupBox;
+    Label8: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    edtDBPoolMaxItems: TEdit;
+    edtedtDBPoolCleanup: TEdit;
+    edtDBPoolExpire: TEdit;
+    btnAplicarDBConfig: TButton;
+    acAplicarDBConfig: TAction;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure acIniciarAPIExecute(Sender: TObject);
@@ -42,6 +63,7 @@ type
     procedure ApplicationEvents1Minimize(Sender: TObject);
     procedure trayPrincDblClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure acAplicarDBConfigExecute(Sender: TObject);
   private
     FApp: TApp;
   public
@@ -57,6 +79,18 @@ uses
   Winapi.ShellAPI;
 
 {$R *.dfm}
+
+procedure TfrmPrinc.acAplicarDBConfigExecute(Sender: TObject);
+begin
+  FApp.DBParams.Server := edtDBParamServidor.Text;
+  FApp.DBParams.Database := edtDBParamBanco.Text;
+  FApp.DBParams.Password := edtDBParamSenha.Text;
+  FApp.DBParams.UserName := edtDBParamUsuario.Text;
+  FApp.DBDriverParams.VendorLib := edtDBDriverPath.Text;
+  FApp.DBPoolParams.PoolMaximumItems := StrToInt(edtDBPoolMaxItems.Text);
+  FApp.DBPoolParams.PoolCleanupTimeout := StrToInt(edtedtDBPoolCleanup.Text);
+  FApp.DBPoolParams.PoolExpireTimeout := StrToInt(edtDBPoolExpire.Text);
+end;
 
 procedure TfrmPrinc.acDefinirSenhaExecute(Sender: TObject);
 begin
@@ -86,10 +120,20 @@ begin
     acIniciarAPI.Enabled := False;
     acPararAPI.Enabled := False;
     acDefinirSenha.Enabled := False;
+    acAplicarDBConfig.Enabled := False;
+
+    grpDBParams.Enabled := True;
+    grpDBDriverParams.Enabled := True;
+    grpDBPoolParams.Enabled := True;
   end else begin
     acIniciarAPI.Enabled := not FApp.EmExecucao;
     acPararAPI.Enabled := FApp.EmExecucao;
     acDefinirSenha.Enabled := not FApp.EmExecucao;
+    acAplicarDBConfig.Enabled := not FApp.EmExecucao;
+
+    grpDBParams.Enabled := not FApp.EmExecucao;
+    grpDBDriverParams.Enabled := not FApp.EmExecucao;
+    grpDBPoolParams.Enabled := not FApp.EmExecucao;
   end;
 end;
 
@@ -103,6 +147,16 @@ end;
 procedure TfrmPrinc.FormCreate(Sender: TObject);
 begin
   FApp := TApp.Create;
+
+  edtDBParamServidor.Text := FApp.DBParams.Server;
+  edtDBParamBanco.Text := FApp.DBParams.Database;
+  edtDBParamSenha.Text := FApp.DBParams.Password;
+  edtDBParamUsuario.Text := FApp.DBParams.UserName;
+  edtDBDriverPath.Text := FApp.DBDriverParams.VendorLib;
+  edtDBPoolMaxItems.Text := IntToStr(FApp.DBPoolParams.PoolMaximumItems);
+  edtedtDBPoolCleanup.Text := IntToStr(FApp.DBPoolParams.PoolCleanupTimeout);
+  edtDBPoolExpire.Text := IntToStr(FApp.DBPoolParams.PoolExpireTimeout);
+
 end;
 
 procedure TfrmPrinc.FormDestroy(Sender: TObject);

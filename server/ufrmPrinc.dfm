@@ -15,14 +15,22 @@ object frmPrinc: TfrmPrinc
   OnShow = FormShow
   TextHeight = 21
   object pcPrinc: TPageControl
-    Left = 0
-    Top = 0
-    Width = 610
-    Height = 597
-    ActivePage = tsBancoDados
+    AlignWithMargins = True
+    Left = 8
+    Top = 8
+    Width = 594
+    Height = 581
+    Margins.Left = 8
+    Margins.Top = 8
+    Margins.Right = 8
+    Margins.Bottom = 8
+    ActivePage = tsAPI
     Align = alClient
     TabOrder = 0
+    ExplicitLeft = 0
+    ExplicitTop = 0
     ExplicitWidth = 867
+    ExplicitHeight = 597
     object tsAPI: TTabSheet
       Caption = ':: Configura'#231#245'es da API  '
       object Label1: TLabel
@@ -67,18 +75,20 @@ object frmPrinc: TfrmPrinc
         Caption = 'Autentica'#231#227'o API'
         TabOrder = 3
         object Label2: TLabel
-          Left = 3
-          Top = 31
+          Left = 8
+          Top = 28
           Width = 54
-          Height = 21
+          Height = 29
           Caption = 'Usu'#225'rio'
+          Layout = tlCenter
         end
         object Label3: TLabel
-          Left = 3
-          Top = 58
+          Left = 8
+          Top = 63
           Width = 43
-          Height = 21
+          Height = 29
           Caption = 'Senha'
+          Layout = tlCenter
         end
         object edtUsuario: TEdit
           Left = 96
@@ -120,11 +130,203 @@ object frmPrinc: TfrmPrinc
     object tsBancoDados: TTabSheet
       Caption = ':: Acesso ao Banco de Dados  '
       ImageIndex = 1
+      object grpDBParams: TGroupBox
+        AlignWithMargins = True
+        Left = 3
+        Top = 3
+        Width = 580
+        Height = 182
+        Align = alTop
+        Caption = 'Banco de Dados'
+        TabOrder = 0
+        ExplicitLeft = 16
+        ExplicitTop = 11
+        ExplicitWidth = 393
+        DesignSize = (
+          580
+          182)
+        object Label4: TLabel
+          Left = 16
+          Top = 71
+          Width = 111
+          Height = 21
+          Caption = 'Banco de Dados'
+          Layout = tlCenter
+        end
+        object Label5: TLabel
+          Left = 16
+          Top = 36
+          Width = 59
+          Height = 21
+          Caption = 'Servidor'
+          Layout = tlCenter
+        end
+        object Label6: TLabel
+          Left = 16
+          Top = 106
+          Width = 54
+          Height = 21
+          Caption = 'Usu'#225'rio'
+          Layout = tlCenter
+        end
+        object Label7: TLabel
+          Left = 16
+          Top = 141
+          Width = 43
+          Height = 21
+          Caption = 'Senha'
+          Layout = tlCenter
+        end
+        object edtDBParamServidor: TEdit
+          Left = 155
+          Top = 36
+          Width = 417
+          Height = 29
+          Anchors = [akLeft, akTop, akRight]
+          TabOrder = 0
+          ExplicitWidth = 433
+        end
+        object edtDBParamBanco: TEdit
+          Left = 155
+          Top = 71
+          Width = 417
+          Height = 29
+          Anchors = [akLeft, akTop, akRight]
+          TabOrder = 1
+          ExplicitWidth = 433
+        end
+        object edtDBParamUsuario: TEdit
+          Left = 155
+          Top = 106
+          Width = 417
+          Height = 29
+          Anchors = [akLeft, akTop, akRight]
+          TabOrder = 2
+          ExplicitWidth = 433
+        end
+        object edtDBParamSenha: TEdit
+          Left = 155
+          Top = 141
+          Width = 417
+          Height = 29
+          Anchors = [akLeft, akTop, akRight]
+          PasswordChar = '*'
+          TabOrder = 3
+          ExplicitWidth = 433
+        end
+      end
+      object grpDBDriverParams: TGroupBox
+        AlignWithMargins = True
+        Left = 3
+        Top = 191
+        Width = 580
+        Height = 82
+        Align = alTop
+        Caption = 'Driver de Acesso'
+        TabOrder = 1
+        ExplicitWidth = 596
+        DesignSize = (
+          580
+          82)
+        object Label9: TLabel
+          Left = 16
+          Top = 36
+          Width = 43
+          Height = 21
+          Caption = 'Driver'
+          Layout = tlCenter
+        end
+        object edtDBDriverPath: TEdit
+          Left = 155
+          Top = 36
+          Width = 417
+          Height = 29
+          Anchors = [akLeft, akTop, akRight]
+          TabOrder = 0
+          ExplicitWidth = 433
+        end
+      end
+      object grpDBPoolParams: TGroupBox
+        AlignWithMargins = True
+        Left = 3
+        Top = 279
+        Width = 580
+        Height = 154
+        Align = alTop
+        Caption = 'Pool de Conex'#245'es'
+        TabOrder = 2
+        ExplicitWidth = 596
+        DesignSize = (
+          580
+          154)
+        object Label8: TLabel
+          Left = 16
+          Top = 71
+          Width = 124
+          Height = 21
+          Caption = 'Clean Up Timeout'
+          Layout = tlCenter
+        end
+        object Label10: TLabel
+          Left = 16
+          Top = 36
+          Width = 107
+          Height = 21
+          Caption = 'Maximum Itens'
+          Layout = tlCenter
+        end
+        object Label11: TLabel
+          Left = 16
+          Top = 106
+          Width = 103
+          Height = 21
+          Caption = 'Expire Timeout'
+          Layout = tlCenter
+        end
+        object edtDBPoolMaxItems: TEdit
+          Left = 155
+          Top = 36
+          Width = 417
+          Height = 29
+          Anchors = [akLeft, akTop, akRight]
+          NumbersOnly = True
+          TabOrder = 0
+          ExplicitWidth = 433
+        end
+        object edtedtDBPoolCleanup: TEdit
+          Left = 155
+          Top = 71
+          Width = 417
+          Height = 29
+          Anchors = [akLeft, akTop, akRight]
+          NumbersOnly = True
+          TabOrder = 1
+          ExplicitWidth = 433
+        end
+        object edtDBPoolExpire: TEdit
+          Left = 155
+          Top = 106
+          Width = 417
+          Height = 29
+          Anchors = [akLeft, akTop, akRight]
+          NumbersOnly = True
+          TabOrder = 2
+          ExplicitWidth = 433
+        end
+      end
+      object btnAplicarDBConfig: TButton
+        Left = 3
+        Top = 439
+        Width = 102
+        Height = 42
+        Action = acAplicarDBConfig
+        TabOrder = 3
+      end
     end
   end
   object aclPrinc: TActionList
-    Left = 24
-    Top = 368
+    Left = 352
+    Top = 536
     object acIniciarAPI: TAction
       Category = 'API'
       Caption = 'Iniciar'
@@ -145,17 +347,22 @@ object frmPrinc: TfrmPrinc
       Caption = 'Swagger'
       OnExecute = acSwaggerExecute
     end
+    object acAplicarDBConfig: TAction
+      Category = 'Database'
+      Caption = 'Aplicar'
+      OnExecute = acAplicarDBConfigExecute
+    end
   end
   object ApplicationEvents1: TApplicationEvents
     OnIdle = ApplicationEvents1Idle
     OnMinimize = ApplicationEvents1Minimize
-    Left = 120
-    Top = 368
+    Left = 448
+    Top = 536
   end
   object trayPrinc: TTrayIcon
     Hint = 'LOJA API SERVER'
     OnDblClick = trayPrincDblClick
-    Left = 224
-    Top = 368
+    Left = 552
+    Top = 536
   end
 end

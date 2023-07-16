@@ -2,9 +2,18 @@ unit App;
 
 interface
 
-uses System.Classes, System.JSON, MidasLib;
+uses
+  System.Classes,
+  System.JSON,
+  MidasLib,
+  Database.Tipos;
 
 type
+
+  TConnectionDefDriverParams = Database.Tipos.TConnectionDefDriverParams;
+  TConnectionDefParams = Database.Tipos.TConnectionDefParams;
+  TConnectionDefPoolParams = Database.Tipos.TConnectionDefPoolParams;
+
   TApp = class
   private
     FContext: string;
@@ -13,6 +22,9 @@ type
     FBossConfig: TJSONObject;
     FUsuario: string;
     FSenha: string;
+    FDBParams: TConnectionDefParams;
+    FDBDriverParams: TConnectionDefDriverParams;
+    FDBPoolParams: TConnectionDefPoolParams;
 
     procedure ConfigSwagger;
     procedure ConfigLogger;
@@ -20,6 +32,7 @@ type
     function GetBaseURL: string;
 
     procedure LoadBossConfig;
+    procedure LoadDatabaseConfig;
     function GetVersion: string;
     function GetDescription: string;
     function GetEmExecucao: Boolean;
@@ -40,6 +53,10 @@ type
     property EmExecucao: Boolean read GetEmExecucao;
     property Usuario: string read FUsuario write FUsuario;
     property Senha: string read FSenha write FSenha;
+
+    property DBParams: TConnectionDefParams read FDBParams write FDBParams;
+    property DBDriverParams: TConnectionDefDriverParams read FDBDriverParams write FDBDriverParams;
+    property DBPoolParams: TConnectionDefPoolParams read FDBPoolParams write FDBPoolParams;
 
 end;
 
@@ -62,7 +79,6 @@ uses
   Horse.BasicAuthentication,
 
   Database.Factory,
-  Database.Tipos,
 
   Loja.Controller.Registry,
   Loja.Model.Dto.Resp.ApiError;
@@ -102,31 +118,12 @@ begin
 end;
 
 procedure TApp.ConfigDatabase;
-var
-  LDBDriverParams: TConnectionDefDriverParams;
-  LDBParams: TConnectionDefParams;
-  LDBPoolParams: TConnectionDefPoolParams;
 begin
-  LDBDriverParams.DriverDefName := 'FB_DRIVER';
-  LDBDriverParams.VendorLib := ''; // Path para fbclient.dll
-
-  LDBParams.ConnectionDefName := 'bd_loja';
-  LDBParams.Server := '127.0.0.1';
-  LDBParams.Database := 'C:\#DEV\#Projetos\loja\server\database\loja-bd.fbd';
-  LDBParams.UserName := 'SYSDBA';
-  LDBParams.Password := 'masterkey';
-  LDBParams.LocalConnection := True;
-
-  LDBPoolParams.Pooled := True;
-  LDBPoolParams.PoolMaximumItems := 50;
-  LDBPoolParams.PoolCleanupTimeout := 30000;
-  LDBPoolParams.PoolExpireTimeout := 60000;
-
   TDatabaseFactory.New
     .Conexao
-    .SetConnectionDefDriverParams(LDBDriverParams)
-    .SetConnectionDefParams(LDBParams)
-    .SetConnectionDefPoolParams(LDBPoolParams)
+    .SetConnectionDefDriverParams(FDBDriverParams)
+    .SetConnectionDefParams(FDBParams)
+    .SetConnectionDefPoolParams(FDBPoolParams)
     .IniciaPoolConexoes;
 
   {$IFDEF Test}
@@ -171,6 +168,7 @@ begin
   FCreatedAt := Now;
 
   LoadBossConfig();
+  LoadDatabaseConfig();
   ConfigLogger();
 
   THorse.MaxConnections := StrToIntDef(GetEnvironmentVariable('MAXCONNECTIONS'), 10000);
@@ -247,6 +245,28 @@ begin
     RS.Free;
     LBossConfig.Free;
   end;
+end;
+
+procedure TApp.LoadDatabaseConfig;
+begin
+  FDBParams := Default(TConnectionDefParams);
+  FDBDriverParams := Default(TConnectionDefDriverParams);
+  FDBPoolParams := Default(TConnectionDefPoolParams);
+
+  FDBParams.ConnectionDefName := 'bd_loja';
+  FDBParams.Server := '127.0.0.1';
+  FDBParams.Database := 'C:\#DEV\#Projetos\loja\server\database\loja-bd.fbd';
+  FDBParams.UserName := 'SYSDBA';
+  FDBParams.Password := 'masterkey';
+  FDBParams.LocalConnection := True;
+
+  FDBDriverParams.DriverDefName := 'FB_DRIVER';
+  FDBDriverParams.VendorLib := ''; // Path para fbclient.dll
+
+  FDBPoolParams.Pooled := True;
+  FDBPoolParams.PoolMaximumItems := 50;
+  FDBPoolParams.PoolCleanupTimeout := 30000;
+  FDBPoolParams.PoolExpireTimeout := 60000;
 end;
 
 procedure TApp.Start(APort: Integer);
