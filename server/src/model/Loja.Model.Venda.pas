@@ -324,16 +324,17 @@ begin
       for var LKey in LQtdItens.Keys
       do begin
         var LSaldo := TLojaModelFactory.New.Estoque.ObterSaldoAtualItem(LKey);
-
-        if LSaldo.QtdSaldoAtu < LQtdItens.Items[LKey]
-        then raise EHorseException.New
-          .Status(THTTPStatus.BadRequest)
-          .&Unit(Self.UnitName)
-          .Error(Format('Não há saldo disponível para o item %d (Saldo atual %d, Qtd Venda %d)', [
-            LSaldo.CodItem, LSaldo.QtdSaldoAtu, LQtdItens.Items[LKey]
-          ]));
-
-        LSaldo.Free;
+        try
+          if LSaldo.QtdSaldoAtu < LQtdItens.Items[LKey]
+          then raise EHorseException.New
+            .Status(THTTPStatus.BadRequest)
+            .&Unit(Self.UnitName)
+            .Error(Format('Não há saldo disponível para o item %d (Saldo atual %d, Qtd Venda %d)', [
+              LSaldo.CodItem, LSaldo.QtdSaldoAtu, LQtdItens.Items[LKey]
+            ]));
+        finally
+          LSaldo.Free;
+        end;
       end;
     finally
       LQtdItens.Free;

@@ -132,6 +132,9 @@ type
     [Test]
     procedure Test_NaoEfetivarVenda_SemItensAtivos;
 
+    [Test]
+    procedure Test_NaoEfetivarVenda_ItemSaldoInsuficiente;
+
   end;
 
 
@@ -996,6 +999,43 @@ begin
     LPreco.Free;
   end;
 end;
+procedure TLojaModelVendaTest.Test_NaoEfetivarVenda_ItemSaldoInsuficiente;
+begin
+  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LItem1 := CriarItem('Item 1','');
+  RealizarAcertoEstoque(LItem1.CodItem, 1);
+
+  var LPreco := CriarPrecoVenda(LItem1.CodItem, 10, Now);
+  LPreco.Free;
+
+  try
+    var LDtoItem := TLojaModelDtoReqVendaItem.Create;
+    LDtoItem.NumVnda := LNovaVenda.NumVnda;
+    LDtoItem.CodItem := LItem1.CodItem;
+    LDtoItem.QtdItem := 2;
+
+    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
+    Assert.AreEqual(Double(20), Double(LItemVenda.VrTotal));
+
+    LDtoItem.CodSit := TLojaModelEntityVendaItemSituacao.sitRemovido;
+    LDtoItem.NumSeqItem := LItemVenda.NumSeqItem;
+    LItemVenda.Free;
+
+    Assert.WillRaiseWithMessageRegex(
+      procedure begin
+        TLojaModelFactory.New.Venda.EfetivarVenda(LNovaVenda.NumVnda);
+      end,
+      EHorseException,
+      'Não há saldo disponível para o item'
+    );
+
+    LDtoItem.Free;
+  finally
+    LNovaVenda.Free;
+    LItem1.Free;
+  end;
+end;
+
 procedure TLojaModelVendaTest.Test_NaoEfetivarVenda_SemItens;
 begin
   var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
