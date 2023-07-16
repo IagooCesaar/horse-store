@@ -24,13 +24,9 @@ object frmPrinc: TfrmPrinc
     Margins.Top = 8
     Margins.Right = 8
     Margins.Bottom = 8
-    ActivePage = tsBancoDados
+    ActivePage = tsOutros
     Align = alClient
     TabOrder = 0
-    ExplicitLeft = 0
-    ExplicitTop = 0
-    ExplicitWidth = 867
-    ExplicitHeight = 597
     object tsAPI: TTabSheet
       Caption = ':: Configura'#231#245'es da API  '
       object Label1: TLabel
@@ -78,7 +74,7 @@ object frmPrinc: TfrmPrinc
           Left = 8
           Top = 28
           Width = 54
-          Height = 29
+          Height = 21
           Caption = 'Usu'#225'rio'
           Layout = tlCenter
         end
@@ -86,7 +82,7 @@ object frmPrinc: TfrmPrinc
           Left = 8
           Top = 63
           Width = 43
-          Height = 29
+          Height = 21
           Caption = 'Senha'
           Layout = tlCenter
         end
@@ -139,9 +135,7 @@ object frmPrinc: TfrmPrinc
         Align = alTop
         Caption = 'Banco de Dados'
         TabOrder = 0
-        ExplicitLeft = 16
-        ExplicitTop = 11
-        ExplicitWidth = 393
+        ExplicitWidth = 576
         DesignSize = (
           580
           182)
@@ -184,7 +178,7 @@ object frmPrinc: TfrmPrinc
           Height = 29
           Anchors = [akLeft, akTop, akRight]
           TabOrder = 0
-          ExplicitWidth = 433
+          ExplicitWidth = 413
         end
         object edtDBParamBanco: TEdit
           Left = 155
@@ -193,7 +187,7 @@ object frmPrinc: TfrmPrinc
           Height = 29
           Anchors = [akLeft, akTop, akRight]
           TabOrder = 1
-          ExplicitWidth = 433
+          ExplicitWidth = 413
         end
         object edtDBParamUsuario: TEdit
           Left = 155
@@ -202,7 +196,7 @@ object frmPrinc: TfrmPrinc
           Height = 29
           Anchors = [akLeft, akTop, akRight]
           TabOrder = 2
-          ExplicitWidth = 433
+          ExplicitWidth = 413
         end
         object edtDBParamSenha: TEdit
           Left = 155
@@ -212,7 +206,7 @@ object frmPrinc: TfrmPrinc
           Anchors = [akLeft, akTop, akRight]
           PasswordChar = '*'
           TabOrder = 3
-          ExplicitWidth = 433
+          ExplicitWidth = 413
         end
       end
       object grpDBDriverParams: TGroupBox
@@ -224,7 +218,7 @@ object frmPrinc: TfrmPrinc
         Align = alTop
         Caption = 'Driver de Acesso'
         TabOrder = 1
-        ExplicitWidth = 596
+        ExplicitWidth = 576
         DesignSize = (
           580
           82)
@@ -243,7 +237,7 @@ object frmPrinc: TfrmPrinc
           Height = 29
           Anchors = [akLeft, akTop, akRight]
           TabOrder = 0
-          ExplicitWidth = 433
+          ExplicitWidth = 413
         end
       end
       object grpDBPoolParams: TGroupBox
@@ -255,7 +249,7 @@ object frmPrinc: TfrmPrinc
         Align = alTop
         Caption = 'Pool de Conex'#245'es'
         TabOrder = 2
-        ExplicitWidth = 596
+        ExplicitWidth = 576
         DesignSize = (
           580
           154)
@@ -291,7 +285,7 @@ object frmPrinc: TfrmPrinc
           Anchors = [akLeft, akTop, akRight]
           NumbersOnly = True
           TabOrder = 0
-          ExplicitWidth = 433
+          ExplicitWidth = 413
         end
         object edtedtDBPoolCleanup: TEdit
           Left = 155
@@ -301,7 +295,7 @@ object frmPrinc: TfrmPrinc
           Anchors = [akLeft, akTop, akRight]
           NumbersOnly = True
           TabOrder = 1
-          ExplicitWidth = 433
+          ExplicitWidth = 413
         end
         object edtDBPoolExpire: TEdit
           Left = 155
@@ -311,7 +305,7 @@ object frmPrinc: TfrmPrinc
           Anchors = [akLeft, akTop, akRight]
           NumbersOnly = True
           TabOrder = 2
-          ExplicitWidth = 433
+          ExplicitWidth = 413
         end
       end
       object btnAplicarDBConfig: TButton
@@ -321,6 +315,30 @@ object frmPrinc: TfrmPrinc
         Height = 42
         Action = acAplicarDBConfig
         TabOrder = 3
+      end
+    end
+    object tsOutros: TTabSheet
+      Caption = ':: Outras Configura'#231#245'es  '
+      ImageIndex = 2
+      object GroupBox1: TGroupBox
+        AlignWithMargins = True
+        Left = 3
+        Top = 3
+        Width = 580
+        Height = 105
+        Align = alTop
+        Caption = 'Defini'#231#245'es gerais'
+        TabOrder = 0
+        ExplicitTop = 0
+        object chbAutoIniciar: TCheckBox
+          Left = 16
+          Top = 32
+          Width = 121
+          Height = 17
+          Caption = 'Auto Iniciar'
+          TabOrder = 0
+          OnClick = chbAutoIniciarClick
+        end
       end
     end
   end

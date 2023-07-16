@@ -53,6 +53,9 @@ type
     edtDBPoolExpire: TEdit;
     btnAplicarDBConfig: TButton;
     acAplicarDBConfig: TAction;
+    tsOutros: TTabSheet;
+    GroupBox1: TGroupBox;
+    chbAutoIniciar: TCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure acIniciarAPIExecute(Sender: TObject);
@@ -64,6 +67,7 @@ type
     procedure trayPrincDblClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure acAplicarDBConfigExecute(Sender: TObject);
+    procedure chbAutoIniciarClick(Sender: TObject);
   private
     FApp: TApp;
   public
@@ -76,7 +80,8 @@ var
 implementation
 
 uses
-  Winapi.ShellAPI;
+  Winapi.ShellAPI,
+  Registry;
 
 {$R *.dfm}
 
@@ -144,6 +149,25 @@ begin
   Hide();
   Self.WindowState := wsMinimized;
   trayPrinc.Visible := True;
+end;
+
+procedure TfrmPrinc.chbAutoIniciarClick(Sender: TObject);
+var LRegistro : TRegistry;
+begin
+   LRegistro := TRegistry.create;
+   try
+      LRegistro.RootKey := HKEY_LOCAL_MACHINE;
+      LRegistro.Access  := LRegistro.Access or KEY_WOW64_64KEY;
+      if LRegistro.OpenKey('\SOFTWARE\Microsoft\Windows\CurrentVersion\Run',True)
+      then begin
+         if not chbAutoIniciar.Checked
+         then LRegistro.WriteString(Self.Caption,Application.ExeName)
+         else LRegistro.DeleteValue(Self.Caption);
+      end;
+      LRegistro.CloseKey;
+   finally
+      LRegistro.Free;
+   end;
 end;
 
 procedure TfrmPrinc.FormCreate(Sender: TObject);
