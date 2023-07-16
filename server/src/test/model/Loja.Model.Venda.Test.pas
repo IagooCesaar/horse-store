@@ -1078,7 +1078,6 @@ begin
       'Os valores informados nos meios de pagamentos'
     );
 
-
     LDtoMeiosPagto.Last.VrTotal := 20.01;
     LMeiosPagto := TLojaModelFactory.New.Venda
       .DefinirMeiosPagtoVenda(LNovaVenda.NumVnda, LDtoMeiosPagto);
@@ -1092,7 +1091,6 @@ begin
       EHorseException,
       'Os valores informados nos meios de pagamentos'
     );
-
 
     LDtoItem.Free;
     LDtoMeiosPagto.Free;
