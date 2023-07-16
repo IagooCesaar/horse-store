@@ -442,7 +442,7 @@ begin
 
   var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
   var LItem1 := CriarItem('Item 1','');
-  RealizarAcertoEstoque(LItem1.CodItem, 2);
+  RealizarAcertoEstoque(LItem1.CodItem, 3);
 
   var LItem2 := CriarItem('Item 2','');
   RealizarAcertoEstoque(LItem2.CodItem, 3);
@@ -457,7 +457,7 @@ begin
     LDtoItem.NumVnda := LNovaVenda.NumVnda;
     LDtoItem.CodItem := LItem1.CodItem;
     LDtoItem.QtdItem := 2;
-    // Inserir primeiro item, 2 * 10 = 20,00
+    // Inserir  item 1, 2 * 10 = 20,00
     var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
 
     Assert.AreEqual(Double(20), Double(LItemVenda.VrTotal));
@@ -466,11 +466,19 @@ begin
 
     LItemVenda.Free;
 
+    // Inserir item 1, 1 * 10 = 10,00
+    LDtoItem.QtdItem := 1;
+    LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
+
+    Assert.AreEqual(Double(10), Double(LItemVenda.VrTotal));
+    Assert.AreEqual(TLojaModelEntityVendaItemSituacao.sitAtivo.ToString,
+      LItemVenda.CodSit.ToString);
+    LItemVenda.Free;
+
+    // Inserir item 2, 3 * 15 - 5 = 40,00
     LDtoItem.CodItem := LItem2.CodItem;
     LDtoItem.QtdItem := 3;
     LDtoItem.VrDesc := 5;
-
-    // Inserir segundo item, 3 * 15 - 5 = 40,00
     LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
 
     Assert.AreEqual(Double(40), Double(LItemVenda.VrTotal));
@@ -482,7 +490,7 @@ begin
     // Certificando Total da Venda
     var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
 
-    Assert.AreEqual(Double(60), Double(LVenda.VrTotal));
+    Assert.AreEqual(Double(70), Double(LVenda.VrTotal));
     Assert.AreEqual(Double(5), Double(LVenda.VrDesc));
 
 
@@ -500,7 +508,7 @@ begin
 
     LDtoMeiosPagto.Add(TLojaModelEntityVendaMeioPagto.Create);
     LDtoMeiosPagto.Last.CodMeioPagto := TLojaModelEntityCaixaMeioPagamento.pagPix;
-    LDtoMeiosPagto.Last.VrTotal := 10;
+    LDtoMeiosPagto.Last.VrTotal := 20;
     LDtoMeiosPagto.Last.QtdParc := 1;
 
     var LMeiosPagto := TLojaModelFactory.New.Venda
@@ -525,7 +533,7 @@ begin
     var LMovEstoque := TLojaModelFactory.New.Estoque.ObterHistoricoMovimento(LItem1.CodItem,
       LDatIni, LDatFim);
 
-    Assert.IsTrue(LMovEstoque.Count = 2);
+    Assert.IsTrue(LMovEstoque.Count = 3);
     LMovEstoque.Free;
 
     LMovEstoque := TLojaModelFactory.New.Estoque.ObterHistoricoMovimento(LItem2.CodItem,
@@ -543,7 +551,7 @@ begin
     Assert.AreEqual(Double(10),
       Double(LResumoCaixa.MeiosPagto.Get(pagDinheiro).VrTotal)
     );
-    Assert.AreEqual(Double(10),
+    Assert.AreEqual(Double(20),
       Double(LResumoCaixa.MeiosPagto.Get(pagPix).VrTotal)
     );
 
