@@ -12,7 +12,7 @@ uses
   FireDAC.DApt.Intf, Data.DB, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
   Vcl.Mask, Vcl.DBCtrls, FireDAC.Stan.Def, FireDAC.VCLUI.Wait,
   FireDAC.Phys.IBWrapper, FireDAC.Phys, FireDAC.Phys.IBBase, FireDAC.Phys.FBDef,
-  FireDAC.Phys.FB;
+  FireDAC.Phys.FB, Vcl.Menus;
 
 type
   TfrmPrinc = class(TForm)
@@ -77,6 +77,9 @@ type
     acBackup: TAction;
     btnBackup: TButton;
     DriverFB1: TFDPhysFBDriverLink;
+    menuPrinc: TMainMenu;
+    acSobre: TAction;
+    mniSobre: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure acIniciarAPIExecute(Sender: TObject);
@@ -90,6 +93,7 @@ type
     procedure chbAutoIniciarClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure acBackupExecute(Sender: TObject);
+    procedure acSobreExecute(Sender: TObject);
   private
     FApp: TApp;
   public
@@ -102,6 +106,7 @@ var
 implementation
 
 uses
+  ufrmSobre,
   Winapi.ShellAPI,
   Registry,
   Winsock;
@@ -193,6 +198,16 @@ end;
 procedure TfrmPrinc.acPararAPIExecute(Sender: TObject);
 begin
   FApp.Stop;
+end;
+
+procedure TfrmPrinc.acSobreExecute(Sender: TObject);
+begin
+  var frmSobre := TfrmSobre.Create(Self);
+  try
+     frmSobre.ShowModal();
+  finally
+    FreeAndNil(frmSobre);
+  end;
 end;
 
 procedure TfrmPrinc.acSwaggerExecute(Sender: TObject);

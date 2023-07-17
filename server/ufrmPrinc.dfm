@@ -1,16 +1,21 @@
 object frmPrinc: TfrmPrinc
   Left = 0
   Top = 0
-  BorderStyle = bsDialog
+  BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'LOJA API SERVER'
   ClientHeight = 597
   ClientWidth = 610
   Color = clBtnFace
+  Constraints.MaxHeight = 655
+  Constraints.MaxWidth = 622
+  Constraints.MinHeight = 655
+  Constraints.MinWidth = 622
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -16
   Font.Name = 'Segoe UI'
   Font.Style = []
+  Menu = menuPrinc
   Position = poScreenCenter
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
@@ -30,6 +35,8 @@ object frmPrinc: TfrmPrinc
     ActivePage = tsBancoDados
     Align = alClient
     TabOrder = 0
+    ExplicitWidth = 590
+    ExplicitHeight = 580
     object tsAPI: TTabSheet
       Caption = ':: Configura'#231#245'es da API  '
       object Label1: TLabel
@@ -133,6 +140,7 @@ object frmPrinc: TfrmPrinc
         Align = alTop
         Caption = 'Banco de Dados'
         TabOrder = 0
+        ExplicitWidth = 576
         DesignSize = (
           580
           182)
@@ -304,6 +312,7 @@ object frmPrinc: TfrmPrinc
           DataField = 'PoolCleanupTimeout'
           DataSource = dsDBParams
           TabOrder = 1
+          ExplicitWidth = 413
         end
         object dbPoolExpireTimeout: TDBEdit
           Left = 155
@@ -328,7 +337,7 @@ object frmPrinc: TfrmPrinc
         TabOrder = 3
       end
       object btnBackup: TButton
-        Left = 483
+        Left = 487
         Top = 439
         Width = 100
         Height = 42
@@ -336,6 +345,7 @@ object frmPrinc: TfrmPrinc
         Action = acBackup
         Anchors = [akTop, akRight]
         TabOrder = 4
+        ExplicitLeft = 483
       end
     end
     object tsOutros: TTabSheet
@@ -426,6 +436,10 @@ object frmPrinc: TfrmPrinc
       Caption = 'Backup'
       OnExecute = acBackupExecute
     end
+    object acSobre: TAction
+      Caption = 'Sobre'
+      OnExecute = acSobreExecute
+    end
   end
   object ApplicationEvents1: TApplicationEvents
     OnIdle = ApplicationEvents1Idle
@@ -492,5 +506,12 @@ object frmPrinc: TfrmPrinc
   object DriverFB1: TFDPhysFBDriverLink
     Left = 284
     Top = 480
+  end
+  object menuPrinc: TMainMenu
+    Left = 280
+    Top = 536
+    object mniSobre: TMenuItem
+      Action = acSobre
+    end
   end
 end

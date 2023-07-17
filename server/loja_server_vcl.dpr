@@ -5,6 +5,7 @@ program loja_server_vcl;
 uses
   Vcl.Forms,
   ufrmPrinc in 'ufrmPrinc.pas' {frmPrinc},
+  ufrmSobre in 'ufrmSobre.pas' {frmSobre},
   App in 'src\App.pas',
   Loja.Model.Entity.Itens.Item in 'src\model\entity\itens\Loja.Model.Entity.Itens.Item.pas',
   Loja.Model.Dao.Itens.Item in 'src\model\dao\oficial\itens\Loja.Model.Dao.Itens.Item.pas',
