@@ -103,15 +103,6 @@ object frmPrinc: TfrmPrinc
           TabOrder = 1
           Text = 'admin'
         end
-        object btnDefinirSenha: TButton
-          Left = 223
-          Top = 63
-          Width = 122
-          Height = 26
-          Cursor = crHandPoint
-          Action = acDefinirSenha
-          TabOrder = 2
-        end
       end
       object btnSwagger: TButton
         Left = 343
@@ -355,11 +346,6 @@ object frmPrinc: TfrmPrinc
       Category = 'API'
       Caption = 'Parar'
       OnExecute = acPararAPIExecute
-    end
-    object acDefinirSenha: TAction
-      Category = 'API'
-      Caption = 'Definir Senha'
-      OnExecute = acDefinirSenhaExecute
     end
     object acSwagger: TAction
       Category = 'API'

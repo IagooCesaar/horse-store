@@ -15,7 +15,6 @@ type
     acIniciarAPI: TAction;
     acPararAPI: TAction;
     ApplicationEvents1: TApplicationEvents;
-    acDefinirSenha: TAction;
     acSwagger: TAction;
     pcPrinc: TPageControl;
     tsAPI: TTabSheet;
@@ -28,7 +27,6 @@ type
     Label3: TLabel;
     edtUsuario: TEdit;
     edtSenha: TEdit;
-    btnDefinirSenha: TButton;
     btnSwagger: TButton;
     tsBancoDados: TTabSheet;
     trayPrinc: TTrayIcon;
@@ -61,7 +59,6 @@ type
     procedure acIniciarAPIExecute(Sender: TObject);
     procedure acPararAPIExecute(Sender: TObject);
     procedure ApplicationEvents1Idle(Sender: TObject; var Done: Boolean);
-    procedure acDefinirSenhaExecute(Sender: TObject);
     procedure acSwaggerExecute(Sender: TObject);
     procedure ApplicationEvents1Minimize(Sender: TObject);
     procedure trayPrincDblClick(Sender: TObject);
@@ -99,16 +96,13 @@ begin
   FApp.SaveDatabaseConfig;
 end;
 
-procedure TfrmPrinc.acDefinirSenhaExecute(Sender: TObject);
-begin
-  FApp.Usuario := edtUsuario.Text;
-  FApp.Senha := edtSenha.Text;
-end;
-
 procedure TfrmPrinc.acIniciarAPIExecute(Sender: TObject);
 begin
   if Length(edtUsuario.Text) * Length(edtSenha.Text) <= 0
   then raise Exception.Create('Obrigatório informar o usuário e senha para autenticação');
+
+  FApp.Usuario := edtUsuario.Text;
+  FApp.Senha := edtSenha.Text;
 
   FApp.Start(StrToInt(edtPorta.Text));
 end;
@@ -129,7 +123,6 @@ begin
   then begin
     acIniciarAPI.Enabled := False;
     acPararAPI.Enabled := False;
-    acDefinirSenha.Enabled := False;
     acAplicarDBConfig.Enabled := False;
 
     grpDBParams.Enabled := True;
@@ -138,7 +131,6 @@ begin
   end else begin
     acIniciarAPI.Enabled := not FApp.EmExecucao;
     acPararAPI.Enabled := FApp.EmExecucao;
-    acDefinirSenha.Enabled := not FApp.EmExecucao;
     acAplicarDBConfig.Enabled := not FApp.EmExecucao;
 
     grpDBParams.Enabled := not FApp.EmExecucao;
