@@ -27,7 +27,7 @@ object frmPrinc: TfrmPrinc
     Margins.Top = 8
     Margins.Right = 8
     Margins.Bottom = 8
-    ActivePage = tsAPI
+    ActivePage = tsBancoDados
     Align = alClient
     TabOrder = 0
     object tsAPI: TTabSheet
@@ -121,6 +121,9 @@ object frmPrinc: TfrmPrinc
     object tsBancoDados: TTabSheet
       Caption = ':: Acesso ao Banco de Dados  '
       ImageIndex = 1
+      DesignSize = (
+        586
+        545)
       object grpDBParams: TGroupBox
         AlignWithMargins = True
         Left = 3
@@ -317,11 +320,22 @@ object frmPrinc: TfrmPrinc
       object btnAplicarDBConfig: TButton
         Left = 3
         Top = 439
-        Width = 102
+        Width = 100
         Height = 42
+        Cursor = crHandPoint
         Action = acAplicarDBConfig
         Default = True
         TabOrder = 3
+      end
+      object btnBackup: TButton
+        Left = 483
+        Top = 439
+        Width = 100
+        Height = 42
+        Cursor = crHandPoint
+        Action = acBackup
+        Anchors = [akTop, akRight]
+        TabOrder = 4
       end
     end
     object tsOutros: TTabSheet
@@ -407,6 +421,11 @@ object frmPrinc: TfrmPrinc
       Caption = 'Aplicar'
       OnExecute = acAplicarDBConfigExecute
     end
+    object acBackup: TAction
+      Category = 'Database'
+      Caption = 'Backup'
+      OnExecute = acBackupExecute
+    end
   end
   object ApplicationEvents1: TApplicationEvents
     OnIdle = ApplicationEvents1Idle
@@ -463,6 +482,15 @@ object frmPrinc: TfrmPrinc
   object dsDBParams: TDataSource
     DataSet = mtDBParams
     Left = 448
+    Top = 480
+  end
+  object FDBackup: TFDIBBackup
+    DriverLink = DriverFB1
+    Left = 356
+    Top = 480
+  end
+  object DriverFB1: TFDPhysFBDriverLink
+    Left = 284
     Top = 480
   end
 end

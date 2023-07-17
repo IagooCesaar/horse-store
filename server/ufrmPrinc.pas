@@ -10,7 +10,9 @@ uses
   Vcl.ComCtrls, Vcl.ExtCtrls, FireDAC.Stan.Intf, FireDAC.Stan.Option,
   FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
   FireDAC.DApt.Intf, Data.DB, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
-  Vcl.Mask, Vcl.DBCtrls;
+  Vcl.Mask, Vcl.DBCtrls, FireDAC.Stan.Def, FireDAC.VCLUI.Wait,
+  FireDAC.Phys.IBWrapper, FireDAC.Phys, FireDAC.Phys.IBBase, FireDAC.Phys.FBDef,
+  FireDAC.Phys.FB;
 
 type
   TfrmPrinc = class(TForm)
@@ -71,6 +73,10 @@ type
     mtDBParamsPoolCleanupTimeout: TIntegerField;
     mtDBParamsPoolExpireTimeout: TIntegerField;
     dsDBParams: TDataSource;
+    FDBackup: TFDIBBackup;
+    acBackup: TAction;
+    btnBackup: TButton;
+    DriverFB1: TFDPhysFBDriverLink;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure acIniciarAPIExecute(Sender: TObject);
@@ -83,6 +89,7 @@ type
     procedure acAplicarDBConfigExecute(Sender: TObject);
     procedure chbAutoIniciarClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure acBackupExecute(Sender: TObject);
   private
     FApp: TApp;
   public
@@ -148,6 +155,28 @@ begin
   FApp.DBPoolParams.PoolExpireTimeout := mtDBParamsPoolExpireTimeout.AsInteger;
 
   FApp.SaveDatabaseConfig;
+end;
+
+procedure TfrmPrinc.acBackupExecute(Sender: TObject);
+begin
+  var LBackupDir := IncludeTrailingPathDelimiter(
+    IncludeTrailingPathDelimiter(ExtractFilePath(ParamStr(0)))+'backups');
+
+  if not(DirectoryExists(LBackupDir))
+  then CreateDir(LBackupDir);
+
+  DriverFB1.VendorLib := mtDBParamsDriverVendorLib.AsString;
+
+  FDBackup.Protocol := ipTCPIP;
+  FDBackup.BackupFiles.Text := LBackupDir + Format('backup_%s.fbk',[FormatDateTime('yyyy_mm_dd_hh_mm_ss', Now)]);
+
+  FDBackup.UserName := mtDBParamsUsername.AsString;
+  FDBackup.Password := mtDBParamsPassword.AsString;
+  FDBackup.Host := mtDBParamsServer.AsString;
+  FDBackup.Database := mtDBParamsDatabase.AsString;
+
+  FDBackup.Backup;
+  ShowMessage('Backup finalizado');
 end;
 
 procedure TfrmPrinc.acIniciarAPIExecute(Sender: TObject);
