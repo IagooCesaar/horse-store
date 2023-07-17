@@ -107,6 +107,9 @@ end;
 
 procedure TfrmPrinc.acIniciarAPIExecute(Sender: TObject);
 begin
+  if Length(edtUsuario.Text) * Length(edtSenha.Text) <= 0
+  then raise Exception.Create('Obrigatório informar o usuário e senha para autenticação');
+
   FApp.Start(StrToInt(edtPorta.Text));
 end;
 
@@ -179,6 +182,9 @@ end;
 procedure TfrmPrinc.FormCreate(Sender: TObject);
 begin
   FApp := TApp.Create;
+
+  edtUsuario.Clear;
+  edtSenha.Clear;
 
   edtDBParamServidor.Text := FApp.DBParams.Server;
   edtDBParamBanco.Text := FApp.DBParams.Database;
