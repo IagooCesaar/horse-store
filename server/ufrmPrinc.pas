@@ -200,13 +200,6 @@ begin
   finally
     LRegistro.Free;
   end;
-
-  if chbAutoIniciar.Checked //or true
-  then begin
-    acIniciarAPI.Execute;
-    Application.Minimize;
-  end;
-
 end;
 
 procedure TfrmPrinc.FormDestroy(Sender: TObject);
