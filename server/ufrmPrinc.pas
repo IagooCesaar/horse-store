@@ -260,6 +260,8 @@ begin
     CanClose := False;
     ShowMessage('A API está em Execução. Pare o serviço para poder encerrar a aplicação');
   end;
+
+  acBackup.Execute;
 end;
 
 procedure TfrmPrinc.FormCreate(Sender: TObject);
