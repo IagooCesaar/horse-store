@@ -69,6 +69,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure acAplicarDBConfigExecute(Sender: TObject);
     procedure chbAutoIniciarClick(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
   private
     FApp: TApp;
   public
@@ -208,6 +209,15 @@ begin
   end;
 end;
 
+procedure TfrmPrinc.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+begin
+  if FApp.EmExecucao
+  then begin
+    CanClose := False;
+    ShowMessage('A API está em Execução. Pare o serviço para poder encerrar a aplicação');
+  end;
+end;
+
 procedure TfrmPrinc.FormCreate(Sender: TObject);
 begin
   FApp := TApp.Create;
@@ -248,6 +258,8 @@ end;
 procedure TfrmPrinc.FormShow(Sender: TObject);
 begin
   pcPrinc.ActivePage := tsAPI;
+  if edtUsuario.CanFocus
+  then edtUsuario.SetFocus;
 end;
 
 procedure TfrmPrinc.trayPrincDblClick(Sender: TObject);

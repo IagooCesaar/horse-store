@@ -1,6 +1,7 @@
 object frmPrinc: TfrmPrinc
   Left = 0
   Top = 0
+  BorderStyle = bsDialog
   Caption = 'LOJA API SERVER'
   ClientHeight = 597
   ClientWidth = 610
@@ -10,6 +11,8 @@ object frmPrinc: TfrmPrinc
   Font.Height = -16
   Font.Name = 'Segoe UI'
   Font.Style = []
+  Position = poScreenCenter
+  OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
@@ -24,7 +27,7 @@ object frmPrinc: TfrmPrinc
     Margins.Top = 8
     Margins.Right = 8
     Margins.Bottom = 8
-    ActivePage = tsOutros
+    ActivePage = tsAPI
     Align = alClient
     TabOrder = 0
     ExplicitWidth = 590
@@ -50,16 +53,16 @@ object frmPrinc: TfrmPrinc
       object btnIniciar: TButton
         Left = 135
         Top = 35
-        Width = 98
+        Width = 125
         Height = 29
         Cursor = crHandPoint
         Action = acIniciarAPI
         TabOrder = 1
       end
       object btnParar: TButton
-        Left = 239
+        Left = 266
         Top = 35
-        Width = 98
+        Width = 125
         Height = 29
         Cursor = crHandPoint
         Action = acPararAPI
@@ -107,9 +110,9 @@ object frmPrinc: TfrmPrinc
         end
       end
       object btnSwagger: TButton
-        Left = 343
+        Left = 397
         Top = 35
-        Width = 106
+        Width = 125
         Height = 29
         Cursor = crHandPoint
         Action = acSwagger
@@ -361,17 +364,20 @@ object frmPrinc: TfrmPrinc
     Top = 536
     object acIniciarAPI: TAction
       Category = 'API'
-      Caption = 'Iniciar'
+      Caption = 'Iniciar [F5]'
+      ShortCut = 116
       OnExecute = acIniciarAPIExecute
     end
     object acPararAPI: TAction
       Category = 'API'
-      Caption = 'Parar'
+      Caption = 'Parar [F6]'
+      ShortCut = 117
       OnExecute = acPararAPIExecute
     end
     object acSwagger: TAction
       Category = 'API'
-      Caption = 'Swagger'
+      Caption = 'Swagger [F1]'
+      ShortCut = 112
       OnExecute = acSwaggerExecute
     end
     object acAplicarDBConfig: TAction
