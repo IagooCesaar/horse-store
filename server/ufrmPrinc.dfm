@@ -17,6 +17,7 @@ object frmPrinc: TfrmPrinc
   Font.Style = []
   Menu = menuPrinc
   Position = poScreenCenter
+  OnClose = FormClose
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -363,7 +364,7 @@ object frmPrinc: TfrmPrinc
         TabOrder = 3
       end
       object btnBackup: TButton
-        Left = 487
+        Left = 483
         Top = 439
         Width = 100
         Height = 42
@@ -371,7 +372,6 @@ object frmPrinc: TfrmPrinc
         Action = acBackup
         Anchors = [akTop, akRight]
         TabOrder = 4
-        ExplicitLeft = 483
       end
     end
     object tsOutros: TTabSheet

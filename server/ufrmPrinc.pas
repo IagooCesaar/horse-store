@@ -98,6 +98,7 @@ type
     procedure acSobreExecute(Sender: TObject);
     procedure edtPortaChange(Sender: TObject);
     procedure lbURLClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
     FApp: TApp;
   public
@@ -191,7 +192,13 @@ end;
 procedure TfrmPrinc.acIniciarAPIExecute(Sender: TObject);
 begin
   if Length(edtUsuario.Text) * Length(edtSenha.Text) <= 0
-  then raise Exception.Create('Obrigatório informar o usuário e senha para autenticação');
+  then begin
+    pcPrinc.ActivePage := tsAPI;
+    if edtUsuario.CanFocus
+    then edtUsuario.SetFocus;
+
+    raise Exception.Create('Obrigatório informar o usuário e senha para autenticação');
+  end;
 
   FApp.Usuario := edtUsuario.Text;
   FApp.Senha := edtSenha.Text;
@@ -277,6 +284,11 @@ begin
   lbURL.Caption := Format('http://%s:%s/loja/api',[RetornaIPComputador, edtPorta.Text]);
 end;
 
+procedure TfrmPrinc.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  acBackup.Execute;
+end;
+
 procedure TfrmPrinc.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
   if FApp.EmExecucao
@@ -284,8 +296,6 @@ begin
     CanClose := False;
     ShowMessage('A API está em Execução. Pare o serviço para poder encerrar a aplicação');
   end;
-
-  acBackup.Execute;
 end;
 
 procedure TfrmPrinc.FormCreate(Sender: TObject);
