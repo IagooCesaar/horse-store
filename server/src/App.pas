@@ -127,9 +127,9 @@ begin
 
   TDatabaseFactory.New
     .Conexao
-    .SetConnectionDefDriverParams(FDBDriverParams)
-    .SetConnectionDefParams(FDBParams)
-    .SetConnectionDefPoolParams(FDBPoolParams)
+      .SetConnectionDefDriverParams(FDBDriverParams)
+      .SetConnectionDefParams(FDBParams)
+      .SetConnectionDefPoolParams(FDBPoolParams)
     .IniciaPoolConexoes;
 
   {$IFDEF Test}
@@ -196,6 +196,7 @@ begin
 
   //Registro de Rotas
   Loja.Controller.Registry.DoRegistry(FContext);
+  ConfigSwagger();
 end;
 
 destructor TApp.Destroy;
@@ -316,8 +317,6 @@ begin
   FStartedAt := Now;
   THorse.Listen(APort,
     procedure begin
-      ConfigSwagger();
-
       {$IF defined(CONSOLE) and (not defined(TEST))}
       Writeln(Format('Server is runing on %s:%d', [THorse.Host, THorse.Port]));
       Writeln(Format('Try use Swagger on %s', [SwaggerURL]));
