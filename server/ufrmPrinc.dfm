@@ -32,7 +32,7 @@ object frmPrinc: TfrmPrinc
     Margins.Top = 8
     Margins.Right = 8
     Margins.Bottom = 8
-    ActivePage = tsBancoDados
+    ActivePage = tsAPI
     Align = alClient
     TabOrder = 0
     ExplicitWidth = 590
@@ -46,6 +46,31 @@ object frmPrinc: TfrmPrinc
         Height = 21
         Caption = 'Porta'
       end
+      object Label12: TLabel
+        Left = 16
+        Top = 192
+        Width = 32
+        Height = 21
+        Caption = 'URL:'
+      end
+      object lbURL: TLabel
+        Left = 104
+        Top = 192
+        Width = 29
+        Height = 21
+        Cursor = crHandPoint
+        Hint = 'Copiar'
+        Caption = 'URL'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clHighlight
+        Font.Height = -16
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsUnderline]
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
+        OnClick = lbURLClick
+      end
       object edtPorta: TEdit
         Left = 8
         Top = 35
@@ -54,6 +79,7 @@ object frmPrinc: TfrmPrinc
         NumbersOnly = True
         TabOrder = 0
         Text = '9000'
+        OnChange = edtPortaChange
       end
       object btnIniciar: TButton
         Left = 135

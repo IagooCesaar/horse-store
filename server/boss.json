@@ -1,6 +1,6 @@
 {
 	"name": "loja_server",
-	"description": "Projeto de estudo Horse",
+	"description": "API Rest desenvolvida com Delphi 11 Community Edition + Framework Horse",
 	"version": "0.0.1",
 	"homepage": "",
 	"mainsrc": "./src",

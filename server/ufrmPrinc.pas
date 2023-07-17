@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Clipbrd,
 
   App, Vcl.WinXCtrls, Vcl.StdCtrls, System.Actions, Vcl.ActnList, Vcl.AppEvnts,
   Vcl.ComCtrls, Vcl.ExtCtrls, FireDAC.Stan.Intf, FireDAC.Stan.Option,
@@ -80,6 +80,8 @@ type
     menuPrinc: TMainMenu;
     acSobre: TAction;
     mniSobre: TMenuItem;
+    Label12: TLabel;
+    lbURL: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure acIniciarAPIExecute(Sender: TObject);
@@ -94,6 +96,8 @@ type
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure acBackupExecute(Sender: TObject);
     procedure acSobreExecute(Sender: TObject);
+    procedure edtPortaChange(Sender: TObject);
+    procedure lbURLClick(Sender: TObject);
   private
     FApp: TApp;
   public
@@ -268,6 +272,11 @@ begin
   end;
 end;
 
+procedure TfrmPrinc.edtPortaChange(Sender: TObject);
+begin
+  lbURL.Caption := Format('http://%s:%s/loja/api',[RetornaIPComputador, edtPorta.Text]);
+end;
+
 procedure TfrmPrinc.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
 begin
   if FApp.EmExecucao
@@ -285,6 +294,7 @@ begin
 
   edtUsuario.Clear;
   edtSenha.Clear;
+  edtPortaChange(Sender);
 
   lbComputadorIP.Caption := RetornaIPComputador;
   lbComputadorNome.Caption := RetornaNomeComputador;
@@ -324,6 +334,12 @@ begin
   pcPrinc.ActivePage := tsAPI;
   if edtUsuario.CanFocus
   then edtUsuario.SetFocus;
+end;
+
+procedure TfrmPrinc.lbURLClick(Sender: TObject);
+begin
+  Clipboard.AsText := lbURL.Caption;
+  ShowMessage('Copiado para área de transferência');
 end;
 
 procedure TfrmPrinc.trayPrincDblClick(Sender: TObject);

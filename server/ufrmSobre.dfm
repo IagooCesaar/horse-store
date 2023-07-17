@@ -17,7 +17,7 @@ object frmSobre: TfrmSobre
     Left = 0
     Top = 0
     Width = 444
-    Height = 41
+    Height = 30
     Align = alTop
     Alignment = taCenter
     Caption = 'HORSE STORE API'
@@ -28,11 +28,12 @@ object frmSobre: TfrmSobre
     Font.Style = [fsBold]
     ParentFont = False
     Layout = tlCenter
+    ExplicitWidth = 180
   end
   object Label1: TLabel
     AlignWithMargins = True
     Left = 10
-    Top = 51
+    Top = 40
     Width = 424
     Height = 50
     Margins.Left = 10
@@ -97,6 +98,7 @@ object frmSobre: TfrmSobre
     Width = 218
     Height = 21
     Cursor = crHandPoint
+    Hint = 'Acessar'
     Caption = 'iagocesar.nogueira@gmail.com'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clHighlight
@@ -104,6 +106,8 @@ object frmSobre: TfrmSobre
     Font.Name = 'Segoe UI'
     Font.Style = [fsUnderline]
     ParentFont = False
+    ParentShowHint = False
+    ShowHint = True
     OnClick = lbEmailClick
   end
   object lbRepositorio: TLabel
@@ -112,6 +116,7 @@ object frmSobre: TfrmSobre
     Width = 306
     Height = 21
     Cursor = crHandPoint
+    Hint = 'Acessar'
     Caption = 'https://github.com/IagooCesaar/horse-store'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clHighlight
@@ -119,6 +124,8 @@ object frmSobre: TfrmSobre
     Font.Name = 'Segoe UI'
     Font.Style = [fsUnderline]
     ParentFont = False
+    ParentShowHint = False
+    ShowHint = True
     OnClick = lbRepositorioClick
   end
 end
