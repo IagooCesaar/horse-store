@@ -24,9 +24,11 @@ object frmPrinc: TfrmPrinc
     Margins.Top = 8
     Margins.Right = 8
     Margins.Bottom = 8
-    ActivePage = tsAPI
+    ActivePage = tsOutros
     Align = alClient
     TabOrder = 0
+    ExplicitWidth = 590
+    ExplicitHeight = 580
     object tsAPI: TTabSheet
       Caption = ':: Configura'#231#245'es da API  '
       object Label1: TLabel
@@ -126,7 +128,6 @@ object frmPrinc: TfrmPrinc
         Align = alTop
         Caption = 'Banco de Dados'
         TabOrder = 0
-        ExplicitWidth = 576
         DesignSize = (
           580
           182)
@@ -169,7 +170,6 @@ object frmPrinc: TfrmPrinc
           Height = 29
           Anchors = [akLeft, akTop, akRight]
           TabOrder = 0
-          ExplicitWidth = 413
         end
         object edtDBParamBanco: TEdit
           Left = 155
@@ -178,7 +178,6 @@ object frmPrinc: TfrmPrinc
           Height = 29
           Anchors = [akLeft, akTop, akRight]
           TabOrder = 1
-          ExplicitWidth = 413
         end
         object edtDBParamUsuario: TEdit
           Left = 155
@@ -187,7 +186,6 @@ object frmPrinc: TfrmPrinc
           Height = 29
           Anchors = [akLeft, akTop, akRight]
           TabOrder = 2
-          ExplicitWidth = 413
         end
         object edtDBParamSenha: TEdit
           Left = 155
@@ -197,7 +195,6 @@ object frmPrinc: TfrmPrinc
           Anchors = [akLeft, akTop, akRight]
           PasswordChar = '*'
           TabOrder = 3
-          ExplicitWidth = 413
         end
       end
       object grpDBDriverParams: TGroupBox
@@ -209,7 +206,6 @@ object frmPrinc: TfrmPrinc
         Align = alTop
         Caption = 'Driver de Acesso'
         TabOrder = 1
-        ExplicitWidth = 576
         DesignSize = (
           580
           82)
@@ -228,7 +224,6 @@ object frmPrinc: TfrmPrinc
           Height = 29
           Anchors = [akLeft, akTop, akRight]
           TabOrder = 0
-          ExplicitWidth = 413
         end
       end
       object grpDBPoolParams: TGroupBox
@@ -240,7 +235,6 @@ object frmPrinc: TfrmPrinc
         Align = alTop
         Caption = 'Pool de Conex'#245'es'
         TabOrder = 2
-        ExplicitWidth = 576
         DesignSize = (
           580
           154)
@@ -276,7 +270,6 @@ object frmPrinc: TfrmPrinc
           Anchors = [akLeft, akTop, akRight]
           NumbersOnly = True
           TabOrder = 0
-          ExplicitWidth = 413
         end
         object edtedtDBPoolCleanup: TEdit
           Left = 155
@@ -286,7 +279,6 @@ object frmPrinc: TfrmPrinc
           Anchors = [akLeft, akTop, akRight]
           NumbersOnly = True
           TabOrder = 1
-          ExplicitWidth = 413
         end
         object edtDBPoolExpire: TEdit
           Left = 155
@@ -296,7 +288,6 @@ object frmPrinc: TfrmPrinc
           Anchors = [akLeft, akTop, akRight]
           NumbersOnly = True
           TabOrder = 2
-          ExplicitWidth = 413
         end
       end
       object btnAplicarDBConfig: TButton
@@ -316,11 +307,42 @@ object frmPrinc: TfrmPrinc
         Left = 3
         Top = 3
         Width = 580
-        Height = 105
+        Height = 182
         Align = alTop
         Caption = 'Defini'#231#245'es gerais'
         TabOrder = 0
-        ExplicitTop = 0
+        object lbComputadorIP1: TLabel
+          Left = 16
+          Top = 65
+          Width = 127
+          Height = 21
+          Caption = 'IP do Computador'
+          Layout = tlCenter
+        end
+        object lbComputadorNome1: TLabel
+          Left = 16
+          Top = 100
+          Width = 157
+          Height = 21
+          Caption = 'Nome do Computador'
+          Layout = tlCenter
+        end
+        object lbComputadorIP: TLabel
+          Left = 188
+          Top = 65
+          Width = 13
+          Height = 21
+          Caption = 'IP'
+          Layout = tlCenter
+        end
+        object lbComputadorNome: TLabel
+          Left = 188
+          Top = 100
+          Width = 43
+          Height = 21
+          Caption = 'Nome'
+          Layout = tlCenter
+        end
         object chbAutoIniciar: TCheckBox
           Left = 16
           Top = 32

@@ -54,6 +54,10 @@ type
     tsOutros: TTabSheet;
     GroupBox1: TGroupBox;
     chbAutoIniciar: TCheckBox;
+    lbComputadorIP1: TLabel;
+    lbComputadorNome1: TLabel;
+    lbComputadorIP: TLabel;
+    lbComputadorNome: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure acIniciarAPIExecute(Sender: TObject);
@@ -78,9 +82,43 @@ implementation
 
 uses
   Winapi.ShellAPI,
-  Registry;
+  Registry,
+  Winsock;
 
 {$R *.dfm}
+
+function RetornaIPComputador: String;
+var
+   WSAData: TWSAData;
+   HostEnt: PHostEnt;
+   Name:string;
+begin
+   WSAStartup(2, WSAData);
+   SetLength(Name, 255);
+   Gethostname(PAnsiChar (Name), 255);
+   SetLength(Name, StrLen(PChar(Name)));
+   HostEnt := gethostbyname(PAnsiChar(Name));
+   with HostEnt^
+   do begin
+     Result := Format('%d.%d.%d.%d',[Byte(h_addr^[0]),Byte(h_addr^[1]),Byte(h_addr^[2]),Byte(h_addr^[3])]);
+   end;
+   WSACleanup;
+end;
+
+function RetornaNomeComputador: String;
+//Fonte: https://www.devmedia.com.br/forum/capturar-o-nome-do-computador-em-uso/307483
+var
+  lpBuffer : PChar;
+  nSize    : DWord;
+const
+  Buff_Size = MAX_COMPUTERNAME_LENGTH + 1;
+begin
+   nSize := Buff_Size;
+   lpBuffer := StrAlloc(Buff_Size);
+   GetComputerName(lpBuffer,nSize);
+   Result := String(lpBuffer);
+   StrDispose(lpBuffer);
+end;
 
 procedure TfrmPrinc.acAplicarDBConfigExecute(Sender: TObject);
 begin
@@ -164,7 +202,6 @@ begin
       ShowMessage('Sem permissão para alterar registros (HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run)');
       chbAutoIniciar.Checked := False;
     end;
-
     LRegistro.CloseKey;
   finally
     LRegistro.Free;
@@ -177,6 +214,9 @@ begin
 
   edtUsuario.Clear;
   edtSenha.Clear;
+
+  lbComputadorIP.Caption := RetornaIPComputador;
+  lbComputadorNome.Caption := RetornaNomeComputador;
 
   edtDBParamServidor.Text := FApp.DBParams.Server;
   edtDBParamBanco.Text := FApp.DBParams.Database;
