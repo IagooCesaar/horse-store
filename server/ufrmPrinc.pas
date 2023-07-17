@@ -7,7 +7,10 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
 
   App, Vcl.WinXCtrls, Vcl.StdCtrls, System.Actions, Vcl.ActnList, Vcl.AppEvnts,
-  Vcl.ComCtrls, Vcl.ExtCtrls;
+  Vcl.ComCtrls, Vcl.ExtCtrls, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
+  FireDAC.DApt.Intf, Data.DB, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
+  Vcl.Mask, Vcl.DBCtrls;
 
 type
   TfrmPrinc = class(TForm)
@@ -33,22 +36,22 @@ type
     grpDBParams: TGroupBox;
     Label4: TLabel;
     Label5: TLabel;
-    edtDBParamServidor: TEdit;
-    edtDBParamBanco: TEdit;
+    dbServer: TDBEdit;
+    dbDatabase: TDBEdit;
     Label6: TLabel;
-    edtDBParamUsuario: TEdit;
+    dbUsername: TDBEdit;
     Label7: TLabel;
-    edtDBParamSenha: TEdit;
+    dbPassword: TDBEdit;
     grpDBDriverParams: TGroupBox;
     Label9: TLabel;
-    edtDBDriverPath: TEdit;
+    dbDriverVendorLib: TDBEdit;
     grpDBPoolParams: TGroupBox;
     Label8: TLabel;
     Label10: TLabel;
     Label11: TLabel;
-    edtDBPoolMaxItems: TEdit;
-    edtedtDBPoolCleanup: TEdit;
-    edtDBPoolExpire: TEdit;
+    dbPoolMaximumItems: TDBEdit;
+    dbPoolCleanupTimeout: TDBEdit;
+    dbPoolExpireTimeout: TDBEdit;
     btnAplicarDBConfig: TButton;
     acAplicarDBConfig: TAction;
     tsOutros: TTabSheet;
@@ -58,6 +61,16 @@ type
     lbComputadorNome1: TLabel;
     lbComputadorIP: TLabel;
     lbComputadorNome: TLabel;
+    mtDBParams: TFDMemTable;
+    mtDBParamsServer: TStringField;
+    mtDBParamsDatabase: TStringField;
+    mtDBParamsPassword: TStringField;
+    mtDBParamsUsername: TStringField;
+    mtDBParamsDriverVendorLib: TStringField;
+    mtDBParamsPoolMaximumItems: TIntegerField;
+    mtDBParamsPoolCleanupTimeout: TIntegerField;
+    mtDBParamsPoolExpireTimeout: TIntegerField;
+    dsDBParams: TDataSource;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure acIniciarAPIExecute(Sender: TObject);
@@ -123,14 +136,16 @@ end;
 
 procedure TfrmPrinc.acAplicarDBConfigExecute(Sender: TObject);
 begin
-  FApp.DBParams.Server := edtDBParamServidor.Text;
-  FApp.DBParams.Database := edtDBParamBanco.Text;
-  FApp.DBParams.Password := edtDBParamSenha.Text;
-  FApp.DBParams.UserName := edtDBParamUsuario.Text;
-  FApp.DBDriverParams.VendorLib := edtDBDriverPath.Text;
-  FApp.DBPoolParams.PoolMaximumItems := StrToInt(edtDBPoolMaxItems.Text);
-  FApp.DBPoolParams.PoolCleanupTimeout := StrToInt(edtedtDBPoolCleanup.Text);
-  FApp.DBPoolParams.PoolExpireTimeout := StrToInt(edtDBPoolExpire.Text);
+  mtDBParams.Post;
+
+  FApp.DBParams.Server := mtDBParamsServer.AsString;
+  FApp.DBParams.Database := mtDBParamsDatabase.AsString;
+  FApp.DBParams.Password := mtDBParamsPassword.AsString;
+  FApp.DBParams.UserName := mtDBParamsUsername.AsString;
+  FApp.DBDriverParams.VendorLib := mtDBParamsDriverVendorLib.AsString;
+  FApp.DBPoolParams.PoolMaximumItems := mtDBParamsPoolMaximumItems.AsInteger;
+  FApp.DBPoolParams.PoolCleanupTimeout := mtDBParamsPoolCleanupTimeout.AsInteger;
+  FApp.DBPoolParams.PoolExpireTimeout := mtDBParamsPoolExpireTimeout.AsInteger;
 
   FApp.SaveDatabaseConfig;
 end;
@@ -168,9 +183,9 @@ begin
     grpDBDriverParams.Enabled := True;
     grpDBPoolParams.Enabled := True;
   end else begin
-    acIniciarAPI.Enabled := not FApp.EmExecucao;
+    acIniciarAPI.Enabled := not(FApp.EmExecucao) and not(mtDBParams.State in [dsEdit]);
     acPararAPI.Enabled := FApp.EmExecucao;
-    acAplicarDBConfig.Enabled := not FApp.EmExecucao;
+    acAplicarDBConfig.Enabled := not(FApp.EmExecucao) and (mtDBParams.State in [dsEdit]);
 
     grpDBParams.Enabled := not FApp.EmExecucao;
     grpDBDriverParams.Enabled := not FApp.EmExecucao;
@@ -228,14 +243,17 @@ begin
   lbComputadorIP.Caption := RetornaIPComputador;
   lbComputadorNome.Caption := RetornaNomeComputador;
 
-  edtDBParamServidor.Text := FApp.DBParams.Server;
-  edtDBParamBanco.Text := FApp.DBParams.Database;
-  edtDBParamSenha.Text := FApp.DBParams.Password;
-  edtDBParamUsuario.Text := FApp.DBParams.UserName;
-  edtDBDriverPath.Text := FApp.DBDriverParams.VendorLib;
-  edtDBPoolMaxItems.Text := IntToStr(FApp.DBPoolParams.PoolMaximumItems);
-  edtedtDBPoolCleanup.Text := IntToStr(FApp.DBPoolParams.PoolCleanupTimeout);
-  edtDBPoolExpire.Text := IntToStr(FApp.DBPoolParams.PoolExpireTimeout);
+  mtDBParams.CreateDataSet;
+  mtDBParams.Edit;
+  mtDBParamsServer.AsString := FApp.DBParams.Server;
+  mtDBParamsDatabase.AsString := FApp.DBParams.Database;
+  mtDBParamsPassword.AsString := FApp.DBParams.Password;
+  mtDBParamsUsername.AsString := FApp.DBParams.UserName;
+  mtDBParamsDriverVendorLib.AsString := FApp.DBDriverParams.VendorLib;
+  mtDBParamsPoolMaximumItems.AsInteger := FApp.DBPoolParams.PoolMaximumItems;
+  mtDBParamsPoolCleanupTimeout.AsInteger := FApp.DBPoolParams.PoolCleanupTimeout;
+  mtDBParamsPoolExpireTimeout.AsInteger := FApp.DBPoolParams.PoolExpireTimeout;
+  mtDBParams.Post;
 
   var LRegistro := TRegistry.create;
   try

@@ -30,8 +30,6 @@ object frmPrinc: TfrmPrinc
     ActivePage = tsAPI
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 590
-    ExplicitHeight = 580
     object tsAPI: TTabSheet
       Caption = ':: Configura'#231#245'es da API  '
       object Label1: TLabel
@@ -57,6 +55,7 @@ object frmPrinc: TfrmPrinc
         Height = 29
         Cursor = crHandPoint
         Action = acIniciarAPI
+        Default = True
         TabOrder = 1
       end
       object btnParar: TButton
@@ -166,38 +165,50 @@ object frmPrinc: TfrmPrinc
           Caption = 'Senha'
           Layout = tlCenter
         end
-        object edtDBParamServidor: TEdit
+        object dbServer: TDBEdit
           Left = 155
           Top = 36
           Width = 417
           Height = 29
           Anchors = [akLeft, akTop, akRight]
+          DataField = 'Server'
+          DataSource = dsDBParams
           TabOrder = 0
+          ExplicitWidth = 413
         end
-        object edtDBParamBanco: TEdit
+        object dbDatabase: TDBEdit
           Left = 155
           Top = 71
           Width = 417
           Height = 29
           Anchors = [akLeft, akTop, akRight]
+          DataField = 'Database'
+          DataSource = dsDBParams
           TabOrder = 1
+          ExplicitWidth = 413
         end
-        object edtDBParamUsuario: TEdit
+        object dbUsername: TDBEdit
           Left = 155
           Top = 106
           Width = 417
           Height = 29
           Anchors = [akLeft, akTop, akRight]
+          DataField = 'Username'
+          DataSource = dsDBParams
           TabOrder = 2
+          ExplicitWidth = 413
         end
-        object edtDBParamSenha: TEdit
+        object dbPassword: TDBEdit
           Left = 155
           Top = 141
           Width = 417
           Height = 29
           Anchors = [akLeft, akTop, akRight]
+          DataField = 'Password'
+          DataSource = dsDBParams
           PasswordChar = '*'
           TabOrder = 3
+          ExplicitWidth = 413
         end
       end
       object grpDBDriverParams: TGroupBox
@@ -209,6 +220,7 @@ object frmPrinc: TfrmPrinc
         Align = alTop
         Caption = 'Driver de Acesso'
         TabOrder = 1
+        ExplicitWidth = 576
         DesignSize = (
           580
           82)
@@ -220,13 +232,16 @@ object frmPrinc: TfrmPrinc
           Caption = 'Driver'
           Layout = tlCenter
         end
-        object edtDBDriverPath: TEdit
+        object dbDriverVendorLib: TDBEdit
           Left = 155
           Top = 36
           Width = 417
           Height = 29
           Anchors = [akLeft, akTop, akRight]
+          DataField = 'DriverVendorLib'
+          DataSource = dsDBParams
           TabOrder = 0
+          ExplicitWidth = 413
         end
       end
       object grpDBPoolParams: TGroupBox
@@ -238,6 +253,7 @@ object frmPrinc: TfrmPrinc
         Align = alTop
         Caption = 'Pool de Conex'#245'es'
         TabOrder = 2
+        ExplicitWidth = 576
         DesignSize = (
           580
           154)
@@ -265,32 +281,37 @@ object frmPrinc: TfrmPrinc
           Caption = 'Expire Timeout'
           Layout = tlCenter
         end
-        object edtDBPoolMaxItems: TEdit
+        object dbPoolMaximumItems: TDBEdit
           Left = 155
           Top = 36
           Width = 417
           Height = 29
           Anchors = [akLeft, akTop, akRight]
-          NumbersOnly = True
+          DataField = 'PoolMaximumItems'
+          DataSource = dsDBParams
           TabOrder = 0
+          ExplicitWidth = 413
         end
-        object edtedtDBPoolCleanup: TEdit
+        object dbPoolCleanupTimeout: TDBEdit
           Left = 155
           Top = 71
           Width = 417
           Height = 29
           Anchors = [akLeft, akTop, akRight]
-          NumbersOnly = True
+          DataField = 'PoolCleanupTimeout'
+          DataSource = dsDBParams
           TabOrder = 1
         end
-        object edtDBPoolExpire: TEdit
+        object dbPoolExpireTimeout: TDBEdit
           Left = 155
           Top = 106
           Width = 417
           Height = 29
           Anchors = [akLeft, akTop, akRight]
-          NumbersOnly = True
+          DataField = 'PoolExpireTimeout'
+          DataSource = dsDBParams
           TabOrder = 2
+          ExplicitWidth = 413
         end
       end
       object btnAplicarDBConfig: TButton
@@ -299,6 +320,7 @@ object frmPrinc: TfrmPrinc
         Width = 102
         Height = 42
         Action = acAplicarDBConfig
+        Default = True
         TabOrder = 3
       end
     end
@@ -397,5 +419,50 @@ object frmPrinc: TfrmPrinc
     OnDblClick = trayPrincDblClick
     Left = 552
     Top = 536
+  end
+  object mtDBParams: TFDMemTable
+    FetchOptions.AssignedValues = [evMode]
+    FetchOptions.Mode = fmAll
+    ResourceOptions.AssignedValues = [rvSilentMode]
+    ResourceOptions.SilentMode = True
+    UpdateOptions.AssignedValues = [uvCheckRequired, uvAutoCommitUpdates]
+    UpdateOptions.CheckRequired = False
+    UpdateOptions.AutoCommitUpdates = True
+    Left = 552
+    Top = 480
+    object mtDBParamsServer: TStringField
+      FieldName = 'Server'
+      Size = 60
+    end
+    object mtDBParamsDatabase: TStringField
+      FieldName = 'Database'
+      Size = 255
+    end
+    object mtDBParamsPassword: TStringField
+      FieldName = 'Password'
+      Size = 60
+    end
+    object mtDBParamsUsername: TStringField
+      FieldName = 'Username'
+      Size = 60
+    end
+    object mtDBParamsDriverVendorLib: TStringField
+      FieldName = 'DriverVendorLib'
+      Size = 255
+    end
+    object mtDBParamsPoolMaximumItems: TIntegerField
+      FieldName = 'PoolMaximumItems'
+    end
+    object mtDBParamsPoolCleanupTimeout: TIntegerField
+      FieldName = 'PoolCleanupTimeout'
+    end
+    object mtDBParamsPoolExpireTimeout: TIntegerField
+      FieldName = 'PoolExpireTimeout'
+    end
+  end
+  object dsDBParams: TDataSource
+    DataSet = mtDBParams
+    Left = 448
+    Top = 480
   end
 end
