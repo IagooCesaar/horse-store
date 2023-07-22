@@ -201,11 +201,13 @@ end;
 
 destructor TApp.Destroy;
 begin
+  if FBossConfig <> nil
+  then FreeAndNil(FBossConfig);
+
   while THorse.IsRunning do begin
     THorse.StopListen;
     Sleep(1000);
   end;
-  FBossConfig.Free;
   inherited;
 end;
 
