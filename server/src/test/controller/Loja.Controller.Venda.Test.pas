@@ -101,6 +101,15 @@ type
 
     [Test]
     procedure Test_NaoAtualizarItemVenda_ValorTotalNegativo;
+
+    [Test]
+    procedure Test_ObterItensVenda;
+
+    [Test]
+    procedure Test_NaoObterItensVenda_VendaInexistente;
+
+    [Test]
+    procedure Test_NaoObterItensVenda_VendaSemItens;
   end;
 
 implementation
@@ -533,6 +542,7 @@ begin
     LDto.NumVnda := LNovaVenda.NumVnda;
     LDto.CodItem := LItem.CodItem;
     LDto.QtdItem := 2;
+    LDto.VrDesc := 4;
 
     var LResponseItemVenda := TRequest.New
       .BasicAuthentication(FUsarname, FPassword)
@@ -547,10 +557,11 @@ begin
     var LItemVenda := TJson.ClearJsonAndConvertToObject
       <TLojaModelDtoRespVendaItem>(LResponseItemVenda.Content);
 
-    Assert.AreEqual(Double(20), Double(LItemVenda.VrTotal));
+    Assert.AreEqual(Double(16), Double(LItemVenda.VrTotal));
     Assert.AreEqual(TLojaModelEntityVendaItemSituacao.sitAtivo.ToString,
       LItemVenda.CodSit.ToString);
     Assert.AreEqual(1, LItemVenda.NumSeqItem);
+    Assert.AreEqual(Double(4), Double(LItemVenda.VrDesc));
 
     var LResponseVendaAtu :=  TRequest.New
       .BasicAuthentication(FUsarname, FPassword)
@@ -562,7 +573,7 @@ begin
     var LVendaAtu := TJson.ClearJsonAndConvertToObject
       <TLojaModelEntityVendaVenda>(LResponseVendaAtu.Content);
 
-    Assert.AreEqual(Double(20), Double(LVendaAtu.VrTotal));
+    Assert.AreEqual(Double(16), Double(LVendaAtu.VrTotal));
 
     LDto.Free;
     LItemVenda.Free;
@@ -1330,6 +1341,102 @@ begin
 
     LDto.Free;
     LError.Free;
+  finally
+    LNovaVenda.Free;
+    LItem.Free;
+    LPreco.Free;
+  end;
+end;
+
+procedure TLojaControllerVendaTest.Test_NaoObterItensVenda_VendaInexistente;
+begin
+  var LResponse := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/venda/{num_vnda}/itens')
+    .AddUrlSegment('num_vnda', MaxInt.ToString)
+    .Get();
+
+  Assert.AreEqual(404, LResponse.StatusCode);
+end;
+
+procedure TLojaControllerVendaTest.Test_NaoObterItensVenda_VendaSemItens;
+begin
+  var LResponseVenda := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/venda')
+    .Post();
+
+  var LNovaVenda := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityVendaVenda>(LResponseVenda.Content);
+
+  var LResponse := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/venda/{num_vnda}/itens')
+    .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+    .Get();
+
+  Assert.AreEqual(204, LResponse.StatusCode);
+
+  LNovaVenda.Free;
+end;
+
+procedure TLojaControllerVendaTest.Test_ObterItensVenda;
+begin
+  var LResponseVenda := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/venda')
+    .Post();
+
+  var LNovaVenda := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityVendaVenda>(LResponseVenda.Content);
+
+  var LItem := CriarItem('Teste inserir na venda','');
+  var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
+  RealizarAcertoEstoque(LItem.CodItem, 2);
+
+  try
+    var LDto := TLojaModelDtoReqVendaItem.Create;
+    LDto.NumVnda := LNovaVenda.NumVnda;
+    LDto.CodItem := LItem.CodItem;
+    LDto.QtdItem := 1;
+    LDto.VrDesc := 2;
+
+    TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/itens')
+      .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+      .AddBody(TJson.ObjectToClearJsonString(LDto))
+      .Post();
+
+    TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/itens')
+      .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+      .AddBody(TJson.ObjectToClearJsonString(LDto))
+      .Post();
+
+    var LResponse := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/itens')
+      .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+      .Get();
+
+    Assert.AreEqual(200, LResponse.StatusCode);
+
+    var LItens := TJson.ClearJsonAndConvertToObject
+      <TLojaModelDtoRespVendaItemLista>(LResponse.Content);
+
+    Assert.AreEqual(2, LItens.Count);
+
+    LDto.Free;
+    LItens.Free;
   finally
     LNovaVenda.Free;
     LItem.Free;
