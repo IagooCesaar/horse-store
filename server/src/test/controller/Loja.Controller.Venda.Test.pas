@@ -77,6 +77,9 @@ type
 
     [Test]
     procedure Test_NaoInserirItemVenda_VendaNaoPendente;
+
+    [Test]
+    procedure Test_AtualizarItemVenda;
   end;
 
 implementation
@@ -264,6 +267,90 @@ end;
 procedure TLojaControllerVendaTest.TearDownFixture;
 begin
   FecharCaixaAtual;
+end;
+
+procedure TLojaControllerVendaTest.Test_AtualizarItemVenda;
+begin
+  var LResponseVenda := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/venda')
+    .Post();
+
+  var LNovaVenda := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityVendaVenda>(LResponseVenda.Content);
+
+  var LItem := CriarItem('Teste inserir na venda','');
+  var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
+  RealizarAcertoEstoque(LItem.CodItem, 2);
+
+  try
+    var LDto := TLojaModelDtoReqVendaItem.Create;
+    LDto.NumVnda := LNovaVenda.NumVnda;
+    LDto.CodItem := LItem.CodItem;
+    LDto.QtdItem := 1;
+
+    var LResponseItemVenda := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/itens')
+      .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+      .AddBody(TJson.ObjectToClearJsonString(LDto))
+      .Post();
+
+    var LItemVenda := TJson.ClearJsonAndConvertToObject
+      <TLojaModelDtoRespVendaItem>(LResponseItemVenda.Content);
+
+    var LResponseVendaAtu :=  TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}')
+      .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+      .Get();
+
+    var LVendaAtu := TJson.ClearJsonAndConvertToObject
+      <TLojaModelEntityVendaVenda>(LResponseVendaAtu.Content);
+
+    Assert.AreEqual(Double(10), Double(LVendaAtu.VrTotal));
+
+    LDto.QtdItem := 2;
+    var LResponseItemAtu := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/itens/{num_seq_item}')
+      .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+      .AddUrlSegment('num_seq_item', LItemVenda.NumSeqItem.ToString)
+      .AddBody(TJson.ObjectToClearJsonString(LDto))
+      .Put();
+
+    var LItemAtualizado := TJson.ClearJsonAndConvertToObject
+      <TLojaModelDtoRespVendaItem>(LResponseItemAtu.Content);
+
+    Assert.AreEqual(LDto.QtdItem, LItemAtualizado.QtdItem);
+    Assert.AreEqual(Double(20), Double(LItemAtualizado.VrTotal));
+
+    var LResponseVendaAtu2 :=  TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}')
+      .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+      .Get();
+
+    var LVendaAtu2 := TJson.ClearJsonAndConvertToObject
+      <TLojaModelEntityVendaVenda>(LResponseVendaAtu2.Content);
+
+    Assert.AreEqual(Double(20), Double(LVendaAtu2.VrTotal));
+
+    LDto.Free;
+    LItemVenda.Free;
+    LVendaAtu.Free;
+    LItemAtualizado.Free;
+    LVendaAtu2.Free;
+  finally
+    LNovaVenda.Free;
+    LItem.Free;
+    LPreco.Free;
+  end;
 end;
 
 procedure TLojaControllerVendaTest.Test_CancelarVenda;
