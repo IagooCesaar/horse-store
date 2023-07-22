@@ -548,7 +548,7 @@ begin
 
       if LItemVenda.CodSit = TLojaModelEntityVendaItemSituacao.sitRemovido
       then raise EHorseException.New
-        .Status(THTTPStatus.NotFound)
+        .Status(THTTPStatus.BadRequest)
         .&Unit(Self.UnitName)
         .Error('Este item foi removido da venda, portanto não pode ser alterado');
 
