@@ -36,6 +36,18 @@ type
 
     [Test]
     procedure Test_NaoIniciarVenda_SemCaixaHoje;
+
+    [Test]
+    procedure Test_CancelarVenda;
+
+    [Test]
+    procedure Test_NaoCancelarVenda_NumeroInvalido;
+
+    [Test]
+    procedure Test_NaoCancelarVenda_Inexistente;
+
+    [Test]
+    procedure Test_NaoCancelarVenda_NaoPendente;
   end;
 
 implementation
@@ -54,6 +66,7 @@ uses
   Loja.Model.Entity.Venda.Types,
   Loja.Model.Entity.Venda.Venda,
 
+  Loja.Model.Entity.Caixa.Types,
 
   Database.Factory,
   Database.Interfaces;
@@ -143,6 +156,39 @@ begin
   FecharCaixaAtual;
 end;
 
+procedure TLojaControllerVendaTest.Test_CancelarVenda;
+begin
+  var LResponse := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/venda')
+    .Post();
+
+  var LVenda := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityVendaVenda>(LResponse.Content);
+  try
+
+    var LResponseCancelar := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/cancelar')
+      .AddUrlSegment('num_vnda', LVenda.NumVnda.ToString)
+      .Patch();
+
+    Assert.AreEqual(200, LResponseCancelar.StatusCode);
+
+    var LCancelada := TJson.ClearJsonAndConvertToObject
+      <TLojaModelEntityVendaVenda>(LResponseCancelar.Content);
+
+    Assert.AreEqual(TLojaModelEntityVendaSituacao.sitCancelada,
+      LCancelada.CodSit);
+
+    LCancelada.Free;
+  finally
+    LVenda.Free;
+  end;
+end;
+
 procedure TLojaControllerVendaTest.Test_IniciarVenda;
 begin
   FecharCaixaAtual;
@@ -163,6 +209,84 @@ begin
   Assert.AreEqual(TLojaModelEntityVendaSituacao.sitPendente, LVenda.CodSit);
 
   LVenda.Free;
+end;
+
+procedure TLojaControllerVendaTest.Test_NaoCancelarVenda_Inexistente;
+begin
+  var LResponseCancelar := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/cancelar')
+      .AddUrlSegment('num_vnda', MaxInt.ToString)
+      .Patch();
+
+  Assert.AreEqual(THTTPStatus.NotFound, THTTPStatus(LResponseCancelar.StatusCode));
+
+  var LError := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDTORespApiError>(LResponseCancelar.Content);
+
+  Assert.AreEqual('Não foi possível encontrar a venda pelo número informado', LError.error);
+
+  LError.Free;
+end;
+
+procedure TLojaControllerVendaTest.Test_NaoCancelarVenda_NaoPendente;
+begin
+  var LResponse := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/venda')
+    .Post();
+
+  var LVenda := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityVendaVenda>(LResponse.Content);
+  try
+    // Cancela a primeira vez
+    TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/cancelar')
+      .AddUrlSegment('num_vnda', LVenda.NumVnda.ToString)
+      .Patch();
+
+    // Não consegue cancelar pois não está pendente
+    var LResponseCancelar := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/cancelar')
+      .AddUrlSegment('num_vnda', LVenda.NumVnda.ToString)
+      .Patch();
+
+    Assert.AreEqual(THTTPStatus.BadRequest, THTTPStatus(LResponseCancelar.StatusCode));
+
+    var LError := TJson.ClearJsonAndConvertToObject
+      <TLojaModelDTORespApiError>(LResponseCancelar.Content);
+
+    Assert.AreEqual('A venda informada não está Pendente', LError.error);
+
+    LError.Free;
+  finally
+    LVenda.Free;
+  end;
+end;
+
+procedure TLojaControllerVendaTest.Test_NaoCancelarVenda_NumeroInvalido;
+begin
+  var LResponseCancelar := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/cancelar')
+      .AddUrlSegment('num_vnda', '-1')
+      .Patch();
+
+  Assert.AreEqual(THTTPStatus.BadRequest, THTTPStatus(LResponseCancelar.StatusCode));
+
+  var LError := TJson.ClearJsonAndConvertToObject
+    <TLojaModelDTORespApiError>(LResponseCancelar.Content);
+
+  Assert.AreEqual('O número de venda informado é inválido', LError.error);
+
+  LError.Free;
 end;
 
 procedure TLojaControllerVendaTest.Test_NaoIniciarVenda_SemCaixaAberto;
