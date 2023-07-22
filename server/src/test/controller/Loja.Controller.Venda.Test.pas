@@ -62,6 +62,21 @@ type
 
     [Test]
     procedure Test_InserirItemVenda;
+
+    [Test]
+    procedure Test_NaoInserirItemVenda_QuantidadeInvalida;
+
+    [Test]
+    procedure Test_NaoInserirItemVenda_ItemInexistente;
+
+    [Test]
+    procedure Test_NaoInserirItemVenda_SemPrecoImplantado;
+
+    [Test]
+    procedure Test_NaoInserirItemVenda_ValorTotalNegativo;
+
+    [Test]
+    procedure Test_NaoInserirItemVenda_VendaNaoPendente;
   end;
 
 implementation
@@ -516,6 +531,231 @@ begin
         .AddDateTime('dat_abert', LAbertura)
         .&End
       .ExecSQL;
+  end;
+end;
+
+procedure TLojaControllerVendaTest.Test_NaoInserirItemVenda_ItemInexistente;
+begin
+  var LResponseVenda := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/venda')
+    .Post();
+
+  var LNovaVenda := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityVendaVenda>(LResponseVenda.Content);
+
+  try
+    var LDto := TLojaModelDtoReqVendaItem.Create;
+    LDto.NumVnda := LNovaVenda.NumVnda;
+    LDto.CodItem := -1;
+    LDto.QtdItem := 1;
+
+    var LResponseItemVenda := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/itens')
+      .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+      .AddBody(TJson.ObjectToClearJsonString(LDto))
+      .Post();
+
+    Assert.AreEqual(404, LResponseItemVenda.StatusCode, LResponseItemVenda.Content);
+
+    var LError := TJson.ClearJsonAndConvertToObject
+      <TLojaModelDTORespApiError>(LResponseItemVenda.Content);
+
+    Assert.AreEqual('Não foi possível encontrar o item informado', LError.error);
+
+    LDto.Free;
+    LError.Free;
+  finally
+    LNovaVenda.Free;
+  end;
+end;
+
+procedure TLojaControllerVendaTest.Test_NaoInserirItemVenda_QuantidadeInvalida;
+begin
+  var LResponseVenda := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/venda')
+    .Post();
+
+  var LNovaVenda := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityVendaVenda>(LResponseVenda.Content);
+
+  var LItem := CriarItem('Teste inserir na venda','');
+  var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
+  RealizarAcertoEstoque(LItem.CodItem, 2);
+
+  try
+    var LDto := TLojaModelDtoReqVendaItem.Create;
+    LDto.NumVnda := LNovaVenda.NumVnda;
+    LDto.CodItem := LItem.CodItem;
+    LDto.QtdItem := -1;
+
+    var LResponseItemVenda := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/itens')
+      .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+      .AddBody(TJson.ObjectToClearJsonString(LDto))
+      .Post();
+
+    Assert.AreEqual(400, LResponseItemVenda.StatusCode, LResponseItemVenda.Content);
+
+    var LError := TJson.ClearJsonAndConvertToObject
+      <TLojaModelDTORespApiError>(LResponseItemVenda.Content);
+
+    Assert.AreEqual('A quantidade do item vendido deverá ser superior a zero', LError.error);
+
+    LDto.Free;
+    LError.Free;
+  finally
+    LNovaVenda.Free;
+    LItem.Free;
+    LPreco.Free;
+  end;
+end;
+
+procedure TLojaControllerVendaTest.Test_NaoInserirItemVenda_SemPrecoImplantado;
+begin
+  var LResponseVenda := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/venda')
+    .Post();
+
+  var LNovaVenda := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityVendaVenda>(LResponseVenda.Content);
+
+  var LItem := CriarItem('Item sem preço','');
+  RealizarAcertoEstoque(LItem.CodItem, 2);
+
+  try
+    var LDto := TLojaModelDtoReqVendaItem.Create;
+    LDto.NumVnda := LNovaVenda.NumVnda;
+    LDto.CodItem := LItem.CodItem;
+    LDto.QtdItem := 1;
+
+    var LResponseItemVenda := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/itens')
+      .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+      .AddBody(TJson.ObjectToClearJsonString(LDto))
+      .Post();
+
+    Assert.AreEqual(404, LResponseItemVenda.StatusCode, LResponseItemVenda.Content);
+
+    var LError := TJson.ClearJsonAndConvertToObject
+      <TLojaModelDTORespApiError>(LResponseItemVenda.Content);
+
+    Assert.AreEqual('Não há preço de venda implantado para o item', LError.error);
+
+    LDto.Free;
+    LError.Free;
+  finally
+    LNovaVenda.Free;
+    LItem.Free;
+  end;
+end;
+
+procedure TLojaControllerVendaTest.Test_NaoInserirItemVenda_ValorTotalNegativo;
+begin
+  var LResponseVenda := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/venda')
+    .Post();
+
+  var LNovaVenda := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityVendaVenda>(LResponseVenda.Content);
+
+  var LItem := CriarItem('Teste inserir na venda','');
+  var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
+  RealizarAcertoEstoque(LItem.CodItem, 2);
+
+  try
+    var LDto := TLojaModelDtoReqVendaItem.Create;
+    LDto.NumVnda := LNovaVenda.NumVnda;
+    LDto.CodItem := LItem.CodItem;
+    LDto.QtdItem := 1;
+    LDto.VrDesc := 11;
+
+    var LResponseItemVenda := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/itens')
+      .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+      .AddBody(TJson.ObjectToClearJsonString(LDto))
+      .Post();
+
+    Assert.AreEqual(400, LResponseItemVenda.StatusCode, LResponseItemVenda.Content);
+
+    var LError := TJson.ClearJsonAndConvertToObject
+      <TLojaModelDTORespApiError>(LResponseItemVenda.Content);
+
+    Assert.AreEqual('O valor total do item não pode ser negativo', LError.error);
+
+    LDto.Free;
+    LError.Free;
+  finally
+    LNovaVenda.Free;
+    LItem.Free;
+    LPreco.Free;
+  end;
+end;
+
+procedure TLojaControllerVendaTest.Test_NaoInserirItemVenda_VendaNaoPendente;
+begin
+  var LResponseVenda := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/venda')
+    .Post();
+
+  var LNovaVenda := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityVendaVenda>(LResponseVenda.Content);
+
+  var LItem := CriarItem('Teste inserir na venda','');
+  var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
+  RealizarAcertoEstoque(LItem.CodItem, 2);
+
+   TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/venda/{num_vnda}/cancelar')
+    .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+    .Patch();
+
+  try
+    var LDto := TLojaModelDtoReqVendaItem.Create;
+    LDto.NumVnda := LNovaVenda.NumVnda;
+    LDto.CodItem := LItem.CodItem;
+    LDto.QtdItem := 1;
+
+    var LResponseItemVenda := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/itens')
+      .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+      .AddBody(TJson.ObjectToClearJsonString(LDto))
+      .Post();
+
+    Assert.AreEqual(400, LResponseItemVenda.StatusCode, LResponseItemVenda.Content);
+
+    var LError := TJson.ClearJsonAndConvertToObject
+      <TLojaModelDTORespApiError>(LResponseItemVenda.Content);
+
+    Assert.AreEqual('A venda informada não está Pendente', LError.error);
+
+    LDto.Free;
+    LError.Free;
+  finally
+    LNovaVenda.Free;
+    LItem.Free;
+    LPreco.Free;
   end;
 end;
 
