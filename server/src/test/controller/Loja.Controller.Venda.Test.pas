@@ -9,7 +9,10 @@ uses
   Loja.Model.Dto.Req.Caixa.Abertura,
   Loja.Model.Dto.Req.Caixa.Fechamento,
   Loja.Model.Dto.Resp.Caixa.ResumoCaixa,
-  Loja.Model.Dto.Resp.Caixa.ResumoCaixa.MeioPagto;
+  Loja.Model.Dto.Resp.Caixa.ResumoCaixa.MeioPagto,
+
+  Loja.Model.Entity.Itens.Item,
+  Loja.Model.Entity.Preco.Venda;
 
 type
   [TestFixture]
@@ -19,7 +22,15 @@ type
 
     FBaseURL, FUsarname, FPassword: String;
 
+    function CriarItem(ANome, ACodBarr: String): TLojaModelEntityItensItem;
+
+    function CriarPrecoVenda(ACodItem: Integer; AVrVnda: Currency;
+      ADatIni: TDateTime): TLojaModelEntityPrecoVenda;
+
+    procedure RealizarAcertoEstoque(ACodItem: Integer; AQtdSaldoReal: Integer);
+
     procedure AbrirCaixa(AVrAbert: Currency);
+
     procedure FecharCaixaAtual;
   public
     [SetupFixture]
@@ -48,6 +59,9 @@ type
 
     [Test]
     procedure Test_NaoCancelarVenda_NaoPendente;
+
+    [Test]
+    procedure Test_InserirItemVenda;
   end;
 
 implementation
@@ -67,6 +81,9 @@ uses
   Loja.Model.Entity.Venda.Venda,
 
   Loja.Model.Entity.Caixa.Types,
+  Loja.Model.Dto.Req.Itens.CriarItem,
+  Loja.Model.Dto.Req.Preco.CriarPrecoVenda,
+  Loja.Model.Dto.Req.Estoque.AcertoEstoque,
 
   Database.Factory,
   Database.Interfaces;
@@ -90,6 +107,52 @@ begin
       <TLojaModelEntityCaixaCaixa>(LResponse.Content);
   finally
     LAbertura.Free;
+  end;
+end;
+
+function TLojaControllerVendaTest.CriarItem(ANome,
+  ACodBarr: String): TLojaModelEntityItensItem;
+var LNovoItem : TLojaModelDtoReqItensCriarItem;
+begin
+  try
+    LNovoItem := TLojaModelDtoReqItensCriarItem.Create;
+    LNovoItem.NomItem := ANome;
+    LNovoItem.NumCodBarr := ACodBarr;
+
+    var LResponse := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/itens')
+      .AddBody(TJson.ObjectToClearJsonString(LNovoItem))
+      .Post();
+
+    Result := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItem>
+      (LResponse.Content);
+  finally
+    FreeAndNil(LNovoItem);
+  end;
+end;
+
+function TLojaControllerVendaTest.CriarPrecoVenda(ACodItem: Integer;
+  AVrVnda: Currency; ADatIni: TDateTime): TLojaModelEntityPrecoVenda;
+begin
+  var LDto := TLojaModelDtoReqPrecoCriarPrecoVenda.Create;
+  LDto.CodItem := ACodItem;
+  LDto.DatIni := ADatIni;
+  LDto.VrVnda := AVrVnda;
+  try
+    var LResponse := TRequest.New
+        .BasicAuthentication(FUsarname, FPassword)
+        .BaseURL(FBaseURL)
+        .Resource('/preco-venda/{cod_item}')
+        .AddUrlSegment('cod_item', ACodItem.ToString)
+        .AddBody(TJson.ObjectToClearJsonString(LDto))
+        .Post();
+
+    Result := TJson.ClearJsonAndConvertToObject
+      <TLojaModelEntityPrecoVenda>(LResponse.Content);
+  finally
+    LDto.Free;
   end;
 end;
 
@@ -144,6 +207,25 @@ begin
   end;
 end;
 
+procedure TLojaControllerVendaTest.RealizarAcertoEstoque(ACodItem,
+  AQtdSaldoReal: Integer);
+begin
+  var LAcerto := TLojaModelDtoReqEstoqueAcertoEstoque.Create;
+  LACerto.QtdSaldoReal := AQtdSaldoReal;
+  LAcerto.DscMot := 'Implantação Teste';
+  try
+    TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/estoque/{cod_item}/acerto-de-estoque')
+      .AddUrlSegment('cod_item', ACodItem.ToString)
+      .AddBody(TJson.ObjectToClearJsonString(LAcerto))
+      .Post();
+
+  finally
+    LAcerto.Free;
+  end;
+end;
 procedure TLojaControllerVendaTest.SetupFixture;
 begin
   FBaseURL := TLojaControllerApiTest.GetInstance.BaseURL;
@@ -209,6 +291,11 @@ begin
   Assert.AreEqual(TLojaModelEntityVendaSituacao.sitPendente, LVenda.CodSit);
 
   LVenda.Free;
+end;
+
+procedure TLojaControllerVendaTest.Test_InserirItemVenda;
+begin
+
 end;
 
 procedure TLojaControllerVendaTest.Test_NaoCancelarVenda_Inexistente;
