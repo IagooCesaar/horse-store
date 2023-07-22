@@ -79,6 +79,9 @@ uses
 
   Loja.Model.Entity.Venda.Types,
   Loja.Model.Entity.Venda.Venda,
+  Loja.Model.Dto.Req.Venda.Item,
+  Loja.Model.Dto.Resp.Venda.Item,
+  Loja.Model.Dto.Req.Venda.MeioPagto,
 
   Loja.Model.Entity.Caixa.Types,
   Loja.Model.Dto.Req.Itens.CriarItem,
@@ -295,7 +298,63 @@ end;
 
 procedure TLojaControllerVendaTest.Test_InserirItemVenda;
 begin
+  var LResponseVenda := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/venda')
+    .Post();
 
+  var LNovaVenda := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityVendaVenda>(LResponseVenda.Content);
+
+  var LItem := CriarItem('Teste inserir na venda','');
+  var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
+  RealizarAcertoEstoque(LItem.CodItem, 2);
+
+  try
+    var LDto := TLojaModelDtoReqVendaItem.Create;
+    LDto.NumVnda := LNovaVenda.NumVnda;
+    LDto.CodItem := LItem.CodItem;
+    LDto.QtdItem := 2;
+
+    var LResponseItemVenda := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/itens')
+      .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+      .AddBody(TJson.ObjectToClearJsonString(LDto))
+      .Post();
+
+    Assert.AreEqual(THTTPStatus.Created, THTTPStatus(LResponseItemVenda.StatusCode));
+
+    var LItemVenda := TJson.ClearJsonAndConvertToObject
+      <TLojaModelDtoRespVendaItem>(LResponseItemVenda.Content);
+
+    Assert.AreEqual(Double(20), Double(LItemVenda.VrTotal));
+    Assert.AreEqual(TLojaModelEntityVendaItemSituacao.sitAtivo.ToString,
+      LItemVenda.CodSit.ToString);
+    Assert.AreEqual(1, LItemVenda.NumSeqItem);
+
+    var LResponseVendaAtu :=  TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}')
+      .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+      .Get();
+
+    var LVendaAtu := TJson.ClearJsonAndConvertToObject
+      <TLojaModelEntityVendaVenda>(LResponseVendaAtu.Content);
+
+    Assert.AreEqual(Double(20), Double(LVendaAtu.VrTotal));
+
+    LDto.Free;
+    LItemVenda.Free;
+    LVendaAtu.Free;
+  finally
+    LNovaVenda.Free;
+    LItem.Free;
+    LPreco.Free;
+  end;
 end;
 
 procedure TLojaControllerVendaTest.Test_NaoCancelarVenda_Inexistente;
