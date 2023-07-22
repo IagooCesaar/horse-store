@@ -129,6 +129,9 @@ begin
       .AddBody(TJson.ObjectToClearJsonString(LNovoItem))
       .Post();
 
+    if LResponse.StatusCode <> 201
+    then raise Exception.Create(Format('Falha ao criar item para teste: %s',[LResponse.Content]));
+
     Result := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItem>
       (LResponse.Content);
   finally
@@ -167,8 +170,12 @@ begin
     .Resource('/caixa/caixa-aberto')
     .Get();
 
+  if LResponseAberto.StatusCode = 204
+  then Exit;
+
   var LCaixaAberto := TJson.ClearJsonAndConvertToObject
       <TLojaModelEntityCaixaCaixa>(LResponseAberto.Content);
+
   if LCaixaAberto = nil
   then Exit;
   try
@@ -234,6 +241,9 @@ begin
   FBaseURL := TLojaControllerApiTest.GetInstance.BaseURL;
   FUsarname := TLojaControllerApiTest.GetInstance.UserName;
   FPassword := TLojaControllerApiTest.GetInstance.Password;
+
+  FecharCaixaAtual;
+  AbrirCaixa(0);
 end;
 
 procedure TLojaControllerVendaTest.TearDownFixture;
@@ -325,7 +335,7 @@ begin
       .AddBody(TJson.ObjectToClearJsonString(LDto))
       .Post();
 
-    Assert.AreEqual(THTTPStatus.Created, THTTPStatus(LResponseItemVenda.StatusCode));
+    Assert.AreEqual(201, LResponseItemVenda.StatusCode, LResponseItemVenda.Content);
 
     var LItemVenda := TJson.ClearJsonAndConvertToObject
       <TLojaModelDtoRespVendaItem>(LResponseItemVenda.Content);
