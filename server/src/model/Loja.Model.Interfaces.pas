@@ -32,7 +32,6 @@ uses
   Loja.Model.Entity.Venda.MeioPagto,
   Loja.Model.Dto.Resp.Venda.Item,
   Loja.Model.Dto.Req.Venda.Item,
-  Loja.Model.Dto.Req.Venda.MeioPagto,
   Loja.Model.Dto.Req.Venda.EfetivaVenda;
 
 type

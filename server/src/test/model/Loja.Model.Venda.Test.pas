@@ -159,7 +159,6 @@ uses
   Loja.Model.Entity.Venda.Item,
   Loja.Model.Entity.Venda.MeioPagto,
 
-  Loja.Model.Dto.Req.Venda.MeioPagto,
   Loja.Model.Dto.Req.Venda.Item,
 
   Loja.Model.Entity.Caixa.Types,

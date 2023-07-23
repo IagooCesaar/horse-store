@@ -85,7 +85,6 @@ uses
   Loja.Controller.Venda in 'src\controllers\Loja.Controller.Venda.pas',
   Loja.Model.Dto.Req.Venda.EfetivaVenda in 'src\model\dto\Loja.Model.Dto.Req.Venda.EfetivaVenda.pas',
   Loja.Model.Dto.Req.Venda.Item in 'src\model\dto\Loja.Model.Dto.Req.Venda.Item.pas',
-  Loja.Model.Dto.Req.Venda.MeioPagto in 'src\model\dto\Loja.Model.Dto.Req.Venda.MeioPagto.pas',
   Loja.Model.Dto.Resp.Venda.Item in 'src\model\dto\Loja.Model.Dto.Resp.Venda.Item.pas';
 
 {$R *.res}
