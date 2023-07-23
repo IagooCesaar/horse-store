@@ -10,6 +10,9 @@ uses
 
 type
   TControllerVendas = class(TControllerBase)
+    mtVendas: TFDMemTable;
+    mtItens: TFDMemTable;
+    mtMeiosPagto: TFDMemTable;
   private
     { Private declarations }
   public

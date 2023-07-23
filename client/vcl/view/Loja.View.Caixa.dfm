@@ -72,7 +72,7 @@ inherited ViewCaixa: TViewCaixa
           Caption = 'pResumo'
           ShowCaption = False
           TabOrder = 1
-          ExplicitWidth = 1188
+          ExplicitWidth = 1180
           object grpResumo: TGridPanel
             Left = 0
             Top = 38
@@ -97,7 +97,7 @@ inherited ViewCaixa: TViewCaixa
                 Value = 16.660000000000000000
               end
               item
-                Value = 16.660000000000000000
+                Value = 16.660000000000010000
               end>
             ControlCollection = <
               item
@@ -136,8 +136,7 @@ inherited ViewCaixa: TViewCaixa
               end>
             ShowCaption = False
             TabOrder = 0
-            ExplicitTop = 35
-            ExplicitWidth = 1192
+            ExplicitWidth = 1180
             inline FrameCaixaResumoMeioPagto1: TFrameCaixaResumoMeioPagto
               AlignWithMargins = True
               Left = 5
@@ -159,21 +158,20 @@ inherited ViewCaixa: TViewCaixa
               StyleElements = []
               ExplicitLeft = 5
               ExplicitTop = 5
-              ExplicitWidth = 229
+              ExplicitWidth = 189
               ExplicitHeight = 98
               inherited pCliente: TPanel
                 Width = 189
                 Height = 98
-                ExplicitWidth = 229
+                ExplicitWidth = 189
                 ExplicitHeight = 98
                 inherited lbMeioPagto: TLabel
                   Width = 165
-                  ExplicitLeft = 16
-                  ExplicitWidth = 167
                 end
                 inherited lbValor: TLabel
+                  Left = 10
                   Width = 165
-                  ExplicitLeft = 152
+                  ExplicitLeft = 302
                 end
               end
             end
@@ -196,21 +194,22 @@ inherited ViewCaixa: TViewCaixa
               ParentFont = False
               TabOrder = 1
               StyleElements = []
-              ExplicitLeft = 242
+              ExplicitLeft = 202
               ExplicitTop = 5
-              ExplicitWidth = 229
+              ExplicitWidth = 189
               ExplicitHeight = 98
               inherited pCliente: TPanel
                 Width = 189
                 Height = 98
-                ExplicitWidth = 229
+                ExplicitWidth = 189
                 ExplicitHeight = 98
                 inherited lbMeioPagto: TLabel
                   Width = 165
                 end
                 inherited lbValor: TLabel
+                  Left = 10
                   Width = 165
-                  ExplicitLeft = 152
+                  ExplicitLeft = 302
                 end
               end
             end
@@ -233,21 +232,22 @@ inherited ViewCaixa: TViewCaixa
               ParentFont = False
               TabOrder = 2
               StyleElements = []
-              ExplicitLeft = 479
+              ExplicitLeft = 399
               ExplicitTop = 5
-              ExplicitWidth = 230
+              ExplicitWidth = 189
               ExplicitHeight = 98
               inherited pCliente: TPanel
                 Width = 189
                 Height = 98
-                ExplicitWidth = 230
+                ExplicitWidth = 189
                 ExplicitHeight = 98
                 inherited lbMeioPagto: TLabel
                   Width = 165
                 end
                 inherited lbValor: TLabel
+                  Left = 10
                   Width = 165
-                  ExplicitLeft = 152
+                  ExplicitLeft = 302
                 end
               end
             end
@@ -270,21 +270,22 @@ inherited ViewCaixa: TViewCaixa
               ParentFont = False
               TabOrder = 3
               StyleElements = []
-              ExplicitLeft = 717
+              ExplicitLeft = 596
               ExplicitTop = 5
-              ExplicitWidth = 229
+              ExplicitWidth = 189
               ExplicitHeight = 98
               inherited pCliente: TPanel
                 Width = 189
                 Height = 98
-                ExplicitWidth = 229
+                ExplicitWidth = 189
                 ExplicitHeight = 98
                 inherited lbMeioPagto: TLabel
                   Width = 165
                 end
                 inherited lbValor: TLabel
+                  Left = 10
                   Width = 165
-                  ExplicitLeft = 152
+                  ExplicitLeft = 302
                 end
               end
             end
@@ -307,21 +308,22 @@ inherited ViewCaixa: TViewCaixa
               ParentFont = False
               TabOrder = 4
               StyleElements = []
-              ExplicitLeft = 954
+              ExplicitLeft = 793
               ExplicitTop = 5
-              ExplicitWidth = 229
+              ExplicitWidth = 189
               ExplicitHeight = 98
               inherited pCliente: TPanel
                 Width = 189
                 Height = 98
-                ExplicitWidth = 229
+                ExplicitWidth = 189
                 ExplicitHeight = 98
                 inherited lbMeioPagto: TLabel
                   Width = 165
                 end
                 inherited lbValor: TLabel
+                  Left = 10
                   Width = 165
-                  ExplicitLeft = 152
+                  ExplicitLeft = 302
                 end
               end
             end
@@ -344,21 +346,22 @@ inherited ViewCaixa: TViewCaixa
               ParentFont = False
               TabOrder = 5
               StyleElements = []
-              ExplicitLeft = 954
+              ExplicitLeft = 990
               ExplicitTop = 5
-              ExplicitWidth = 229
+              ExplicitWidth = 189
               ExplicitHeight = 98
               inherited pCliente: TPanel
                 Width = 189
                 Height = 98
-                ExplicitWidth = 229
+                ExplicitWidth = 189
                 ExplicitHeight = 98
                 inherited lbMeioPagto: TLabel
                   Width = 165
                 end
                 inherited lbValor: TLabel
+                  Left = 10
                   Width = 165
-                  ExplicitLeft = 112
+                  ExplicitLeft = 302
                 end
               end
             end
@@ -377,7 +380,7 @@ inherited ViewCaixa: TViewCaixa
             Caption = 'pAcoes'
             ShowCaption = False
             TabOrder = 1
-            ExplicitWidth = 1188
+            ExplicitWidth = 1180
             object btnCriarSangria: TButton
               AlignWithMargins = True
               Left = 387
@@ -469,7 +472,7 @@ inherited ViewCaixa: TViewCaixa
             Caption = 'pDados'
             ShowCaption = False
             TabOrder = 2
-            ExplicitWidth = 1188
+            ExplicitWidth = 1180
             object Label4: TLabel
               AlignWithMargins = True
               Left = 0
