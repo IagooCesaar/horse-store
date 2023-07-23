@@ -122,6 +122,9 @@ type
 
     [Test]
     procedure Test_NaoObterVendas_SemFiltroSituacao;
+
+    [Test]
+    procedure Test_DefinirMeiosPagamento;
   end;
 
 implementation
@@ -139,9 +142,9 @@ uses
 
   Loja.Model.Entity.Venda.Types,
   Loja.Model.Entity.Venda.Venda,
+  Loja.Model.Entity.Venda.MeioPagto,
   Loja.Model.Dto.Req.Venda.Item,
   Loja.Model.Dto.Resp.Venda.Item,
-  Loja.Model.Dto.Req.Venda.MeioPagto,
 
   Loja.Model.Entity.Caixa.Types,
   Loja.Model.Dto.Req.Itens.CriarItem,
@@ -509,6 +512,68 @@ begin
     LCancelada.Free;
   finally
     LVenda.Free;
+  end;
+end;
+
+procedure TLojaControllerVendaTest.Test_DefinirMeiosPagamento;
+begin
+  var LResponseVenda := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/venda')
+    .Post();
+
+  var LNovaVenda := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityVendaVenda>(LResponseVenda.Content);
+
+  var LItem := CriarItem('Teste inserir na venda','');
+  var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
+  RealizarAcertoEstoque(LItem.CodItem, 2);
+
+  try
+    var LDto := TLojaModelDtoReqVendaItem.Create;
+    LDto.NumVnda := LNovaVenda.NumVnda;
+    LDto.CodItem := LItem.CodItem;
+    LDto.QtdItem := 2;
+    LDto.VrDesc := 4;
+
+    TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/itens')
+      .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+      .AddBody(TJson.ObjectToClearJsonString(LDto))
+      .Post();
+
+    var LDtoPagto := TLojaModelEntityVendaMeioPagtoLista.Create;
+    LDtoPagto.Add(TLojaModelEntityVendaMeioPagto.Create);
+    LDtoPagto.Last.CodMeioPagto := TLojaModelEntityCaixaMeioPagamento.pagDinheiro;
+    LDtoPagto.Last.QtdParc := 1;
+    LDtoPagto.Last.VrTotal := 16;
+
+    var LResponse := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/meios-pagamento')
+      .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+      .AddBody(TJson.ObjectToClearJsonString(LDtoPagto))
+      .Post();
+
+    Assert.AreEqual(201, LResponse.StatusCode, LResponse.Content);
+
+    var LMeiosPagto := TJson.ClearJsonAndConvertToObject
+      <TLojaModelEntityVendaMeioPagtoLista>(LResponse.Content);
+
+    Assert.IsTrue(LMeiosPagto.Count = 1);
+    Assert.AreEqual(1, LMeiosPagto.First.NumSeqMeioPagto);
+
+    LDto.Free;
+    LDtoPagto.Free;
+    LMeiosPagto.Free;
+  finally
+    LNovaVenda.Free;
+    LItem.Free;
+    LPreco.Free;
   end;
 end;
 

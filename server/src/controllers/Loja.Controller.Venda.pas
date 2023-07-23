@@ -24,7 +24,6 @@ uses
   Loja.Model.Entity.Venda.MeioPagto,
   Loja.Model.Entity.Venda.Types,
 
-  Loja.Model.Dto.Req.Venda.MeioPagto,
   Loja.Model.Dto.Req.Venda.Item;
 
 procedure GetVendas(Req: THorseRequest; Resp: THorseResponse);
@@ -443,7 +442,7 @@ begin
           .Required(True)
         .&End
         .AddParamBody('body')
-          .Schema(TLojaModelDtoReqVendaMeioPagamento)
+          .Schema(TLojaModelEntityVendaMeioPagto)
           .IsArray(True)
         .&End
         .AddResponse(Integer(THTTPStatus.Created))
