@@ -134,6 +134,12 @@ type
 
     [Test]
     procedure Test_ObterMeiosPagamento;
+
+    [Test]
+    procedure Test_NaoObterMeiosPagamento_SemDefinicao;
+
+    [Test]
+    procedure Test_EfetivarVenda;
   end;
 
 implementation
@@ -630,11 +636,92 @@ begin
       .AddBody(TJson.ObjectToClearJsonString(LDtoPagto))
       .Post();
 
-    Assert.AreEqual(204, LResponse.StatusCode, LResponse.Content);
+    Assert.AreEqual(Integer(THTTPStatus.NoContent), LResponse.StatusCode, LResponse.Content);
 
 
     LDto.Free;
     LDtoPagto.Free;
+  finally
+    LNovaVenda.Free;
+    LItem.Free;
+    LPreco.Free;
+  end;
+end;
+
+procedure TLojaControllerVendaTest.Test_EfetivarVenda;
+begin
+  var LResponseVenda := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/venda')
+    .Post();
+
+  var LNovaVenda := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityVendaVenda>(LResponseVenda.Content);
+
+  var LItem := CriarItem('Teste inserir na venda','');
+  var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
+  RealizarAcertoEstoque(LItem.CodItem, 10);
+
+  try
+    var LDto := TLojaModelDtoReqVendaItem.Create;
+    LDto.NumVnda := LNovaVenda.NumVnda;
+    LDto.CodItem := LItem.CodItem;
+    LDto.QtdItem := 10;
+    LDto.VrDesc := 0;
+
+    TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/itens')
+      .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+      .AddBody(TJson.ObjectToClearJsonString(LDto))
+      .Post();
+
+    var LDtoPagto := TLojaModelEntityVendaMeioPagtoLista.Create;
+
+    LDtoPagto.Add(TLojaModelEntityVendaMeioPagto.Create);
+    LDtoPagto.Last.CodMeioPagto := TLojaModelEntityCaixaMeioPagamento.pagPix;
+    LDtoPagto.Last.QtdParc := 1;
+    LDtoPagto.Last.VrTotal := 20;
+
+    LDtoPagto.Add(TLojaModelEntityVendaMeioPagto.Create);
+    LDtoPagto.Last.CodMeioPagto := TLojaModelEntityCaixaMeioPagamento.pagDinheiro;
+    LDtoPagto.Last.QtdParc := 1;
+    LDtoPagto.Last.VrTotal := 20;
+
+    LDtoPagto.Add(TLojaModelEntityVendaMeioPagto.Create);
+    LDtoPagto.Last.CodMeioPagto := TLojaModelEntityCaixaMeioPagamento.pagCartaoCredito;
+    LDtoPagto.Last.QtdParc := 2;
+    LDtoPagto.Last.VrTotal := 60;
+
+    TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/meios-pagamento')
+      .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+      .AddBody(TJson.ObjectToClearJsonString(LDtoPagto))
+      .Post();
+
+
+    var LResponse := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/efetivar')
+      .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+      .Patch();
+
+    Assert.AreEqual(200, LResponse.StatusCode);
+
+    var LVendaEfet := TJson.ClearJsonAndConvertToObject
+      <TLojaModelEntityVendaVenda>(LResponse.Content);
+
+    Assert.AreEqual(TLojaModelEntityVendaSituacao.sitEfetivada, LVendaEfet.CodSit);
+    Assert.AreEqual(Double(100), Double(LVendaEfet.VrTotal));
+
+    LDto.Free;
+    LDtoPagto.Free;
+    LVendaEfet.Free;
   finally
     LNovaVenda.Free;
     LItem.Free;
@@ -1585,6 +1672,53 @@ begin
   Assert.AreEqual(204, LResponse.StatusCode);
 
   LNovaVenda.Free;
+end;
+
+procedure TLojaControllerVendaTest.Test_NaoObterMeiosPagamento_SemDefinicao;
+begin
+  var LResponseVenda := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/venda')
+    .Post();
+
+  var LNovaVenda := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityVendaVenda>(LResponseVenda.Content);
+
+  var LItem := CriarItem('Teste inserir na venda','');
+  var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
+  RealizarAcertoEstoque(LItem.CodItem, 2);
+
+  try
+    var LDto := TLojaModelDtoReqVendaItem.Create;
+    LDto.NumVnda := LNovaVenda.NumVnda;
+    LDto.CodItem := LItem.CodItem;
+    LDto.QtdItem := 2;
+    LDto.VrDesc := 4;
+
+    TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/itens')
+      .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+      .AddBody(TJson.ObjectToClearJsonString(LDto))
+      .Post();
+
+    var LResponse := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/meios-pagamento')
+      .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+      .Get();
+
+    Assert.AreEqual(204, LResponse.StatusCode, LResponse.Content);
+
+    LDto.Free;
+  finally
+    LNovaVenda.Free;
+    LItem.Free;
+    LPreco.Free;
+  end;
 end;
 
 procedure TLojaControllerVendaTest.Test_NaoObterVendas_PeriodoInvalido;
