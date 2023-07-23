@@ -27,7 +27,6 @@ type
 
     { ILojaModelDaoVendaMeioPagto }
     function ObterMeiosPagtoVenda(ANumVnda: Integer): TLojaModelEntityVendaMeioPagtoLista;
-    function ObterMeioPagtoVenda(ANumVnda, ANumSeqMeioPagto: Integer): TLojaModelEntityVendaMeioPagto;
     procedure RemoverMeiosPagtoVenda(ANumVnda: Integer);
     function InserirMeioPagto(ANovoMeioPagto: TLojaModelEntityVendaMeioPagto): TLojaModelEntityVendaMeioPagto;
 
@@ -79,20 +78,6 @@ begin
   FRepository.Last.QtdParc := ANovoMeioPagto.QtdParc;
   FRepository.Last.VrTotal := ANovoMeioPagto.VrTotal;
   Result := Clone(FRepository.Last);
-end;
-
-function TLojaModelDaoVendaMeioPagtoInMemory.ObterMeioPagtoVenda(ANumVnda,
-  ANumSeqMeioPagto: Integer): TLojaModelEntityVendaMeioPagto;
-begin
-  Result := nil;
-  for var LMeio in FRepository
-  do
-    if  (LMeio.NumVnda = ANumVnda)
-    and (LMeio.NumSeqMeioPagto = ANumSeqMeioPagto)
-    then begin
-      Result := Clone(LMeio);
-      Break;
-    end;
 end;
 
 function TLojaModelDaoVendaMeioPagtoInMemory.ObterMeiosPagtoVenda(

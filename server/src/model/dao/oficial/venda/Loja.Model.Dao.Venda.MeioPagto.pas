@@ -17,6 +17,8 @@ type
   TLojaModelDaoVendaMeioPagto = class(TInterfacedObject, ILojaModelDaoVendaMeioPagto)
   private
     function AtribuiCampos(ds: TDataSet): TLojaModelEntityVendaMeioPagto;
+
+    function ObterMeioPagtoVenda(ANumVnda, ANumSeqMeioPagto: Integer): TLojaModelEntityVendaMeioPagto;
   public
     constructor Create;
     destructor Destroy; override;
@@ -24,7 +26,6 @@ type
 
     { ILojaModelDaoVendaMeioPagto }
     function ObterMeiosPagtoVenda(ANumVnda: Integer): TLojaModelEntityVendaMeioPagtoLista;
-    function ObterMeioPagtoVenda(ANumVnda, ANumSeqMeioPagto: Integer): TLojaModelEntityVendaMeioPagto;
     procedure RemoverMeiosPagtoVenda(ANumVnda: Integer);
     function InserirMeioPagto(ANovoMeioPagto: TLojaModelEntityVendaMeioPagto): TLojaModelEntityVendaMeioPagto;
 
