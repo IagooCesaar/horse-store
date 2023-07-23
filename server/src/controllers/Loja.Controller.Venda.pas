@@ -132,6 +132,12 @@ begin
     .InvalidFormatMessage('O valor informado não é um inteiro válido')
     .AsInteger;
 
+  if Req.Body = ''
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(C_UnitName)
+    .Error('O body não estava no formato esperado');
+
   var LNovoItem := TJson.ClearJsonAndConvertToObject
     <TLojaModelDtoReqVendaItem>(Req.Body);
   try
@@ -159,6 +165,12 @@ begin
     .RequiredMessage('o número sequencial do item é obrigatório')
     .InvalidFormatMessage('O valor informado não é um inteiro válido')
     .AsInteger;
+
+  if Req.Body = ''
+  then raise EHorseException.New
+    .Status(THTTPStatus.BadRequest)
+    .&Unit(C_UnitName)
+    .Error('O body não estava no formato esperado');
 
   var LAtualizaItem := TJson.ClearJsonAndConvertToObject
     <TLojaModelDtoReqVendaItem>(Req.Body);
