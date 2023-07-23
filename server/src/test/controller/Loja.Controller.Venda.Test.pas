@@ -110,6 +110,18 @@ type
 
     [Test]
     procedure Test_NaoObterItensVenda_VendaSemItens;
+
+    [Test]
+    procedure Test_ObterVendas;
+
+    [Test]
+    procedure Test_NaoObterVendas_SemVendasNoPeriodo;
+
+    [Test]
+    procedure Test_NaoObterVendas_PeriodoInvalido;
+
+    [Test]
+    procedure Test_NaoObterVendas_SemFiltroSituacao;
   end;
 
 implementation
@@ -1383,6 +1395,74 @@ begin
   LNovaVenda.Free;
 end;
 
+procedure TLojaControllerVendaTest.Test_NaoObterVendas_PeriodoInvalido;
+var LDatIni, LDatFim : TDate;
+begin
+  LDatIni := Trunc(Now);
+  LDatFim := Trunc(Now-1);
+
+  var LResponse := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/venda')
+    .AddParam('dat_incl_ini', FormatDateTime('yyy-mm-dd', LDatIni))
+    .AddParam('dat_incl_fim', FormatDateTime('yyy-mm-dd', LDatFim))
+    .AddParam('cod_sit', TLojaModelEntityVendaSituacao.sitPendente.Name)
+    .Get();
+
+  Assert.AreEqual(400, LResponse.StatusCode);
+
+  var LError := TJson.ClearJsonAndConvertToObject<TLojaModelDTORespApiError>(LResponse.Content);
+
+  Assert.AreEqual('A data inicial deve ser inferior à data final em pelo menos 1 dia',
+    LError.error);
+
+  LError.Free;
+end;
+
+procedure TLojaControllerVendaTest.Test_NaoObterVendas_SemFiltroSituacao;
+var LDatIni, LDatFim : TDate;
+begin
+  LDatIni := Trunc(Now);
+  LDatFim := Trunc(Now+1);
+
+  var LResponse := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/venda')
+    .AddParam('dat_incl_ini', FormatDateTime('yyy-mm-dd', LDatIni))
+    .AddParam('dat_incl_fim', FormatDateTime('yyy-mm-dd', LDatFim))
+    .AddParam('cod_sit', 'Pendente')
+    .Get();
+
+  Assert.AreEqual(400, LResponse.StatusCode);
+
+  var LError := TJson.ClearJsonAndConvertToObject<TLojaModelDTORespApiError>(LResponse.Content);
+
+  Assert.AreEqual('O código de situação informado é inválido',
+    LError.error);
+
+  LError.Free;
+end;
+
+procedure TLojaControllerVendaTest.Test_NaoObterVendas_SemVendasNoPeriodo;
+var LDatIni, LDatFim : TDate;
+begin
+  LDatIni := Trunc(Now+1);
+  LDatFim := Trunc(Now+2);
+
+  var LResponse := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/venda')
+    .AddParam('dat_incl_ini', FormatDateTime('yyy-mm-dd', LDatIni))
+    .AddParam('dat_incl_fim', FormatDateTime('yyy-mm-dd', LDatFim))
+    .AddParam('cod_sit', TLojaModelEntityVendaSituacao.sitPendente.Name)
+    .Get();
+
+  Assert.AreEqual(204, LResponse.StatusCode);
+end;
+
 procedure TLojaControllerVendaTest.Test_ObterItensVenda;
 begin
   var LResponseVenda := TRequest.New
@@ -1442,6 +1522,61 @@ begin
     LItem.Free;
     LPreco.Free;
   end;
+end;
+
+procedure TLojaControllerVendaTest.Test_ObterVendas;
+var LDatIni, LDatFim : TDate;
+begin
+  // Insere pelo menos uma venda
+  Test_IniciarVenda;
+  Test_CancelarVenda;
+  //Test_EfetivarVenda;
+
+  LDatIni := Trunc(Now);
+  LDatFim := Trunc(Now+1);
+
+  var LResponse1 := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/venda')
+    .AddParam('dat_incl_ini', FormatDateTime('yyy-mm-dd', LDatIni))
+    .AddParam('dat_incl_fim', FormatDateTime('yyy-mm-dd', LDatFim))
+    .AddParam('cod_sit', TLojaModelEntityVendaSituacao.sitPendente.Name)
+    .Get();
+  Assert.AreEqual(200, LResponse1.StatusCode);
+  var LVendas := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityVendaVendaLista>(LResponse1.Content);
+  Assert.IsTrue(LVendas.Count >= 1);
+  LVendas.Free;
+
+  var LResponse2 := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/venda')
+    .AddParam('dat_incl_ini', FormatDateTime('yyy-mm-dd', LDatIni))
+    .AddParam('dat_incl_fim', FormatDateTime('yyy-mm-dd', LDatFim))
+    .AddParam('cod_sit', TLojaModelEntityVendaSituacao.sitCancelada.Name)
+    .Get();
+  Assert.AreEqual(200, LResponse2.StatusCode);
+  LVendas := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityVendaVendaLista>(LResponse1.Content);
+  Assert.IsTrue(LVendas.Count >= 1);
+  LVendas.Free;
+
+//  var LResponse3 := TRequest.New
+//    .BasicAuthentication(FUsarname, FPassword)
+//    .BaseURL(FBaseURL)
+//    .Resource('/venda')
+//    .AddParam('dat_incl_ini', FormatDateTime('yyy-mm-dd', LDatIni))
+//    .AddParam('dat_incl_fim', FormatDateTime('yyy-mm-dd', LDatFim))
+//    .AddParam('cod_sit', TLojaModelEntityVendaSituacao.sitEfetivada.Name)
+//    .Get();
+//  Assert.AreEqual(200, LResponse3.StatusCode);
+//  LVendas := TJson.ClearJsonAndConvertToObject
+//    <TLojaModelEntityVendaVendaLista>(LResponse1.Content);
+//  Assert.IsTrue(LVendas.Count >= 1);
+//  LVendas.Free;
+
 end;
 
 initialization

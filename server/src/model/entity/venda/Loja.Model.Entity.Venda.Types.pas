@@ -23,6 +23,7 @@ type
   TLojaModelEntityVendaSituacaoHelper = record helper for TLojaModelEntityVendaSituacao
   public
     function ToString: string;
+    function Name: string;
     constructor Create(AValue: string); overload;
     constructor CreateByName(AValue: string); overload;
   end;
@@ -49,6 +50,11 @@ end;
 constructor TLojaModelEntityVendaSituacaoHelper.CreateByName(AValue: string);
 begin
   Self := TLojaModelEntityVendaSituacao(GetEnumValue(TypeInfo(TLojaModelEntityVendaSituacao), AValue));
+end;
+
+function TLojaModelEntityVendaSituacaoHelper.Name: string;
+begin
+  Result := GetEnumName(TypeInfo(TLojaModelEntityVendaSituacao),Integer(Self));
 end;
 
 function TLojaModelEntityVendaSituacaoHelper.ToString: string;
