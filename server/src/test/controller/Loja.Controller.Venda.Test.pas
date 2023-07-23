@@ -675,7 +675,7 @@ begin
     <TLojaModelEntityVendaVenda>(LResponseVenda.Content);
 
   var LItem := CriarItem('Teste inserir na venda','');
-  var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
+  var LPreco := CriarPrecoVenda(LITem.CodItem, 12, Now);
   RealizarAcertoEstoque(LItem.CodItem, 10);
 
   try
@@ -708,7 +708,22 @@ begin
     LDtoPagto.Add(TLojaModelEntityVendaMeioPagto.Create);
     LDtoPagto.Last.CodMeioPagto := TLojaModelEntityCaixaMeioPagamento.pagCartaoCredito;
     LDtoPagto.Last.QtdParc := 2;
-    LDtoPagto.Last.VrTotal := 60;
+    LDtoPagto.Last.VrTotal := 20;
+
+    LDtoPagto.Add(TLojaModelEntityVendaMeioPagto.Create);
+    LDtoPagto.Last.CodMeioPagto := TLojaModelEntityCaixaMeioPagamento.pagCartaoDebito;
+    LDtoPagto.Last.QtdParc := 1;
+    LDtoPagto.Last.VrTotal := 20;
+
+    LDtoPagto.Add(TLojaModelEntityVendaMeioPagto.Create);
+    LDtoPagto.Last.CodMeioPagto := TLojaModelEntityCaixaMeioPagamento.pagVoucher;
+    LDtoPagto.Last.QtdParc := 1;
+    LDtoPagto.Last.VrTotal := 20;
+
+    LDtoPagto.Add(TLojaModelEntityVendaMeioPagto.Create);
+    LDtoPagto.Last.CodMeioPagto := TLojaModelEntityCaixaMeioPagamento.pagCheque;
+    LDtoPagto.Last.QtdParc := 1;
+    LDtoPagto.Last.VrTotal := 20;
 
     TRequest.New
       .BasicAuthentication(FUsarname, FPassword)
@@ -726,13 +741,13 @@ begin
       .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
       .Patch();
 
-    Assert.AreEqual(200, LResponse.StatusCode);
+    Assert.AreEqual(200, LResponse.StatusCode, LResponse.Content);
 
     var LVendaEfet := TJson.ClearJsonAndConvertToObject
       <TLojaModelEntityVendaVenda>(LResponse.Content);
 
     Assert.AreEqual(TLojaModelEntityVendaSituacao.sitEfetivada, LVendaEfet.CodSit);
-    Assert.AreEqual(Double(100), Double(LVendaEfet.VrTotal));
+    Assert.AreEqual(Double(120), Double(LVendaEfet.VrTotal));
 
     LDto.Free;
     LDtoPagto.Free;
