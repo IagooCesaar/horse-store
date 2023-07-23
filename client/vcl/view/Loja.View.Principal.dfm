@@ -32,6 +32,7 @@ object ViewPrincipal: TViewPrincipal
     List = True
     ShowCaptions = True
     TabOrder = 0
+    ExplicitHeight = 552
     object btnVender: TToolButton
       AlignWithMargins = True
       Left = 0
