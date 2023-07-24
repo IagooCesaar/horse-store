@@ -54,6 +54,8 @@ type
     procedure mtMeiosPagtoAfterDataChanged(DataSet: TDataSet);
   private
     procedure AtualizaValoresItem;
+
+    procedure ConcluirVenda(AAcao: string; ANumVnda: Integer);
   public
     procedure CriarDatasets; override;
 
@@ -67,6 +69,9 @@ type
     procedure ObterMeiosPagtoVenda(ANumVnda: Integer);
 
     procedure NovaVenda;
+
+    procedure EfetivarVenda(ANumVnda: Integer);
+    procedure CancelarVenda(ANumVnda: Integer);
   end;
 
 
@@ -89,6 +94,23 @@ begin
   mtItensVR_TOTAL.AsFloat := mtItensVR_BRUTO.AsFloat - mtItensVR_DESC.AsFloat;
 end;
 
+procedure TControllerVendas.CancelarVenda(ANumVnda: Integer);
+begin
+  ConcluirVenda('cancelar', ANumVnda);
+end;
+
+procedure TControllerVendas.ConcluirVenda(AAcao: string; ANumVnda: Integer);
+begin
+  var LResponse := PreparaRequest
+    .Resource('/venda/{num_vnda}/{acao}')
+    .AddUrlSegment('num_vnda', ANumVnda.ToString)
+    .AddUrlSegment('acao', AAcao)
+    .Patch();
+
+  if not(LResponse.StatusCode in [200])
+  then RaiseException(LResponse, 'Erro ao concluir a venda');
+end;
+
 procedure TControllerVendas.CriarDatasets;
 begin
   inherited;
@@ -108,6 +130,11 @@ begin
   mtVendas.CreateDataSet;
   mtItens.CreateDataSet;
   mtMeiosPagto.CreateDataSet;
+end;
+
+procedure TControllerVendas.EfetivarVenda(ANumVnda: Integer);
+begin
+  ConcluirVenda('efetivar', ANumVnda);
 end;
 
 procedure TControllerVendas.mtItensBeforeDelete(DataSet: TDataSet);

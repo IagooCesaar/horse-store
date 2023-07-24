@@ -226,6 +226,11 @@ begin
   inherited;
   if not PermiteEditar
   then Exit;
+
+  FControllerVendas.CancelarVenda(FControllerVendas.mtDadosNUM_VNDA.AsInteger);
+  AbrirDetalhesVenda(FControllerVendas.mtDadosNUM_VNDA.AsInteger);
+
+  ShowMessage('A venda foi cancelada!');
 end;
 
 procedure TViewVender.btnEfetivarClick(Sender: TObject);
@@ -234,6 +239,10 @@ begin
   if not PermiteEditar
   then Exit;
 
+  FControllerVendas.EfetivarVenda(FControllerVendas.mtDadosNUM_VNDA.AsInteger);
+  AbrirDetalhesVenda(FControllerVendas.mtDadosNUM_VNDA.AsInteger);
+
+  ShowMessage('A venda foi efetivada com sucesso!');
 end;
 
 procedure TViewVender.btnMeioPagtoRemoverClick(Sender: TObject);
@@ -246,8 +255,6 @@ begin
   FControllerVendas.mtMeiosPagtoQTD_PARC.AsInteger := 0;
   FControllerVendas.mtMeiosPagtoVR_TOTAL.AsFloat := 0;
   FControllerVendas.mtMeiosPagto.Post;
-
-  //FControllerVendas.ObterMeiosPagtoVenda(FControllerVendas.mtDadosNUM_VNDA.AsInteger);
 end;
 
 procedure TViewVender.edtPesquisaKeyDown(Sender: TObject; var Key: Word;
