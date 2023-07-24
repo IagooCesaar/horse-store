@@ -26,6 +26,13 @@ type
     constructor CreateByName(AValue: string); overload;
   end;
 
+  TLojaModelVendaItemSituacaoHelper = record helper for TLojaModelVendaItemSituacao
+  public
+    function Name: string;
+    function FriendlyName: string;
+    constructor CreateByName(AValue: string); overload;
+  end;
+
 implementation
 
 { TLojaModelVendaSituacaoHelper }
@@ -50,6 +57,28 @@ end;
 constructor TLojaModelVendaSituacaoHelper.CreateByName(AValue: string);
 begin
   Self := TLojaModelVendaSituacao(GetEnumValue(TypeInfo(TLojaModelVendaSituacao), AValue));
+end;
+
+{ TLojaModelVendaItemSituacaoHelper }
+
+constructor TLojaModelVendaItemSituacaoHelper.CreateByName(AValue: string);
+begin
+  Self := TLojaModelVendaItemSituacao(GetEnumValue(TypeInfo(TLojaModelVendaItemSituacao), AValue));
+end;
+
+function TLojaModelVendaItemSituacaoHelper.FriendlyName: string;
+begin
+  case Self of
+    sitAtivo:
+      Result := 'Ativo';
+    sitRemovido:
+      Result := 'Removido';
+  end;
+end;
+
+function TLojaModelVendaItemSituacaoHelper.Name: string;
+begin
+  Result := GetEnumName(TypeInfo(TLojaModelVendaItemSituacao),Integer(Self));
 end;
 
 end.

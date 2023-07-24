@@ -59,39 +59,41 @@ type
     btnEfetivar: TButton;
     btnCancelar: TButton;
     Label5: TLabel;
-    DBEdit1: TDBEdit;
+    dbNUM_VNDA: TDBEdit;
     dsVenda: TDataSource;
     Label6: TLabel;
-    DBEdit2: TDBEdit;
+    dbCOD_SIT: TDBEdit;
     Label7: TLabel;
-    DBEdit3: TDBEdit;
+    dbDAT_INCL: TDBEdit;
     Label8: TLabel;
-    DBEdit4: TDBEdit;
+    dbDAT_CONCL: TDBEdit;
     Label9: TLabel;
-    DBEdit5: TDBEdit;
+    dbVR_BRUTO1: TDBEdit;
     Label10: TLabel;
-    DBEdit6: TDBEdit;
+    dbVR_DESC1: TDBEdit;
     Label11: TLabel;
-    DBEdit7: TDBEdit;
+    dbVR_TOTAL1: TDBEdit;
     Label12: TLabel;
-    DBEdit8: TDBEdit;
+    dbNUM_SEQ_ITEM: TDBEdit;
     dsItens: TDataSource;
     Label13: TLabel;
-    DBEdit9: TDBEdit;
+    dbCOD_SIT1: TDBEdit;
     Label14: TLabel;
-    DBEdit10: TDBEdit;
+    dbCOD_ITEM: TDBEdit;
     Label15: TLabel;
-    DBEdit11: TDBEdit;
+    dbNOM_ITEM: TDBEdit;
     Label16: TLabel;
-    DBEdit12: TDBEdit;
+    dbQTD_ITEM: TDBEdit;
     Label17: TLabel;
-    DBEdit13: TDBEdit;
+    dbVR_PRECO_UNIT: TDBEdit;
     Label18: TLabel;
-    DBEdit14: TDBEdit;
+    dbVR_BRUTO: TDBEdit;
     Label19: TLabel;
-    DBEdit15: TDBEdit;
+    dbVR_DESC: TDBEdit;
     Label20: TLabel;
-    DBEdit16: TDBEdit;
+    dbVR_TOTAL: TDBEdit;
+    Label21: TLabel;
+    dbNUM_VNDA1: TDBEdit;
     procedure edtPesquisaKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormCreate(Sender: TObject);
@@ -103,6 +105,9 @@ type
     procedure btnEfetivarClick(Sender: TObject);
     procedure btnCancelarClick(Sender: TObject);
     procedure btnMeioPagtoRemoverClick(Sender: TObject);
+
+    procedure mtItensBeforePost(DataSet: TDataSet);
+    procedure mtItensBeforeDelete(DataSet: TDataSet);
   private
     FControllerVendas: TControllerVendas;
     FControllerItens: TControllerItens;
@@ -220,6 +225,9 @@ begin
   dsItens.DataSet := FControllerVendas.mtItens;
   dsMeiosPagto.DataSet:= FControllerVendas.mtMeiosPagto;
 
+  FControllerVendas.mtItens.BeforeDelete := mtItensBeforeDelete;
+  FControllerVendas.mtItens.BeforePost := mtItensBeforePost;
+
   FControllerVendas.CriarDatasets;
 end;
 
@@ -228,6 +236,18 @@ begin
   FreeAndNil(FControllerVendas);
   FreeAndNil(FControllerItens);
   inherited;
+end;
+
+procedure TViewVender.mtItensBeforeDelete(DataSet: TDataSet);
+begin
+  FControllerVendas.mtItensBeforeDelete(DataSet);
+  FControllerVendas.ObterVenda(FControllerVendas.mtDadosNUM_VNDA.AsInteger);
+end;
+
+procedure TViewVender.mtItensBeforePost(DataSet: TDataSet);
+begin
+  FControllerVendas.mtItensBeforePost(DataSet);
+  FControllerVendas.ObterVenda(FControllerVendas.mtDadosNUM_VNDA.AsInteger);
 end;
 
 function TViewVender.PermiteEditar: Boolean;
@@ -239,23 +259,30 @@ end;
 procedure TViewVender.sbBuscarClick(Sender: TObject);
 begin
   inherited;
+  if Trim(edtPesquisa.Text) = ''
+  then Exit;
+
+  var LQtd := 1;
+  var LChave := '';
+  if Pos('*', edtPesquisa.Text) > 0
+  then begin
+    LQtd := StrToIntDef(PegaSeq(edtPesquisa.Text, 1, '*').Trim, 1);
+    LChave := PegaSeq(edtPesquisa.Text, 2, '*').Trim;
+  end
+  else LChave := Trim(edtPesquisa.Text);
+
   if sbInserirItem.Down
   then begin
+    if FControllerVendas.mtDados.IsEmpty
+    then begin
+      FControllerVendas.NovaVenda;
+      AbrirDetalhesVenda(FControllerVendas.mtDadosNUM_VNDA.AsInteger);
+    end
+    else
     if not PermiteEditar
     then Exit;
-    // Identificar o item e quantidade, inserir um novo com Desconto = 0
-
-    var LQtd := 1;
-    var LChave := '';
-    if Pos('*', edtPesquisa.Text) > 0
-    then begin
-      LQtd := StrToIntDef(PegaSeq(edtPesquisa.Text, 1, '*').Trim, 1);
-      LChave := PegaSeq(edtPesquisa.Text, 2, '*').Trim;
-    end
-    else LChave := Trim(edtPesquisa.Text);
 
     var LEncontrou := False;
-
     try
       FControllerItens.ObterItem(StrToIntDef(LChave, -1));
       LEncontrou := True;
@@ -274,14 +301,29 @@ begin
     if not LEncontrou
     then raise Exception.Create('Não foi possível encontrar o item informado');
 
-    ShowMessage(FControllerItens.mtDadosNOM_ITEM.AsString + ' | QTD: '+LQtd.ToString);
+    try
+      FControllerVendas.mtItens.Append;
+      FControllerVendas.mtItensNUM_VNDA.AsInteger := FControllerVendas.mtDadosNUM_VNDA.AsInteger;
+      FControllerVendas.mtItensCOD_ITEM.AsInteger := FControllerItens.mtDadosCOD_ITEM.AsInteger;
+      FControllerVendas.mtItensQTD_ITEM.AsInteger := LQtd;
+      FControllerVendas.mtItensVR_DESC.AsFloat := 0;
+      FControllerVendas.mtItens.Post;
 
+      FControllerVendas.ObterVenda(FControllerVendas.mtDadosNUM_VNDA.AsInteger);
+    except
+      FControllerVendas.mtItens.Cancel;
+      raise;
+    end;
+
+    edtPesquisa.Clear;
   end
   else
   if sbNovaVenda.Down then
   begin
     try
-     // Criar uma nova venda e então inserir item
+      // Criar uma nova venda e então inserir item
+      FControllerVendas.NovaVenda;
+      AbrirDetalhesVenda(FControllerVendas.mtDadosNUM_VNDA.AsInteger);
     finally
       sbInserirItem.Down := True;
       sbBuscar.Click;
@@ -291,8 +333,9 @@ begin
   if sbConsultaPreco.Down
   then begin
     // Identificar o item e consultar preço
+    FControllerItens.ObterItem(StrToIntDef(LChave, -1));
     try
-      TViewConsultaPrecoVenda.Exibir(Self, 1);
+      TViewConsultaPrecoVenda.Exibir(Self, FControllerItens.mtDadosCOD_ITEM.AsInteger);
     finally
       sbInserirItem.Down := True;
     end;

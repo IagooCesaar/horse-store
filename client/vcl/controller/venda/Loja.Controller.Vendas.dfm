@@ -81,6 +81,8 @@ inherited ControllerVendas: TControllerVendas
     end
   end
   object mtItens: TFDMemTable
+    BeforePost = mtItensBeforePost
+    BeforeDelete = mtItensBeforeDelete
     FetchOptions.AssignedValues = [evMode]
     FetchOptions.Mode = fmAll
     ResourceOptions.AssignedValues = [rvSilentMode]
@@ -91,10 +93,9 @@ inherited ControllerVendas: TControllerVendas
     Left = 216
     Top = 32
     object mtItensNUM_VNDA: TIntegerField
-      DisplayLabel = 'N'#250'm. Vnda'
-      DisplayWidth = 8
+      DisplayLabel = 'N'#250'm. Venda'
+      DisplayWidth = 5
       FieldName = 'NUM_VNDA'
-      Visible = False
     end
     object mtItensNUM_SEQ_ITEM: TIntegerField
       Alignment = taCenter
@@ -117,9 +118,9 @@ inherited ControllerVendas: TControllerVendas
     object mtItensCOD_SIT: TStringField
       Alignment = taCenter
       DisplayLabel = 'Situa'#231#227'o'
-      DisplayWidth = 8
+      DisplayWidth = 15
       FieldName = 'COD_SIT'
-      Size = 15
+      Size = 22
     end
     object mtItensQTD_ITEM: TIntegerField
       Alignment = taCenter

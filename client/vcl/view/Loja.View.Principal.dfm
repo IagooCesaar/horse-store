@@ -2,8 +2,8 @@ object ViewPrincipal: TViewPrincipal
   Left = 0
   Top = 0
   Caption = 'Loja'
-  ClientHeight = 570
-  ClientWidth = 868
+  ClientHeight = 569
+  ClientWidth = 864
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,7 +20,7 @@ object ViewPrincipal: TViewPrincipal
     Left = 0
     Top = 0
     Width = 129
-    Height = 551
+    Height = 550
     Align = alLeft
     AutoSize = True
     BorderWidth = 2
@@ -75,8 +75,8 @@ object ViewPrincipal: TViewPrincipal
   end
   object sbar1: TStatusBar
     Left = 0
-    Top = 551
-    Width = 868
+    Top = 550
+    Width = 864
     Height = 19
     Panels = <>
     ExplicitTop = 552

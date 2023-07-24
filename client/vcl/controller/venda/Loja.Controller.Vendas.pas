@@ -8,6 +8,9 @@ uses
   FireDAC.Phys.Intf, FireDAC.DApt.Intf, Data.DB, FireDAC.Comp.DataSet,
   FireDAC.Comp.Client,
 
+  RESTRequest4D,
+  DataSet.Serialize,
+
   Loja.Model.Venda.Types;
 
 type
@@ -29,7 +32,6 @@ type
     mtVendasVR_BRUTO: TFloatField;
     mtVendasVR_DESC: TFloatField;
     mtVendasVR_TOTAL: TFloatField;
-    mtItensNUM_VNDA: TIntegerField;
     mtItensNUM_SEQ_ITEM: TIntegerField;
     mtItensCOD_ITEM: TIntegerField;
     mtItensNOM_ITEM: TStringField;
@@ -44,8 +46,11 @@ type
     mtMeiosPagtoCOD_MEIO_PAGTO: TStringField;
     mtMeiosPagtoQTD_PARC: TIntegerField;
     mtMeiosPagtoVR_TOTAL: TFloatField;
+    mtItensNUM_VNDA: TIntegerField;
     procedure mtItensQTD_ITEMChange(Sender: TField);
     procedure mtItensVR_DESCChange(Sender: TField);
+    procedure mtItensBeforePost(DataSet: TDataSet);
+    procedure mtItensBeforeDelete(DataSet: TDataSet);
   private
     procedure AtualizaValoresItem;
   public
@@ -59,6 +64,8 @@ type
     procedure ObterItensVenda(ANumVnda: Integer);
 
     procedure ObterMeiosPagtoVenda(ANumVnda: Integer);
+
+    procedure NovaVenda;
   end;
 
 
@@ -102,6 +109,74 @@ begin
   mtMeiosPagto.CreateDataSet;
 end;
 
+procedure TControllerVendas.mtItensBeforeDelete(DataSet: TDataSet);
+begin
+  inherited;
+  if DataSet.ControlsDisabled
+  then Exit;
+
+  DataSet.Edit;
+  DataSet.FieldByName('cod_sit').AsString := TLojaModelVendaItemSituacao.sitRemovido.Name;
+  var LBody := DataSet.ToJSONObject();
+  DataSet.Cancel;
+
+  var LResponse := PreparaRequest
+    .Resource('/venda/{num_vnda}/itens/{num_seq_item}')
+    .AddUrlSegment('num_vnda', DataSet.FieldByName('num_vnda').AsString)
+    .AddUrlSegment('num_seq_item', DataSet.FieldByName('num_seq_item').AsString)
+    .AddBody(LBody)
+    .PUT();
+
+  try
+    DataSet.DisableControls;
+    if not(LResponse.StatusCode in [200,201])
+    then RaiseException(LResponse, 'Erro ao remover o item da venda');
+
+    DataSet.MergeFromJSONObject(LResponse.Content);
+    Abort; // procedimento de delete
+  finally
+    DataSet.EnableControls;
+  end;
+end;
+
+procedure TControllerVendas.mtItensBeforePost(DataSet: TDataSet);
+var LResponse: IResponse;
+begin
+  inherited;
+  if DataSet.ControlsDisabled
+  then Exit;
+
+  var LBody := DataSet.ToJSONObject();
+  var LRequest := PreparaRequest;
+
+  if (DataSet.State = dsEdit)
+  then begin
+    LResponse := LRequest
+      .Resource('/venda/{num_vnda}/itens/{num_seq_item}')
+      .AddUrlSegment('num_vnda', DataSet.FieldByName('num_vnda').AsString)
+      .AddUrlSegment('num_seq_item', DataSet.FieldByName('num_seq_item').AsString)
+      .AddBody(LBody)
+      .PUT();
+  end
+  else 
+  begin
+    LResponse := LRequest
+      .Resource('/venda/{num_vnda}/itens')
+      .AddUrlSegment('num_vnda', DataSet.FieldByName('num_vnda').AsString)      
+      .AddBody(LBody)
+      .POST();
+  end;
+  try
+    DataSet.DisableControls;
+    if not(LResponse.StatusCode in [200,201])
+    then RaiseException(LResponse, 'Erro ao atualizar o cadastro do item');
+
+    DataSet.MergeFromJSONObject(LResponse.Content);
+  finally
+    DataSet.EnableControls;
+  end;
+end;
+
 procedure TControllerVendas.mtItensQTD_ITEMChange(Sender: TField);
 begin
   inherited;
@@ -120,6 +195,26 @@ begin
   AtualizaValoresItem;   
 end;
 
+procedure TControllerVendas.NovaVenda;
+begin
+  try
+    var LResponse := PreparaRequest
+      .Resource('/venda')
+      .Post();
+
+    if LResponse.StatusCode <> 201
+    then RaiseException(LResponse, 'Falha ao iniciar uma nova venda');
+
+    if mtDados.Active
+    then mtDados.Close;
+
+    Serializar(LResponse);
+  finally
+    if not mtDados.Active
+    then mtDados.CreateDataSet;
+  end;
+end;
+
 procedure TControllerVendas.ObterItensVenda(ANumVnda: Integer);
 begin
   try
@@ -130,6 +225,9 @@ begin
 
     if not(LResponse.StatusCode in [200, 204])
     then RaiseException(LResponse, 'Não foi possível obter itens da venda');
+
+    if mtItens.Active
+    then mtItens.Close;
 
     if LResponse.StatusCode = 200
     then Serializar(LResponse, mtItens);
@@ -151,7 +249,8 @@ begin
     if not(LResponse.StatusCode in [200, 204])
     then RaiseException(LResponse, 'Não foi possível obter meios de pagamento da venda');
 
-    mtMeiosPagto.Close;
+    if mtMeiosPagto.Active
+    then mtMeiosPagto.Close;   
 
     if LResponse.StatusCode = 200
     then Serializar(LResponse, mtMeiosPagto);
@@ -172,6 +271,9 @@ begin
 
     if not(LResponse.StatusCode in [200, 204])
     then RaiseException(LResponse, 'Não foi possível obter dados da venda');
+
+    if mtDados.Active
+    then mtDados.Close;    
 
     if LResponse.StatusCode = 200
     then Serializar(LResponse);
