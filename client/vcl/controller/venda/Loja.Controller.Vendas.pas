@@ -6,7 +6,9 @@ uses
   System.SysUtils, System.Classes, Loja.Controller.Base, FireDAC.Stan.Intf,
   FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
   FireDAC.Phys.Intf, FireDAC.DApt.Intf, Data.DB, FireDAC.Comp.DataSet,
-  FireDAC.Comp.Client;
+  FireDAC.Comp.Client,
+
+  Loja.Model.Venda.Types;
 
 type
   TControllerVendas = class(TControllerBase)
@@ -46,6 +48,9 @@ type
     { Private declarations }
   public
     procedure CriarDatasets; override;
+
+    procedure ObterVendas(ADatInclIni, ADatInclFim: TDate;
+       ACodSit: TLojaModelVendaSituacao);
   end;
 
 
@@ -76,6 +81,30 @@ begin
   mtVendas.CreateDataSet;
   mtItens.CreateDataSet;
   mtMeiosPagto.CreateDataSet;
+end;
+
+procedure TControllerVendas.ObterVendas(ADatInclIni, ADatInclFim: TDate;
+  ACodSit: TLojaModelVendaSituacao);
+begin
+  try
+    var LResponse := PreparaRequest
+      .Resource('/venda')
+      .AddParam('dat_incl_ini', FormatDateTime('yyyy-mm-dd', ADatInclIni))
+      .AddParam('dat_incl_fim', FormatDateTime('yyyy-mm-dd', ADatInclFim))
+      .AddParam('cod_sit', ACodSit.Name)
+      .Get();
+
+    if LResponse.StatusCode <> 200
+    then RaiseException(LResponse, 'Não foi possível obter lista de vendas');
+
+    if mtVendas.Active
+    then mtVendas.Close;
+
+    Serializar(LResponse, mtVendas);
+  finally
+    if not mtVendas.Active
+    then mtVendas.CreateDataSet;
+  end;
 end;
 
 end.

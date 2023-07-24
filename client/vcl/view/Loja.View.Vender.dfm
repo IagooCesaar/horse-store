@@ -10,13 +10,13 @@ inherited ViewVender: TViewVender
     ExplicitLeft = 0
     ExplicitTop = 57
     ExplicitWidth = 1227
-    ExplicitHeight = 548
+    ExplicitHeight = 547
     object pcPrinc: TPageControl
       Left = 0
       Top = 0
       Width = 1231
-      Height = 548
-      ActivePage = tsVenda
+      Height = 547
+      ActivePage = tsPesquisa
       Align = alClient
       TabOrder = 0
       ExplicitWidth = 1227
@@ -31,6 +31,7 @@ inherited ViewVender: TViewVender
           Caption = 'Panel1'
           ShowCaption = False
           TabOrder = 0
+          ExplicitWidth = 1219
           object Label1: TLabel
             Left = 16
             Top = 24
@@ -94,23 +95,23 @@ inherited ViewVender: TViewVender
         end
         object Panel2: TPanel
           Left = 0
-          Top = 416
+          Top = 415
           Width = 1223
           Height = 96
           Align = alBottom
           Caption = 'Panel2'
           TabOrder = 1
+          ExplicitWidth = 1219
         end
         object Panel3: TPanel
           Left = 688
           Top = 89
           Width = 535
-          Height = 327
+          Height = 326
           Align = alRight
           Caption = 'Panel3'
           TabOrder = 2
-          ExplicitLeft = 694
-          ExplicitTop = 95
+          ExplicitLeft = 684
           object DBNavigator1: TDBNavigator
             Left = 1
             Top = 1
@@ -125,7 +126,7 @@ inherited ViewVender: TViewVender
           Left = 0
           Top = 89
           Width = 688
-          Height = 327
+          Height = 326
           Align = alClient
           DataSource = dsItens
           TabOrder = 3
@@ -144,7 +145,7 @@ inherited ViewVender: TViewVender
           Left = 0
           Top = 104
           Width = 1223
-          Height = 408
+          Height = 407
           Margins.Left = 0
           Margins.Top = 8
           Margins.Right = 0
@@ -153,11 +154,10 @@ inherited ViewVender: TViewVender
           Caption = 'Lista de Caixas'
           ShowCaption = False
           TabOrder = 0
-          ExplicitWidth = 1200
-          ExplicitHeight = 400
+          ExplicitHeight = 408
           object Panel4: TPanel
             Left = 1
-            Top = 375
+            Top = 374
             Width = 1221
             Height = 32
             Align = alBottom
@@ -165,7 +165,7 @@ inherited ViewVender: TViewVender
             Caption = 'Panel3'
             ShowCaption = False
             TabOrder = 0
-            ExplicitTop = 471
+            ExplicitTop = 375
             object Label3: TLabel
               AlignWithMargins = True
               Left = 8
@@ -187,12 +187,13 @@ inherited ViewVender: TViewVender
             Left = 9
             Top = 9
             Width = 1205
-            Height = 358
+            Height = 357
             Margins.Left = 8
             Margins.Top = 8
             Margins.Right = 8
             Margins.Bottom = 8
             Align = alClient
+            DataSource = dsVendas
             Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
             ReadOnly = True
             TabOrder = 1
@@ -212,7 +213,6 @@ inherited ViewVender: TViewVender
           Caption = 'Panel1'
           ShowCaption = False
           TabOrder = 1
-          ExplicitTop = 8
           object Label2: TLabel
             Left = 16
             Top = 16
@@ -255,6 +255,36 @@ inherited ViewVender: TViewVender
             Cursor = crHandPoint
             Caption = 'Pesquisar'
             TabOrder = 2
+            OnClick = btnPesquisarClick
+          end
+          object rbtVendaPend: TRadioButton
+            Left = 432
+            Top = 20
+            Width = 137
+            Height = 17
+            Cursor = crHandPoint
+            Caption = 'Pendentes'
+            Checked = True
+            TabOrder = 3
+            TabStop = True
+          end
+          object rbtVendaCanc: TRadioButton
+            Left = 432
+            Top = 43
+            Width = 137
+            Height = 17
+            Cursor = crHandPoint
+            Caption = 'Canceladas'
+            TabOrder = 4
+          end
+          object rbtVendaEfet: TRadioButton
+            Left = 432
+            Top = 66
+            Width = 137
+            Height = 17
+            Cursor = crHandPoint
+            Caption = 'Efetivadas'
+            TabOrder = 5
           end
         end
       end
@@ -271,7 +301,7 @@ inherited ViewVender: TViewVender
       Width = 1191
       Height = 37
       Caption = 'Ponto de Venda'
-      ExplicitWidth = 147
+      ExplicitWidth = 1191
     end
   end
   object dsVenda: TDataSource

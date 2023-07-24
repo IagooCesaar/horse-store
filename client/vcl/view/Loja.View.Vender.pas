@@ -40,11 +40,15 @@ type
     edtDatIni: TDateTimePicker;
     edtDatFim: TDateTimePicker;
     btnPesquisar: TButton;
+    rbtVendaPend: TRadioButton;
+    rbtVendaCanc: TRadioButton;
+    rbtVendaEfet: TRadioButton;
     procedure edtPesquisaKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure sbBuscarClick(Sender: TObject);
+    procedure btnPesquisarClick(Sender: TObject);
   private
     FControllerVendas: TControllerVendas;
   public
@@ -54,9 +58,23 @@ type
 implementation
 
 uses
-  Loja.View.Preco.ConsultaPreco;
+  Loja.View.Preco.ConsultaPreco,
+  Loja.Model.Venda.Types;
 
 {$R *.dfm}
+
+procedure TViewVender.btnPesquisarClick(Sender: TObject);
+begin
+  inherited;
+  if rbtVendaPend.Checked
+  then FControllerVendas.ObterVendas(edtDatIni.Date, edtDatFim.Date, TLojaModelVendaSituacao.sitPendente)
+  else
+  if rbtVendaCanc.Checked
+  then FControllerVendas.ObterVendas(edtDatIni.Date, edtDatFim.Date, TLojaModelVendaSituacao.sitCancelada)
+  else
+  if rbtVendaEfet.Checked
+  then FControllerVendas.ObterVendas(edtDatIni.Date, edtDatFim.Date, TLojaModelVendaSituacao.sitEfetivada);
+end;
 
 procedure TViewVender.edtPesquisaKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
@@ -77,6 +95,8 @@ begin
   dsVendas.DataSet := FControllerVendas.mtVendas;
   dsItens.DataSet := FControllerVendas.mtItens;
   dsMeiosPagto.DataSet:= FControllerVendas.mtMeiosPagto;
+
+  FControllerVendas.CriarDatasets;
 end;
 
 procedure TViewVender.FormDestroy(Sender: TObject);
