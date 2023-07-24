@@ -8,7 +8,7 @@ uses
   Vcl.ExtCtrls, Vcl.Buttons, Vcl.ComCtrls, Data.DB, Vcl.Grids, Vcl.DBGrids, Vcl.DBCtrls,
 
   Loja.DM.Imagens,
-  Loja.Controller.Vendas;
+  Loja.Controller.Vendas, Vcl.CategoryButtons;
 
 type
   TViewVender = class(TViewModeloMdi)
@@ -21,10 +21,6 @@ type
     sbInserirItem: TSpeedButton;
     sbConsultaPreco: TSpeedButton;
     sbNovaVenda: TSpeedButton;
-    Panel2: TPanel;
-    Panel3: TPanel;
-    dbgItens: TDBGrid;
-    DBNavigator1: TDBNavigator;
     dsVenda: TDataSource;
     dsItens: TDataSource;
     dsMeiosPagto: TDataSource;
@@ -43,12 +39,32 @@ type
     rbtVendaPend: TRadioButton;
     rbtVendaCanc: TRadioButton;
     rbtVendaEfet: TRadioButton;
+    GroupBox1: TGroupBox;
+    dbgItens: TDBGrid;
+    Panel3: TPanel;
+    DBNavigator1: TDBNavigator;
+    pBottom: TPanel;
+    GroupBox3: TGroupBox;
+    p1: TPanel;
+    GroupBox2: TGroupBox;
+    dbgMeiosPagto: TDBGrid;
+    btnMeioPagtoCH: TButton;
+    btnMeioPagtoVO: TButton;
+    btnMeioPagtoCD: TButton;
+    btnMeioPagtoCC: TButton;
+    btnMeioPagtoPIX: TButton;
+    btnMeioPagtoDN: TButton;
+    btnMeioPagtoRemover: TButton;
+    pModeloBotoes: TCategoryButtons;
+    btnEfetivar: TButton;
+    btnCancelar: TButton;
     procedure edtPesquisaKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure sbBuscarClick(Sender: TObject);
     procedure btnPesquisarClick(Sender: TObject);
+    procedure btnAdicionarMeioPagtoClick(Sender: TObject);
   private
     FControllerVendas: TControllerVendas;
   public
@@ -74,6 +90,12 @@ begin
   else
   if rbtVendaEfet.Checked
   then FControllerVendas.ObterVendas(edtDatIni.Date, edtDatFim.Date, TLojaModelVendaSituacao.sitEfetivada);
+end;
+
+procedure TViewVender.btnAdicionarMeioPagtoClick(Sender: TObject);
+begin
+  inherited;
+  //
 end;
 
 procedure TViewVender.edtPesquisaKeyDown(Sender: TObject; var Key: Word;

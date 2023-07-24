@@ -1,27 +1,30 @@
 inherited ViewVender: TViewVender
   Caption = 'Ponto de Venda'
+  ClientHeight = 772
   ClientWidth = 1231
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   ExplicitWidth = 1243
+  ExplicitHeight = 810
   TextHeight = 21
   inherited pModeloClient: TPanel
     Width = 1231
+    Height = 715
     ExplicitLeft = 0
     ExplicitTop = 57
     ExplicitWidth = 1227
-    ExplicitHeight = 547
+    ExplicitHeight = 546
     object pcPrinc: TPageControl
       Left = 0
       Top = 0
       Width = 1231
-      Height = 547
-      ActivePage = tsPesquisa
+      Height = 715
+      ActivePage = tsVenda
       Align = alClient
       TabOrder = 0
-      ExplicitWidth = 1227
+      ExplicitHeight = 547
       object tsVenda: TTabSheet
-        Caption = 'tsVenda'
+        Caption = ':: Venda  '
         object Panel1: TPanel
           Left = 0
           Top = 0
@@ -31,7 +34,8 @@ inherited ViewVender: TViewVender
           Caption = 'Panel1'
           ShowCaption = False
           TabOrder = 0
-          ExplicitWidth = 1219
+          ExplicitLeft = 2
+          ExplicitTop = -6
           object Label1: TLabel
             Left = 16
             Top = 24
@@ -93,59 +97,301 @@ inherited ViewVender: TViewVender
             OnKeyDown = edtPesquisaKeyDown
           end
         end
-        object Panel2: TPanel
+        object GroupBox1: TGroupBox
           Left = 0
-          Top = 415
-          Width = 1223
-          Height = 96
-          Align = alBottom
-          Caption = 'Panel2'
-          TabOrder = 1
-          ExplicitWidth = 1219
-        end
-        object Panel3: TPanel
-          Left = 688
           Top = 89
-          Width = 535
-          Height = 326
-          Align = alRight
-          Caption = 'Panel3'
-          TabOrder = 2
-          ExplicitLeft = 684
-          object DBNavigator1: TDBNavigator
-            Left = 1
-            Top = 1
-            Width = 533
-            Height = 32
+          Width = 1223
+          Height = 271
+          Align = alClient
+          Caption = ':: Itens da venda  '
+          TabOrder = 1
+          ExplicitLeft = 520
+          ExplicitTop = 200
+          ExplicitWidth = 185
+          ExplicitHeight = 105
+          object dbgItens: TDBGrid
+            Left = 2
+            Top = 23
+            Width = 684
+            Height = 246
+            Align = alClient
             DataSource = dsItens
-            Align = alTop
             TabOrder = 0
+            TitleFont.Charset = DEFAULT_CHARSET
+            TitleFont.Color = clWindowText
+            TitleFont.Height = -16
+            TitleFont.Name = 'Segoe UI'
+            TitleFont.Style = []
+          end
+          object Panel3: TPanel
+            Left = 686
+            Top = 23
+            Width = 535
+            Height = 246
+            Align = alRight
+            Caption = 'Panel3'
+            ShowCaption = False
+            TabOrder = 1
+            ExplicitLeft = 688
+            ExplicitTop = 89
+            ExplicitHeight = 326
+            object DBNavigator1: TDBNavigator
+              Left = 1
+              Top = 1
+              Width = 533
+              Height = 32
+              DataSource = dsItens
+              VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast, nbInsert, nbDelete, nbEdit, nbPost, nbCancel]
+              Align = alTop
+              TabOrder = 0
+            end
           end
         end
-        object dbgItens: TDBGrid
+        object pBottom: TPanel
           Left = 0
-          Top = 89
-          Width = 688
-          Height = 326
-          Align = alClient
-          DataSource = dsItens
-          TabOrder = 3
-          TitleFont.Charset = DEFAULT_CHARSET
-          TitleFont.Color = clWindowText
-          TitleFont.Height = -16
-          TitleFont.Name = 'Segoe UI'
-          TitleFont.Style = []
+          Top = 360
+          Width = 1223
+          Height = 319
+          Align = alBottom
+          BevelOuter = bvNone
+          Caption = 'pBottom'
+          ShowCaption = False
+          TabOrder = 2
+          ExplicitTop = 192
+          object GroupBox3: TGroupBox
+            Left = 0
+            Top = 0
+            Width = 680
+            Height = 319
+            Align = alClient
+            Caption = ':: Meios de pagamento  '
+            TabOrder = 0
+            ExplicitLeft = -6
+            ExplicitTop = 4
+            ExplicitWidth = 1118
+            ExplicitHeight = 279
+            object p1: TPanel
+              Left = 2
+              Top = 23
+              Width = 185
+              Height = 294
+              Align = alLeft
+              Caption = 'p1'
+              TabOrder = 0
+              ExplicitLeft = -4
+              object btnMeioPagtoCH: TButton
+                AlignWithMargins = True
+                Left = 9
+                Top = 249
+                Width = 167
+                Height = 32
+                Cursor = crHandPoint
+                Margins.Left = 8
+                Margins.Top = 8
+                Margins.Right = 8
+                Margins.Bottom = 0
+                Align = alTop
+                Caption = 'Cheque'
+                Images = dmImagens.imgIco16
+                TabOrder = 6
+                OnClick = btnAdicionarMeioPagtoClick
+                ExplicitTop = 9
+              end
+              object btnMeioPagtoVO: TButton
+                AlignWithMargins = True
+                Left = 9
+                Top = 209
+                Width = 167
+                Height = 32
+                Cursor = crHandPoint
+                Margins.Left = 8
+                Margins.Top = 8
+                Margins.Right = 8
+                Margins.Bottom = 0
+                Align = alTop
+                Caption = 'Voucher'
+                Images = dmImagens.imgIco16
+                TabOrder = 5
+                OnClick = btnAdicionarMeioPagtoClick
+                ExplicitLeft = 17
+                ExplicitTop = 17
+              end
+              object btnMeioPagtoCD: TButton
+                AlignWithMargins = True
+                Left = 9
+                Top = 169
+                Width = 167
+                Height = 32
+                Cursor = crHandPoint
+                Margins.Left = 8
+                Margins.Top = 8
+                Margins.Right = 8
+                Margins.Bottom = 0
+                Align = alTop
+                Caption = 'Cart'#227'o D'#233'bito'
+                Images = dmImagens.imgIco16
+                TabOrder = 4
+                OnClick = btnAdicionarMeioPagtoClick
+                ExplicitLeft = 17
+                ExplicitTop = 17
+              end
+              object btnMeioPagtoCC: TButton
+                AlignWithMargins = True
+                Left = 9
+                Top = 129
+                Width = 167
+                Height = 32
+                Cursor = crHandPoint
+                Margins.Left = 8
+                Margins.Top = 8
+                Margins.Right = 8
+                Margins.Bottom = 0
+                Align = alTop
+                Caption = 'Cart'#227'o Cr'#233'dito'
+                Images = dmImagens.imgIco16
+                TabOrder = 3
+                OnClick = btnAdicionarMeioPagtoClick
+                ExplicitLeft = 17
+                ExplicitTop = 17
+              end
+              object btnMeioPagtoPIX: TButton
+                AlignWithMargins = True
+                Left = 9
+                Top = 89
+                Width = 167
+                Height = 32
+                Cursor = crHandPoint
+                Margins.Left = 8
+                Margins.Top = 8
+                Margins.Right = 8
+                Margins.Bottom = 0
+                Align = alTop
+                Caption = 'PIX'
+                Images = dmImagens.imgIco16
+                TabOrder = 2
+                OnClick = btnAdicionarMeioPagtoClick
+                ExplicitLeft = 7
+              end
+              object btnMeioPagtoDN: TButton
+                AlignWithMargins = True
+                Left = 9
+                Top = 49
+                Width = 167
+                Height = 32
+                Cursor = crHandPoint
+                Margins.Left = 8
+                Margins.Top = 8
+                Margins.Right = 8
+                Margins.Bottom = 0
+                Align = alTop
+                Caption = 'Dinheiro'
+                Images = dmImagens.imgIco16
+                TabOrder = 1
+                OnClick = btnAdicionarMeioPagtoClick
+                ExplicitLeft = 7
+              end
+              object btnMeioPagtoRemover: TButton
+                AlignWithMargins = True
+                Left = 9
+                Top = 9
+                Width = 167
+                Height = 32
+                Cursor = crHandPoint
+                Margins.Left = 8
+                Margins.Top = 8
+                Margins.Right = 8
+                Margins.Bottom = 0
+                Align = alTop
+                Caption = 'Remover'
+                ImageIndex = 0
+                Images = dmImagens.imgIco16
+                TabOrder = 0
+                ExplicitLeft = 17
+                ExplicitTop = 17
+              end
+            end
+            object dbgMeiosPagto: TDBGrid
+              Left = 187
+              Top = 23
+              Width = 491
+              Height = 294
+              Align = alClient
+              DataSource = dsMeiosPagto
+              TabOrder = 1
+              TitleFont.Charset = DEFAULT_CHARSET
+              TitleFont.Color = clWindowText
+              TitleFont.Height = -16
+              TitleFont.Name = 'Segoe UI'
+              TitleFont.Style = []
+            end
+          end
+          object GroupBox2: TGroupBox
+            Left = 680
+            Top = 0
+            Width = 543
+            Height = 319
+            Align = alRight
+            Caption = ':: Totais da venda  '
+            TabOrder = 1
+            ExplicitHeight = 279
+            object pModeloBotoes: TCategoryButtons
+              Left = 2
+              Top = 261
+              Width = 539
+              Height = 56
+              Align = alBottom
+              ButtonFlow = cbfVertical
+              Categories = <>
+              RegularButtonColor = clWhite
+              SelectedButtonColor = 15132390
+              TabOrder = 0
+              TabStop = False
+              ExplicitLeft = 0
+              ExplicitTop = 434
+              ExplicitWidth = 907
+              object btnEfetivar: TButton
+                AlignWithMargins = True
+                Left = 329
+                Top = 8
+                Width = 95
+                Height = 36
+                Cursor = crHandPoint
+                Margins.Left = 0
+                Margins.Top = 8
+                Margins.Right = 8
+                Margins.Bottom = 8
+                Align = alRight
+                Caption = 'Efetivar'
+                TabOrder = 0
+              end
+              object btnCancelar: TButton
+                AlignWithMargins = True
+                Left = 432
+                Top = 8
+                Width = 95
+                Height = 36
+                Cursor = crHandPoint
+                Margins.Left = 0
+                Margins.Top = 8
+                Margins.Right = 8
+                Margins.Bottom = 8
+                Align = alRight
+                Caption = 'Cancelar'
+                TabOrder = 1
+              end
+            end
+          end
         end
       end
       object tsPesquisa: TTabSheet
-        Caption = 'tsPesquisa'
+        Caption = ':: Pesquisa  '
         ImageIndex = 1
         object pVendasGrid: TPanel
           AlignWithMargins = True
           Left = 0
           Top = 104
           Width = 1223
-          Height = 407
+          Height = 575
           Margins.Left = 0
           Margins.Top = 8
           Margins.Right = 0
@@ -154,10 +400,11 @@ inherited ViewVender: TViewVender
           Caption = 'Lista de Caixas'
           ShowCaption = False
           TabOrder = 0
-          ExplicitHeight = 408
+          ExplicitWidth = 1219
+          ExplicitHeight = 406
           object Panel4: TPanel
             Left = 1
-            Top = 374
+            Top = 542
             Width = 1221
             Height = 32
             Align = alBottom
@@ -165,7 +412,8 @@ inherited ViewVender: TViewVender
             Caption = 'Panel3'
             ShowCaption = False
             TabOrder = 0
-            ExplicitTop = 375
+            ExplicitTop = 373
+            ExplicitWidth = 1217
             object Label3: TLabel
               AlignWithMargins = True
               Left = 8
@@ -187,7 +435,7 @@ inherited ViewVender: TViewVender
             Left = 9
             Top = 9
             Width = 1205
-            Height = 357
+            Height = 525
             Margins.Left = 8
             Margins.Top = 8
             Margins.Right = 8
@@ -213,6 +461,7 @@ inherited ViewVender: TViewVender
           Caption = 'Panel1'
           ShowCaption = False
           TabOrder = 1
+          ExplicitWidth = 1219
           object Label2: TLabel
             Left = 16
             Top = 16
@@ -301,10 +550,11 @@ inherited ViewVender: TViewVender
       Width = 1191
       Height = 37
       Caption = 'Ponto de Venda'
-      ExplicitWidth = 1191
+      ExplicitWidth = 147
     end
   end
   object dsVenda: TDataSource
+    AutoEdit = False
     Left = 472
     Top = 8
   end
@@ -317,6 +567,7 @@ inherited ViewVender: TViewVender
     Top = 8
   end
   object dsVendas: TDataSource
+    AutoEdit = False
     Left = 688
     Top = 8
   end
