@@ -44,8 +44,10 @@ type
     mtMeiosPagtoCOD_MEIO_PAGTO: TStringField;
     mtMeiosPagtoQTD_PARC: TIntegerField;
     mtMeiosPagtoVR_TOTAL: TFloatField;
+    procedure mtItensQTD_ITEMChange(Sender: TField);
+    procedure mtItensVR_DESCChange(Sender: TField);
   private
-    { Private declarations }
+    procedure AtualizaValoresItem;
   public
     procedure CriarDatasets; override;
 
@@ -66,7 +68,18 @@ implementation
 
 {$R *.dfm}
 
+uses
+  System.Math;
+
 { TControllerVendas }
+
+procedure TControllerVendas.AtualizaValoresItem;
+begin
+  mtItensVR_BRUTO.AsFloat := RoundTo(    
+    mtItensQTD_ITEM.AsInteger * mtItensVR_PRECO_UNIT.AsFloat, -2);
+    
+  mtItensVR_TOTAL.AsFloat := mtItensVR_BRUTO.AsFloat - mtItensVR_DESC.AsFloat;
+end;
 
 procedure TControllerVendas.CriarDatasets;
 begin
@@ -87,6 +100,24 @@ begin
   mtVendas.CreateDataSet;
   mtItens.CreateDataSet;
   mtMeiosPagto.CreateDataSet;
+end;
+
+procedure TControllerVendas.mtItensQTD_ITEMChange(Sender: TField);
+begin
+  inherited;
+  if mtItens.ControlsDisabled
+  then Exit;
+
+  AtualizaValoresItem;   
+end;
+
+procedure TControllerVendas.mtItensVR_DESCChange(Sender: TField);
+begin
+  inherited;
+  if mtItens.ControlsDisabled
+  then Exit;
+
+  AtualizaValoresItem;   
 end;
 
 procedure TControllerVendas.ObterItensVenda(ANumVnda: Integer);

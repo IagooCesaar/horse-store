@@ -2,6 +2,7 @@ inherited ViewVender: TViewVender
   Caption = 'Ponto de Venda'
   ClientHeight = 782
   ClientWidth = 1231
+  KeyPreview = True
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   ExplicitWidth = 1243
@@ -114,6 +115,8 @@ inherited ViewVender: TViewVender
             Height = 268
             Align = alClient
             DataSource = dsItens
+            Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
+            ReadOnly = True
             TabOrder = 0
             TitleFont.Charset = DEFAULT_CHARSET
             TitleFont.Color = clWindowText
@@ -121,13 +124,13 @@ inherited ViewVender: TViewVender
             TitleFont.Name = 'Segoe UI'
             TitleFont.Style = []
           end
-          object Panel3: TPanel
+          object pControleItens: TPanel
             Left = 686
             Top = 23
             Width = 535
             Height = 268
             Align = alRight
-            Caption = 'Panel3'
+            Caption = 'pControleItens'
             ShowCaption = False
             TabOrder = 1
             ExplicitLeft = 688
@@ -205,12 +208,11 @@ inherited ViewVender: TViewVender
               Caption = 'Valor Total Item'
               FocusControl = DBEdit16
             end
-            object DBNavigator1: TDBNavigator
+            object dbnItens: TDBNavigator
               Left = 1
               Top = 1
               Width = 533
               Height = 32
-              DataSource = dsItens
               VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast, nbInsert, nbDelete, nbEdit, nbPost, nbCancel]
               Align = alTop
               TabOrder = 0
@@ -222,7 +224,7 @@ inherited ViewVender: TViewVender
               Height = 29
               TabStop = False
               DataField = 'NUM_SEQ_ITEM'
-              DataSource = DataSource2
+              DataSource = dsItens
               Enabled = False
               ReadOnly = True
               TabOrder = 1
@@ -234,7 +236,7 @@ inherited ViewVender: TViewVender
               Height = 29
               TabStop = False
               DataField = 'COD_SIT'
-              DataSource = DataSource2
+              DataSource = dsItens
               Enabled = False
               ReadOnly = True
               TabOrder = 2
@@ -245,7 +247,7 @@ inherited ViewVender: TViewVender
               Width = 100
               Height = 29
               DataField = 'COD_ITEM'
-              DataSource = DataSource2
+              DataSource = dsItens
               ReadOnly = True
               TabOrder = 3
             end
@@ -255,7 +257,7 @@ inherited ViewVender: TViewVender
               Width = 409
               Height = 29
               DataField = 'NOM_ITEM'
-              DataSource = DataSource2
+              DataSource = dsItens
               ReadOnly = True
               TabOrder = 4
             end
@@ -265,7 +267,7 @@ inherited ViewVender: TViewVender
               Width = 100
               Height = 29
               DataField = 'QTD_ITEM'
-              DataSource = DataSource2
+              DataSource = dsItens
               TabOrder = 5
             end
             object DBEdit13: TDBEdit
@@ -275,7 +277,7 @@ inherited ViewVender: TViewVender
               Height = 29
               TabStop = False
               DataField = 'VR_PRECO_UNIT'
-              DataSource = DataSource2
+              DataSource = dsItens
               Enabled = False
               ReadOnly = True
               TabOrder = 6
@@ -287,7 +289,7 @@ inherited ViewVender: TViewVender
               Height = 29
               TabStop = False
               DataField = 'VR_BRUTO'
-              DataSource = DataSource2
+              DataSource = dsItens
               Enabled = False
               ReadOnly = True
               TabOrder = 7
@@ -297,11 +299,9 @@ inherited ViewVender: TViewVender
               Top = 249
               Width = 163
               Height = 29
-              TabStop = False
               DataField = 'VR_DESC'
-              DataSource = DataSource2
+              DataSource = dsItens
               Enabled = False
-              ReadOnly = True
               TabOrder = 8
             end
             object DBEdit16: TDBEdit
@@ -311,7 +311,7 @@ inherited ViewVender: TViewVender
               Height = 29
               TabStop = False
               DataField = 'VR_TOTAL'
-              DataSource = DataSource2
+              DataSource = dsItens
               Enabled = False
               ReadOnly = True
               TabOrder = 9
@@ -483,8 +483,8 @@ inherited ViewVender: TViewVender
                 ImageIndex = 0
                 Images = dmImagens.imgIco16
                 TabOrder = 0
-                ExplicitLeft = 17
-                ExplicitTop = 17
+                OnClick = btnMeioPagtoRemoverClick
+                ExplicitLeft = 7
               end
             end
             object dbgMeiosPagto: TDBGrid
@@ -603,6 +603,7 @@ inherited ViewVender: TViewVender
                 Align = alRight
                 Caption = 'Efetivar'
                 TabOrder = 0
+                OnClick = btnEfetivarClick
               end
               object btnCancelar: TButton
                 AlignWithMargins = True
@@ -618,6 +619,7 @@ inherited ViewVender: TViewVender
                 Align = alRight
                 Caption = 'Cancelar'
                 TabOrder = 1
+                OnClick = btnCancelarClick
               end
             end
             object DBEdit1: TDBEdit
@@ -627,7 +629,7 @@ inherited ViewVender: TViewVender
               Height = 29
               TabStop = False
               DataField = 'NUM_VNDA'
-              DataSource = DataSource1
+              DataSource = dsVenda
               ReadOnly = True
               TabOrder = 1
             end
@@ -638,7 +640,13 @@ inherited ViewVender: TViewVender
               Height = 29
               TabStop = False
               DataField = 'COD_SIT'
-              DataSource = DataSource1
+              DataSource = dsVenda
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -16
+              Font.Name = 'Segoe UI'
+              Font.Style = [fsBold]
+              ParentFont = False
               ReadOnly = True
               TabOrder = 2
             end
@@ -649,7 +657,7 @@ inherited ViewVender: TViewVender
               Height = 29
               TabStop = False
               DataField = 'DAT_INCL'
-              DataSource = DataSource1
+              DataSource = dsVenda
               ReadOnly = True
               TabOrder = 3
             end
@@ -660,7 +668,7 @@ inherited ViewVender: TViewVender
               Height = 29
               TabStop = False
               DataField = 'DAT_CONCL'
-              DataSource = DataSource1
+              DataSource = dsVenda
               ReadOnly = True
               TabOrder = 4
             end
@@ -671,7 +679,7 @@ inherited ViewVender: TViewVender
               Height = 29
               TabStop = False
               DataField = 'VR_BRUTO'
-              DataSource = DataSource1
+              DataSource = dsVenda
               ReadOnly = True
               TabOrder = 5
             end
@@ -682,7 +690,7 @@ inherited ViewVender: TViewVender
               Height = 29
               TabStop = False
               DataField = 'VR_DESC'
-              DataSource = DataSource1
+              DataSource = dsVenda
               ReadOnly = True
               TabOrder = 6
             end
@@ -693,7 +701,7 @@ inherited ViewVender: TViewVender
               Height = 29
               TabStop = False
               DataField = 'VR_TOTAL'
-              DataSource = DataSource1
+              DataSource = dsVenda
               Font.Charset = DEFAULT_CHARSET
               Font.Color = clWindowText
               Font.Height = -16
@@ -877,15 +885,6 @@ inherited ViewVender: TViewVender
       ExplicitWidth = 147
     end
   end
-  object dsVenda: TDataSource
-    AutoEdit = False
-    Left = 472
-    Top = 8
-  end
-  object dsItens: TDataSource
-    Left = 528
-    Top = 8
-  end
   object dsMeiosPagto: TDataSource
     Left = 608
     Top = 8
@@ -895,14 +894,14 @@ inherited ViewVender: TViewVender
     Left = 688
     Top = 8
   end
-  object DataSource1: TDataSource
+  object dsVenda: TDataSource
     DataSet = ControllerVendas.mtDados
-    Left = 608
-    Top = 392
+    Left = 864
+    Top = 8
   end
-  object DataSource2: TDataSource
+  object dsItens: TDataSource
     DataSet = ControllerVendas.mtItens
-    Left = 616
-    Top = 400
+    Left = 784
+    Top = 8
   end
 end

@@ -6,9 +6,11 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Loja.View.ModeloMdi, Vcl.StdCtrls,
   Vcl.ExtCtrls, Vcl.Buttons, Vcl.ComCtrls, Data.DB, Vcl.Grids, Vcl.DBGrids, Vcl.DBCtrls,
+  Vcl.CategoryButtons, Vcl.Mask,
 
   Loja.DM.Imagens,
-  Loja.Controller.Vendas, Vcl.CategoryButtons, Vcl.Mask;
+  Loja.Controller.Vendas,
+  Loja.Controller.Itens;
 
 type
   TViewVender = class(TViewModeloMdi)
@@ -21,8 +23,6 @@ type
     sbInserirItem: TSpeedButton;
     sbConsultaPreco: TSpeedButton;
     sbNovaVenda: TSpeedButton;
-    dsVenda: TDataSource;
-    dsItens: TDataSource;
     dsMeiosPagto: TDataSource;
     dsVendas: TDataSource;
     sbBuscar: TSpeedButton;
@@ -41,8 +41,8 @@ type
     rbtVendaEfet: TRadioButton;
     GroupBox1: TGroupBox;
     dbgItens: TDBGrid;
-    Panel3: TPanel;
-    DBNavigator1: TDBNavigator;
+    pControleItens: TPanel;
+    dbnItens: TDBNavigator;
     pBottom: TPanel;
     GroupBox3: TGroupBox;
     p1: TPanel;
@@ -60,7 +60,7 @@ type
     btnCancelar: TButton;
     Label5: TLabel;
     DBEdit1: TDBEdit;
-    DataSource1: TDataSource;
+    dsVenda: TDataSource;
     Label6: TLabel;
     DBEdit2: TDBEdit;
     Label7: TLabel;
@@ -75,7 +75,7 @@ type
     DBEdit7: TDBEdit;
     Label12: TLabel;
     DBEdit8: TDBEdit;
-    DataSource2: TDataSource;
+    dsItens: TDataSource;
     Label13: TLabel;
     DBEdit9: TDBEdit;
     Label14: TLabel;
@@ -100,8 +100,13 @@ type
     procedure btnPesquisarClick(Sender: TObject);
     procedure btnAdicionarMeioPagtoClick(Sender: TObject);
     procedure dbgVendasDblClick(Sender: TObject);
+    procedure btnEfetivarClick(Sender: TObject);
+    procedure btnCancelarClick(Sender: TObject);
+    procedure btnMeioPagtoRemoverClick(Sender: TObject);
   private
     FControllerVendas: TControllerVendas;
+    FControllerItens: TControllerItens;
+    function PermiteEditar: Boolean;
   public
     procedure AbrirDetalhesVenda(ANumVnda: Integer);
   end;
@@ -113,6 +118,22 @@ uses
   Loja.Model.Venda.Types;
 
 {$R *.dfm}
+
+function PegaSeq(Texto: String; posicao: Integer; sep: String = '|'): String;
+var sl : TStringList;
+begin
+  try
+    sl := TStringList.Create;
+    sl.StrictDelimiter := True;
+    sl.Delimiter       := Sep[1];
+    sl.DelimitedText   := Texto;
+    if (sl.Count) < posicao
+    then Result := ''
+    else Result := sl.Strings[Posicao-1];
+  finally
+    FreeAndNil(sl);
+  end;
+end;
 
 procedure TViewVender.btnPesquisarClick(Sender: TObject);
 begin
@@ -143,12 +164,37 @@ begin
   FControllerVendas.ObterMeiosPagtoVenda(ANumVnda);
 
   pcPrinc.ActivePage := tsVenda;
+
+  pControleItens.Enabled := PermiteEditar;
 end;
 
 procedure TViewVender.btnAdicionarMeioPagtoClick(Sender: TObject);
 begin
   inherited;
-  //
+  if not PermiteEditar
+  then Exit;
+end;
+
+procedure TViewVender.btnCancelarClick(Sender: TObject);
+begin
+  inherited;
+  if not PermiteEditar
+  then Exit;
+end;
+
+procedure TViewVender.btnEfetivarClick(Sender: TObject);
+begin
+  inherited;
+  if not PermiteEditar
+  then Exit;
+
+end;
+
+procedure TViewVender.btnMeioPagtoRemoverClick(Sender: TObject);
+begin
+  inherited;
+  if not PermiteEditar
+  then Exit;
 end;
 
 procedure TViewVender.edtPesquisaKeyDown(Sender: TObject; var Key: Word;
@@ -166,6 +212,8 @@ begin
   edtDatIni.Date := Trunc(Now - 30);
   edtDatFim.Date := Trunc(Now);
 
+  FControllerItens := TControllerItens.Create(Self);
+
   FControllerVendas := TControllerVendas.Create(Self);
   dsVenda.DataSet := FControllerVendas.mtDados;
   dsVendas.DataSet := FControllerVendas.mtVendas;
@@ -178,7 +226,14 @@ end;
 procedure TViewVender.FormDestroy(Sender: TObject);
 begin
   FreeAndNil(FControllerVendas);
+  FreeAndNil(FControllerItens);
   inherited;
+end;
+
+function TViewVender.PermiteEditar: Boolean;
+begin
+  Result := TLojaModelVendaSituacao.CreateByName(
+    FControllerVendas.mtDadosCOD_SIT.AsString) = sitPendente;
 end;
 
 procedure TViewVender.sbBuscarClick(Sender: TObject);
@@ -186,7 +241,41 @@ begin
   inherited;
   if sbInserirItem.Down
   then begin
+    if not PermiteEditar
+    then Exit;
     // Identificar o item e quantidade, inserir um novo com Desconto = 0
+
+    var LQtd := 1;
+    var LChave := '';
+    if Pos('*', edtPesquisa.Text) > 0
+    then begin
+      LQtd := StrToIntDef(PegaSeq(edtPesquisa.Text, 1, '*').Trim, 1);
+      LChave := PegaSeq(edtPesquisa.Text, 2, '*').Trim;
+    end
+    else LChave := Trim(edtPesquisa.Text);
+
+    var LEncontrou := False;
+
+    try
+      FControllerItens.ObterItem(StrToIntDef(LChave, -1));
+      LEncontrou := True;
+    except
+      LEncontrou := False;
+    end;
+
+    if not LEncontrou
+    then try
+      FControllerItens.ObterItem(LChave);
+      LEncontrou := True;
+    except
+      LEncontrou := False;
+    end;
+
+    if not LEncontrou
+    then raise Exception.Create('Não foi possível encontrar o item informado');
+
+    ShowMessage(FControllerItens.mtDadosNOM_ITEM.AsString + ' | QTD: '+LQtd.ToString);
+
   end
   else
   if sbNovaVenda.Down then

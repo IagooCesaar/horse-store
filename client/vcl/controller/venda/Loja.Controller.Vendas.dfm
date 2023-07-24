@@ -126,6 +126,7 @@ inherited ControllerVendas: TControllerVendas
       DisplayLabel = 'Quantidade'
       DisplayWidth = 8
       FieldName = 'QTD_ITEM'
+      OnChange = mtItensQTD_ITEMChange
     end
     object mtItensVR_PRECO_UNIT: TFloatField
       DisplayLabel = 'Pre'#231'o Unit.'
@@ -143,6 +144,7 @@ inherited ControllerVendas: TControllerVendas
       DisplayLabel = 'Valor Desconto'
       DisplayWidth = 10
       FieldName = 'VR_DESC'
+      OnChange = mtItensVR_DESCChange
       DisplayFormat = '#,##0.00'
     end
     object mtItensVR_TOTAL: TFloatField

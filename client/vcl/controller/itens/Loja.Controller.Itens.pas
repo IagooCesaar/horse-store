@@ -25,7 +25,8 @@ type
   public
     procedure CriarDatasets; override;
 
-    procedure ObterItem(ACodItem: Integer);
+    procedure ObterItem(ACodItem: Integer); overload;
+    procedure ObterItem(ANumCodBarr: string); overload;
     procedure ObterItens(ACodItem: Integer;
       ANome, ACodBarras: TLhsBracketFilter );
   end;
@@ -92,6 +93,20 @@ begin
   var LResponse := PreparaRequest
     .Resource('/itens/{cod_item}')
     .AddUrlSegment('cod_item', ACodItem.ToString)
+    .Get();
+
+  if not(LResponse.StatusCode in [200,204])
+  then RaiseException(LResponse, 'Falha ao obter dados do item');
+
+  if LResponse.StatusCode = 200
+  then Serializar(LResponse);
+end;
+
+procedure TControllerItens.ObterItem(ANumCodBarr: string);
+begin
+  var LResponse := PreparaRequest
+    .Resource('/itens/codigo-barras/{num_cod_barr}')
+    .AddUrlSegment('num_cod_barr', ANumCodBarr)
     .Get();
 
   if not(LResponse.StatusCode in [200,204])
