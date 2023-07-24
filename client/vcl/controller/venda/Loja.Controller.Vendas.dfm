@@ -156,6 +156,8 @@ inherited ControllerVendas: TControllerVendas
     end
   end
   object mtMeiosPagto: TFDMemTable
+    AfterPost = mtMeiosPagtoAfterDataChanged
+    AfterDelete = mtMeiosPagtoAfterDataChanged
     FetchOptions.AssignedValues = [evMode]
     FetchOptions.Mode = fmAll
     ResourceOptions.AssignedValues = [rvSilentMode]
@@ -169,7 +171,6 @@ inherited ControllerVendas: TControllerVendas
       Alignment = taLeftJustify
       DisplayLabel = 'N'#250'm. Venda'
       FieldName = 'NUM_VNDA'
-      Visible = False
     end
     object mtMeiosPagtoNUM_SEQ_MEIO_PAGTO: TIntegerField
       Alignment = taCenter

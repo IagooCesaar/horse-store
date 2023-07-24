@@ -120,7 +120,8 @@ implementation
 
 uses
   Loja.View.Preco.ConsultaPreco,
-  Loja.Model.Venda.Types;
+  Loja.Model.Venda.Types,
+  Loja.Model.Caixa.Types;
 
 {$R *.dfm}
 
@@ -174,10 +175,37 @@ begin
 end;
 
 procedure TViewVender.btnAdicionarMeioPagtoClick(Sender: TObject);
+var LMeioPagto: TLojaModelCaixaMeioPagamento;
 begin
   inherited;
   if not PermiteEditar
   then Exit;
+
+  if TButton(Sender) = btnMeioPagtoDN
+  then LMeioPagto := pagDinheiro
+  else
+  if TButton(Sender) = btnMeioPagtoPIX
+  then LMeioPagto := pagPix
+  else
+  if TButton(Sender) = btnMeioPagtoCC
+  then LMeioPagto := pagCartaoCredito
+  else
+  if TButton(Sender) = btnMeioPagtoCD
+  then LMeioPagto := pagCartaoDebito
+  else
+  if TButton(Sender) = btnMeioPagtoVO
+  then LMeioPagto := pagVoucher
+  else
+  if TButton(Sender) = btnMeioPagtoCH
+  then LMeioPagto := pagCheque;
+
+  FControllerVendas.mtMeiosPagto.Append;
+  FControllerVendas.mtMeiosPagtoNUM_VNDA.AsInteger := FControllerVendas.mtDadosNUM_VNDA.AsInteger;
+  FControllerVendas.mtMeiosPagtoCOD_MEIO_PAGTO.AsString := LMeioPagto.ToString;
+  FControllerVendas.mtMeiosPagtoQTD_PARC.AsInteger := 1;
+  FControllerVendas.mtMeiosPagtoVR_TOTAL.AsFloat := 10;
+  FControllerVendas.mtMeiosPagto.Post;
+
 end;
 
 procedure TViewVender.btnCancelarClick(Sender: TObject);
@@ -200,6 +228,9 @@ begin
   inherited;
   if not PermiteEditar
   then Exit;
+
+  FControllerVendas.mtMeiosPagto.Delete;
+  FControllerVendas.ObterMeiosPagtoVenda(FControllerVendas.mtDadosNUM_VNDA.AsInteger);
 end;
 
 procedure TViewVender.edtPesquisaKeyDown(Sender: TObject; var Key: Word;

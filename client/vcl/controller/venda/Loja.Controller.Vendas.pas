@@ -51,6 +51,7 @@ type
     procedure mtItensVR_DESCChange(Sender: TField);
     procedure mtItensBeforePost(DataSet: TDataSet);
     procedure mtItensBeforeDelete(DataSet: TDataSet);
+    procedure mtMeiosPagtoAfterDataChanged(DataSet: TDataSet);
   private
     procedure AtualizaValoresItem;
   public
@@ -169,7 +170,7 @@ begin
   try
     DataSet.DisableControls;
     if not(LResponse.StatusCode in [200,201])
-    then RaiseException(LResponse, 'Erro ao atualizar o cadastro do item');
+    then RaiseException(LResponse, 'Erro ao atualizar o item da venda');
 
     DataSet.MergeFromJSONObject(LResponse.Content);
   finally
@@ -193,6 +194,33 @@ begin
   then Exit;
 
   AtualizaValoresItem;   
+end;
+
+procedure TControllerVendas.mtMeiosPagtoAfterDataChanged(DataSet: TDataSet);
+begin
+  inherited;
+  if DataSet.ControlsDisabled
+  then Exit;
+
+  var LBody := DataSet.ToJSONArray();
+
+  var LResponse := PreparaRequest
+    .Resource('/venda/{num_vnda}/meios-pagamento')
+    .AddUrlSegment('num_vnda', DataSet.FieldByName('num_vnda').AsString)
+    .AddBody(LBody)
+    .Post();
+
+  try
+    DataSet.DisableControls;
+    if not(LResponse.StatusCode in [200,201])
+    then RaiseException(LResponse, 'Erro ao atualizar meios de pagamento da venda');
+
+    DataSet.Close;
+    DataSet.LoadFromJSON(LResponse.Content);
+
+  finally
+    DataSet.EnableControls;
+  end;
 end;
 
 procedure TControllerVendas.NovaVenda;
