@@ -65,10 +65,11 @@ type
     procedure sbBuscarClick(Sender: TObject);
     procedure btnPesquisarClick(Sender: TObject);
     procedure btnAdicionarMeioPagtoClick(Sender: TObject);
+    procedure dbgVendasDblClick(Sender: TObject);
   private
     FControllerVendas: TControllerVendas;
   public
-    { Public declarations }
+    procedure AbrirDetalhesVenda(ANumVnda: Integer);
   end;
 
 implementation
@@ -90,6 +91,24 @@ begin
   else
   if rbtVendaEfet.Checked
   then FControllerVendas.ObterVendas(edtDatIni.Date, edtDatFim.Date, TLojaModelVendaSituacao.sitEfetivada);
+end;
+
+procedure TViewVender.dbgVendasDblClick(Sender: TObject);
+begin
+  inherited;
+  if FControllerVendas.mtVendas.IsEmpty
+  then Exit;
+
+  AbrirDetalhesVenda(FControllerVendas.mtVendasNUM_VNDA.AsInteger);
+end;
+
+procedure TViewVender.AbrirDetalhesVenda(ANumVnda: Integer);
+begin
+  FControllerVendas.ObterVenda(ANumVnda);
+  FControllerVendas.ObterItensVenda(ANumVnda);
+  FControllerVendas.ObterMeiosPagtoVenda(ANumVnda);
+
+  pcPrinc.ActivePage := tsVenda;
 end;
 
 procedure TViewVender.btnAdicionarMeioPagtoClick(Sender: TObject);

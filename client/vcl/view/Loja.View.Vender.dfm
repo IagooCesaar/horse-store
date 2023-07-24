@@ -19,7 +19,7 @@ inherited ViewVender: TViewVender
       Top = 0
       Width = 1231
       Height = 715
-      ActivePage = tsVenda
+      ActivePage = tsPesquisa
       Align = alClient
       TabOrder = 0
       ExplicitHeight = 547
@@ -192,6 +192,7 @@ inherited ViewVender: TViewVender
                 Margins.Bottom = 0
                 Align = alTop
                 Caption = 'Cheque'
+                ImageIndex = 6
                 Images = dmImagens.imgIco16
                 TabOrder = 6
                 OnClick = btnAdicionarMeioPagtoClick
@@ -210,6 +211,7 @@ inherited ViewVender: TViewVender
                 Margins.Bottom = 0
                 Align = alTop
                 Caption = 'Voucher'
+                ImageIndex = 7
                 Images = dmImagens.imgIco16
                 TabOrder = 5
                 OnClick = btnAdicionarMeioPagtoClick
@@ -229,6 +231,7 @@ inherited ViewVender: TViewVender
                 Margins.Bottom = 0
                 Align = alTop
                 Caption = 'Cart'#227'o D'#233'bito'
+                ImageIndex = 5
                 Images = dmImagens.imgIco16
                 TabOrder = 4
                 OnClick = btnAdicionarMeioPagtoClick
@@ -248,6 +251,7 @@ inherited ViewVender: TViewVender
                 Margins.Bottom = 0
                 Align = alTop
                 Caption = 'Cart'#227'o Cr'#233'dito'
+                ImageIndex = 5
                 Images = dmImagens.imgIco16
                 TabOrder = 3
                 OnClick = btnAdicionarMeioPagtoClick
@@ -267,6 +271,7 @@ inherited ViewVender: TViewVender
                 Margins.Bottom = 0
                 Align = alTop
                 Caption = 'PIX'
+                ImageIndex = 8
                 Images = dmImagens.imgIco16
                 TabOrder = 2
                 OnClick = btnAdicionarMeioPagtoClick
@@ -285,6 +290,7 @@ inherited ViewVender: TViewVender
                 Margins.Bottom = 0
                 Align = alTop
                 Caption = 'Dinheiro'
+                ImageIndex = 4
                 Images = dmImagens.imgIco16
                 TabOrder = 1
                 OnClick = btnAdicionarMeioPagtoClick
@@ -450,6 +456,7 @@ inherited ViewVender: TViewVender
             TitleFont.Height = -16
             TitleFont.Name = 'Segoe UI'
             TitleFont.Style = []
+            OnDblClick = dbgVendasDblClick
           end
         end
         object Panel5: TPanel

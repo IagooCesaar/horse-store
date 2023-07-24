@@ -51,6 +51,12 @@ type
 
     procedure ObterVendas(ADatInclIni, ADatInclFim: TDate;
        ACodSit: TLojaModelVendaSituacao);
+
+    procedure ObterVenda(ANumVnda: Integer);
+
+    procedure ObterItensVenda(ANumVnda: Integer);
+
+    procedure ObterMeiosPagtoVenda(ANumVnda: Integer);
   end;
 
 
@@ -81,6 +87,63 @@ begin
   mtVendas.CreateDataSet;
   mtItens.CreateDataSet;
   mtMeiosPagto.CreateDataSet;
+end;
+
+procedure TControllerVendas.ObterItensVenda(ANumVnda: Integer);
+begin
+  try
+    var LResponse := PreparaRequest
+      .Resource('/venda/{num_vnda}/itens')
+      .AddUrlSegment('num_vnda', ANumVnda.ToString)
+      .Get();
+
+    if LResponse.StatusCode <> 200
+    then RaiseException(LResponse, 'Não foi possível obter itens da venda');
+
+    Serializar(LResponse, mtItens);
+
+  finally
+    if not mtItens.Active
+    then mtItens.CreateDataSet;
+  end;
+end;
+
+procedure TControllerVendas.ObterMeiosPagtoVenda(ANumVnda: Integer);
+begin
+  try
+    var LResponse := PreparaRequest
+      .Resource('/venda/{num_vnda}/meios-pagamento')
+      .AddUrlSegment('num_vnda', ANumVnda.ToString)
+      .Get();
+
+    if LResponse.StatusCode <> 200
+    then RaiseException(LResponse, 'Não foi possível obter meios de pagamento da venda');
+
+    Serializar(LResponse, mtMeiosPagto);
+
+  finally
+    if not mtMeiosPagto.Active
+    then mtMeiosPagto.CreateDataSet;
+  end;
+end;
+
+procedure TControllerVendas.ObterVenda(ANumVnda: Integer);
+begin
+  try
+    var LResponse := PreparaRequest
+      .Resource('/venda/{num_vnda}')
+      .AddUrlSegment('num_vnda', ANumVnda.ToString)
+      .Get();
+
+    if LResponse.StatusCode <> 200
+    then RaiseException(LResponse, 'Não foi possível obter dados da venda');
+
+    Serializar(LResponse);
+
+  finally
+    if not mtDados.Active
+    then mtDados.CreateDataSet;
+  end;
 end;
 
 procedure TControllerVendas.ObterVendas(ADatInclIni, ADatInclFim: TDate;
