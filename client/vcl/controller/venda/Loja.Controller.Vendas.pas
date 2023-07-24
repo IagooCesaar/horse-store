@@ -60,7 +60,22 @@ implementation
 procedure TControllerVendas.CriarDatasets;
 begin
   inherited;
+  if mtDados.Active
+  then mtDados.Close;
 
+  if mtVendas.Active
+  then mtVendas.Close;
+
+  if mtMeiosPagto.Active
+  then mtMeiosPagto.Close;
+
+  if mtItens.Active
+  then mtItens.Close;
+
+  mtDados.CreateDataSet;
+  mtVendas.CreateDataSet;
+  mtItens.CreateDataSet;
+  mtMeiosPagto.CreateDataSet;
 end;
 
 end.
