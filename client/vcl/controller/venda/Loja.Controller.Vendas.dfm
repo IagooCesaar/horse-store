@@ -30,7 +30,7 @@ inherited ControllerVendas: TControllerVendas
       DisplayFormat = '#,##0.00'
     end
     object mtDadosVR_TOTAL: TFloatField
-      DisplayLabel = 'Valor L'#237'quido'
+      DisplayLabel = 'Valor Total'
       FieldName = 'VR_TOTAL'
       DisplayFormat = '#,##0.00'
     end
@@ -75,7 +75,7 @@ inherited ControllerVendas: TControllerVendas
       DisplayFormat = '#,##0.00'
     end
     object mtVendasVR_TOTAL: TFloatField
-      DisplayLabel = 'Valor L'#237'quido'
+      DisplayLabel = 'Valor Total'
       FieldName = 'VR_TOTAL'
       DisplayFormat = '#,##0.00'
     end
@@ -92,51 +92,62 @@ inherited ControllerVendas: TControllerVendas
     Top = 32
     object mtItensNUM_VNDA: TIntegerField
       DisplayLabel = 'N'#250'm. Vnda'
+      DisplayWidth = 8
       FieldName = 'NUM_VNDA'
+      Visible = False
     end
     object mtItensNUM_SEQ_ITEM: TIntegerField
       Alignment = taCenter
       DisplayLabel = 'N'#250'm. Seq.'
+      DisplayWidth = 8
       FieldName = 'NUM_SEQ_ITEM'
     end
     object mtItensCOD_ITEM: TIntegerField
       Alignment = taCenter
       DisplayLabel = 'C'#243'd. Item'
+      DisplayWidth = 8
       FieldName = 'COD_ITEM'
     end
     object mtItensNOM_ITEM: TStringField
       DisplayLabel = 'Item'
+      DisplayWidth = 40
       FieldName = 'NOM_ITEM'
       Size = 100
     end
     object mtItensCOD_SIT: TStringField
       Alignment = taCenter
       DisplayLabel = 'Situa'#231#227'o'
+      DisplayWidth = 8
       FieldName = 'COD_SIT'
       Size = 15
     end
     object mtItensQTD_ITEM: TIntegerField
       Alignment = taCenter
       DisplayLabel = 'Quantidade'
+      DisplayWidth = 8
       FieldName = 'QTD_ITEM'
     end
     object mtItensVR_PRECO_UNIT: TFloatField
       DisplayLabel = 'Pre'#231'o Unit.'
+      DisplayWidth = 10
       FieldName = 'VR_PRECO_UNIT'
       DisplayFormat = '#,##0.00'
     end
     object mtItensVR_BRUTO: TFloatField
       DisplayLabel = 'Valor Bruto'
+      DisplayWidth = 10
       FieldName = 'VR_BRUTO'
       DisplayFormat = '#,##0.00'
     end
     object mtItensVR_DESC: TFloatField
       DisplayLabel = 'Valor Desconto'
+      DisplayWidth = 10
       FieldName = 'VR_DESC'
       DisplayFormat = '#,##0.00'
     end
     object mtItensVR_TOTAL: TFloatField
       DisplayLabel = 'Valor Total'
+      DisplayWidth = 10
       FieldName = 'VR_TOTAL'
       DisplayFormat = '#,##0.00'
     end
@@ -155,6 +166,7 @@ inherited ControllerVendas: TControllerVendas
       Alignment = taLeftJustify
       DisplayLabel = 'N'#250'm. Venda'
       FieldName = 'NUM_VNDA'
+      Visible = False
     end
     object mtMeiosPagtoNUM_SEQ_MEIO_PAGTO: TIntegerField
       Alignment = taCenter

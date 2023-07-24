@@ -1,15 +1,15 @@
 inherited ViewVender: TViewVender
   Caption = 'Ponto de Venda'
-  ClientHeight = 772
+  ClientHeight = 782
   ClientWidth = 1231
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   ExplicitWidth = 1243
-  ExplicitHeight = 810
+  ExplicitHeight = 820
   TextHeight = 21
   inherited pModeloClient: TPanel
     Width = 1231
-    Height = 715
+    Height = 725
     ExplicitLeft = 0
     ExplicitTop = 57
     ExplicitWidth = 1227
@@ -18,8 +18,8 @@ inherited ViewVender: TViewVender
       Left = 0
       Top = 0
       Width = 1231
-      Height = 715
-      ActivePage = tsPesquisa
+      Height = 725
+      ActivePage = tsVenda
       Align = alClient
       TabOrder = 0
       ExplicitHeight = 547
@@ -29,23 +29,21 @@ inherited ViewVender: TViewVender
           Left = 0
           Top = 0
           Width = 1223
-          Height = 89
+          Height = 77
           Align = alTop
           Caption = 'Panel1'
           ShowCaption = False
           TabOrder = 0
-          ExplicitLeft = 2
-          ExplicitTop = -6
           object Label1: TLabel
             Left = 16
-            Top = 24
+            Top = 11
             Width = 195
             Height = 21
             Caption = 'C'#243'digo ou C'#243'digo de Barras'
           end
           object sbInserirItem: TSpeedButton
             Left = 217
-            Top = 20
+            Top = 7
             Width = 137
             Height = 25
             Cursor = crHandPoint
@@ -57,7 +55,7 @@ inherited ViewVender: TViewVender
           end
           object sbConsultaPreco: TSpeedButton
             Left = 360
-            Top = 20
+            Top = 7
             Width = 137
             Height = 25
             Cursor = crHandPoint
@@ -68,7 +66,7 @@ inherited ViewVender: TViewVender
           end
           object sbNovaVenda: TSpeedButton
             Left = 503
-            Top = 20
+            Top = 7
             Width = 137
             Height = 25
             Cursor = crHandPoint
@@ -79,7 +77,7 @@ inherited ViewVender: TViewVender
           end
           object sbBuscar: TSpeedButton
             Left = 640
-            Top = 51
+            Top = 38
             Width = 29
             Height = 29
             Cursor = crHandPoint
@@ -89,7 +87,7 @@ inherited ViewVender: TViewVender
           end
           object edtPesquisa: TEdit
             Left = 16
-            Top = 51
+            Top = 38
             Width = 624
             Height = 29
             TabOrder = 0
@@ -99,9 +97,9 @@ inherited ViewVender: TViewVender
         end
         object GroupBox1: TGroupBox
           Left = 0
-          Top = 89
+          Top = 77
           Width = 1223
-          Height = 271
+          Height = 293
           Align = alClient
           Caption = ':: Itens da venda  '
           TabOrder = 1
@@ -113,7 +111,7 @@ inherited ViewVender: TViewVender
             Left = 2
             Top = 23
             Width = 684
-            Height = 246
+            Height = 268
             Align = alClient
             DataSource = dsItens
             TabOrder = 0
@@ -127,7 +125,7 @@ inherited ViewVender: TViewVender
             Left = 686
             Top = 23
             Width = 535
-            Height = 246
+            Height = 268
             Align = alRight
             Caption = 'Panel3'
             ShowCaption = False
@@ -135,6 +133,78 @@ inherited ViewVender: TViewVender
             ExplicitLeft = 688
             ExplicitTop = 89
             ExplicitHeight = 326
+            object Label12: TLabel
+              Left = 6
+              Top = 48
+              Width = 71
+              Height = 21
+              Caption = 'N'#250'm. Seq.'
+              FocusControl = DBEdit8
+            end
+            object Label13: TLabel
+              Left = 184
+              Top = 48
+              Width = 59
+              Height = 21
+              Caption = 'Situa'#231#227'o'
+              FocusControl = DBEdit9
+            end
+            object Label14: TLabel
+              Left = 6
+              Top = 107
+              Width = 66
+              Height = 21
+              Caption = 'C'#243'd. Item'
+              FocusControl = DBEdit10
+            end
+            object Label15: TLabel
+              Left = 112
+              Top = 107
+              Width = 31
+              Height = 21
+              Caption = 'Item'
+              FocusControl = DBEdit11
+            end
+            object Label16: TLabel
+              Left = 6
+              Top = 166
+              Width = 81
+              Height = 21
+              Caption = 'Quantidade'
+              FocusControl = DBEdit12
+            end
+            object Label17: TLabel
+              Left = 112
+              Top = 166
+              Width = 75
+              Height = 21
+              Caption = 'Pre'#231'o Unit.'
+              FocusControl = DBEdit13
+            end
+            object Label18: TLabel
+              Left = 6
+              Top = 225
+              Width = 78
+              Height = 21
+              Caption = 'Valor Bruto'
+              FocusControl = DBEdit14
+            end
+            object Label19: TLabel
+              Left = 175
+              Top = 225
+              Width = 105
+              Height = 21
+              Caption = 'Valor Desconto'
+              FocusControl = DBEdit15
+            end
+            object Label20: TLabel
+              Left = 344
+              Top = 225
+              Width = 107
+              Height = 21
+              Caption = 'Valor Total Item'
+              FocusControl = DBEdit16
+            end
             object DBNavigator1: TDBNavigator
               Left = 1
               Top = 1
@@ -145,11 +215,112 @@ inherited ViewVender: TViewVender
               Align = alTop
               TabOrder = 0
             end
+            object DBEdit8: TDBEdit
+              Left = 6
+              Top = 72
+              Width = 172
+              Height = 29
+              TabStop = False
+              DataField = 'NUM_SEQ_ITEM'
+              DataSource = DataSource2
+              Enabled = False
+              ReadOnly = True
+              TabOrder = 1
+            end
+            object DBEdit9: TDBEdit
+              Left = 184
+              Top = 72
+              Width = 172
+              Height = 29
+              TabStop = False
+              DataField = 'COD_SIT'
+              DataSource = DataSource2
+              Enabled = False
+              ReadOnly = True
+              TabOrder = 2
+            end
+            object DBEdit10: TDBEdit
+              Left = 6
+              Top = 131
+              Width = 100
+              Height = 29
+              DataField = 'COD_ITEM'
+              DataSource = DataSource2
+              ReadOnly = True
+              TabOrder = 3
+            end
+            object DBEdit11: TDBEdit
+              Left = 112
+              Top = 131
+              Width = 409
+              Height = 29
+              DataField = 'NOM_ITEM'
+              DataSource = DataSource2
+              ReadOnly = True
+              TabOrder = 4
+            end
+            object DBEdit12: TDBEdit
+              Left = 6
+              Top = 190
+              Width = 100
+              Height = 29
+              DataField = 'QTD_ITEM'
+              DataSource = DataSource2
+              TabOrder = 5
+            end
+            object DBEdit13: TDBEdit
+              Left = 112
+              Top = 190
+              Width = 163
+              Height = 29
+              TabStop = False
+              DataField = 'VR_PRECO_UNIT'
+              DataSource = DataSource2
+              Enabled = False
+              ReadOnly = True
+              TabOrder = 6
+            end
+            object DBEdit14: TDBEdit
+              Left = 6
+              Top = 249
+              Width = 163
+              Height = 29
+              TabStop = False
+              DataField = 'VR_BRUTO'
+              DataSource = DataSource2
+              Enabled = False
+              ReadOnly = True
+              TabOrder = 7
+            end
+            object DBEdit15: TDBEdit
+              Left = 175
+              Top = 249
+              Width = 163
+              Height = 29
+              TabStop = False
+              DataField = 'VR_DESC'
+              DataSource = DataSource2
+              Enabled = False
+              ReadOnly = True
+              TabOrder = 8
+            end
+            object DBEdit16: TDBEdit
+              Left = 344
+              Top = 249
+              Width = 163
+              Height = 29
+              TabStop = False
+              DataField = 'VR_TOTAL'
+              DataSource = DataSource2
+              Enabled = False
+              ReadOnly = True
+              TabOrder = 9
+            end
           end
         end
         object pBottom: TPanel
           Left = 0
-          Top = 360
+          Top = 370
           Width = 1223
           Height = 319
           Align = alBottom
@@ -339,7 +510,70 @@ inherited ViewVender: TViewVender
             Align = alRight
             Caption = ':: Totais da venda  '
             TabOrder = 1
-            ExplicitHeight = 279
+            ExplicitLeft = 684
+            ExplicitTop = 4
+            object Label5: TLabel
+              Left = 6
+              Top = 32
+              Width = 85
+              Height = 21
+              Caption = 'N'#250'm. Venda'
+              FocusControl = DBEdit1
+            end
+            object Label6: TLabel
+              Left = 127
+              Top = 32
+              Width = 94
+              Height = 21
+              Caption = 'C'#243'd. Situa'#231#227'o'
+              FocusControl = DBEdit2
+            end
+            object Label7: TLabel
+              Left = 6
+              Top = 91
+              Width = 85
+              Height = 21
+              Caption = 'Dat Inclus'#227'o'
+              FocusControl = DBEdit3
+            end
+            object Label8: TLabel
+              Left = 175
+              Top = 91
+              Width = 100
+              Height = 21
+              Caption = 'Dat Conclus'#227'o'
+              FocusControl = DBEdit4
+            end
+            object Label9: TLabel
+              Left = 6
+              Top = 150
+              Width = 78
+              Height = 21
+              Caption = 'Valor Bruto'
+              FocusControl = DBEdit5
+            end
+            object Label10: TLabel
+              Left = 175
+              Top = 150
+              Width = 105
+              Height = 21
+              Caption = 'Valor Desconto'
+              FocusControl = DBEdit6
+            end
+            object Label11: TLabel
+              Left = 344
+              Top = 147
+              Width = 82
+              Height = 21
+              Caption = 'Valor Total'
+              FocusControl = DBEdit7
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -16
+              Font.Name = 'Segoe UI'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
             object pModeloBotoes: TCategoryButtons
               Left = 2
               Top = 261
@@ -386,6 +620,89 @@ inherited ViewVender: TViewVender
                 TabOrder = 1
               end
             end
+            object DBEdit1: TDBEdit
+              Left = 6
+              Top = 56
+              Width = 115
+              Height = 29
+              TabStop = False
+              DataField = 'NUM_VNDA'
+              DataSource = DataSource1
+              ReadOnly = True
+              TabOrder = 1
+            end
+            object DBEdit2: TDBEdit
+              Left = 127
+              Top = 56
+              Width = 147
+              Height = 29
+              TabStop = False
+              DataField = 'COD_SIT'
+              DataSource = DataSource1
+              ReadOnly = True
+              TabOrder = 2
+            end
+            object DBEdit3: TDBEdit
+              Left = 6
+              Top = 115
+              Width = 163
+              Height = 29
+              TabStop = False
+              DataField = 'DAT_INCL'
+              DataSource = DataSource1
+              ReadOnly = True
+              TabOrder = 3
+            end
+            object DBEdit4: TDBEdit
+              Left = 175
+              Top = 115
+              Width = 163
+              Height = 29
+              TabStop = False
+              DataField = 'DAT_CONCL'
+              DataSource = DataSource1
+              ReadOnly = True
+              TabOrder = 4
+            end
+            object DBEdit5: TDBEdit
+              Left = 6
+              Top = 174
+              Width = 163
+              Height = 29
+              TabStop = False
+              DataField = 'VR_BRUTO'
+              DataSource = DataSource1
+              ReadOnly = True
+              TabOrder = 5
+            end
+            object DBEdit6: TDBEdit
+              Left = 175
+              Top = 174
+              Width = 163
+              Height = 29
+              TabStop = False
+              DataField = 'VR_DESC'
+              DataSource = DataSource1
+              ReadOnly = True
+              TabOrder = 6
+            end
+            object DBEdit7: TDBEdit
+              Left = 344
+              Top = 174
+              Width = 163
+              Height = 29
+              TabStop = False
+              DataField = 'VR_TOTAL'
+              DataSource = DataSource1
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -16
+              Font.Name = 'Segoe UI'
+              Font.Style = [fsBold]
+              ParentFont = False
+              ReadOnly = True
+              TabOrder = 7
+            end
           end
         end
       end
@@ -397,7 +714,7 @@ inherited ViewVender: TViewVender
           Left = 0
           Top = 104
           Width = 1223
-          Height = 575
+          Height = 585
           Margins.Left = 0
           Margins.Top = 8
           Margins.Right = 0
@@ -410,7 +727,7 @@ inherited ViewVender: TViewVender
           ExplicitHeight = 406
           object Panel4: TPanel
             Left = 1
-            Top = 542
+            Top = 552
             Width = 1221
             Height = 32
             Align = alBottom
@@ -441,7 +758,7 @@ inherited ViewVender: TViewVender
             Left = 9
             Top = 9
             Width = 1205
-            Height = 525
+            Height = 535
             Margins.Left = 8
             Margins.Top = 8
             Margins.Right = 8
@@ -577,5 +894,15 @@ inherited ViewVender: TViewVender
     AutoEdit = False
     Left = 688
     Top = 8
+  end
+  object DataSource1: TDataSource
+    DataSet = ControllerVendas.mtDados
+    Left = 608
+    Top = 392
+  end
+  object DataSource2: TDataSource
+    DataSet = ControllerVendas.mtItens
+    Left = 616
+    Top = 400
   end
 end

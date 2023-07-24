@@ -97,10 +97,11 @@ begin
       .AddUrlSegment('num_vnda', ANumVnda.ToString)
       .Get();
 
-    if LResponse.StatusCode <> 200
+    if not(LResponse.StatusCode in [200, 204])
     then RaiseException(LResponse, 'Não foi possível obter itens da venda');
 
-    Serializar(LResponse, mtItens);
+    if LResponse.StatusCode = 200
+    then Serializar(LResponse, mtItens);
 
   finally
     if not mtItens.Active
@@ -116,10 +117,13 @@ begin
       .AddUrlSegment('num_vnda', ANumVnda.ToString)
       .Get();
 
-    if LResponse.StatusCode <> 200
+    if not(LResponse.StatusCode in [200, 204])
     then RaiseException(LResponse, 'Não foi possível obter meios de pagamento da venda');
 
-    Serializar(LResponse, mtMeiosPagto);
+    mtMeiosPagto.Close;
+
+    if LResponse.StatusCode = 200
+    then Serializar(LResponse, mtMeiosPagto);
 
   finally
     if not mtMeiosPagto.Active
@@ -135,10 +139,11 @@ begin
       .AddUrlSegment('num_vnda', ANumVnda.ToString)
       .Get();
 
-    if LResponse.StatusCode <> 200
+    if not(LResponse.StatusCode in [200, 204])
     then RaiseException(LResponse, 'Não foi possível obter dados da venda');
 
-    Serializar(LResponse);
+    if LResponse.StatusCode = 200
+    then Serializar(LResponse);
 
   finally
     if not mtDados.Active

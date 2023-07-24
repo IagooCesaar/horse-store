@@ -8,7 +8,7 @@ uses
   Vcl.ExtCtrls, Vcl.Buttons, Vcl.ComCtrls, Data.DB, Vcl.Grids, Vcl.DBGrids, Vcl.DBCtrls,
 
   Loja.DM.Imagens,
-  Loja.Controller.Vendas, Vcl.CategoryButtons;
+  Loja.Controller.Vendas, Vcl.CategoryButtons, Vcl.Mask;
 
 type
   TViewVender = class(TViewModeloMdi)
@@ -58,6 +58,40 @@ type
     pModeloBotoes: TCategoryButtons;
     btnEfetivar: TButton;
     btnCancelar: TButton;
+    Label5: TLabel;
+    DBEdit1: TDBEdit;
+    DataSource1: TDataSource;
+    Label6: TLabel;
+    DBEdit2: TDBEdit;
+    Label7: TLabel;
+    DBEdit3: TDBEdit;
+    Label8: TLabel;
+    DBEdit4: TDBEdit;
+    Label9: TLabel;
+    DBEdit5: TDBEdit;
+    Label10: TLabel;
+    DBEdit6: TDBEdit;
+    Label11: TLabel;
+    DBEdit7: TDBEdit;
+    Label12: TLabel;
+    DBEdit8: TDBEdit;
+    DataSource2: TDataSource;
+    Label13: TLabel;
+    DBEdit9: TDBEdit;
+    Label14: TLabel;
+    DBEdit10: TDBEdit;
+    Label15: TLabel;
+    DBEdit11: TDBEdit;
+    Label16: TLabel;
+    DBEdit12: TDBEdit;
+    Label17: TLabel;
+    DBEdit13: TDBEdit;
+    Label18: TLabel;
+    DBEdit14: TDBEdit;
+    Label19: TLabel;
+    DBEdit15: TDBEdit;
+    Label20: TLabel;
+    DBEdit16: TDBEdit;
     procedure edtPesquisaKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormCreate(Sender: TObject);
@@ -128,6 +162,7 @@ end;
 procedure TViewVender.FormCreate(Sender: TObject);
 begin
   inherited;
+  pcPrinc.ActivePage := tsVenda;
   edtDatIni.Date := Trunc(Now - 30);
   edtDatFim.Date := Trunc(Now);
 
