@@ -241,6 +241,10 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="model\Loja.Model.Venda.Types.pas"/>
+        <DCCReference Include="view\Loja.View.Venda.InserirMeioPagto.pas">
+            <Form>ViewVendaInserirMeioPagto</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

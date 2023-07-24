@@ -41,7 +41,8 @@ uses
   Loja.Model.Caixa.ResumoMeioPagto in 'model\Loja.Model.Caixa.ResumoMeioPagto.pas',
   Loja.Model.Caixa.Fechamento in 'model\Loja.Model.Caixa.Fechamento.pas',
   Loja.View.Caixa.Fechamento in 'view\Loja.View.Caixa.Fechamento.pas' {ViewCaixaFechamento},
-  Loja.Model.Venda.Types in 'model\Loja.Model.Venda.Types.pas';
+  Loja.Model.Venda.Types in 'model\Loja.Model.Venda.Types.pas',
+  Loja.View.Venda.InserirMeioPagto in 'view\Loja.View.Venda.InserirMeioPagto.pas' {ViewVendaInserirMeioPagto};
 
 {$R *.res}
 

@@ -119,6 +119,7 @@ type
 implementation
 
 uses
+  Loja.View.Venda.InserirMeioPagto,
   Loja.View.Preco.ConsultaPreco,
   Loja.Model.Venda.Types,
   Loja.Model.Caixa.Types;
@@ -199,12 +200,10 @@ begin
   if TButton(Sender) = btnMeioPagtoCH
   then LMeioPagto := pagCheque;
 
-  FControllerVendas.mtMeiosPagto.Append;
-  FControllerVendas.mtMeiosPagtoNUM_VNDA.AsInteger := FControllerVendas.mtDadosNUM_VNDA.AsInteger;
-  FControllerVendas.mtMeiosPagtoCOD_MEIO_PAGTO.AsString := LMeioPagto.ToString;
-  FControllerVendas.mtMeiosPagtoQTD_PARC.AsInteger := 1;
-  FControllerVendas.mtMeiosPagtoVR_TOTAL.AsFloat := 10;
-  FControllerVendas.mtMeiosPagto.Post;
+  TViewVendaInserirMeioPagto.Exibir(Self,
+    FControllerVendas,
+    FControllerVendas.mtDadosNUM_VNDA.AsInteger,
+    LMeioPagto);
 
 end;
 
