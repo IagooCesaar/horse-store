@@ -92,11 +92,6 @@ inherited ControllerVendas: TControllerVendas
     UpdateOptions.AutoCommitUpdates = True
     Left = 216
     Top = 32
-    object mtItensNUM_VNDA: TIntegerField
-      DisplayLabel = 'N'#250'm. Venda'
-      DisplayWidth = 5
-      FieldName = 'NUM_VNDA'
-    end
     object mtItensNUM_SEQ_ITEM: TIntegerField
       Alignment = taCenter
       DisplayLabel = 'N'#250'm. Seq.'
@@ -154,10 +149,14 @@ inherited ControllerVendas: TControllerVendas
       FieldName = 'VR_TOTAL'
       DisplayFormat = '#,##0.00'
     end
+    object mtItensNUM_VNDA: TIntegerField
+      DisplayLabel = 'N'#250'm. Venda'
+      DisplayWidth = 5
+      FieldName = 'NUM_VNDA'
+    end
   end
   object mtMeiosPagto: TFDMemTable
     AfterPost = mtMeiosPagtoAfterDataChanged
-    AfterDelete = mtMeiosPagtoAfterDataChanged
     FetchOptions.AssignedValues = [evMode]
     FetchOptions.Mode = fmAll
     ResourceOptions.AssignedValues = [rvSilentMode]
@@ -167,11 +166,6 @@ inherited ControllerVendas: TControllerVendas
     UpdateOptions.AutoCommitUpdates = True
     Left = 296
     Top = 32
-    object mtMeiosPagtoNUM_VNDA: TIntegerField
-      Alignment = taLeftJustify
-      DisplayLabel = 'N'#250'm. Venda'
-      FieldName = 'NUM_VNDA'
-    end
     object mtMeiosPagtoNUM_SEQ_MEIO_PAGTO: TIntegerField
       Alignment = taCenter
       DisplayLabel = 'N'#250'm. Seq'
@@ -189,6 +183,11 @@ inherited ControllerVendas: TControllerVendas
       DisplayLabel = 'Valor Total'
       FieldName = 'VR_TOTAL'
       DisplayFormat = '#,##0.00'
+    end
+    object mtMeiosPagtoNUM_VNDA: TIntegerField
+      Alignment = taLeftJustify
+      DisplayLabel = 'N'#250'm. Venda'
+      FieldName = 'NUM_VNDA'
     end
   end
 end

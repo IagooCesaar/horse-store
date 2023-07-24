@@ -5,10 +5,10 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Loja.View.ModeloModal, Vcl.StdCtrls,
-  Vcl.CategoryButtons, Vcl.ExtCtrls,
+  Vcl.CategoryButtons, Vcl.ExtCtrls, Data.DB, Vcl.Mask, Vcl.DBCtrls,
 
   Loja.Controller.Vendas,
-  Loja.Model.Caixa.Types, Data.DB, Vcl.Mask, Vcl.DBCtrls;
+  Loja.Model.Caixa.Types;
 
 type
   TViewVendaInserirMeioPagto = class(TViewModeloModal)
@@ -28,14 +28,15 @@ type
     FController: TControllerVendas;
     FNumVnda: Integer;
     FCodMeioPagto: TLojaModelCaixaMeioPagamento;
+    FAdicionar: Boolean;
   public
     { Public declarations }
     class function Exibir(AOwner: TComponent;
       AControllerVenda: TControllerVendas;
-      ANumVnda: Integer; ACodMeioPagto: TLojaModelCaixaMeioPagamento): Integer;
+      ANumVnda: Integer;
+      ACodMeioPagto: TLojaModelCaixaMeioPagamento;
+      AAdicionar: Boolean): Integer;
   end;
-
-
 
 implementation
 
@@ -58,13 +59,15 @@ end;
 
 class function TViewVendaInserirMeioPagto.Exibir(AOwner: TComponent;
   AControllerVenda: TControllerVendas; ANumVnda: Integer;
-  ACodMeioPagto: TLojaModelCaixaMeioPagamento): Integer;
+  ACodMeioPagto: TLojaModelCaixaMeioPagamento; AAdicionar: Boolean): Integer;
 begin
   var ViewVendaInserirMeioPagto := TViewVendaInserirMeioPagto.Create(AOwner);
   try
     ViewVendaInserirMeioPagto.FController := AControllerVenda;
     ViewVendaInserirMeioPagto.FNumVnda := ANumVnda;
     ViewVendaInserirMeioPagto.FCodMeioPagto := ACodMeioPagto;
+    ViewVendaInserirMeioPagto.FAdicionar := AAdicionar;
+
     Result := ViewVendaInserirMeioPagto.ShowModal();
   finally
     FreeAndNil(ViewVendaInserirMeioPagto);
@@ -94,21 +97,28 @@ begin
   var LTotalVenda := 0.00;
   var LTotalMeiosPagto := 0.00;
 
-  FController.ObterVenda(FNumVnda);
-  LTotalVenda := FController.mtDadosVR_TOTAL.AsFloat;
+  if FAdicionar
+  then begin
+    FController.ObterVenda(FNumVnda);
+    LTotalVenda := FController.mtDadosVR_TOTAL.AsFloat;
 
-  FController.mtMeiosPagto.First;
-  while not FController.mtMeiosPagto.Eof
-  do begin
-    LTotalMeiosPagto := LTotalMeiosPagto + FController.mtMeiosPagtoVR_TOTAL.AsFloat;
-    FController.mtMeiosPagto.Next;
-  end;
+    FController.mtMeiosPagto.First;
+    while not FController.mtMeiosPagto.Eof
+    do begin
+      LTotalMeiosPagto := LTotalMeiosPagto + FController.mtMeiosPagtoVR_TOTAL.AsFloat;
+      FController.mtMeiosPagto.Next;
+    end;
 
-  LTotalMeiosPagto := LTotalVenda - LTotalMeiosPagto;
-  if LTotalMeiosPagto < 0
-  then LTotalMeiosPagto := 0;
+    LTotalMeiosPagto := LTotalVenda - LTotalMeiosPagto;
+    if LTotalMeiosPagto < 0
+    then LTotalMeiosPagto := 0;
+  end
+  else LTotalMeiosPagto := FController.mtMeiosPagtoVR_TOTAL.AsFloat;
 
-  FController.mtMeiosPagto.Append;
+  if FAdicionar
+  then FController.mtMeiosPagto.Append
+  else FController.mtMeiosPagto.Edit;
+
   FController.mtMeiosPagtoNUM_VNDA.AsInteger := FNumVnda;
   FController.mtMeiosPagtoCOD_MEIO_PAGTO.AsString := FCodMeioPagto.ToString;
   FController.mtMeiosPagtoQTD_PARC.AsInteger := 1;

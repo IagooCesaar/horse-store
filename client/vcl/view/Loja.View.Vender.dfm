@@ -494,12 +494,14 @@ inherited ViewVender: TViewVender
               Height = 294
               Align = alClient
               DataSource = dsMeiosPagto
+              ReadOnly = True
               TabOrder = 1
               TitleFont.Charset = DEFAULT_CHARSET
               TitleFont.Color = clWindowText
               TitleFont.Height = -16
               TitleFont.Name = 'Segoe UI'
               TitleFont.Style = []
+              OnDblClick = dbgMeiosPagtoDblClick
             end
           end
           object GroupBox2: TGroupBox

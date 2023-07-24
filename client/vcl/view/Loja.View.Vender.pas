@@ -108,6 +108,7 @@ type
 
     procedure mtItensBeforePost(DataSet: TDataSet);
     procedure mtItensBeforeDelete(DataSet: TDataSet);
+    procedure dbgMeiosPagtoDblClick(Sender: TObject);
   private
     FControllerVendas: TControllerVendas;
     FControllerItens: TControllerItens;
@@ -153,6 +154,19 @@ begin
   else
   if rbtVendaEfet.Checked
   then FControllerVendas.ObterVendas(edtDatIni.Date, edtDatFim.Date, TLojaModelVendaSituacao.sitEfetivada);
+end;
+
+procedure TViewVender.dbgMeiosPagtoDblClick(Sender: TObject);
+begin
+  inherited;
+
+  var LMeioPagto := TLojaModelCaixaMeioPagamento.Create(
+    FControllerVendas.mtMeiosPagtoCOD_MEIO_PAGTO.AsString);
+
+  TViewVendaInserirMeioPagto.Exibir(Self,
+    FControllerVendas,
+    FControllerVendas.mtDadosNUM_VNDA.AsInteger,
+    LMeioPagto, False);
 end;
 
 procedure TViewVender.dbgVendasDblClick(Sender: TObject);
@@ -203,7 +217,7 @@ begin
   TViewVendaInserirMeioPagto.Exibir(Self,
     FControllerVendas,
     FControllerVendas.mtDadosNUM_VNDA.AsInteger,
-    LMeioPagto);
+    LMeioPagto, True);
 
 end;
 
@@ -228,8 +242,12 @@ begin
   if not PermiteEditar
   then Exit;
 
-  FControllerVendas.mtMeiosPagto.Delete;
-  FControllerVendas.ObterMeiosPagtoVenda(FControllerVendas.mtDadosNUM_VNDA.AsInteger);
+  FControllerVendas.mtMeiosPagto.Edit;
+  FControllerVendas.mtMeiosPagtoQTD_PARC.AsInteger := 0;
+  FControllerVendas.mtMeiosPagtoVR_TOTAL.AsFloat := 0;
+  FControllerVendas.mtMeiosPagto.Post;
+
+  //FControllerVendas.ObterMeiosPagtoVenda(FControllerVendas.mtDadosNUM_VNDA.AsInteger);
 end;
 
 procedure TViewVender.edtPesquisaKeyDown(Sender: TObject; var Key: Word;

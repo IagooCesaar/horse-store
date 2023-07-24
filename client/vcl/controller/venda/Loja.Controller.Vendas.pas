@@ -206,18 +206,23 @@ begin
 
   var LResponse := PreparaRequest
     .Resource('/venda/{num_vnda}/meios-pagamento')
-    .AddUrlSegment('num_vnda', DataSet.FieldByName('num_vnda').AsString)
+    .AddUrlSegment('num_vnda', DataSet.FieldByName('NUM_VNDA').AsString)
     .AddBody(LBody)
     .Post();
 
   try
     DataSet.DisableControls;
-    if not(LResponse.StatusCode in [200,201])
+    if not(LResponse.StatusCode in [201,204])
     then RaiseException(LResponse, 'Erro ao atualizar meios de pagamento da venda');
 
-    DataSet.Close;
-    DataSet.LoadFromJSON(LResponse.Content);
+    if DataSet.Active
+    then DataSet.Close;
 
+    if LResponse.StatusCode = 201
+    then DataSet.LoadFromJSON(LResponse.Content);
+
+    if mtMeiosPagto.IsEmpty
+    then mtMeiosPagto.CreateDataSet;
   finally
     DataSet.EnableControls;
   end;
