@@ -154,6 +154,10 @@ begin
   else
   if rbtVendaEfet.Checked
   then FControllerVendas.ObterVendas(edtDatIni.Date, edtDatFim.Date, TLojaModelVendaSituacao.sitEfetivada);
+
+  if FControllerVendas.mtVendas.IsEmpty
+  then ShowMessage('A consulta não retornou dados');
+
 end;
 
 procedure TViewVender.dbgMeiosPagtoDblClick(Sender: TObject);

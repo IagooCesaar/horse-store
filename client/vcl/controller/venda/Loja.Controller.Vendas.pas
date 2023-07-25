@@ -355,13 +355,14 @@ begin
       .AddParam('cod_sit', ACodSit.Name)
       .Get();
 
-    if LResponse.StatusCode <> 200
+    if not(LResponse.StatusCode in [200,204])
     then RaiseException(LResponse, 'Não foi possível obter lista de vendas');
 
     if mtVendas.Active
     then mtVendas.Close;
 
-    Serializar(LResponse, mtVendas);
+    if LResponse.StatusCode = 200
+    then Serializar(LResponse, mtVendas);
   finally
     if not mtVendas.Active
     then mtVendas.CreateDataSet;

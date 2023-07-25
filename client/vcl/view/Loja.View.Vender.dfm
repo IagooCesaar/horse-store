@@ -20,7 +20,7 @@ inherited ViewVender: TViewVender
       Top = 0
       Width = 1231
       Height = 738
-      ActivePage = tsVenda
+      ActivePage = tsPesquisa
       Align = alClient
       TabOrder = 0
       ExplicitWidth = 1227
@@ -84,8 +84,11 @@ inherited ViewVender: TViewVender
             Width = 29
             Height = 29
             Cursor = crHandPoint
+            Hint = 'Executar [Enter]'
             ImageIndex = 3
             Images = dmImagens.imgIco16
+            ParentShowHint = False
+            ShowHint = True
             OnClick = sbBuscarClick
           end
           object edtPesquisa: TEdit

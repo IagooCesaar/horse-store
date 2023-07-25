@@ -277,6 +277,7 @@ end;
 procedure TViewCaixa.FormCreate(Sender: TObject);
 begin
   inherited;
+  pcPrinc.ActivePage := tsCaixa;
   edtDatIni.Date := Trunc(Now - 30);
   edtDatFim.Date := Trunc(Now);
 
