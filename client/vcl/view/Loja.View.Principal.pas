@@ -28,6 +28,8 @@ type
     sbar1: TStatusBar;
     acCaixa: TAction;
     btnCaixa: TToolButton;
+    acSobre: TAction;
+    mniSobre: TMenuItem;
     procedure acVenderExecute(Sender: TObject);
     procedure acItensExecute(Sender: TObject);
     procedure acComprarExecute(Sender: TObject);
@@ -37,6 +39,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure acCaixaExecute(Sender: TObject);
+    procedure acSobreExecute(Sender: TObject);
   private
     { Private declarations }
     procedure OpenChild(sClassName: string);
@@ -54,7 +57,7 @@ uses
 
   Loja.View.Logon,
   Loja.View.Configuracoes,
-  Loja.View.ModeloModal,
+  Loja.View.Sobre,
 
   Loja.Model.Infra.Configuracoes,
   Loja.Model.Infra.Usuario;
@@ -99,6 +102,16 @@ end;
 procedure TViewPrincipal.acSairExecute(Sender: TObject);
 begin
   Application.Terminate;
+end;
+
+procedure TViewPrincipal.acSobreExecute(Sender: TObject);
+begin
+  var ViewSobre := TViewSobre.Create(Self);
+  try
+    ViewSobre.ShowModal();
+  finally
+    FreeAndNil(ViewSobre);
+  end;
 end;
 
 procedure TViewPrincipal.acVenderExecute(Sender: TObject);

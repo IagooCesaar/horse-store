@@ -252,6 +252,10 @@
             <Form>ViewVendaInserirMeioPagto</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="view\Loja.View.Sobre.pas">
+            <Form>ViewSobre</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -292,9 +296,9 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="Win64\Debug\loja.rsm" Configuration="Debug" Class="DebugSymbols">
+                <DeployFile LocalName="Win64\Release\loja.exe" Configuration="Release" Class="ProjectOutput">
                     <Platform Name="Win64">
-                        <RemoteName>loja.rsm</RemoteName>
+                        <RemoteName>loja.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

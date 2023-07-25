@@ -2,8 +2,8 @@ object ViewPrincipal: TViewPrincipal
   Left = 0
   Top = 0
   Caption = 'Loja'
-  ClientHeight = 568
-  ClientWidth = 860
+  ClientHeight = 567
+  ClientWidth = 856
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,7 +20,7 @@ object ViewPrincipal: TViewPrincipal
     Left = 0
     Top = 0
     Width = 129
-    Height = 549
+    Height = 548
     Align = alLeft
     AutoSize = True
     BorderWidth = 2
@@ -32,6 +32,7 @@ object ViewPrincipal: TViewPrincipal
     List = True
     ShowCaptions = True
     TabOrder = 0
+    ExplicitHeight = 549
     object btnVender: TToolButton
       AlignWithMargins = True
       Left = 0
@@ -74,10 +75,12 @@ object ViewPrincipal: TViewPrincipal
   end
   object sbar1: TStatusBar
     Left = 0
-    Top = 549
-    Width = 860
+    Top = 548
+    Width = 856
     Height = 19
     Panels = <>
+    ExplicitTop = 549
+    ExplicitWidth = 860
   end
   object acmAcoes: TActionManager
     ActionBars = <
@@ -135,6 +138,11 @@ object ViewPrincipal: TViewPrincipal
       ImageIndex = 6
       OnExecute = acCaixaExecute
     end
+    object acSobre: TAction
+      Category = 'Menu'
+      Caption = 'Sobre'
+      OnExecute = acSobreExecute
+    end
   end
   object menuPrinc: TMainMenu
     Images = dmImagens.imgIco16
@@ -145,6 +153,9 @@ object ViewPrincipal: TViewPrincipal
     end
     object mniConfiguracoes: TMenuItem
       Action = acConfiguracoes
+    end
+    object mniSobre: TMenuItem
+      Action = acSobre
     end
   end
 end

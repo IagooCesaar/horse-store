@@ -3,6 +3,8 @@ program loja;
 uses
   Vcl.Forms,
   System.Classes,
+  Vcl.Themes,
+  Vcl.Styles,
   Loja.View.Principal in 'view\Loja.View.Principal.pas' {ViewPrincipal},
   Loja.DM.Imagens in 'view\infra\Loja.DM.Imagens.pas' {dmImagens: TDataModule},
   Loja.View.ModeloModal in 'view\infra\Loja.View.ModeloModal.pas' {ViewModeloModal},
@@ -13,8 +15,6 @@ uses
   Loja.View.Vender in 'view\Loja.View.Vender.pas' {ViewVender},
   Loja.Controller.Vendas in 'controller\venda\Loja.Controller.Vendas.pas' {ControllerVendas: TDataModule},
   Loja.View.Logon in 'view\infra\Loja.View.Logon.pas' {ViewLogon},
-  Vcl.Themes,
-  Vcl.Styles,
   Loja.View.Configuracoes in 'view\infra\Loja.View.Configuracoes.pas' {ViewConfiguracoes},
   Loja.Model.Infra.Configuracoes in 'model\infra\Loja.Model.Infra.Configuracoes.pas',
   Loja.Model.Infra.Usuario in 'model\infra\Loja.Model.Infra.Usuario.pas',
@@ -41,7 +41,8 @@ uses
   Loja.Model.Caixa.Fechamento in 'model\Loja.Model.Caixa.Fechamento.pas',
   Loja.View.Caixa.Fechamento in 'view\Loja.View.Caixa.Fechamento.pas' {ViewCaixaFechamento},
   Loja.Model.Venda.Types in 'model\Loja.Model.Venda.Types.pas',
-  Loja.View.Venda.InserirMeioPagto in 'view\Loja.View.Venda.InserirMeioPagto.pas' {ViewVendaInserirMeioPagto};
+  Loja.View.Venda.InserirMeioPagto in 'view\Loja.View.Venda.InserirMeioPagto.pas' {ViewVendaInserirMeioPagto},
+  Loja.View.Sobre in 'view\Loja.View.Sobre.pas' {ViewSobre};
 
 {$R *.res}
 
@@ -54,6 +55,7 @@ begin
     ,TViewItens
     ,TViewComprar
     ,TViewCaixa
+    ,TViewSobre
   ]);
 
   Application.Initialize;
