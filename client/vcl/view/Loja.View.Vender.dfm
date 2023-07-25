@@ -137,7 +137,7 @@ inherited ViewVender: TViewVender
             ExplicitHeight = 280
             object Label12: TLabel
               Left = 6
-              Top = 48
+              Top = 55
               Width = 71
               Height = 21
               Caption = 'N'#250'm. Seq.'
@@ -145,7 +145,7 @@ inherited ViewVender: TViewVender
             end
             object Label13: TLabel
               Left = 184
-              Top = 48
+              Top = 55
               Width = 59
               Height = 21
               Caption = 'Situa'#231#227'o'
@@ -153,7 +153,7 @@ inherited ViewVender: TViewVender
             end
             object Label14: TLabel
               Left = 6
-              Top = 107
+              Top = 114
               Width = 66
               Height = 21
               Caption = 'C'#243'd. Item'
@@ -161,7 +161,7 @@ inherited ViewVender: TViewVender
             end
             object Label15: TLabel
               Left = 112
-              Top = 107
+              Top = 114
               Width = 31
               Height = 21
               Caption = 'Item'
@@ -169,7 +169,7 @@ inherited ViewVender: TViewVender
             end
             object Label16: TLabel
               Left = 6
-              Top = 166
+              Top = 173
               Width = 81
               Height = 21
               Caption = 'Quantidade'
@@ -177,7 +177,7 @@ inherited ViewVender: TViewVender
             end
             object Label17: TLabel
               Left = 112
-              Top = 166
+              Top = 173
               Width = 75
               Height = 21
               Caption = 'Pre'#231'o Unit.'
@@ -185,7 +185,7 @@ inherited ViewVender: TViewVender
             end
             object Label18: TLabel
               Left = 6
-              Top = 225
+              Top = 232
               Width = 78
               Height = 21
               Caption = 'Valor Bruto'
@@ -193,7 +193,7 @@ inherited ViewVender: TViewVender
             end
             object Label19: TLabel
               Left = 281
-              Top = 167
+              Top = 174
               Width = 105
               Height = 21
               Caption = 'Valor Desconto'
@@ -201,7 +201,7 @@ inherited ViewVender: TViewVender
             end
             object Label20: TLabel
               Left = 175
-              Top = 225
+              Top = 232
               Width = 107
               Height = 21
               Caption = 'Valor Total Item'
@@ -209,7 +209,7 @@ inherited ViewVender: TViewVender
             end
             object Label21: TLabel
               Left = 362
-              Top = 48
+              Top = 55
               Width = 77
               Height = 21
               Caption = 'N'#250'm. Vnda'
@@ -219,15 +219,17 @@ inherited ViewVender: TViewVender
               Left = 1
               Top = 1
               Width = 533
-              Height = 32
+              Height = 48
               DataSource = dsItens
               VisibleButtons = [nbFirst, nbPrior, nbNext, nbLast, nbDelete, nbEdit, nbPost, nbCancel]
               Align = alTop
+              ParentShowHint = False
+              ShowHint = True
               TabOrder = 0
             end
             object dbNUM_SEQ_ITEM: TDBEdit
               Left = 6
-              Top = 72
+              Top = 79
               Width = 172
               Height = 29
               TabStop = False
@@ -238,7 +240,7 @@ inherited ViewVender: TViewVender
             end
             object dbCOD_SIT1: TDBEdit
               Left = 184
-              Top = 72
+              Top = 79
               Width = 172
               Height = 29
               TabStop = False
@@ -249,7 +251,7 @@ inherited ViewVender: TViewVender
             end
             object dbCOD_ITEM: TDBEdit
               Left = 6
-              Top = 131
+              Top = 138
               Width = 100
               Height = 29
               DataField = 'COD_ITEM'
@@ -259,7 +261,7 @@ inherited ViewVender: TViewVender
             end
             object dbNOM_ITEM: TDBEdit
               Left = 112
-              Top = 131
+              Top = 138
               Width = 409
               Height = 29
               DataField = 'NOM_ITEM'
@@ -269,7 +271,7 @@ inherited ViewVender: TViewVender
             end
             object dbQTD_ITEM: TDBEdit
               Left = 6
-              Top = 190
+              Top = 197
               Width = 100
               Height = 29
               DataField = 'QTD_ITEM'
@@ -278,7 +280,7 @@ inherited ViewVender: TViewVender
             end
             object dbVR_PRECO_UNIT: TDBEdit
               Left = 112
-              Top = 190
+              Top = 197
               Width = 163
               Height = 29
               TabStop = False
@@ -289,7 +291,7 @@ inherited ViewVender: TViewVender
             end
             object dbVR_BRUTO: TDBEdit
               Left = 6
-              Top = 249
+              Top = 256
               Width = 163
               Height = 29
               TabStop = False
@@ -300,7 +302,7 @@ inherited ViewVender: TViewVender
             end
             object dbVR_DESC: TDBEdit
               Left = 281
-              Top = 190
+              Top = 197
               Width = 163
               Height = 29
               DataField = 'VR_DESC'
@@ -309,7 +311,7 @@ inherited ViewVender: TViewVender
             end
             object dbVR_TOTAL: TDBEdit
               Left = 175
-              Top = 248
+              Top = 255
               Width = 163
               Height = 29
               TabStop = False
@@ -320,7 +322,7 @@ inherited ViewVender: TViewVender
             end
             object dbNUM_VNDA1: TDBEdit
               Left = 362
-              Top = 72
+              Top = 79
               Width = 103
               Height = 29
               TabStop = False
