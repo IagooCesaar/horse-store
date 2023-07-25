@@ -496,6 +496,7 @@ inherited ViewVender: TViewVender
               Height = 294
               Align = alClient
               DataSource = dsMeiosPagto
+              Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
               ReadOnly = True
               TabOrder = 1
               TitleFont.Charset = DEFAULT_CHARSET
