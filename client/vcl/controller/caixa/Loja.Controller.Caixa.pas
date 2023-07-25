@@ -33,8 +33,9 @@ type
     mtResumoCaixaCOD_SIT: TStringField;
     mtResumoCaixaMEIOS_PAGTO: TMemoField;
     mtResumoCaixaVR_SALDO: TCurrencyField;
-    procedure DataModuleCreate(Sender: TObject);
   public
+    procedure CriarDataSets;
+
     procedure ObterCaixas(ADatIni, ADatFim: TDate);
     procedure ObterCaixaAberto;
     procedure ObterCaixa(ACodCaixa: Integer);
@@ -69,9 +70,8 @@ begin
   then RaiseException(LResponse, 'Falha ao abrir novo caixa');
 end;
 
-procedure TControllerCaixa.DataModuleCreate(Sender: TObject);
+procedure TControllerCaixa.CriarDataSets;
 begin
-  inherited;
   mtDados.CreateDataSet;
   mtCaixas.CreateDataSet;
   mtResumoCaixa.CreateDataSet;

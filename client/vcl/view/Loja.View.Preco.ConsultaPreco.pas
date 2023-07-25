@@ -117,6 +117,9 @@ begin
   dsPrecoAtual.DataSet := FControllerPrecoVenda.mtPrecoAtual;
   dsNovoPreco.DataSet := FControllerPrecoVenda.mtNovoPreco;
 
+  FControllerPrecoVenda.CriarDataSets;
+  FControllerItens.CriarDatasets;
+
   pcPrecos.ActivePage := tsHistorico;
 end;
 

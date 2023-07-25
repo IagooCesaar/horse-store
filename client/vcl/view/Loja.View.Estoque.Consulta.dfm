@@ -4,25 +4,25 @@ inherited ViewEstoqueConsulta: TViewEstoqueConsulta
   ClientWidth = 815
   OnCreate = FormCreate
   OnShow = FormShow
-  ExplicitWidth = 831
-  ExplicitHeight = 617
+  ExplicitWidth = 827
+  ExplicitHeight = 616
   TextHeight = 21
   inherited pModeloClient: TPanel
     Width = 815
     Height = 522
-    ExplicitWidth = 819
-    ExplicitHeight = 523
+    ExplicitWidth = 811
+    ExplicitHeight = 521
     object pItem: TPanel
       Left = 0
       Top = 0
-      Width = 823
+      Width = 815
       Height = 145
       Align = alTop
       BevelOuter = bvNone
       Caption = 'pItem'
       ShowCaption = False
       TabOrder = 0
-      ExplicitWidth = 819
+      ExplicitWidth = 811
       DesignSize = (
         815
         145)
@@ -107,7 +107,7 @@ inherited ViewEstoqueConsulta: TViewEstoqueConsulta
         TabOrder = 3
       end
       object btnPesquisar: TButton
-        Left = 680
+        Left = 672
         Top = 97
         Width = 121
         Height = 36
@@ -116,7 +116,7 @@ inherited ViewEstoqueConsulta: TViewEstoqueConsulta
         Caption = 'Realizar Acerto'
         TabOrder = 4
         OnClick = btnPesquisarClick
-        ExplicitLeft = 688
+        ExplicitLeft = 668
       end
     end
     object GroupBox1: TGroupBox
@@ -138,14 +138,14 @@ inherited ViewEstoqueConsulta: TViewEstoqueConsulta
       HeaderFont.Name = 'Segoe UI'
       HeaderFont.Style = [fsBold]
       TabOrder = 1
-      ExplicitWidth = 799
-      ExplicitHeight = 212
+      ExplicitWidth = 791
+      ExplicitHeight = 210
       object dbgSaldo: TDBGrid
         AlignWithMargins = True
         Left = 10
         Top = 29
-        Width = 783
-        Height = 174
+        Width = 775
+        Height = 172
         Margins.Left = 8
         Margins.Top = 6
         Margins.Right = 8
@@ -180,12 +180,12 @@ inherited ViewEstoqueConsulta: TViewEstoqueConsulta
       HeaderFont.Name = 'Segoe UI'
       HeaderFont.Style = [fsBold]
       TabOrder = 2
-      ExplicitWidth = 799
+      ExplicitWidth = 791
       object DBGrid1: TDBGrid
         AlignWithMargins = True
         Left = 10
         Top = 29
-        Width = 783
+        Width = 775
         Height = 87
         Margins.Left = 8
         Margins.Top = 6
@@ -206,17 +206,17 @@ inherited ViewEstoqueConsulta: TViewEstoqueConsulta
   inherited pModeloBotoes: TCategoryButtons
     Top = 522
     Width = 815
-    ExplicitTop = 523
-    ExplicitWidth = 819
+    ExplicitTop = 521
+    ExplicitWidth = 811
     inherited btnModeloOk: TButton
-      Left = 613
+      Left = 605
       Visible = False
-      ExplicitLeft = 609
+      ExplicitLeft = 601
     end
     inherited btnModeloCancelar: TButton
-      Left = 716
+      Left = 708
       Caption = 'Voltar'
-      ExplicitLeft = 712
+      ExplicitLeft = 704
     end
   end
   object dsItem: TDataSource

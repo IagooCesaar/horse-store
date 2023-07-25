@@ -334,7 +334,7 @@ inherited ViewItens: TViewItens
       Width = 1170
       Height = 37
       Caption = 'Cadastro de Itens'
-      ExplicitWidth = 1170
+      ExplicitWidth = 162
     end
   end
   object dsItens: TDataSource

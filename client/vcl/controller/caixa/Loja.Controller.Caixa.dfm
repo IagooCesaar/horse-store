@@ -1,5 +1,4 @@
 inherited ControllerCaixa: TControllerCaixa
-  OnCreate = DataModuleCreate
   Height = 123
   inherited mtDados: TFDMemTable
     object mtDadosCOD_CAIXA: TIntegerField

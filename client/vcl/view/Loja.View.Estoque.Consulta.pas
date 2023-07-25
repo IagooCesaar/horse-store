@@ -86,6 +86,9 @@ begin
   dsSaldo.DataSet := FControllerSaldo.mtDados;
   dsMovimentos.DataSet := FControllerSaldo.mtMovimentos;
   dsFechamento.DataSet := FControllerSaldo.mtUltFecha;
+
+  FControllerItens.CriarDatasets;
+  FControllerSaldo.CriarDataSets;
 end;
 
 procedure TViewEstoqueConsulta.FormShow(Sender: TObject);

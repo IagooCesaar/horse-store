@@ -19,14 +19,13 @@ type
   private
     { Private declarations }
   protected
-    procedure CriarDatasets; virtual;
-
     function PreparaRequest: IRequest;
     procedure RaiseException(AResponse : IResponse; ATituloMensagem: string);
     procedure Serializar(AResponse : IResponse; dsDestino: TDataSet = nil); overload;
     procedure Serializar(AJsonString : string; dsDestino: TDataSet = nil); overload;
     procedure Serializar(AJsonValue : TJSONValue; dsDestino: TDataSet = nil); overload;
   public
+    procedure CriarDataSets; virtual;
   end;
 
 implementation

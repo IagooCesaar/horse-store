@@ -189,11 +189,6 @@
             <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
-        <DCCReference Include="controller\estoque\Loja.Controller.Estoque.Movimento.pas">
-            <Form>ControllerEstoqueMovimento</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TDataModule</DesignClass>
-        </DCCReference>
         <DCCReference Include="view\Loja.View.Estoque.Consulta.pas">
             <Form>ViewEstoqueConsulta</Form>
             <FormType>dfm</FormType>

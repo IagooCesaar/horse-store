@@ -123,6 +123,7 @@ begin
   inherited;
   FController := TControllerItens.Create(Self);
   dsItens.DataSet := FController.mtDados;
+  FController.CriarDatasets;
 end;
 
 procedure TViewItens.FormDestroy(Sender: TObject);

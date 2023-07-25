@@ -23,6 +23,7 @@ type
   private
     procedure CriarMovimento(ATipoMov: string; ACodCaixa: Integer; AMovimento: TLojaModelCaixaNovoMovimento);
   public
+
     procedure ObterMovimentosCaixa(ACodCaixa: Integer);
     procedure CriarMovimentoSangria(ACodCaixa: Integer; AMovimento: TLojaModelCaixaNovoMovimento);
     procedure CriarMovimentoReforco(ACodCaixa: Integer; AMovimento: TLojaModelCaixaNovoMovimento);

@@ -1,14 +1,14 @@
 inherited ViewCaixa: TViewCaixa
   Caption = 'Controle de Caixa'
-  ClientHeight = 611
-  ClientWidth = 1216
+  ClientHeight = 610
+  ClientWidth = 1212
   OnCreate = FormCreate
-  ExplicitWidth = 1232
-  ExplicitHeight = 650
+  ExplicitWidth = 1228
+  ExplicitHeight = 649
   TextHeight = 21
   inherited pModeloClient: TPanel
-    Width = 1216
-    Height = 554
+    Width = 1212
+    Height = 553
     ExplicitLeft = 0
     ExplicitTop = 57
     ExplicitWidth = 1216
@@ -17,8 +17,8 @@ inherited ViewCaixa: TViewCaixa
       AlignWithMargins = True
       Left = 8
       Top = 8
-      Width = 1204
-      Height = 539
+      Width = 1200
+      Height = 538
       Margins.Left = 8
       Margins.Top = 8
       Margins.Right = 8
@@ -26,8 +26,6 @@ inherited ViewCaixa: TViewCaixa
       ActivePage = tsCaixa
       Align = alClient
       TabOrder = 0
-      ExplicitWidth = 1200
-      ExplicitHeight = 538
       object tsCaixa: TTabSheet
         Caption = ':: Caixa  '
         object pVerCaixaAberto: TPanel
@@ -718,7 +716,7 @@ inherited ViewCaixa: TViewCaixa
         object Panel1: TPanel
           Left = 0
           Top = 0
-          Width = 1196
+          Width = 1192
           Height = 96
           Align = alTop
           Caption = 'Panel1'
@@ -774,8 +772,8 @@ inherited ViewCaixa: TViewCaixa
           AlignWithMargins = True
           Left = 0
           Top = 104
-          Width = 1196
-          Height = 399
+          Width = 1192
+          Height = 398
           Margins.Left = 0
           Margins.Top = 8
           Margins.Right = 0
@@ -838,7 +836,7 @@ inherited ViewCaixa: TViewCaixa
     end
   end
   inherited pModeloTop: TPanel
-    Width = 1216
+    Width = 1212
     ExplicitWidth = 1216
     inherited bvlModeloLinha: TBevel
       Width = 1220

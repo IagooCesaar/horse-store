@@ -287,6 +287,9 @@ begin
   dsCaixas.DataSet := FControllerCaixa.mtCaixas;
   dsMovimentos.DataSet := FControllerMovimento.mtDados;
 
+  FControllerCaixa.CriarDataSets;
+  FControllerMovimento.CriarDataSets;
+
   FrameCaixaResumoMeioPagto1.Cor := RGB(151, 255, 170);
   FrameCaixaResumoMeioPagto1.CorFonte := RGB(000, 000, 000);
   FrameCaixaResumoMeioPagto1.Nome := 'Meio de Pagamento';

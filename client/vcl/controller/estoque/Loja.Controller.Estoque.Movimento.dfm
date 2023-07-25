@@ -1,2 +1,0 @@
-inherited ControllerEstoqueMovimento: TControllerEstoqueMovimento
-end
