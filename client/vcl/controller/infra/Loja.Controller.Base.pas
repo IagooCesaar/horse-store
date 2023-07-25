@@ -49,25 +49,26 @@ var LMensagem: String;
   function RetornoErroHorse: string;
   var LApiError: TLojaModelInfraDTOApiError; LJson: TJSONObject;
   begin
-    try
-      try
-        // Se o erro foi tratado pelo EHorseException virá em formato JSON
-        LJson := TJSONObject.ParseJSONValue(AResponse.Content) as TJSONObject;
-        LApiError := TJson.ClearJsonAndConvertToObject<TLojaModelInfraDTOApiError>(LJson);
-        Result := Format(
-          #13#10#13#10+
-          'Mensagem: %s'+#13#10+#13#10+
-          'Unit da API: %s'+#13#10+
-          'Status code: %d %s',
-          [LApiError.error, LApiError.&unit, AResponse.StatusCode, AResponse.StatusText]
-        );
-      finally
-        if LApiError <> nil
-        then LApiError.Free;
-        if LJson <> nil
-        then LJson.Free;
-      end;
-    except
+    if Trim(AResponse.Content).StartsWith('{')
+    then try
+      // Se o erro foi tratado pelo EHorseException virá em formato JSON
+      LJson := TJSONObject.ParseJSONValue(AResponse.Content) as TJSONObject;
+      LApiError := TJson.ClearJsonAndConvertToObject<TLojaModelInfraDTOApiError>(LJson);
+      Result := Format(
+        #13#10#13#10+
+        'Mensagem: %s'+#13#10+#13#10+
+        'Unit da API: %s'+#13#10+
+        'Status code: %d %s',
+        [LApiError.error, LApiError.&unit, AResponse.StatusCode, AResponse.StatusText]
+      );
+    finally
+      if LApiError <> nil
+      then LApiError.Free;
+      if LJson <> nil
+      then LJson.Free;
+    end
+    else
+    begin
       // Se erro ocorre antes dos controles de Exceção do Horse, vem em text/plain
       Result := Format(
         #13#10#13#10+
