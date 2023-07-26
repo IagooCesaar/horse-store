@@ -32,7 +32,6 @@ object ViewPrincipal: TViewPrincipal
     List = True
     ShowCaptions = True
     TabOrder = 0
-    ExplicitHeight = 549
     object btnVender: TToolButton
       AlignWithMargins = True
       Left = 0
@@ -79,8 +78,6 @@ object ViewPrincipal: TViewPrincipal
     Width = 856
     Height = 19
     Panels = <>
-    ExplicitTop = 549
-    ExplicitWidth = 860
   end
   object acmAcoes: TActionManager
     ActionBars = <

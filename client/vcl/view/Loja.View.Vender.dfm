@@ -36,6 +36,7 @@ inherited ViewVender: TViewVender
           Caption = 'Panel1'
           ShowCaption = False
           TabOrder = 0
+          ExplicitWidth = 1219
           object Label1: TLabel
             Left = 16
             Top = 11
@@ -108,6 +109,8 @@ inherited ViewVender: TViewVender
           Align = alClient
           Caption = ':: Itens da venda  '
           TabOrder = 1
+          ExplicitWidth = 1219
+          ExplicitHeight = 305
           object dbgItens: TDBGrid
             Left = 2
             Top = 23
@@ -133,6 +136,8 @@ inherited ViewVender: TViewVender
             Caption = 'pControleItens'
             ShowCaption = False
             TabOrder = 1
+            ExplicitLeft = 682
+            ExplicitHeight = 280
             object Label12: TLabel
               Left = 6
               Top = 55
@@ -342,6 +347,8 @@ inherited ViewVender: TViewVender
           Caption = 'pBottom'
           ShowCaption = False
           TabOrder = 2
+          ExplicitTop = 382
+          ExplicitWidth = 1219
           object GroupBox3: TGroupBox
             Left = 0
             Top = 0
@@ -350,6 +357,7 @@ inherited ViewVender: TViewVender
             Align = alClient
             Caption = ':: Meios de pagamento  '
             TabOrder = 0
+            ExplicitWidth = 676
             object p1: TPanel
               Left = 2
               Top = 23
@@ -511,6 +519,7 @@ inherited ViewVender: TViewVender
             Align = alRight
             Caption = ':: Totais da venda  '
             TabOrder = 1
+            ExplicitLeft = 676
             object Label5: TLabel
               Left = 6
               Top = 32
@@ -727,8 +736,6 @@ inherited ViewVender: TViewVender
           Caption = 'Lista de Caixas'
           ShowCaption = False
           TabOrder = 0
-          ExplicitWidth = 1219
-          ExplicitHeight = 597
           object Panel4: TPanel
             Left = 1
             Top = 565
@@ -739,8 +746,6 @@ inherited ViewVender: TViewVender
             Caption = 'Panel3'
             ShowCaption = False
             TabOrder = 0
-            ExplicitTop = 564
-            ExplicitWidth = 1217
             object Label3: TLabel
               AlignWithMargins = True
               Left = 8
@@ -789,7 +794,6 @@ inherited ViewVender: TViewVender
           Caption = 'Panel1'
           ShowCaption = False
           TabOrder = 1
-          ExplicitWidth = 1219
           object Label2: TLabel
             Left = 16
             Top = 16

@@ -231,6 +231,12 @@ begin
   if not PermiteEditar
   then Exit;
 
+  if FControllerVendas.mtItens.State in [dsInsert, dsEdit]
+  then raise Exception.Create('Termine de editar o item selecionado');
+
+  if FControllerVendas.mtMeiosPagto.State in [dsInsert, dsEdit]
+  then raise Exception.Create('Termine de editar o meio de pagamento selecionado');
+
   FControllerVendas.CancelarVenda(FControllerVendas.mtDadosNUM_VNDA.AsInteger);
   AbrirDetalhesVenda(FControllerVendas.mtDadosNUM_VNDA.AsInteger);
 
@@ -242,6 +248,12 @@ begin
   inherited;
   if not PermiteEditar
   then Exit;
+
+  if FControllerVendas.mtItens.State in [dsInsert, dsEdit]
+  then raise Exception.Create('Termine de editar o item selecionado');
+
+  if FControllerVendas.mtMeiosPagto.State in [dsInsert, dsEdit]
+  then raise Exception.Create('Termine de editar o meio de pagamento selecionado');
 
   FControllerVendas.EfetivarVenda(FControllerVendas.mtDadosNUM_VNDA.AsInteger);
   AbrirDetalhesVenda(FControllerVendas.mtDadosNUM_VNDA.AsInteger);
