@@ -139,5 +139,26 @@ SQL> quit;
 
 ## Iniciando o projeto
 
+Primeiro passo será instalar versão 11 da IDE Delphi, podendo ser até mesmo a versão [Community Edition](https://www.embarcadero.com/br/products/delphi/starter).
 
+Será necessário obter o **Boss**, que é um gerenciador de dependência para o Delphi, similar ao NPM e YARN para Node.js. Verifique pela versão compatível com seu dispositivo dentre as opções em [Releases](https://github.com/HashLoad/boss/releases).
 
+Para rodar o projeto de testes será necessário a instalação do **DelphiCodeCoverage**. Neste projeto foi utilizada a versão 1.0.15, que pode [ser obtida aqui](https://github.com/DelphiCodeCoverage/DelphiCodeCoverage/releases).
+
+Após realizar download do **Boss** e do **DelphiCodeCoverage**, recomendo colocar ambos os executáveis em uma mesma pasta em seu computador, e adicionar o caminho para acesso a esta pasta na variável **PATH** do seu Windows (nível de usuário ou a nível do computador). Com isto, você conseguirá utilizar estes executáveis facilmente no [Windows Terminal](https://apps.microsoft.com/store/detail/windows-terminal/9N0DX20HK701?hl=pt-br&gl=br&icid=CNavAppsWindowsApps) (ou outros consoles do Windows).
+
+Após fazer download do projeto, abra o Windows Terminal e navegue até a pasta onde se encontra o projeto.
+
+![Windows Terminal](https://github.com/IagooCesaar/horse-store/assets/12894025/f23cd05a-6985-4da1-aff9-4370b0dfd570)
+
+- Baixando dependências para o projeto CLIENTE: Navegue até a pasta do projeto cliente (ex: `cd .\cliente\vcl`) e rode o comando `boss install`. Aguarde o final do procedimento e então retorne para a pasta anterior (ex: `cd ..\..`).
+
+- Baixando dependências para o projeto SERVER: Navegue até a pasta do projeto server (ex: `cd .\server`) e rode o comando `boss install`. Aguarde o final do procedimento.
+
+> IMPORTANTE: <br>
+> Este projeto foi construído utilizando versões do **Horse** e do **GBSwagger** que ainda não foram disponibilizadas oficialmente. Ou seja, embora no arquivo `boss.json` esteja indicando a versão 3.1.3 do Horse e 3.0.7 do GBSwagger, este projeto exige versões superiores.<br>
+> Deste modo, até que as novas versões destas dependência sejam publicadas, é recomendado que seja realizado o download manual destas duas libs e então atualizada as dependências em `\server\modules\horse` e`\server\modules\gbswagger` respectivamente. Assim que as nova versões sejam disponibilizadas este projeto será atualizado.
+
+Para executar a avaliação de cobertura de código, execute o arquivo `code_coverage.bat` que se encontra na pasta `.\server\`. Os resultados serão salvos em `.\server\Win64\Debug\`. Recomenda-se, para esta avaliação, abrir o arquivo `.\server\Win64\Debug\CodeCoverage_summary.html`
+
+![Relatório de cobertura de código](https://github.com/IagooCesaar/horse-store/assets/12894025/f7db4c89-86a1-4d44-89a0-4a5e91af40c6)
