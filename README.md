@@ -157,7 +157,7 @@ Após fazer download do projeto, abra o Windows Terminal e navegue até a pasta 
 
 > IMPORTANTE: <br>
 > Este projeto foi construído utilizando versões do **Horse** e do **GBSwagger** que ainda não foram disponibilizadas oficialmente. Ou seja, embora no arquivo `boss.json` esteja indicando a versão 3.1.3 do Horse e 3.0.7 do GBSwagger, este projeto exige versões superiores.<br>
-> Deste modo, até que as novas versões destas dependência sejam publicadas, é recomendado que seja realizado o download manual destas duas libs e então atualizada as dependências em `\server\modules\horse` e`\server\modules\gbswagger` respectivamente. Assim que as nova versões sejam disponibilizadas este projeto será atualizado.
+> Deste modo, até que as novas versões destas dependência sejam publicadas, é recomendado que seja realizado o download manual destas duas libs e então atualizada as dependências em `\server\modules\horse` e `\server\modules\gbswagger` respectivamente. Assim que as nova versões sejam disponibilizadas este projeto será atualizado.
 
 Para executar a avaliação de cobertura de código, execute o arquivo `code_coverage.bat` que se encontra na pasta `.\server\`. Os resultados serão salvos em `.\server\Win64\Debug\`. Recomenda-se, para esta avaliação, abrir o arquivo `.\server\Win64\Debug\CodeCoverage_summary.html`
 
