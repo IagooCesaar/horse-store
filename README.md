@@ -162,3 +162,9 @@ Após fazer download do projeto, abra o Windows Terminal e navegue até a pasta 
 Para executar a avaliação de cobertura de código, execute o arquivo `code_coverage.bat` que se encontra na pasta `.\server\`. Os resultados serão salvos em `.\server\Win64\Debug\`. Recomenda-se, para esta avaliação, abrir o arquivo `.\server\Win64\Debug\CodeCoverage_summary.html`
 
 ![Relatório de cobertura de código](https://github.com/IagooCesaar/horse-store/assets/12894025/f7db4c89-86a1-4d44-89a0-4a5e91af40c6)
+
+> 💡 Execute o script de criação do banco de dados antes de rodar o script de verificação de cobertura de código.
+
+> 💡 Utilize o projeto `loja_server_vcl` para configurar o acesso ao banco de dados
+
+> 💡 No vídeo há mais detalhes sobre a execução deste projeto
