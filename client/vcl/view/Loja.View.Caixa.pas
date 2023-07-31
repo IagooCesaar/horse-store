@@ -61,6 +61,9 @@ type
     dbtVR_FECHA: TDBText;
     btnAtualizar: TButton;
     FrameCaixaResumoMeioPagto6: TFrameCaixaResumoMeioPagto;
+    Label10: TLabel;
+    dbtVR_SALDO: TDBText;
+    dsResumo: TDataSource;
     procedure FormCreate(Sender: TObject);
     procedure btnPesquisarClick(Sender: TObject);
     procedure dbgCaixasDblClick(Sender: TObject);
@@ -286,6 +289,7 @@ begin
 
   dsCaixa.DataSet := FControllerCaixa.mtDados;
   dsCaixas.DataSet := FControllerCaixa.mtCaixas;
+  dsResumo.DataSet := FControllerCaixa.mtResumoCaixa;
   dsMovimentos.DataSet := FControllerMovimento.mtDados;
 
   FControllerCaixa.CriarDataSets;
