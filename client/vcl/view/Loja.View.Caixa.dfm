@@ -400,7 +400,6 @@ inherited ViewCaixa: TViewCaixa
               Font.Style = [fsBold]
               ParentFont = False
               Layout = tlCenter
-              ExplicitLeft = 904
               ExplicitHeight = 21
             end
             object dbtVR_SALDO: TDBText
@@ -424,7 +423,6 @@ inherited ViewCaixa: TViewCaixa
               Font.Name = 'Segoe UI'
               Font.Style = [fsBold]
               ParentFont = False
-              ExplicitLeft = 1068
               ExplicitHeight = 21
             end
             object btnCriarSangria: TButton
@@ -880,7 +878,7 @@ inherited ViewCaixa: TViewCaixa
               Left = 8
               Top = 0
               Width = 313
-              Height = 32
+              Height = 21
               Margins.Left = 8
               Margins.Top = 0
               Margins.Right = 0
@@ -888,7 +886,6 @@ inherited ViewCaixa: TViewCaixa
               Align = alLeft
               Caption = 'Duplo clique para visualizar detalhes do caixa'
               Layout = tlCenter
-              ExplicitHeight = 21
             end
           end
           object dbgCaixas: TDBGrid

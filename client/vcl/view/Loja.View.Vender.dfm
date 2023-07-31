@@ -751,7 +751,7 @@ inherited ViewVender: TViewVender
               Left = 8
               Top = 0
               Width = 320
-              Height = 32
+              Height = 21
               Margins.Left = 8
               Margins.Top = 0
               Margins.Right = 0
@@ -759,7 +759,6 @@ inherited ViewVender: TViewVender
               Align = alLeft
               Caption = 'Duplo clique para visualizar detalhes da venda'
               Layout = tlCenter
-              ExplicitHeight = 21
             end
           end
           object dbgVendas: TDBGrid
