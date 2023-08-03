@@ -92,8 +92,8 @@
 		},
 		"github.com/iagoocesaar/pascal-database-engine": {
 			"name": "pascal-database-engine",
-			"version": "0.0.2",
-			"hash": "c7d147a01adb3937f0f4888255871f44",
+			"version": "0.0.3",
+			"hash": "dcde47dba9a33f459456f70d42fcd2e8",
 			"artifacts": {},
 			"failed": false,
 			"changed": false
