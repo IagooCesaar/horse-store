@@ -265,6 +265,7 @@ begin
 
   // Parâmetros fixos
   FDBParams.ConnectionDefName := 'bd_loja';
+  FDBDriverParams.DriverID := 'FB';
   FDBDriverParams.DriverDefName := 'FB_DRIVER';
   FDBParams.LocalConnection := False;
   FDBPoolParams.Pooled := True;
