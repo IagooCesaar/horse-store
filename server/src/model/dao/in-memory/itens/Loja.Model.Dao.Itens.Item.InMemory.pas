@@ -47,6 +47,8 @@ begin
     if LItem.CodItem = AItem.CodItem then begin
       LItem.NomItem := AItem.NomItem;
       LItem.NumCodBarr := AItem.NumCodBarr;
+      LItem.FlgPermSaldNeg := AItem.FlgPermSaldNeg;
+      LItem.FlgTabPreco := AItem.FlgTabPreco;
 
       Result := Clone(LItem);
       Break;
@@ -60,6 +62,8 @@ begin
   Result.CodItem := ASource.CodItem;
   Result.NomItem := ASource.NomItem;
   Result.NumCodBarr := ASource.NumCodBarr;
+  Result.FlgPermSaldNeg := ASource.FlgPermSaldNeg;
+  Result.FlgTabPreco := ASource.FlgTabPreco;
 end;
 
 constructor TLojaModelDaoItensItemInMemory.Create;
@@ -79,6 +83,8 @@ begin
   FRepository.Last.CodItem := Lid;
   FRepository.Last.NomItem := ANovoItem.NomItem;
   FRepository.Last.NumCodBarr := ANovoItem.NumCodBarr;
+  FRepository.Last.FlgPermSaldNeg:= ANovoItem.FlgPermSaldNeg;
+  FRepository.Last.FlgTabPreco := ANovoItem.FlgTabPreco;
 
   Result := Clone(FRepository.Last);
 end;
