@@ -94,11 +94,12 @@ begin
   if AItem.FlgTabPreco = ''
   then AItem.FlgTabPreco := 'S';
 
-  Result := EntityToDTO(
-    TLojaModelDaoFactory.New.Itens
-      .Item
-      .AtualizarItem(AItem)
-    );
+  var LItemAtualizado := TLojaModelDaoFactory.New.Itens
+    .Item
+    .AtualizarItem(AItem);
+
+  Result := EntityToDTO(LItemAtualizado);
+  LItemAtualizado.Free;
 end;
 
 constructor TLojaModelItens.Create;
@@ -148,11 +149,12 @@ begin
   if ANovoItem.FlgTabPreco = ''
   then ANovoItem.FlgTabPreco := 'S';
 
-  Result := EntityToDTO(
-    TLojaModelDaoFactory.New.Itens
-      .Item
-      .CriarItem(ANovoItem)
-    );
+  var LNovoItem := TLojaModelDaoFactory.New.Itens
+    .Item
+    .CriarItem(ANovoItem);
+
+  Result := EntityToDTO(LNovoItem);
+  LNovoItem.Free;
 end;
 
 destructor TLojaModelItens.Destroy;
@@ -196,11 +198,12 @@ begin
       .&Unit(Self.UnitName)
       .Error('Você deve informar um critério para filtro');
 
-  Result := EntityToDTO(
-    TLojaModelDaoFactory.New.Itens
-      .Item
-      .ObterItens(AFiltro)
-    );
+  var LItens := TLojaModelDaoFactory.New.Itens
+    .Item
+    .ObterItens(AFiltro);
+
+  Result := EntityToDTO(LItens);
+  LItens.Free;
 end;
 
 function TLojaModelItens.ObterPorCodigo(
@@ -218,6 +221,7 @@ begin
       .Error('Não foi possível encontrar o item pelo código informado');
 
   Result := EntityToDTO(LItem);
+  LItem.Free;
 end;
 
 function TLojaModelItens.ObterPorNumCodBarr(
@@ -234,6 +238,7 @@ begin
       .Error('Não foi possível encontrar o item pelo código de barras informado');
 
   Result := EntityToDTO(LItem);
+  LItem.Free;
 end;
 
 end.
