@@ -128,6 +128,8 @@ begin
 
     LDTO.NomItem := 'Nome atualizado';
     LDTO.NumCodBarr := TLojaInfraUtilsFuncoes.GeraStringRandomica(14,1);
+    LDTO.FlgPermSaldNeg := not LItemCriado.FlgPermSaldNeg;
+    LDTO.FlgTabPreco := not LItemCriado.FlgTabPreco;
 
     var LResponse := TRequest.New
       .BasicAuthentication(FUsarname, FPassword)
@@ -144,6 +146,8 @@ begin
 
     Assert.AreEqual(LDTO.NomItem, LItemAtualizado.NomItem);
     Assert.AreEqual(LDTO.NumCodBarr, LItemAtualizado.NumCodBarr);
+    Assert.IsTrue(LItemAtualizado.FlgPermSaldNeg);
+    Assert.IsFalse(LItemAtualizado.FlgTabPreco);
 
     LItemCriado.Free;
     LItemAtualizado.Free;
@@ -168,6 +172,14 @@ begin
       .Post();
 
     Assert.AreEqual(201, LResponse.StatusCode);
+
+    var LItem := TJson.ClearJsonAndConvertToObject<TLojaModelDtoRespItensItem>
+      (LResponse.Content);
+    Assert.AreEqual(LNovoItem.NomItem, LItem.NomItem);
+    Assert.AreEqual(LNovoItem.NumCodBarr, LItem.NumCodBarr);
+    Assert.IsFalse(LItem.FlgPermSaldNeg);
+    Assert.IsTrue(LItem.FlgTabPreco);
+    LItem.Free;
   finally
     FreeAndNil(LNovoItem);
   end;
