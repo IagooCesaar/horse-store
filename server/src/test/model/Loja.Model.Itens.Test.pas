@@ -152,6 +152,8 @@ begin
     Assert.IsTrue(LItem <> nil);
     Assert.AreEqual(LDTONovoItem.NomItem, LItem.NomItem, 'O nome não coincide');
     Assert.AreEqual(LDTONovoItem.NumCodBarr, Litem.NumCodBarr, 'O código de barras não coincide');
+    Assert.IsFalse(LItem.FlgPermSaldNeg);
+    Assert.IsTrue(LItem.FlgTabPreco);
 
     LItem.Free;
   finally
