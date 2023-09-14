@@ -21,13 +21,13 @@ uses
   Loja.Model.Factory,
   Loja.Model.Entity.Itens.Item,
   Loja.Model.Dto.Req.Itens.CriarItem,
-  Loja.Model.Dto.Req.Itens.FiltroItens;
+  Loja.Model.Dto.Req.Itens.FiltroItens,
+  Loja.Model.Dto.Resp.Itens.Item;
 
 procedure ObterItens(Req: THorseRequest; Resp: THorseResponse);
 var
   LLhsBracketType: TLhsBracketsType;
   LFiltros: TLojaModelDtoReqItensFiltroItens;
-  LItens : TLojaModelEntityItensItemLista;
 begin
   THorseCoreParamConfig.GetInstance.CheckLhsBrackets(True);
 
@@ -46,7 +46,7 @@ begin
       LFiltros.NumCodBarrLhsBracketsType := LLhsBracketType;
     end;
 
-    LItens := TLojaModelFactory.New
+    var LItens := TLojaModelFactory.New
       .Itens
       .ObterItens(LFiltros);
 
@@ -183,7 +183,7 @@ begin
         .Description('Obter dados cadastrais de itens. Utilize LHS Brackets para filtrar: (eq, contains, startsWith e endsWith)')
         .AddParamQuery('nom_item', 'Nome do item. Utilize LHS Brackets para filtrar: (eq, contains, startsWith e endsWith)').&End
         .AddParamQuery('num_cod_barr', 'Número do código de barras do item. Utilize LHS Brackets para filtrar: (eq, contains, startsWith e endsWith)').&End
-        .AddResponse(Integer(THTTPStatus.OK)).Schema(TLojaModelEntityItensItem).IsArray(true).&End
+        .AddResponse(Integer(THTTPStatus.OK)).Schema(TLojaModelDtoRespItensItem).IsArray(true).&End
         .AddResponse(Integer(THTTPStatus.BadRequest)).&End
         .AddResponse(Integer(THTTPStatus.NotFound)).&End
         .AddResponse(Integer(THTTPStatus.PreconditionFailed)).&End
@@ -193,7 +193,7 @@ begin
       .POST('Cria um novo item')
         .Description('Cria um novo item para venda')
         .AddParamBody('Body').Schema(TLojaModelDtoReqItensCriarItem).&End
-        .AddResponse(Integer(THTTPStatus.Created)).Schema(TLojaModelEntityItensItem).&End
+        .AddResponse(Integer(THTTPStatus.Created)).Schema(TLojaModelDtoRespItensItem).&End
         .AddResponse(Integer(THTTPStatus.BadRequest)).&End
         .AddResponse(Integer(THTTPStatus.NotFound)).&End
         .AddResponse(Integer(THTTPStatus.PreconditionFailed)).&End
@@ -210,7 +210,7 @@ begin
           .Schema(SWAG_INTEGER)
         .&End
         .AddParamBody('Body').Schema(TLojaModelDtoReqItensCriarItem).&End
-        .AddResponse(Integer(THTTPStatus.OK)).Schema(TLojaModelEntityItensItem).&End
+        .AddResponse(Integer(THTTPStatus.OK)).Schema(TLojaModelDtoRespItensItem).&End
         .AddResponse(Integer(THTTPStatus.BadRequest)).&End
         .AddResponse(Integer(THTTPStatus.NotFound)).&End
         .AddResponse(Integer(THTTPStatus.PreconditionFailed)).&End
@@ -225,7 +225,7 @@ begin
         .AddParamPath('cod_item', 'Código do item')
           .Schema(SWAG_INTEGER)
         .&End
-        .AddResponse(Integer(THTTPStatus.OK)).Schema(TLojaModelEntityItensItem).&End
+        .AddResponse(Integer(THTTPStatus.OK)).Schema(TLojaModelDtoRespItensItem).&End
         .AddResponse(Integer(THTTPStatus.BadRequest)).&End
         .AddResponse(Integer(THTTPStatus.NotFound)).&End
         .AddResponse(Integer(THTTPStatus.PreconditionFailed)).&End
@@ -240,7 +240,7 @@ begin
         .AddParamPath('num_cod_barr', 'Código de barras')
           .Schema(SWAG_STRING)
         .&End
-        .AddResponse(Integer(THTTPStatus.OK)).Schema(TLojaModelEntityItensItem).&End
+        .AddResponse(Integer(THTTPStatus.OK)).Schema(TLojaModelDtoRespItensItem).&End
         .AddResponse(Integer(THTTPStatus.BadRequest)).&End
         .AddResponse(Integer(THTTPStatus.NotFound)).&End
         .AddResponse(Integer(THTTPStatus.PreconditionFailed)).&End

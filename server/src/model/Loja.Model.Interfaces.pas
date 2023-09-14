@@ -10,6 +10,7 @@ uses
   Loja.Model.Entity.Itens.Item,
   Loja.Model.Dto.Req.Itens.CriarItem,
   Loja.Model.Dto.Req.Itens.FiltroItens,
+  Loja.Model.Dto.Resp.Itens.Item,
 
   Loja.Model.Entity.Estoque.Movimento,
   Loja.Model.Entity.Estoque.Saldo,
@@ -37,11 +38,11 @@ uses
 type
   ILojaModelItens = interface
     ['{C4B5FD33-A52B-47D3-8DA8-709CAEC9CC4D}']
-    function ObterPorCodigo(ACodItem: Integer): TLojaModelEntityItensItem;
-    function ObterPorNumCodBarr(ANumCodBarr: string): TLojaModelEntityItensItem;
-    function ObterItens(AFiltro: TLojaModelDtoReqItensFiltroItens): TLojaModelEntityItensItemLista;
-    function CriarItem(ANovoItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
-    function AtualizarItem(AItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
+    function ObterPorCodigo(ACodItem: Integer): TLojaModelDtoRespItensItem;
+    function ObterPorNumCodBarr(ANumCodBarr: string): TLojaModelDtoRespItensItem;
+    function ObterItens(AFiltro: TLojaModelDtoReqItensFiltroItens): TLojaModelDtoRespItensItemLista;
+    function CriarItem(ANovoItem: TLojaModelDtoReqItensCriarItem): TLojaModelDtoRespItensItem;
+    function AtualizarItem(AItem: TLojaModelDtoReqItensCriarItem): TLojaModelDtoRespItensItem;
   end;
 
   ILojaModelEstoque = interface
