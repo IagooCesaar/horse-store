@@ -11,7 +11,7 @@ uses
   Loja.Model.Dto.Resp.Caixa.ResumoCaixa,
   Loja.Model.Dto.Resp.Caixa.ResumoCaixa.MeioPagto,
 
-  Loja.Model.Entity.Itens.Item,
+  Loja.Model.Dto.Resp.Itens.Item,
   Loja.Model.Entity.Preco.Venda;
 
 type
@@ -22,7 +22,7 @@ type
 
     FBaseURL, FUsarname, FPassword: String;
 
-    function CriarItem(ANome, ACodBarr: String): TLojaModelEntityItensItem;
+    function CriarItem(ANome, ACodBarr: String): TLojaModelDtoRespItensItem;
 
     function CriarPrecoVenda(ACodItem: Integer; AVrVnda: Currency;
       ADatIni: TDateTime): TLojaModelEntityPrecoVenda;
@@ -216,7 +216,7 @@ begin
 end;
 
 function TLojaControllerVendaTest.CriarItem(ANome,
-  ACodBarr: String): TLojaModelEntityItensItem;
+  ACodBarr: String): TLojaModelDtoRespItensItem;
 var LNovoItem : TLojaModelDtoReqItensCriarItem;
 begin
   try
@@ -234,7 +234,7 @@ begin
     if LResponse.StatusCode <> 201
     then raise Exception.Create(Format('Falha ao criar item para teste: %s',[LResponse.Content]));
 
-    Result := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItem>
+    Result := TJson.ClearJsonAndConvertToObject<TLojaModelDtoRespItensItem>
       (LResponse.Content);
   finally
     FreeAndNil(LNovoItem);
