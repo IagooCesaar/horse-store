@@ -34,7 +34,8 @@ implementation
 
 uses
   Database.Factory,
-  Horse.Commons;
+  Horse.Commons,
+  System.StrUtils;
 
 { TLojaModelDaoItensItem }
 
@@ -69,8 +70,8 @@ begin
       .AddInteger('cod_item', AItem.CodItem)
       .AddString('nom_item', AItem.NomItem)
       .AddString('num_cod_barr', Variant(AItem.NumCodBarr))
-      .AddString('flg_perm_sald_neg', AItem.FlgPermSaldNeg)
-      .AddString('flg_tab_preco', AItem.FlgTabPreco)
+      .AddString('flg_perm_sald_neg', IfThen(AItem.FlgPermSaldNeg, 'S', 'N') )
+      .AddString('flg_tab_preco', IfThen(AItem.FlgTabPreco, 'S', 'N') )
       .&End
     .ExecSQL();
 
@@ -97,8 +98,8 @@ begin
       .AddInteger('cod_item', Lid)
       .AddString('nom_item', ANovoItem.NomItem)
       .AddString('num_cod_barr', Variant(ANovoItem.NumCodBarr))
-      .AddString('flg_perm_sald_neg', ANovoItem.FlgPermSaldNeg)
-      .AddString('flg_tab_preco', ANovoItem.FlgTabPreco)
+      .AddString('flg_perm_sald_neg', IfThen(ANovoItem.FlgPermSaldNeg, 'S', 'N') )
+      .AddString('flg_tab_preco', IfThen(ANovoItem.FlgTabPreco, 'S', 'N') )
       .&End
     .ExecSQL();
 

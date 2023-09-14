@@ -88,12 +88,6 @@ begin
     end;
   end;
 
-  if AItem.FlgPermSaldNeg = ''
-  then AItem.FlgPermSaldNeg := 'S';
-
-  if AItem.FlgTabPreco = ''
-  then AItem.FlgTabPreco := 'S';
-
   var LItemAtualizado := TLojaModelDaoFactory.New.Itens
     .Item
     .AtualizarItem(AItem);
@@ -142,12 +136,6 @@ begin
       LItem.Free;
     end;
   end;
-
-  if ANovoItem.FlgPermSaldNeg = ''
-  then ANovoItem.FlgPermSaldNeg := 'S';
-
-  if ANovoItem.FlgTabPreco = ''
-  then ANovoItem.FlgTabPreco := 'S';
 
   var LNovoItem := TLojaModelDaoFactory.New.Itens
     .Item

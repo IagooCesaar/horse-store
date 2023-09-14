@@ -14,8 +14,8 @@ type
     FNomItem: String;
     FNumCodBarr: string;
     FCodItem: Integer;
-    FFlgPermSaldNeg: string;
-    FFlgTabPreco: string;
+    FFlgPermSaldNeg: boolean;
+    FFlgTabPreco: boolean;
 
   public
     [SwagIgnore]
@@ -23,10 +23,20 @@ type
 
     property NomItem: String read FNomItem write FNomItem;
     property NumCodBarr: string read FNumCodBarr write FNumCodBarr;
-    property FlgPermSaldNeg: string read FFlgPermSaldNeg write FFlgPermSaldNeg;
-    property FlgTabPreco: string read FFlgTabPreco write FFlgTabPreco;
+    property FlgPermSaldNeg: boolean read FFlgPermSaldNeg write FFlgPermSaldNeg;
+    property FlgTabPreco: boolean read FFlgTabPreco write FFlgTabPreco;
+
+    constructor Create;
   end;
 
 implementation
+
+{ TLojaModelDtoReqItensCriarItem }
+
+constructor TLojaModelDtoReqItensCriarItem.Create;
+begin
+  Self.FFlgPermSaldNeg := False;
+  Self.FFlgTabPreco := True;
+end;
 
 end.

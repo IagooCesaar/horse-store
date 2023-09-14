@@ -35,9 +35,10 @@ type
 
 implementation
 
+uses
+  System.StrUtils;
+
 { TLojaModelDaoItensItem }
-
-
 
 function TLojaModelDaoItensItemInMemory.AtualizarItem(
   AItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
@@ -47,8 +48,8 @@ begin
     if LItem.CodItem = AItem.CodItem then begin
       LItem.NomItem := AItem.NomItem;
       LItem.NumCodBarr := AItem.NumCodBarr;
-      LItem.FlgPermSaldNeg := AItem.FlgPermSaldNeg;
-      LItem.FlgTabPreco := AItem.FlgTabPreco;
+      LItem.FlgPermSaldNeg := IfThen(AItem.FlgPermSaldNeg, 'S', 'N');
+      LItem.FlgTabPreco := IfThen(AItem.FlgTabPreco, 'S', 'N');
 
       Result := Clone(LItem);
       Break;
@@ -83,8 +84,8 @@ begin
   FRepository.Last.CodItem := Lid;
   FRepository.Last.NomItem := ANovoItem.NomItem;
   FRepository.Last.NumCodBarr := ANovoItem.NumCodBarr;
-  FRepository.Last.FlgPermSaldNeg:= ANovoItem.FlgPermSaldNeg;
-  FRepository.Last.FlgTabPreco := ANovoItem.FlgTabPreco;
+  FRepository.Last.FlgPermSaldNeg := IfThen(ANovoItem.FlgPermSaldNeg, 'S', 'N');
+  FRepository.Last.FlgTabPreco := IfThen(ANovoItem.FlgTabPreco, 'S', 'N');
 
   Result := Clone(FRepository.Last);
 end;
