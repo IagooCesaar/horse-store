@@ -483,7 +483,7 @@ begin
         LItemVenda.CodSit := sitAtivo;
         LItemVenda.QtdItem := ANovoItem.QtdItem;
         if LPrecoVnda = nil
-        then LItemVenda.VrPrecoUnit := 0
+        then LItemVenda.VrPrecoUnit := ANovoItem.VrPrecoUnit
         else LItemVenda.VrPrecoUnit := LPrecoVnda.VrVnda;
         LItemVenda.VrBruto := RoundTo(LItemVenda.QtdItem * LItemVenda.VrPrecoUnit, -2);
         LItemVenda.VrDesc := ANovoItem.VrDesc;
@@ -573,7 +573,7 @@ begin
         LItemVenda.CodItem := AItem.CodItem;
         LItemVenda.QtdItem := AItem.QtdItem;
         if LPrecoVnda = nil
-        then LItemVenda.VrPrecoUnit := 0
+        then LItemVenda.VrPrecoUnit := AItem.VrPrecoUnit
         else LItemVenda.VrPrecoUnit := LPrecoVnda.VrVnda;
         LItemVenda.VrBruto := RoundTo(LItemVenda.QtdItem * LItemVenda.VrPrecoUnit, -2);
         LItemVenda.VrDesc := AItem.VrDesc;
