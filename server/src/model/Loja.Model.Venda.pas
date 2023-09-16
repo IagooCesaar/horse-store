@@ -349,6 +349,11 @@ begin
     end;
 
     CalculaTotaisVenda(LVenda);
+    if LVenda.VrTotal <= 0
+    then raise EHorseException.New
+      .Status(THTTPStatus.BadRequest)
+      .&Unit(Self.UnitName)
+      .Error('O valor total da venda deve ser superior a zero');
 
     if LMeiosPagto.Count = 0
     then raise EHorseException.New
