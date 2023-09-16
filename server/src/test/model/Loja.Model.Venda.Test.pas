@@ -23,7 +23,7 @@ type
   private
     FCaixa: TLojaModelEntityCaixaCaixa;
 
-    function CriarItem(ANome, ACodBarr: String): TLojaModelEntityItensItem;
+    function CriarItem(ANome, ACodBarr: String; ATabPreco: Boolean = true): TLojaModelEntityItensItem;
     function CriarPrecoVenda(ACodItem: Integer; AVrVnda: Currency;
       ADatIni: TDateTime): TLojaModelEntityPrecoVenda;
     procedure RealizarAcertoEstoque(ACodItem: Integer; AQtdSaldoReal: Integer);
@@ -58,6 +58,9 @@ type
     procedure Test_InserirItemVenda;
 
     [Test]
+    procedure Test_InserirItemVenda_SemTabPreco;
+
+    [Test]
     procedure Test_NaoInserirItemVenda_QuantidadeInvalida;
 
     [Test]
@@ -74,6 +77,9 @@ type
 
     [Test]
     procedure Test_AtualizarItemVenda;
+
+    [Test]
+    procedure Test_AtualizarItemVenda_SemTabPreco;
 
     [Test]
     procedure Test_AtualizarItemVenda_RemoverItem;
@@ -182,13 +188,14 @@ begin
 end;
 
 function TLojaModelVendaTest.CriarItem(ANome,
-  ACodBarr: String): TLojaModelEntityItensItem;
+  ACodBarr: String; ATabPreco: Boolean = true): TLojaModelEntityItensItem;
 var LDTONovoItem: TLojaModelDtoReqItensCriarItem;
 begin
   LDTONovoItem := TLojaModelDtoReqItensCriarItem.Create;
   try
     LDTONovoItem.NomItem := ANome;
     LDTONovoItem.NumCodBarr := ACodBarr;
+    LDTONovoItem.FlgTabPreco := ATabPreco;
     Result := TLojaModelDaoFactory.New.Itens.Item.CriarItem(LDTONovoItem);
   finally
     LDTONovoItem.Free;
@@ -371,6 +378,57 @@ begin
   finally
     LNovaVenda.Free;
     LItem.Free;
+    LPreco.Free;
+  end;
+end;
+
+procedure TLojaModelVendaTest.Test_AtualizarItemVenda_SemTabPreco;
+begin
+  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LItem1 := CriarItem('Teste atualizar na venda','');
+  var LItem2 := CriarItem('Item sem tabela de preço','', False);
+  var LPreco := CriarPrecoVenda(LItem1.CodItem, 10, Now);
+  RealizarAcertoEstoque(LItem1.CodItem, 2);
+  RealizarAcertoEstoque(LItem2.CodItem, 2);
+
+  try
+    var LDto := TLojaModelDtoReqVendaItem.Create;
+    LDto.NumVnda := LNovaVenda.NumVnda;
+    LDto.CodItem := LItem1.CodItem;
+    LDto.QtdItem := 2;
+
+    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
+
+    Assert.AreEqual(Double(20), Double(LItemVenda.VrTotal));
+    Assert.AreEqual(TLojaModelEntityVendaItemSituacao.sitAtivo.ToString,
+      LItemVenda.CodSit.ToString);
+
+    var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+
+    Assert.AreEqual(Double(20), Double(LVenda.VrTotal));
+
+    LDto.CodItem := LItem2.CodItem;
+    LDto.NumSeqItem := LItemVenda.NumSeqItem;
+    LDto.QtdItem := 3;
+
+    var LItemAtualizado := TLojaModelFactory.New.Venda.AtualizarItemVenda(LDto);
+    Assert.AreEqual(Double(0), Double(LItemAtualizado.VrTotal));
+    Assert.AreEqual(TLojaModelEntityVendaItemSituacao.sitAtivo.ToString,
+      LItemAtualizado.CodSit.ToString);
+
+    var LVendaAtualizada := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+    Assert.AreEqual(Double(0), Double(LVendaAtualizada.VrTotal));
+
+    LDto.Free;
+    LItemVenda.Free;
+    LVenda.Free;
+    LItemAtualizado.Free;
+    LVendaAtualizada.Free;
+
+  finally
+    LNovaVenda.Free;
+    LItem1.Free;
+    LItem2.Free;
     LPreco.Free;
   end;
 end;
@@ -618,6 +676,37 @@ begin
     LNovaVenda.Free;
     LItem.Free;
     LPreco.Free;
+  end;
+end;
+
+procedure TLojaModelVendaTest.Test_InserirItemVenda_SemTabPreco;
+begin
+  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LItem := CriarItem('Teste inserir na venda','', false);
+  RealizarAcertoEstoque(LItem.CodItem, 2);
+
+  try
+    var LDto := TLojaModelDtoReqVendaItem.Create;
+    LDto.NumVnda := LNovaVenda.NumVnda;
+    LDto.CodItem := LItem.CodItem;
+    LDto.QtdItem := 2;
+
+    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
+
+    Assert.AreEqual(Double(0), Double(LItemVenda.VrTotal));
+    Assert.AreEqual(TLojaModelEntityVendaItemSituacao.sitAtivo.ToString,
+      LItemVenda.CodSit.ToString);
+
+    var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+
+    Assert.AreEqual(Double(0), Double(LVenda.VrTotal));
+
+    LDto.Free;
+    LItemVenda.Free;
+    LVenda.Free;
+  finally
+    LNovaVenda.Free;
+    LItem.Free;
   end;
 end;
 
