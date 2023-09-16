@@ -152,6 +152,9 @@ type
     procedure Test_EfetivarVenda;
 
     [Test]
+    procedure Test_EfetivarVenda_ItemGenerico;
+
+    [Test]
     procedure Test_NaoEfetivarVenda_SemItens;
 
     [Test]
@@ -771,6 +774,80 @@ begin
     LNovaVenda.Free;
     LItem.Free;
     LPreco.Free;
+  end;
+end;
+
+procedure TLojaControllerVendaTest.Test_EfetivarVenda_ItemGenerico;
+begin
+  var LResponseVenda := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/venda')
+    .Post();
+
+  var LNovaVenda := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityVendaVenda>(LResponseVenda.Content);
+
+  var LItem := CriarItem('Item Genérico para venda '+LNovaVenda.NumVnda.ToString,
+    '', False, True);
+
+  try
+    var LDto := TLojaModelDtoReqVendaItem.Create;
+    LDto.NumVnda := LNovaVenda.NumVnda;
+    LDto.CodItem := LItem.CodItem;
+    LDto.QtdItem := 10;
+    LDto.VrDesc := 0;
+    LDto.VrPrecoUnit := 1.50;
+
+    TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/itens')
+      .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+      .AddBody(TJson.ObjectToClearJsonString(LDto))
+      .Post();
+
+    var LDtoPagto := TLojaModelEntityVendaMeioPagtoLista.Create;
+
+    LDtoPagto.Add(TLojaModelEntityVendaMeioPagto.Create);
+    LDtoPagto.Last.CodMeioPagto := TLojaModelEntityCaixaMeioPagamento.pagPix;
+    LDtoPagto.Last.QtdParc := 1;
+    LDtoPagto.Last.VrTotal := 10;
+
+    LDtoPagto.Add(TLojaModelEntityVendaMeioPagto.Create);
+    LDtoPagto.Last.CodMeioPagto := TLojaModelEntityCaixaMeioPagamento.pagDinheiro;
+    LDtoPagto.Last.QtdParc := 1;
+    LDtoPagto.Last.VrTotal := 5;
+
+    TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/meios-pagamento')
+      .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+      .AddBody(TJson.ObjectToClearJsonString(LDtoPagto))
+      .Post();
+
+    var LResponse := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/efetivar')
+      .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+      .Patch();
+
+    Assert.AreEqual(200, LResponse.StatusCode, LResponse.Content);
+
+    var LVendaEfet := TJson.ClearJsonAndConvertToObject
+      <TLojaModelEntityVendaVenda>(LResponse.Content);
+
+    Assert.AreEqual(TLojaModelEntityVendaSituacao.sitEfetivada, LVendaEfet.CodSit);
+    Assert.AreEqual(Double(15), Double(LVendaEfet.VrTotal));
+
+    LDto.Free;
+    LDtoPagto.Free;
+    LVendaEfet.Free;
+  finally
+    LNovaVenda.Free;
+    LItem.Free;
   end;
 end;
 
