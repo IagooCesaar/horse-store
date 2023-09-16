@@ -18,8 +18,11 @@ type
     mtDadosCOD_ITEM: TIntegerField;
     mtDadosNOM_ITEM: TStringField;
     mtDadosNUM_COD_BARR: TStringField;
+    mtDadosFLG_PERM_SALD_NEG: TBooleanField;
+    mtDadosFLG_TAB_PRECO: TBooleanField;
     procedure mtDadosBeforePost(DataSet: TDataSet);
     procedure DataModuleCreate(Sender: TObject);
+    procedure mtDadosNewRecord(DataSet: TDataSet);
   private
     { Private declarations }
   public
@@ -86,6 +89,16 @@ begin
   finally
     DataSet.EnableControls;
   end;
+end;
+
+procedure TControllerItens.mtDadosNewRecord(DataSet: TDataSet);
+begin
+  inherited;
+  if mtDados.ControlsDisabled
+  then Exit;
+
+  mtDadosFLG_TAB_PRECO.AsBoolean := True;
+  mtDadosFLG_PERM_SALD_NEG.AsBoolean := False;
 end;
 
 procedure TControllerItens.ObterItem(ACodItem: Integer);

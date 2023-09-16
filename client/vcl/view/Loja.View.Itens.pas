@@ -42,6 +42,8 @@ type
     dbnItens: TDBNavigator;
     btnEstoque: TButton;
     btnPrecoVenda: TButton;
+    chbFLG_PERM_SALD_NEG: TDBCheckBox;
+    chbFLG_TAB_PRECO: TDBCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure btnPesquisarClick(Sender: TObject);
