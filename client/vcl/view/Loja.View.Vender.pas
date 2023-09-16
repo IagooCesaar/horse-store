@@ -108,7 +108,11 @@ type
 
     procedure mtItensBeforePost(DataSet: TDataSet);
     procedure mtItensBeforeDelete(DataSet: TDataSet);
+    procedure mtItensAfterScroll(DataSet: TDataSet);
+
     procedure dbgMeiosPagtoDblClick(Sender: TObject);
+    procedure dbQTD_ITEMKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     FControllerVendas: TControllerVendas;
     FControllerItens: TControllerItens;
@@ -180,6 +184,15 @@ begin
   then Exit;
 
   AbrirDetalhesVenda(FControllerVendas.mtVendasNUM_VNDA.AsInteger);
+end;
+
+procedure TViewVender.dbQTD_ITEMKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  inherited;
+  if  (Key = VK_RETURN)
+  and (FControllerVendas.mtItens.State in [dsInsert, dsEdit])
+  then FControllerVendas.mtItens.Post;
 end;
 
 procedure TViewVender.AbrirDetalhesVenda(ANumVnda: Integer);
@@ -259,6 +272,8 @@ begin
   AbrirDetalhesVenda(FControllerVendas.mtDadosNUM_VNDA.AsInteger);
 
   ShowMessage('A venda foi efetivada com sucesso!');
+
+  sbNovaVenda.Down := True;
 end;
 
 procedure TViewVender.btnMeioPagtoRemoverClick(Sender: TObject);
@@ -298,6 +313,7 @@ begin
 
   FControllerVendas.mtItens.BeforeDelete := mtItensBeforeDelete;
   FControllerVendas.mtItens.BeforePost := mtItensBeforePost;
+  FControllerVendas.mtItens.AfterScroll := mtItensAfterScroll;
 
   FControllerVendas.CriarDatasets;
 end;
@@ -307,6 +323,13 @@ begin
   FreeAndNil(FControllerVendas);
   FreeAndNil(FControllerItens);
   inherited;
+end;
+
+procedure TViewVender.mtItensAfterScroll(DataSet: TDataSet);
+begin
+  FControllerVendas.mtItensAfterScroll(DataSet);
+  dbVR_PRECO_UNIT.Enabled := not FControllerVendas.mtItensFLG_TAB_PRECO.AsBoolean;
+  dbVR_PRECO_UNIT.ReadOnly := FControllerVendas.mtItensFLG_TAB_PRECO.AsBoolean;
 end;
 
 procedure TViewVender.mtItensBeforeDelete(DataSet: TDataSet);
@@ -387,6 +410,10 @@ begin
     end;
 
     edtPesquisa.Clear;
+
+    if FControllerItens.mtDadosFLG_TAB_PRECO.AsBoolean = false
+    then if dbVR_PRECO_UNIT.CanFocus
+         then dbVR_PRECO_UNIT.SetFocus;
   end
   else
   if sbNovaVenda.Down then

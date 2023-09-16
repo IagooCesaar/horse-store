@@ -281,17 +281,18 @@ inherited ViewVender: TViewVender
               DataField = 'QTD_ITEM'
               DataSource = dsItens
               TabOrder = 5
+              OnKeyDown = dbQTD_ITEMKeyDown
             end
             object dbVR_PRECO_UNIT: TDBEdit
               Left = 112
               Top = 197
               Width = 163
               Height = 29
-              TabStop = False
               DataField = 'VR_PRECO_UNIT'
               DataSource = dsItens
               ReadOnly = True
               TabOrder = 6
+              OnKeyDown = dbQTD_ITEMKeyDown
             end
             object dbVR_BRUTO: TDBEdit
               Left = 6
@@ -312,6 +313,7 @@ inherited ViewVender: TViewVender
               DataField = 'VR_DESC'
               DataSource = dsItens
               TabOrder = 7
+              OnKeyDown = dbQTD_ITEMKeyDown
             end
             object dbVR_TOTAL: TDBEdit
               Left = 175
@@ -751,7 +753,7 @@ inherited ViewVender: TViewVender
               Left = 8
               Top = 0
               Width = 320
-              Height = 21
+              Height = 32
               Margins.Left = 8
               Margins.Top = 0
               Margins.Right = 0
@@ -759,6 +761,7 @@ inherited ViewVender: TViewVender
               Align = alLeft
               Caption = 'Duplo clique para visualizar detalhes da venda'
               Layout = tlCenter
+              ExplicitHeight = 21
             end
           end
           object dbgVendas: TDBGrid
