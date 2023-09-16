@@ -97,6 +97,7 @@ begin
   Result.NumSeqItem := ASource.NumSeqItem;
   Result.CodItem := ASource.CodItem;
   Result.NomItem := LItem.NomItem;
+  Result.FlgTabPreco := LItem.FlgTabPreco = 'S';
   Result.CodSit := ASource.CodSit;
   Result.QtdItem := ASource.QtdItem;
   Result.VrPrecoUnit := ASource.VrPrecoUnit;
