@@ -83,6 +83,7 @@ inherited ControllerVendas: TControllerVendas
   object mtItens: TFDMemTable
     BeforePost = mtItensBeforePost
     BeforeDelete = mtItensBeforeDelete
+    AfterScroll = mtItensAfterScroll
     FetchOptions.AssignedValues = [evMode]
     FetchOptions.Mode = fmAll
     ResourceOptions.AssignedValues = [rvSilentMode]
@@ -153,6 +154,11 @@ inherited ControllerVendas: TControllerVendas
       DisplayLabel = 'N'#250'm. Venda'
       DisplayWidth = 5
       FieldName = 'NUM_VNDA'
+    end
+    object mtItensFLG_TAB_PRECO: TBooleanField
+      DisplayLabel = 'Utiliza Tab. Pre'#231'o'
+      FieldName = 'FLG_TAB_PRECO'
+      Visible = False
     end
   end
   object mtMeiosPagto: TFDMemTable

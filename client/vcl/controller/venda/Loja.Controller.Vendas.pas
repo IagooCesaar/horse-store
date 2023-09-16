@@ -47,11 +47,13 @@ type
     mtMeiosPagtoQTD_PARC: TIntegerField;
     mtMeiosPagtoVR_TOTAL: TFloatField;
     mtItensNUM_VNDA: TIntegerField;
+    mtItensFLG_TAB_PRECO: TBooleanField;
     procedure mtItensQTD_ITEMChange(Sender: TField);
     procedure mtItensVR_DESCChange(Sender: TField);
     procedure mtItensBeforePost(DataSet: TDataSet);
     procedure mtItensBeforeDelete(DataSet: TDataSet);
     procedure mtMeiosPagtoAfterDataChanged(DataSet: TDataSet);
+    procedure mtItensAfterScroll(DataSet: TDataSet);
   private
     procedure AtualizaValoresItem;
 
@@ -135,6 +137,12 @@ end;
 procedure TControllerVendas.EfetivarVenda(ANumVnda: Integer);
 begin
   ConcluirVenda('efetivar', ANumVnda);
+end;
+
+procedure TControllerVendas.mtItensAfterScroll(DataSet: TDataSet);
+begin
+  inherited;
+  //
 end;
 
 procedure TControllerVendas.mtItensBeforeDelete(DataSet: TDataSet);
