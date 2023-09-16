@@ -17,6 +17,7 @@ type
     FNumSeqItem: Integer;
     FCodItem: Integer;
     FQtdItem: Integer;
+    FVrPrecoUnit: Currency;
     FVrDesc: Currency;
     FCodSit: TLojaModelEntityVendaItemSituacao;
   public
@@ -28,6 +29,10 @@ type
     property CodItem: Integer read FCodItem write FCodItem;
     property CodSit: TLojaModelEntityVendaItemSituacao read FCodSit write FCodSit;
     property QtdItem: Integer read FQtdItem write FQtdItem;
+
+    [SwagProp('Valor unitário do item - necessário informar quando item não utilizar tabela de preço de venda', false)]
+    property VrPrecoUnit: Currency read FVrPrecoUnit write FVrPrecoUnit;
+
     property VrDesc: Currency read FVrDesc write FVrDesc;
   end;
 
