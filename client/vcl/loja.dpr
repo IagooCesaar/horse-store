@@ -42,7 +42,9 @@ uses
   Loja.View.Caixa.Fechamento in 'view\Loja.View.Caixa.Fechamento.pas' {ViewCaixaFechamento},
   Loja.Model.Venda.Types in 'model\Loja.Model.Venda.Types.pas',
   Loja.View.Venda.InserirMeioPagto in 'view\Loja.View.Venda.InserirMeioPagto.pas' {ViewVendaInserirMeioPagto},
-  Loja.View.Sobre in 'view\Loja.View.Sobre.pas' {ViewSobre};
+  Loja.View.Sobre in 'view\Loja.View.Sobre.pas' {ViewSobre},
+  uMeuBallonHint in 'libs\uMeuBallonHint.pas',
+  uFuncoes in 'libs\uFuncoes.pas';
 
 {$R *.res}
 

@@ -256,6 +256,8 @@
             <Form>ViewSobre</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="libs\uMeuBallonHint.pas"/>
+        <DCCReference Include="libs\uFuncoes.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -291,6 +293,12 @@
                 <DeployFile LocalName="Win64\Debug\loja.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win64">
                         <RemoteName>loja.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Win64\Debug\loja.rsm" Configuration="Debug" Class="DebugSymbols">
+                    <Platform Name="Win64">
+                        <RemoteName>loja.rsm</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

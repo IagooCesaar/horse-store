@@ -127,25 +127,11 @@ uses
   Loja.View.Venda.InserirMeioPagto,
   Loja.View.Preco.ConsultaPreco,
   Loja.Model.Venda.Types,
-  Loja.Model.Caixa.Types;
+  Loja.Model.Caixa.Types,
+
+  uFuncoes;
 
 {$R *.dfm}
-
-function PegaSeq(Texto: String; posicao: Integer; sep: String = '|'): String;
-var sl : TStringList;
-begin
-  try
-    sl := TStringList.Create;
-    sl.StrictDelimiter := True;
-    sl.Delimiter       := Sep[1];
-    sl.DelimitedText   := Texto;
-    if (sl.Count) < posicao
-    then Result := ''
-    else Result := sl.Strings[Posicao-1];
-  finally
-    FreeAndNil(sl);
-  end;
-end;
 
 procedure TViewVender.btnPesquisarClick(Sender: TObject);
 begin
@@ -365,8 +351,8 @@ begin
   var LChave := '';
   if Pos('*', edtPesquisa.Text) > 0
   then begin
-    LQtd := StrToIntDef(PegaSeq(edtPesquisa.Text, 1, '*').Trim, 1);
-    LChave := PegaSeq(edtPesquisa.Text, 2, '*').Trim;
+    LQtd := StrToIntDef(Funcoes.PegaSeq(edtPesquisa.Text, 1, '*').Trim, 1);
+    LChave := Funcoes.PegaSeq(edtPesquisa.Text, 2, '*').Trim;
   end
   else LChave := Trim(edtPesquisa.Text);
 

@@ -96,8 +96,13 @@ inherited ViewVender: TViewVender
             Top = 38
             Width = 624
             Height = 29
+            Hint = 
+              'Pesquisa|Pesquise pelo c'#243'digo do produto ou pelo c'#243'digo de barra' +
+              's. Voc'#234' tamb'#233'm poder'#225' informar a quantidade desejada seguindo o ' +
+              'padr'#227'o "Quantidade * C'#243'digo"'
             TabOrder = 0
             TextHint = 'Ex: 3 * {C'#243'digo} ir'#225' inserir quantidade 3 do item informado'
+            OnEnter = MeuBallonInfoOnEnter
             OnKeyDown = edtPesquisaKeyDown
           end
         end
@@ -288,10 +293,14 @@ inherited ViewVender: TViewVender
               Top = 197
               Width = 163
               Height = 29
+              Hint = 
+                'Pre'#231'o Unit'#225'rio|Informe o pre'#231'o unit'#225'rio do produto quando o mesm' +
+                'o n'#227'o utilizar tabela de pre'#231'o'
               DataField = 'VR_PRECO_UNIT'
               DataSource = dsItens
               ReadOnly = True
               TabOrder = 6
+              OnEnter = MeuBallonInfoOnEnter
               OnKeyDown = dbQTD_ITEMKeyDown
             end
             object dbVR_BRUTO: TDBEdit
@@ -753,7 +762,7 @@ inherited ViewVender: TViewVender
               Left = 8
               Top = 0
               Width = 320
-              Height = 32
+              Height = 21
               Margins.Left = 8
               Margins.Top = 0
               Margins.Right = 0
@@ -761,7 +770,6 @@ inherited ViewVender: TViewVender
               Align = alLeft
               Caption = 'Duplo clique para visualizar detalhes da venda'
               Layout = tlCenter
-              ExplicitHeight = 21
             end
           end
           object dbgVendas: TDBGrid
@@ -884,7 +892,7 @@ inherited ViewVender: TViewVender
       Width = 1191
       Height = 37
       Caption = 'Ponto de Venda'
-      ExplicitWidth = 1191
+      ExplicitWidth = 147
     end
   end
   object dsMeiosPagto: TDataSource
