@@ -113,6 +113,7 @@ type
     procedure dbgMeiosPagtoDblClick(Sender: TObject);
     procedure dbQTD_ITEMKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure FormShow(Sender: TObject);
   private
     FControllerVendas: TControllerVendas;
     FControllerItens: TControllerItens;
@@ -314,6 +315,15 @@ begin
   FreeAndNil(FControllerVendas);
   FreeAndNil(FControllerItens);
   inherited;
+end;
+
+procedure TViewVender.FormShow(Sender: TObject);
+begin
+  inherited;
+  if edtPesquisa.CanFocus
+  then edtPesquisa.SetFocus;
+
+  sbNovaVenda.Down := true;
 end;
 
 procedure TViewVender.mtItensAfterScroll(DataSet: TDataSet);

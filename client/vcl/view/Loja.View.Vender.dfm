@@ -1,16 +1,18 @@
 inherited ViewVender: TViewVender
   Caption = 'Ponto de Venda'
-  ClientHeight = 795
-  ClientWidth = 1231
+  ClientHeight = 792
+  ClientWidth = 1229
   KeyPreview = True
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnShow = FormShow
+  ExplicitTop = -137
   ExplicitWidth = 1245
   ExplicitHeight = 831
   TextHeight = 21
   inherited pModeloClient: TPanel
-    Width = 1231
-    Height = 738
+    Width = 1229
+    Height = 735
     ExplicitLeft = 0
     ExplicitTop = 57
     ExplicitWidth = 1229
@@ -18,25 +20,22 @@ inherited ViewVender: TViewVender
     object pcPrinc: TPageControl
       Left = 0
       Top = 0
-      Width = 1231
-      Height = 738
+      Width = 1229
+      Height = 735
       ActivePage = tsVenda
       Align = alClient
       TabOrder = 0
-      ExplicitWidth = 1229
-      ExplicitHeight = 735
       object tsVenda: TTabSheet
         Caption = ':: Venda  '
         object Panel1: TPanel
           Left = 0
           Top = 0
-          Width = 1223
+          Width = 1221
           Height = 77
           Align = alTop
           Caption = 'Panel1'
           ShowCaption = False
           TabOrder = 0
-          ExplicitWidth = 1221
           object Label1: TLabel
             Left = 16
             Top = 11
@@ -97,7 +96,7 @@ inherited ViewVender: TViewVender
             Width = 624
             Height = 29
             Hint = 
-              'Pesquisa|Pesquise pelo c'#243'digo do produto ou pelo c'#243'digo de barra' +
+              'Pesquisa|Pesquise pelo C'#243'digo do Produto ou pelo C'#243'digo de Barra' +
               's. Voc'#234' tamb'#233'm poder'#225' informar a quantidade desejada seguindo o ' +
               'padr'#227'o "Quantidade * C'#243'digo"'
             TabOrder = 0
@@ -109,18 +108,16 @@ inherited ViewVender: TViewVender
         object GroupBox1: TGroupBox
           Left = 0
           Top = 77
-          Width = 1223
-          Height = 306
+          Width = 1221
+          Height = 303
           Align = alClient
           Caption = ':: Itens da venda  '
           TabOrder = 1
-          ExplicitWidth = 1221
-          ExplicitHeight = 303
           object dbgItens: TDBGrid
             Left = 2
             Top = 23
-            Width = 684
-            Height = 281
+            Width = 682
+            Height = 278
             Align = alClient
             DataSource = dsItens
             Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
@@ -133,16 +130,14 @@ inherited ViewVender: TViewVender
             TitleFont.Style = []
           end
           object pControleItens: TPanel
-            Left = 686
+            Left = 684
             Top = 23
             Width = 535
-            Height = 281
+            Height = 278
             Align = alRight
             Caption = 'pControleItens'
             ShowCaption = False
             TabOrder = 1
-            ExplicitLeft = 684
-            ExplicitHeight = 278
             object Label12: TLabel
               Left = 6
               Top = 55
@@ -178,18 +173,30 @@ inherited ViewVender: TViewVender
             object Label16: TLabel
               Left = 6
               Top = 173
-              Width = 81
+              Width = 90
               Height = 21
               Caption = 'Quantidade'
               FocusControl = dbQTD_ITEM
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -16
+              Font.Name = 'Segoe UI'
+              Font.Style = [fsBold]
+              ParentFont = False
             end
             object Label17: TLabel
               Left = 112
               Top = 173
-              Width = 75
+              Width = 84
               Height = 21
               Caption = 'Pre'#231'o Unit.'
               FocusControl = dbVR_PRECO_UNIT
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -16
+              Font.Name = 'Segoe UI'
+              Font.Style = [fsBold]
+              ParentFont = False
             end
             object Label18: TLabel
               Left = 6
@@ -202,10 +209,16 @@ inherited ViewVender: TViewVender
             object Label19: TLabel
               Left = 281
               Top = 174
-              Width = 105
+              Width = 116
               Height = 21
               Caption = 'Valor Desconto'
               FocusControl = dbVR_DESC
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -16
+              Font.Name = 'Segoe UI'
+              Font.Style = [fsBold]
+              ParentFont = False
             end
             object Label20: TLabel
               Left = 175
@@ -285,6 +298,12 @@ inherited ViewVender: TViewVender
               Height = 29
               DataField = 'QTD_ITEM'
               DataSource = dsItens
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -16
+              Font.Name = 'Segoe UI'
+              Font.Style = [fsBold]
+              ParentFont = False
               TabOrder = 5
               OnKeyDown = dbQTD_ITEMKeyDown
             end
@@ -298,6 +317,12 @@ inherited ViewVender: TViewVender
                 'o n'#227'o utilizar tabela de pre'#231'o'
               DataField = 'VR_PRECO_UNIT'
               DataSource = dsItens
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -16
+              Font.Name = 'Segoe UI'
+              Font.Style = [fsBold]
+              ParentFont = False
               ReadOnly = True
               TabOrder = 6
               OnEnter = MeuBallonInfoOnEnter
@@ -321,6 +346,12 @@ inherited ViewVender: TViewVender
               Height = 29
               DataField = 'VR_DESC'
               DataSource = dsItens
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -16
+              Font.Name = 'Segoe UI'
+              Font.Style = [fsBold]
+              ParentFont = False
               TabOrder = 7
               OnKeyDown = dbQTD_ITEMKeyDown
             end
@@ -350,25 +381,22 @@ inherited ViewVender: TViewVender
         end
         object pBottom: TPanel
           Left = 0
-          Top = 383
-          Width = 1223
+          Top = 380
+          Width = 1221
           Height = 319
           Align = alBottom
           BevelOuter = bvNone
           Caption = 'pBottom'
           ShowCaption = False
           TabOrder = 2
-          ExplicitTop = 380
-          ExplicitWidth = 1221
           object GroupBox3: TGroupBox
             Left = 0
             Top = 0
-            Width = 680
+            Width = 678
             Height = 319
             Align = alClient
             Caption = ':: Meios de pagamento  '
             TabOrder = 0
-            ExplicitWidth = 678
             object p1: TPanel
               Left = 2
               Top = 23
@@ -507,7 +535,7 @@ inherited ViewVender: TViewVender
             object dbgMeiosPagto: TDBGrid
               Left = 187
               Top = 23
-              Width = 491
+              Width = 489
               Height = 294
               Align = alClient
               DataSource = dsMeiosPagto
@@ -523,14 +551,13 @@ inherited ViewVender: TViewVender
             end
           end
           object GroupBox2: TGroupBox
-            Left = 680
+            Left = 678
             Top = 0
             Width = 543
             Height = 319
             Align = alRight
             Caption = ':: Totais da venda  '
             TabOrder = 1
-            ExplicitLeft = 678
             object Label5: TLabel
               Left = 6
               Top = 32
@@ -737,8 +764,8 @@ inherited ViewVender: TViewVender
           AlignWithMargins = True
           Left = 0
           Top = 104
-          Width = 1223
-          Height = 598
+          Width = 1221
+          Height = 595
           Margins.Left = 0
           Margins.Top = 8
           Margins.Right = 0
@@ -749,8 +776,8 @@ inherited ViewVender: TViewVender
           TabOrder = 0
           object Panel4: TPanel
             Left = 1
-            Top = 565
-            Width = 1221
+            Top = 562
+            Width = 1219
             Height = 32
             Align = alBottom
             BevelOuter = bvNone
@@ -762,7 +789,7 @@ inherited ViewVender: TViewVender
               Left = 8
               Top = 0
               Width = 320
-              Height = 21
+              Height = 32
               Margins.Left = 8
               Margins.Top = 0
               Margins.Right = 0
@@ -770,14 +797,15 @@ inherited ViewVender: TViewVender
               Align = alLeft
               Caption = 'Duplo clique para visualizar detalhes da venda'
               Layout = tlCenter
+              ExplicitHeight = 21
             end
           end
           object dbgVendas: TDBGrid
             AlignWithMargins = True
             Left = 9
             Top = 9
-            Width = 1205
-            Height = 548
+            Width = 1203
+            Height = 545
             Margins.Left = 8
             Margins.Top = 8
             Margins.Right = 8
@@ -798,7 +826,7 @@ inherited ViewVender: TViewVender
         object Panel5: TPanel
           Left = 0
           Top = 0
-          Width = 1223
+          Width = 1221
           Height = 96
           Align = alTop
           Caption = 'Panel1'
@@ -882,14 +910,14 @@ inherited ViewVender: TViewVender
     end
   end
   inherited pModeloTop: TPanel
-    Width = 1231
+    Width = 1229
     ExplicitWidth = 1229
     inherited bvlModeloLinha: TBevel
-      Width = 1231
+      Width = 1229
       ExplicitWidth = 1231
     end
     inherited lbModeloTitulo: TLabel
-      Width = 1191
+      Width = 1189
       Height = 37
       Caption = 'Ponto de Venda'
       ExplicitWidth = 147
