@@ -192,7 +192,12 @@ begin
   inherited;
   if  (Key = VK_RETURN)
   and (FControllerVendas.mtItens.State in [dsInsert, dsEdit])
-  then FControllerVendas.mtItens.Post;
+  then begin
+    FControllerVendas.mtItens.Post;
+
+    if edtPesquisa.CanFocus
+    then edtPesquisa.SetFocus;
+  end;
 end;
 
 procedure TViewVender.AbrirDetalhesVenda(ANumVnda: Integer);

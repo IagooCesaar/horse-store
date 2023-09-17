@@ -5,16 +5,16 @@ inherited ViewVender: TViewVender
   KeyPreview = True
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  ExplicitWidth = 1243
-  ExplicitHeight = 833
+  ExplicitWidth = 1245
+  ExplicitHeight = 831
   TextHeight = 21
   inherited pModeloClient: TPanel
     Width = 1231
     Height = 738
     ExplicitLeft = 0
     ExplicitTop = 57
-    ExplicitWidth = 1227
-    ExplicitHeight = 737
+    ExplicitWidth = 1229
+    ExplicitHeight = 735
     object pcPrinc: TPageControl
       Left = 0
       Top = 0
@@ -23,8 +23,8 @@ inherited ViewVender: TViewVender
       ActivePage = tsVenda
       Align = alClient
       TabOrder = 0
-      ExplicitWidth = 1227
-      ExplicitHeight = 737
+      ExplicitWidth = 1229
+      ExplicitHeight = 735
       object tsVenda: TTabSheet
         Caption = ':: Venda  '
         object Panel1: TPanel
@@ -36,7 +36,7 @@ inherited ViewVender: TViewVender
           Caption = 'Panel1'
           ShowCaption = False
           TabOrder = 0
-          ExplicitWidth = 1219
+          ExplicitWidth = 1221
           object Label1: TLabel
             Left = 16
             Top = 11
@@ -109,8 +109,8 @@ inherited ViewVender: TViewVender
           Align = alClient
           Caption = ':: Itens da venda  '
           TabOrder = 1
-          ExplicitWidth = 1219
-          ExplicitHeight = 305
+          ExplicitWidth = 1221
+          ExplicitHeight = 303
           object dbgItens: TDBGrid
             Left = 2
             Top = 23
@@ -136,8 +136,8 @@ inherited ViewVender: TViewVender
             Caption = 'pControleItens'
             ShowCaption = False
             TabOrder = 1
-            ExplicitLeft = 682
-            ExplicitHeight = 280
+            ExplicitLeft = 684
+            ExplicitHeight = 278
             object Label12: TLabel
               Left = 6
               Top = 55
@@ -349,8 +349,8 @@ inherited ViewVender: TViewVender
           Caption = 'pBottom'
           ShowCaption = False
           TabOrder = 2
-          ExplicitTop = 382
-          ExplicitWidth = 1219
+          ExplicitTop = 380
+          ExplicitWidth = 1221
           object GroupBox3: TGroupBox
             Left = 0
             Top = 0
@@ -359,7 +359,7 @@ inherited ViewVender: TViewVender
             Align = alClient
             Caption = ':: Meios de pagamento  '
             TabOrder = 0
-            ExplicitWidth = 676
+            ExplicitWidth = 678
             object p1: TPanel
               Left = 2
               Top = 23
@@ -521,7 +521,7 @@ inherited ViewVender: TViewVender
             Align = alRight
             Caption = ':: Totais da venda  '
             TabOrder = 1
-            ExplicitLeft = 676
+            ExplicitLeft = 678
             object Label5: TLabel
               Left = 6
               Top = 32
@@ -875,7 +875,7 @@ inherited ViewVender: TViewVender
   end
   inherited pModeloTop: TPanel
     Width = 1231
-    ExplicitWidth = 1227
+    ExplicitWidth = 1229
     inherited bvlModeloLinha: TBevel
       Width = 1231
       ExplicitWidth = 1231
@@ -884,7 +884,7 @@ inherited ViewVender: TViewVender
       Width = 1191
       Height = 37
       Caption = 'Ponto de Venda'
-      ExplicitWidth = 147
+      ExplicitWidth = 1191
     end
   end
   object dsMeiosPagto: TDataSource

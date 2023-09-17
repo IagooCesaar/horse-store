@@ -61,7 +61,7 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.Title := 'Loja';
-  TStyleManager.TrySetStyle('Windows10 SlateGray');
+  TStyleManager.TrySetStyle('Slate Classico');
   Application.CreateForm(TViewPrincipal, ViewPrincipal);
   Application.CreateForm(TdmImagens, dmImagens);
   Application.Run;
