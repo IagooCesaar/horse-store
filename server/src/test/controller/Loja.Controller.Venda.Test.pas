@@ -167,6 +167,9 @@ type
     procedure Test_NaoEfetivarVenda_ValorTotalZero;
 
     [Test]
+    procedure Test_NaoEfetivarVenda_PrecoUnitarioZero;
+
+    [Test]
     procedure Test_NaoEfetivarVenda_SemMeiosPagto;
 
     [Test]
@@ -1712,6 +1715,73 @@ begin
   end;
 end;
 
+procedure TLojaControllerVendaTest.Test_NaoEfetivarVenda_PrecoUnitarioZero;
+begin
+  var LResponseVenda := TRequest.New
+    .BasicAuthentication(FUsarname, FPassword)
+    .BaseURL(FBaseURL)
+    .Resource('/venda')
+    .Post();
+
+  var LNovaVenda := TJson.ClearJsonAndConvertToObject
+    <TLojaModelEntityVendaVenda>(LResponseVenda.Content);
+  var LItemGen := CriarItem('Item Genérico','', False, True);
+
+  var LItem := CriarItem('Teste inserir na venda','');
+  var LPreco := CriarPrecoVenda(LITem.CodItem, 12, Now);
+  RealizarAcertoEstoque(LItem.CodItem, 10);
+
+  try
+    var LDto := TLojaModelDtoReqVendaItem.Create;
+    LDto.NumVnda := LNovaVenda.NumVnda;
+    LDto.CodItem := LItem.CodItem;
+    LDto.QtdItem := 1;
+    LDto.VrDesc := 0;
+
+    var LResponseItem := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/itens')
+      .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+      .AddBody(TJson.ObjectToClearJsonString(LDto))
+      .Post();
+
+    LDto.CodItem := LItemGen.CodItem;
+    LDto.QtdItem := 2;
+    LDto.VrDesc := 0;
+
+    LResponseItem := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/itens')
+      .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+      .AddBody(TJson.ObjectToClearJsonString(LDto))
+      .Post();
+
+    var LResponse := TRequest.New
+      .BasicAuthentication(FUsarname, FPassword)
+      .BaseURL(FBaseURL)
+      .Resource('/venda/{num_vnda}/efetivar')
+      .AddUrlSegment('num_vnda', LNovaVenda.NumVnda.ToString)
+      .Patch();
+
+    Assert.AreEqual(400, LResponse.StatusCode);
+
+    var LError := TJson.ClearJsonAndConvertToObject
+      <TLojaModelDTORespApiError>(LResponse.Content);
+
+    Assert.AreEqual('Todos os itens da venda deverão possuir preço unitário superior a zero', LError.error);
+
+    LError.Free;
+    LDto.Free;
+  finally
+    LNovaVenda.Free;
+    LItem.Free;
+    LPreco.Free;
+    LItemGen.Free;
+  end;
+end;
+
 procedure TLojaControllerVendaTest.Test_NaoEfetivarVenda_SemItens;
 begin
   var LResponseVenda := TRequest.New
@@ -1911,7 +1981,8 @@ begin
     LDto.NumVnda := LNovaVenda.NumVnda;
     LDto.CodItem := LItem.CodItem;
     LDto.QtdItem := 1;
-    LDto.VrDesc := 0;
+    LDto.VrDesc := 2;
+    LDto.VrPrecoUnit := 2;
 
     var LResponseItem := TRequest.New
       .BasicAuthentication(FUsarname, FPassword)
