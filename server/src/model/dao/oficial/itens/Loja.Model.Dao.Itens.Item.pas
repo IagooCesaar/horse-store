@@ -126,7 +126,7 @@ begin
 
   if AFiltro.NomItem <> ''
   then begin
-    LSql := LSql +'  and i.nom_item like :nom_item ';
+    LSql := LSql +'  and upper(i.nom_item) like :nom_item ';
     case AFiltro.NomItemLhsBracketsType of
       TLhsBracketsType.Contains:
         AFiltro.NomItem := '%'+AFiltro.NomItem+'%';

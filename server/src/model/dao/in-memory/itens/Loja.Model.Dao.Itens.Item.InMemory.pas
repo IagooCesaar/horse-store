@@ -112,7 +112,7 @@ begin
   begin
     LValido := True;
     if (AFiltro.NomItem <> '')
-    then if (Pos(AFiltro.NomItem, FRepository[i].NomItem)>0)
+    then if (Pos(AFiltro.NomItem, AnsiUpperCase(FRepository[i].NomItem))>0)
          then LValido := True and LValido
          else LValido := False;
 

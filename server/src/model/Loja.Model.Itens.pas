@@ -186,6 +186,8 @@ begin
       .&Unit(Self.UnitName)
       .Error('Você deve informar um critério para filtro');
 
+  AFiltro.NomItem := AnsiUpperCase(AFiltro.NomItem);
+
   var LItens := TLojaModelDaoFactory.New.Itens
     .Item
     .ObterItens(AFiltro);
