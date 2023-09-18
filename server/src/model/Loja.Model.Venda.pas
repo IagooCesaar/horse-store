@@ -303,6 +303,22 @@ begin
       .&Unit(Self.UnitName)
       .Error('Não há itens ativos na venda');
 
+    var LPrecoUnitOk := True;
+    for var LItem in LItens
+    do begin
+      if  (LItem.CodSit = sitAtivo)
+      and (LItem.VrPrecoUnit <= 0)
+      then begin
+        LPrecoUnitOk := False;
+        Break;
+      end;
+    end;
+    if not LPrecoUnitOk
+    then raise EHorseException.New
+      .Status(THTTPStatus.BadRequest)
+      .&Unit(Self.UnitName)
+      .Error('Todos os itens da venda deverão possuir preço unitário superior a zero');
+
     // Validar saldo estoque dos itens
     var LQtdItens := TDictionary<Integer, Integer>.Create;
     try
