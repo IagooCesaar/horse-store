@@ -7,6 +7,8 @@ uses
   ufrmPrinc in 'ufrmPrinc.pas' {frmPrinc},
   ufrmSobre in 'ufrmSobre.pas' {frmSobre},
   App in 'src\App.pas',
+  uFuncoes in '..\comum\uFuncoes.pas',
+  uMeuBallonHint in '..\comum\uMeuBallonHint.pas',
   Loja.Model.Entity.Itens.Item in 'src\model\entity\itens\Loja.Model.Entity.Itens.Item.pas',
   Loja.Model.Dao.Itens.Item in 'src\model\dao\oficial\itens\Loja.Model.Dao.Itens.Item.pas',
   Loja.Model.Dao.Itens.Factory in 'src\model\dao\oficial\itens\Loja.Model.Dao.Itens.Factory.pas',
@@ -93,6 +95,7 @@ uses
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
+  Application.Title := 'LOJA API SERVER';
   Application.CreateForm(TfrmPrinc, frmPrinc);
   Application.Run;
 end.

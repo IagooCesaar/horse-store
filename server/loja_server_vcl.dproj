@@ -132,6 +132,10 @@
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <Icon_MainIcon>loja_server_vcl.ico</Icon_MainIcon>
+        <VerInfo_Release>2</VerInfo_Release>
+        <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
+        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.2.2;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_Build>2</VerInfo_Build>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">
@@ -145,6 +149,8 @@
             <Form>frmSobre</Form>
         </DCCReference>
         <DCCReference Include="src\App.pas"/>
+        <DCCReference Include="..\comum\uFuncoes.pas"/>
+        <DCCReference Include="..\comum\uMeuBallonHint.pas"/>
         <DCCReference Include="src\model\entity\itens\Loja.Model.Entity.Itens.Item.pas"/>
         <DCCReference Include="src\model\dao\oficial\itens\Loja.Model.Dao.Itens.Item.pas"/>
         <DCCReference Include="src\model\dao\oficial\itens\Loja.Model.Dao.Itens.Factory.pas"/>
@@ -251,8 +257,6 @@
                     <Source Name="MainSource">loja_server_vcl.dpr</Source>
                 </Source>
                 <Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\bcboffice2k280.bpl">Embarcadero C++Builder Office 2000 Servers Package</Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\bcbofficexp280.bpl">Embarcadero C++Builder Office XP Servers Package</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dcloffice2k280.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dclofficexp280.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
                 </Excluded_Packages>
