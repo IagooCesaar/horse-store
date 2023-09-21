@@ -111,7 +111,6 @@ var
 implementation
 
 uses
-  uFuncoes,
   ufrmSobre,
   Winapi.ShellAPI,
   Registry,
@@ -216,7 +215,8 @@ procedure TfrmPrinc.acSobreExecute(Sender: TObject);
 begin
   var frmSobre := TfrmSobre.Create(Self);
   try
-     frmSobre.ShowModal();
+    frmSobre.lbVersao.Caption := FApp.Version;
+    frmSobre.ShowModal();
   finally
     FreeAndNil(frmSobre);
   end;
@@ -300,12 +300,9 @@ begin
 end;
 
 procedure TfrmPrinc.FormCreate(Sender: TObject);
-var sAux: String;
 begin
-  Funcoes.VersaoArquivo(ParamStr(0),sAux,False);
-  Self.Caption := Self.Caption + ' {vs: '+sAux+'}';
-
   FApp := TApp.Create;
+  Self.Caption := Self.Caption + ' {vs: '+FApp.Version+'}';
 
   edtUsuario.Clear;
   edtSenha.Clear;

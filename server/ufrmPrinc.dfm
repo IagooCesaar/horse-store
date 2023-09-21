@@ -36,8 +36,6 @@ object frmPrinc: TfrmPrinc
     ActivePage = tsAPI
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 590
-    ExplicitHeight = 580
     object tsAPI: TTabSheet
       Caption = ':: Configura'#231#245'es da API  '
       object Label1: TLabel
@@ -364,7 +362,7 @@ object frmPrinc: TfrmPrinc
         TabOrder = 3
       end
       object btnBackup: TButton
-        Left = 491
+        Left = 495
         Top = 439
         Width = 100
         Height = 42

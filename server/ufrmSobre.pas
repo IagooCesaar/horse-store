@@ -22,7 +22,6 @@ type
     lbVersao: TLabel;
     procedure lbEmailClick(Sender: TObject);
     procedure lbRepositorioClick(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
   private
     { Private declarations }
   public
@@ -34,15 +33,9 @@ type
 implementation
 
 uses
-  Winapi.ShellAPI,
-  uFuncoes;
+  Winapi.ShellAPI;
 
 {$R *.dfm}
-
-procedure TfrmSobre.FormCreate(Sender: TObject);
-begin
-  lbVersao.Caption := Funcoes.VersaoArquivo(ParamStr(0));
-end;
 
 procedure TfrmSobre.lbEmailClick(Sender: TObject);
 begin

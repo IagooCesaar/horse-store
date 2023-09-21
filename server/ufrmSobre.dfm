@@ -12,7 +12,6 @@ object frmSobre: TfrmSobre
   Font.Name = 'Segoe UI'
   Font.Style = []
   Position = poScreenCenter
-  OnCreate = FormCreate
   TextHeight = 21
   object lbTitulo: TLabel
     Left = 0
