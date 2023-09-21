@@ -43,8 +43,8 @@ uses
   Loja.Model.Venda.Types in 'model\Loja.Model.Venda.Types.pas',
   Loja.View.Venda.InserirMeioPagto in 'view\Loja.View.Venda.InserirMeioPagto.pas' {ViewVendaInserirMeioPagto},
   Loja.View.Sobre in 'view\Loja.View.Sobre.pas' {ViewSobre},
-  uMeuBallonHint in 'libs\uMeuBallonHint.pas',
-  uFuncoes in 'libs\uFuncoes.pas';
+  uFuncoes in '..\..\comum\uFuncoes.pas',
+  uMeuBallonHint in '..\..\comum\uMeuBallonHint.pas';
 
 {$R *.res}
 
