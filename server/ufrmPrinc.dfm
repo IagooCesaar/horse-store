@@ -33,7 +33,7 @@ object frmPrinc: TfrmPrinc
     Margins.Top = 8
     Margins.Right = 8
     Margins.Bottom = 8
-    ActivePage = tsBancoDados
+    ActivePage = tsAPI
     Align = alClient
     TabOrder = 0
     ExplicitWidth = 590
@@ -364,7 +364,7 @@ object frmPrinc: TfrmPrinc
         TabOrder = 3
       end
       object btnBackup: TButton
-        Left = 487
+        Left = 491
         Top = 439
         Width = 100
         Height = 42
@@ -372,7 +372,7 @@ object frmPrinc: TfrmPrinc
         Action = acBackup
         Anchors = [akTop, akRight]
         TabOrder = 4
-        ExplicitLeft = 483
+        ExplicitLeft = 487
       end
     end
     object tsOutros: TTabSheet
