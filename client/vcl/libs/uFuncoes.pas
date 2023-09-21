@@ -2,6 +2,9 @@ unit uFuncoes;
 
 interface
 
+uses
+  Windows;
+
 type
   Funcoes = class
   public
@@ -18,6 +21,12 @@ type
      class function  GeraStringRandomica(Tamanho : Integer; Tipo : Word) : String;
      class function  RetornaValorExtenso(fValor : Real) : String;
      {$ENDREGION}
+
+    {$REGION 'Funções de sistema operacional'}
+    class function  VersaoArquivo(const NomeArq: string) : String; overload;
+    class procedure VersaoArquivo(const NomeArq: string; var iVersao: array of integer); overload;
+    class procedure VersaoArquivo(const NomeArq: string; var sVersao: String; bBuild : Boolean); overload;
+    {$ENDREGION}
   end;
 
 implementation
@@ -324,6 +333,56 @@ begin
    else
       sAux := '';
    Result := Texto+sAux;
+end;
+
+class function Funcoes.VersaoArquivo(const NomeArq: string): String;
+var sVersao : String;
+begin
+   VersaoArquivo(NomeArq,sVersao,True);
+   Result := sVersao;
+end;
+
+class procedure Funcoes.VersaoArquivo(const NomeArq: string;
+  var iVersao: array of integer);
+///fonte: http://www.devmedia.com.br/forum/carregar-versao-no-caption-do-form/397661
+var
+  VerInfoSize, VerValueSize, Dummy: DWORD;
+  VerInfo: Pointer;
+  VerValue: PVSFixedFileInfo;
+  Maior, Menor, Release, Build: Word;
+  sVersao : String;
+begin
+   iVersao[0] := -1; iVersao[1] := -1; iVersao[2] := -1; iVersao[3] := -1;
+   sVersao    := '';
+   VerInfoSize := GetFileVersionInfoSize( PChar(NomeArq), Dummy );
+   GetMem( VerInfo, VerInfoSize );
+   try
+      GetFileVersionInfo( PChar(NomeArq), 0, VerInfoSize, VerInfo );
+      VerQueryValue( VerInfo, '', Pointer(VerValue), VerValueSize );
+      with VerValue^ do begin
+         Maior    := dwFileVersionMS shr 16;
+         Menor    := dwFileVersionMS and $FFFF;
+         Release  := dwFileVersionLS shr 16;
+         Build    := dwFileVersionLS and $FFFF;
+      end;
+   finally
+      FreeMem( VerInfo, VerInfoSize );
+   end;
+   iVersao[0] := Maior;
+   iVersao[1] := Menor;
+   iVersao[2] := Release;
+   iVersao[3] := Build;
+end;
+
+class procedure Funcoes.VersaoArquivo(const NomeArq: string;
+  var sVersao: String; bBuild: Boolean);
+var iVersao : Array of integer;
+begin
+   SetLength(iVersao,4);
+   VersaoArquivo(NomeArq,iVersao);
+   sVersao := IntToStr(iVersao[0]) + '.' + IntToStr(iVersao[1]) + '.' +
+      IntToStr(iVersao[2]);
+   if bBuild then sVersao := sVersao+ '.' + IntToStr(iVersao[3]);
 end;
 
 end.

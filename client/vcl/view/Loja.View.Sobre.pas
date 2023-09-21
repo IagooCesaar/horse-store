@@ -18,8 +18,11 @@ type
     Label8: TLabel;
     lbEmail: TLabel;
     lbRepositorio: TLabel;
+    Label6: TLabel;
+    lbVersao: TLabel;
     procedure lbRepositorioClick(Sender: TObject);
     procedure lbEmailClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
   public
@@ -29,9 +32,16 @@ type
 implementation
 
 uses
+  uFuncoes,
   Winapi.ShellAPI;
 
 {$R *.dfm}
+
+procedure TViewSobre.FormShow(Sender: TObject);
+begin
+  inherited;
+  lbVersao.Caption := Funcoes.VersaoArquivo(ParamStr(0));
+end;
 
 procedure TViewSobre.lbEmailClick(Sender: TObject);
 begin
