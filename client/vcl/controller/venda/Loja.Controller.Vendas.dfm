@@ -172,23 +172,26 @@ inherited ControllerVendas: TControllerVendas
     UpdateOptions.AutoCommitUpdates = True
     Left = 296
     Top = 32
-    object mtMeiosPagtoNUM_SEQ_MEIO_PAGTO: TIntegerField
-      Alignment = taCenter
-      DisplayLabel = 'N'#250'm. Seq'
-      FieldName = 'NUM_SEQ_MEIO_PAGTO'
-    end
     object mtMeiosPagtoCOD_MEIO_PAGTO: TStringField
       DisplayLabel = 'Meio Pagto'
+      DisplayWidth = 12
       FieldName = 'COD_MEIO_PAGTO'
     end
     object mtMeiosPagtoQTD_PARC: TIntegerField
       DisplayLabel = 'Qtd Parcelas'
+      DisplayWidth = 8
       FieldName = 'QTD_PARC'
     end
     object mtMeiosPagtoVR_TOTAL: TFloatField
       DisplayLabel = 'Valor Total'
+      DisplayWidth = 8
       FieldName = 'VR_TOTAL'
       DisplayFormat = '#,##0.00'
+    end
+    object mtMeiosPagtoNUM_SEQ_MEIO_PAGTO: TIntegerField
+      Alignment = taCenter
+      DisplayLabel = 'N'#250'm. Seq'
+      FieldName = 'NUM_SEQ_MEIO_PAGTO'
     end
     object mtMeiosPagtoNUM_VNDA: TIntegerField
       Alignment = taLeftJustify

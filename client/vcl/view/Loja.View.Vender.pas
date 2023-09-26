@@ -52,9 +52,6 @@ type
     btnMeioPagtoVO: TButton;
     btnMeioPagtoCD: TButton;
     btnMeioPagtoCC: TButton;
-    btnMeioPagtoPIX: TButton;
-    btnMeioPagtoDN: TButton;
-    btnMeioPagtoRemover: TButton;
     pModeloBotoes: TCategoryButtons;
     btnEfetivar: TButton;
     btnCancelar: TButton;
@@ -94,6 +91,10 @@ type
     dbVR_TOTAL: TDBEdit;
     Label21: TLabel;
     dbNUM_VNDA1: TDBEdit;
+    Panel2: TPanel;
+    btnMeioPagtoPIX: TButton;
+    btnMeioPagtoDN: TButton;
+    btnMeioPagtoRemover: TButton;
     procedure edtPesquisaKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure FormCreate(Sender: TObject);
