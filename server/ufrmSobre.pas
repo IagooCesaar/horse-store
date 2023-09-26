@@ -18,6 +18,8 @@ type
     Label8: TLabel;
     lbEmail: TLabel;
     lbRepositorio: TLabel;
+    Label6: TLabel;
+    lbVersao: TLabel;
     procedure lbEmailClick(Sender: TObject);
     procedure lbRepositorioClick(Sender: TObject);
   private

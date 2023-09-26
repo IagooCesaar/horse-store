@@ -4,8 +4,9 @@ inherited ViewSobre: TViewSobre
   ClientHeight = 275
   ClientWidth = 458
   Position = poScreenCenter
-  ExplicitWidth = 470
-  ExplicitHeight = 313
+  OnShow = FormShow
+  ExplicitWidth = 474
+  ExplicitHeight = 314
   TextHeight = 21
   object lbTitulo: TLabel
     Left = 0
@@ -121,5 +122,19 @@ inherited ViewSobre: TViewSobre
     ParentShowHint = False
     ShowHint = True
     OnClick = lbRepositorioClick
+  end
+  object Label6: TLabel
+    Left = 24
+    Top = 103
+    Width = 50
+    Height = 21
+    Caption = 'Vers'#227'o:'
+  end
+  object lbVersao: TLabel
+    Left = 120
+    Top = 103
+    Width = 59
+    Height = 21
+    Caption = 'VERSAO'
   end
 end

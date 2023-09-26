@@ -34,7 +34,8 @@ implementation
 
 uses
   Database.Factory,
-  Horse.Commons;
+  Horse.Commons,
+  System.StrUtils;
 
 { TLojaModelDaoItensItem }
 
@@ -45,6 +46,8 @@ begin
   Result.CodItem := ds.FieldByName('cod_item').AsInteger;
   Result.NomItem := ds.FieldByName('nom_item').AsString;
   Result.NumCodBarr := ds.FieldByName('num_cod_barr').AsString;
+  Result.FlgPermSaldNeg := ds.FieldByName('flg_perm_sald_neg').AsString;
+  Result.FlgTabPreco := ds.FieldByName('flg_tab_preco').AsString;
 end;
 
 function TLojaModelDaoItensItem.AtualizarItem(
@@ -55,7 +58,9 @@ begin
   var LSql := #13#10
   + 'update item '
   + 'set nom_item = :nom_item, '
-  + '    num_cod_barr = :num_cod_barr '
+  + '    num_cod_barr = :num_cod_barr, '
+  + '    flg_perm_sald_neg = :flg_perm_sald_neg, '
+  + '    flg_tab_preco = :flg_tab_preco '
   + 'where (cod_item = :cod_item) '
   ;
 
@@ -65,6 +70,8 @@ begin
       .AddInteger('cod_item', AItem.CodItem)
       .AddString('nom_item', AItem.NomItem)
       .AddString('num_cod_barr', Variant(AItem.NumCodBarr))
+      .AddString('flg_perm_sald_neg', IfThen(AItem.FlgPermSaldNeg, 'S', 'N') )
+      .AddString('flg_tab_preco', IfThen(AItem.FlgTabPreco, 'S', 'N') )
       .&End
     .ExecSQL();
 
@@ -85,12 +92,14 @@ begin
 
   TDatabaseFactory.New.SQL
     .SQL(
-      'insert into item (cod_item, nom_item, num_cod_barr) '+
-      'values (:cod_item, :nom_item, :num_cod_barr) ')
+      'insert into item (cod_item, nom_item, num_cod_barr, flg_perm_sald_neg, flg_tab_preco) '+
+      'values (:cod_item, :nom_item, :num_cod_barr, :flg_perm_sald_neg, :flg_tab_preco) ')
     .ParamList
       .AddInteger('cod_item', Lid)
       .AddString('nom_item', ANovoItem.NomItem)
       .AddString('num_cod_barr', Variant(ANovoItem.NumCodBarr))
+      .AddString('flg_perm_sald_neg', IfThen(ANovoItem.FlgPermSaldNeg, 'S', 'N') )
+      .AddString('flg_tab_preco', IfThen(ANovoItem.FlgTabPreco, 'S', 'N') )
       .&End
     .ExecSQL();
 
@@ -117,7 +126,7 @@ begin
 
   if AFiltro.NomItem <> ''
   then begin
-    LSql := LSql +'  and i.nom_item like :nom_item ';
+    LSql := LSql +'  and upper(i.nom_item) like :nom_item ';
     case AFiltro.NomItemLhsBracketsType of
       TLhsBracketsType.Contains:
         AFiltro.NomItem := '%'+AFiltro.NomItem+'%';

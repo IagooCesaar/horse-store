@@ -5,16 +5,14 @@ inherited ViewVendaInserirMeioPagto: TViewVendaInserirMeioPagto
   OnActivate = FormActivate
   OnCreate = FormCreate
   OnShow = FormShow
-  ExplicitWidth = 393
-  ExplicitHeight = 231
+  ExplicitWidth = 395
+  ExplicitHeight = 229
   TextHeight = 21
   inherited pModeloClient: TPanel
     Width = 381
     Height = 137
-    ExplicitLeft = -160
-    ExplicitTop = -24
-    ExplicitWidth = 907
-    ExplicitHeight = 137
+    ExplicitWidth = 379
+    ExplicitHeight = 134
     object Label1: TLabel
       Left = 24
       Top = 19
@@ -52,9 +50,13 @@ inherited ViewVendaInserirMeioPagto: TViewVendaInserirMeioPagto
       Top = 86
       Width = 214
       Height = 29
+      Hint = 
+        'Quantidade de Parcelas|Informe a quantidade de parcelas que o Va' +
+        'lor Total ser'#225' dividido'
       DataField = 'QTD_PARC'
       DataSource = dsMeioPagto
       TabOrder = 2
+      OnEnter = MeuBallonInfoOnEnter
     end
     object dbVR_TOTAL: TDBEdit
       Left = 147
@@ -69,17 +71,19 @@ inherited ViewVendaInserirMeioPagto: TViewVendaInserirMeioPagto
   inherited pModeloBotoes: TCategoryButtons
     Top = 137
     Width = 381
-    ExplicitWidth = 907
+    ExplicitTop = 134
+    ExplicitWidth = 379
     inherited btnModeloOk: TButton
       Left = 171
       Caption = 'Ok'
       OnClick = btnModeloOkClick
-      ExplicitLeft = 697
+      ExplicitLeft = 171
+      ExplicitTop = 9
     end
     inherited btnModeloCancelar: TButton
       Left = 274
       OnClick = btnModeloCancelarClick
-      ExplicitLeft = 800
+      ExplicitLeft = 272
     end
   end
   object dsMeioPagto: TDataSource

@@ -33,11 +33,9 @@ object frmPrinc: TfrmPrinc
     Margins.Top = 8
     Margins.Right = 8
     Margins.Bottom = 8
-    ActivePage = tsBancoDados
+    ActivePage = tsAPI
     Align = alClient
     TabOrder = 0
-    ExplicitWidth = 590
-    ExplicitHeight = 580
     object tsAPI: TTabSheet
       Caption = ':: Configura'#231#245'es da API  '
       object Label1: TLabel
@@ -167,6 +165,7 @@ object frmPrinc: TfrmPrinc
         Align = alTop
         Caption = 'Banco de Dados'
         TabOrder = 0
+        ExplicitWidth = 576
         DesignSize = (
           580
           182)
@@ -211,6 +210,7 @@ object frmPrinc: TfrmPrinc
           DataField = 'Server'
           DataSource = dsDBParams
           TabOrder = 0
+          ExplicitWidth = 413
         end
         object dbDatabase: TDBEdit
           Left = 155
@@ -221,6 +221,7 @@ object frmPrinc: TfrmPrinc
           DataField = 'Database'
           DataSource = dsDBParams
           TabOrder = 1
+          ExplicitWidth = 413
         end
         object dbUsername: TDBEdit
           Left = 155
@@ -231,6 +232,7 @@ object frmPrinc: TfrmPrinc
           DataField = 'Username'
           DataSource = dsDBParams
           TabOrder = 2
+          ExplicitWidth = 413
         end
         object dbPassword: TDBEdit
           Left = 155
@@ -242,6 +244,7 @@ object frmPrinc: TfrmPrinc
           DataSource = dsDBParams
           PasswordChar = '*'
           TabOrder = 3
+          ExplicitWidth = 413
         end
       end
       object grpDBDriverParams: TGroupBox
@@ -253,6 +256,7 @@ object frmPrinc: TfrmPrinc
         Align = alTop
         Caption = 'Driver de Acesso'
         TabOrder = 1
+        ExplicitWidth = 576
         DesignSize = (
           580
           82)
@@ -273,6 +277,7 @@ object frmPrinc: TfrmPrinc
           DataField = 'DriverVendorLib'
           DataSource = dsDBParams
           TabOrder = 0
+          ExplicitWidth = 413
         end
       end
       object grpDBPoolParams: TGroupBox
@@ -284,6 +289,7 @@ object frmPrinc: TfrmPrinc
         Align = alTop
         Caption = 'Pool de Conex'#245'es'
         TabOrder = 2
+        ExplicitWidth = 576
         DesignSize = (
           580
           154)
@@ -320,6 +326,7 @@ object frmPrinc: TfrmPrinc
           DataField = 'PoolMaximumItems'
           DataSource = dsDBParams
           TabOrder = 0
+          ExplicitWidth = 413
         end
         object dbPoolCleanupTimeout: TDBEdit
           Left = 155
@@ -330,6 +337,7 @@ object frmPrinc: TfrmPrinc
           DataField = 'PoolCleanupTimeout'
           DataSource = dsDBParams
           TabOrder = 1
+          ExplicitWidth = 413
         end
         object dbPoolExpireTimeout: TDBEdit
           Left = 155
@@ -340,6 +348,7 @@ object frmPrinc: TfrmPrinc
           DataField = 'PoolExpireTimeout'
           DataSource = dsDBParams
           TabOrder = 2
+          ExplicitWidth = 413
         end
       end
       object btnAplicarDBConfig: TButton
@@ -353,7 +362,7 @@ object frmPrinc: TfrmPrinc
         TabOrder = 3
       end
       object btnBackup: TButton
-        Left = 483
+        Left = 495
         Top = 439
         Width = 100
         Height = 42
@@ -361,6 +370,7 @@ object frmPrinc: TfrmPrinc
         Action = acBackup
         Anchors = [akTop, akRight]
         TabOrder = 4
+        ExplicitLeft = 487
       end
     end
     object tsOutros: TTabSheet

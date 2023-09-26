@@ -108,7 +108,12 @@ type
 
     procedure mtItensBeforePost(DataSet: TDataSet);
     procedure mtItensBeforeDelete(DataSet: TDataSet);
+    procedure mtItensAfterScroll(DataSet: TDataSet);
+
     procedure dbgMeiosPagtoDblClick(Sender: TObject);
+    procedure dbQTD_ITEMKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormShow(Sender: TObject);
   private
     FControllerVendas: TControllerVendas;
     FControllerItens: TControllerItens;
@@ -123,25 +128,11 @@ uses
   Loja.View.Venda.InserirMeioPagto,
   Loja.View.Preco.ConsultaPreco,
   Loja.Model.Venda.Types,
-  Loja.Model.Caixa.Types;
+  Loja.Model.Caixa.Types,
+
+  uFuncoes;
 
 {$R *.dfm}
-
-function PegaSeq(Texto: String; posicao: Integer; sep: String = '|'): String;
-var sl : TStringList;
-begin
-  try
-    sl := TStringList.Create;
-    sl.StrictDelimiter := True;
-    sl.Delimiter       := Sep[1];
-    sl.DelimitedText   := Texto;
-    if (sl.Count) < posicao
-    then Result := ''
-    else Result := sl.Strings[Posicao-1];
-  finally
-    FreeAndNil(sl);
-  end;
-end;
 
 procedure TViewVender.btnPesquisarClick(Sender: TObject);
 begin
@@ -180,6 +171,20 @@ begin
   then Exit;
 
   AbrirDetalhesVenda(FControllerVendas.mtVendasNUM_VNDA.AsInteger);
+end;
+
+procedure TViewVender.dbQTD_ITEMKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  inherited;
+  if  (Key = VK_RETURN)
+  and (FControllerVendas.mtItens.State in [dsInsert, dsEdit])
+  then begin
+    FControllerVendas.mtItens.Post;
+
+    if edtPesquisa.CanFocus
+    then edtPesquisa.SetFocus;
+  end;
 end;
 
 procedure TViewVender.AbrirDetalhesVenda(ANumVnda: Integer);
@@ -259,6 +264,8 @@ begin
   AbrirDetalhesVenda(FControllerVendas.mtDadosNUM_VNDA.AsInteger);
 
   ShowMessage('A venda foi efetivada com sucesso!');
+
+  sbNovaVenda.Down := True;
 end;
 
 procedure TViewVender.btnMeioPagtoRemoverClick(Sender: TObject);
@@ -298,6 +305,7 @@ begin
 
   FControllerVendas.mtItens.BeforeDelete := mtItensBeforeDelete;
   FControllerVendas.mtItens.BeforePost := mtItensBeforePost;
+  FControllerVendas.mtItens.AfterScroll := mtItensAfterScroll;
 
   FControllerVendas.CriarDatasets;
 end;
@@ -307,6 +315,22 @@ begin
   FreeAndNil(FControllerVendas);
   FreeAndNil(FControllerItens);
   inherited;
+end;
+
+procedure TViewVender.FormShow(Sender: TObject);
+begin
+  inherited;
+  if edtPesquisa.CanFocus
+  then edtPesquisa.SetFocus;
+
+  sbNovaVenda.Down := true;
+end;
+
+procedure TViewVender.mtItensAfterScroll(DataSet: TDataSet);
+begin
+  FControllerVendas.mtItensAfterScroll(DataSet);
+  dbVR_PRECO_UNIT.Enabled := not FControllerVendas.mtItensFLG_TAB_PRECO.AsBoolean;
+  dbVR_PRECO_UNIT.ReadOnly := FControllerVendas.mtItensFLG_TAB_PRECO.AsBoolean;
 end;
 
 procedure TViewVender.mtItensBeforeDelete(DataSet: TDataSet);
@@ -337,8 +361,8 @@ begin
   var LChave := '';
   if Pos('*', edtPesquisa.Text) > 0
   then begin
-    LQtd := StrToIntDef(PegaSeq(edtPesquisa.Text, 1, '*').Trim, 1);
-    LChave := PegaSeq(edtPesquisa.Text, 2, '*').Trim;
+    LQtd := StrToIntDef(Funcoes.PegaSeq(edtPesquisa.Text, 1, '*').Trim, 1);
+    LChave := Funcoes.PegaSeq(edtPesquisa.Text, 2, '*').Trim;
   end
   else LChave := Trim(edtPesquisa.Text);
 
@@ -387,6 +411,10 @@ begin
     end;
 
     edtPesquisa.Clear;
+
+    if FControllerItens.mtDadosFLG_TAB_PRECO.AsBoolean = false
+    then if dbVR_PRECO_UNIT.CanFocus
+         then dbVR_PRECO_UNIT.SetFocus;
   end
   else
   if sbNovaVenda.Down then

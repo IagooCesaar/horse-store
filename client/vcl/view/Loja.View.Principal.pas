@@ -40,6 +40,7 @@ type
     procedure FormActivate(Sender: TObject);
     procedure acCaixaExecute(Sender: TObject);
     procedure acSobreExecute(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     { Private declarations }
     procedure OpenChild(sClassName: string);
@@ -53,6 +54,7 @@ var
 implementation
 
 uses
+  uFuncoes,
   Loja.DM.Imagens,
 
   Loja.View.Logon,
@@ -134,6 +136,13 @@ begin
   var LTexto := '';
   for var i := 1 to 20 do LTexto := LTexto + ' ';
   btnVender.Caption := btnVender.Caption + LTexto;
+end;
+
+procedure TViewPrincipal.FormShow(Sender: TObject);
+var sAux: string;
+begin
+  Funcoes.VersaoArquivo(ParamStr(0),sAux,False);
+  Self.Caption := Self.Caption + ' {vs: '+sAux+'}';
 end;
 
 procedure TViewPrincipal.OpenChild(sClassName: string);

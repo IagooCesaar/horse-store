@@ -196,12 +196,12 @@ inherited ViewCaixa: TViewCaixa
               StyleElements = []
               ExplicitLeft = 200
               ExplicitTop = 5
-              ExplicitWidth = 186
+              ExplicitWidth = 187
               ExplicitHeight = 98
               inherited pCliente: TPanel
                 Width = 187
                 Height = 98
-                ExplicitWidth = 186
+                ExplicitWidth = 187
                 ExplicitHeight = 98
                 inherited lbMeioPagto: TLabel
                   Width = 163
@@ -232,14 +232,14 @@ inherited ViewCaixa: TViewCaixa
               ParentFont = False
               TabOrder = 2
               StyleElements = []
-              ExplicitLeft = 394
+              ExplicitLeft = 395
               ExplicitTop = 5
-              ExplicitWidth = 186
+              ExplicitWidth = 187
               ExplicitHeight = 98
               inherited pCliente: TPanel
                 Width = 187
                 Height = 98
-                ExplicitWidth = 186
+                ExplicitWidth = 187
                 ExplicitHeight = 98
                 inherited lbMeioPagto: TLabel
                   Width = 163
@@ -270,14 +270,14 @@ inherited ViewCaixa: TViewCaixa
               ParentFont = False
               TabOrder = 3
               StyleElements = []
-              ExplicitLeft = 588
+              ExplicitLeft = 590
               ExplicitTop = 5
-              ExplicitWidth = 186
+              ExplicitWidth = 187
               ExplicitHeight = 98
               inherited pCliente: TPanel
                 Width = 187
                 Height = 98
-                ExplicitWidth = 186
+                ExplicitWidth = 187
                 ExplicitHeight = 98
                 inherited lbMeioPagto: TLabel
                   Width = 163
@@ -308,7 +308,7 @@ inherited ViewCaixa: TViewCaixa
               ParentFont = False
               TabOrder = 4
               StyleElements = []
-              ExplicitLeft = 782
+              ExplicitLeft = 785
               ExplicitTop = 5
               ExplicitWidth = 187
               ExplicitHeight = 98
@@ -346,14 +346,14 @@ inherited ViewCaixa: TViewCaixa
               ParentFont = False
               TabOrder = 5
               StyleElements = []
-              ExplicitLeft = 977
+              ExplicitLeft = 980
               ExplicitTop = 5
-              ExplicitWidth = 186
+              ExplicitWidth = 187
               ExplicitHeight = 98
               inherited pCliente: TPanel
                 Width = 187
                 Height = 98
-                ExplicitWidth = 186
+                ExplicitWidth = 187
                 ExplicitHeight = 98
                 inherited lbMeioPagto: TLabel
                   Width = 163
@@ -383,16 +383,16 @@ inherited ViewCaixa: TViewCaixa
             ExplicitWidth = 1168
             object Label10: TLabel
               AlignWithMargins = True
-              Left = 898
+              Left = 885
               Top = 8
-              Width = 160
+              Width = 173
               Height = 30
               Margins.Left = 0
               Margins.Top = 8
               Margins.Right = 4
               Margins.Bottom = 8
               Align = alRight
-              Caption = 'Valor Total em Caixa:'
+              Caption = 'Valor Total Mov. Caixa:'
               Font.Charset = DEFAULT_CHARSET
               Font.Color = clWindowText
               Font.Height = -16
@@ -400,6 +400,7 @@ inherited ViewCaixa: TViewCaixa
               Font.Style = [fsBold]
               ParentFont = False
               Layout = tlCenter
+              ExplicitLeft = 888
               ExplicitHeight = 21
             end
             object dbtVR_SALDO: TDBText
@@ -878,7 +879,7 @@ inherited ViewCaixa: TViewCaixa
               Left = 8
               Top = 0
               Width = 313
-              Height = 21
+              Height = 32
               Margins.Left = 8
               Margins.Top = 0
               Margins.Right = 0
@@ -886,6 +887,7 @@ inherited ViewCaixa: TViewCaixa
               Align = alLeft
               Caption = 'Duplo clique para visualizar detalhes do caixa'
               Layout = tlCenter
+              ExplicitHeight = 21
             end
           end
           object dbgCaixas: TDBGrid

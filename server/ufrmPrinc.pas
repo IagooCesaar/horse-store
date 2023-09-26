@@ -215,7 +215,8 @@ procedure TfrmPrinc.acSobreExecute(Sender: TObject);
 begin
   var frmSobre := TfrmSobre.Create(Self);
   try
-     frmSobre.ShowModal();
+    frmSobre.lbVersao.Caption := FApp.Version;
+    frmSobre.ShowModal();
   finally
     FreeAndNil(frmSobre);
   end;
@@ -301,6 +302,7 @@ end;
 procedure TfrmPrinc.FormCreate(Sender: TObject);
 begin
   FApp := TApp.Create;
+  Self.Caption := Self.Caption + ' {vs: '+FApp.Version+'}';
 
   edtUsuario.Clear;
   edtSenha.Clear;

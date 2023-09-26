@@ -84,6 +84,7 @@ __recovery/
 */win32
 */win64
 **/win64
+**/win32
 
 
 # Firebird databases

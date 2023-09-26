@@ -299,7 +299,7 @@ inherited ViewItens: TViewItens
         Align = alTop
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 3
+        TabOrder = 5
       end
       object btnEstoque: TButton
         Left = 17
@@ -308,7 +308,7 @@ inherited ViewItens: TViewItens
         Height = 36
         Cursor = crHandPoint
         Caption = 'Estoque'
-        TabOrder = 4
+        TabOrder = 6
         OnClick = btnEstoqueClick
       end
       object btnPrecoVenda: TButton
@@ -318,8 +318,30 @@ inherited ViewItens: TViewItens
         Height = 36
         Cursor = crHandPoint
         Caption = 'Pre'#231'o Venda'
-        TabOrder = 5
+        TabOrder = 7
         OnClick = btnPrecoVendaClick
+      end
+      object chbFLG_PERM_SALD_NEG: TDBCheckBox
+        Left = 17
+        Top = 179
+        Width = 192
+        Height = 30
+        Cursor = crHandPoint
+        Caption = 'Permitir saldo negativo'
+        DataField = 'FLG_PERM_SALD_NEG'
+        DataSource = dsItens
+        TabOrder = 3
+      end
+      object chbFLG_TAB_PRECO: TDBCheckBox
+        Left = 215
+        Top = 179
+        Width = 192
+        Height = 30
+        Cursor = crHandPoint
+        Caption = 'Utiliza tabela de pre'#231'o'
+        DataField = 'FLG_TAB_PRECO'
+        DataSource = dsItens
+        TabOrder = 4
       end
     end
   end

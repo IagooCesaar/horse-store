@@ -42,7 +42,9 @@ uses
   Loja.View.Caixa.Fechamento in 'view\Loja.View.Caixa.Fechamento.pas' {ViewCaixaFechamento},
   Loja.Model.Venda.Types in 'model\Loja.Model.Venda.Types.pas',
   Loja.View.Venda.InserirMeioPagto in 'view\Loja.View.Venda.InserirMeioPagto.pas' {ViewVendaInserirMeioPagto},
-  Loja.View.Sobre in 'view\Loja.View.Sobre.pas' {ViewSobre};
+  Loja.View.Sobre in 'view\Loja.View.Sobre.pas' {ViewSobre},
+  uFuncoes in '..\..\comum\uFuncoes.pas',
+  uMeuBallonHint in '..\..\comum\uMeuBallonHint.pas';
 
 {$R *.res}
 
@@ -61,7 +63,7 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.Title := 'Loja';
-  TStyleManager.TrySetStyle('Windows10 SlateGray');
+  TStyleManager.TrySetStyle('Slate Classico');
   Application.CreateForm(TViewPrincipal, ViewPrincipal);
   Application.CreateForm(TdmImagens, dmImagens);
   Application.Run;

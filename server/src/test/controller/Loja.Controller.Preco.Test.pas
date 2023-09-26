@@ -6,7 +6,7 @@ uses
   DUnitX.TestFramework,
   System.SysUtils,
 
-  Loja.Model.Entity.Itens.Item;
+  Loja.Model.Dto.Resp.Itens.Item;
 
 type
   [TestFixture]
@@ -14,7 +14,7 @@ type
   private
     FBaseURL, FUsarname, FPassword: String;
 
-    function CriarItem(ANome, ACodBarr: string): TLojaModelEntityItensItem;
+    function CriarItem(ANome, ACodBarr: string): TLojaModelDtoRespItensItem;
   public
     [SetupFixture]
     procedure SetupFixture;
@@ -71,7 +71,7 @@ uses
 
 { TLojaControllerPrecoTest }
 
-function TLojaControllerPrecoTest.CriarItem(ANome, ACodBarr: string): TLojaModelEntityItensItem;
+function TLojaControllerPrecoTest.CriarItem(ANome, ACodBarr: string): TLojaModelDtoRespItensItem;
 var LNovoItem : TLojaModelDtoReqItensCriarItem;
 begin
   try
@@ -86,7 +86,7 @@ begin
       .AddBody(TJson.ObjectToClearJsonString(LNovoItem))
       .Post();
 
-    Result := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItem>
+    Result := TJson.ClearJsonAndConvertToObject<TLojaModelDtoRespItensItem>
       (LResponse.Content);
 
   finally

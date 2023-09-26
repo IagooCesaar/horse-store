@@ -97,6 +97,7 @@ begin
   Result.NumSeqItem := ASource.NumSeqItem;
   Result.CodItem := ASource.CodItem;
   Result.NomItem := LItem.NomItem;
+  Result.FlgTabPreco := LItem.FlgTabPreco = 'S';
   Result.CodSit := ASource.CodSit;
   Result.QtdItem := ASource.QtdItem;
   Result.VrPrecoUnit := ASource.VrPrecoUnit;
@@ -302,6 +303,22 @@ begin
       .&Unit(Self.UnitName)
       .Error('Não há itens ativos na venda');
 
+    var LPrecoUnitOk := True;
+    for var LItem in LItens
+    do begin
+      if  (LItem.CodSit = sitAtivo)
+      and (LItem.VrPrecoUnit <= 0)
+      then begin
+        LPrecoUnitOk := False;
+        Break;
+      end;
+    end;
+    if not LPrecoUnitOk
+    then raise EHorseException.New
+      .Status(THTTPStatus.BadRequest)
+      .&Unit(Self.UnitName)
+      .Error('Todos os itens da venda deverão possuir preço unitário superior a zero');
+
     // Validar saldo estoque dos itens
     var LQtdItens := TDictionary<Integer, Integer>.Create;
     try
@@ -325,12 +342,20 @@ begin
         var LSaldo := TLojaModelFactory.New.Estoque.ObterSaldoAtualItem(LKey);
         try
           if LSaldo.QtdSaldoAtu < LQtdItens.Items[LKey]
-          then raise EHorseException.New
-            .Status(THTTPStatus.BadRequest)
-            .&Unit(Self.UnitName)
-            .Error(Format('Não há saldo disponível para o item %d (Saldo atual %d, Qtd Venda %d)', [
-              LSaldo.CodItem, LSaldo.QtdSaldoAtu, LQtdItens.Items[LKey]
-            ]));
+          then begin
+            var LItem := TLojaModelFactory.New.Itens.ObterPorCodigo(LKey);
+            try
+              if not LItem.FlgPermSaldNeg
+              then raise EHorseException.New
+                .Status(THTTPStatus.BadRequest)
+                .&Unit(Self.UnitName)
+                .Error(Format('Não há saldo disponível para o item %d (Saldo atual %d, Qtd Venda %d)', [
+                  LSaldo.CodItem, LSaldo.QtdSaldoAtu, LQtdItens.Items[LKey]
+                ]));
+            finally
+              LItem.Free;
+            end;
+          end;
         finally
           LSaldo.Free;
         end;
@@ -340,6 +365,11 @@ begin
     end;
 
     CalculaTotaisVenda(LVenda);
+    if LVenda.VrTotal <= 0
+    then raise EHorseException.New
+      .Status(THTTPStatus.BadRequest)
+      .&Unit(Self.UnitName)
+      .Error('O valor total da venda deve ser superior a zero');
 
     if LMeiosPagto.Count = 0
     then raise EHorseException.New
@@ -455,54 +485,60 @@ begin
     .Status(THTTPStatus.NotFound)
     .&Unit(Self.UnitName)
     .Error('Não foi possível encontrar o item informado');
-  LItem.Free;
 
-  var LVenda := ObterEValidarVenda(ANovoItem.NumVnda, True);
   try
-    var LPrecoVnda := TLojaModelDaoFactory.New.Preco.Venda.ObterPrecoVendaAtual(ANovoItem.CodItem);
-    if LPrecoVnda = nil
-    then raise EHorseException.New
-      .Status(THTTPStatus.NotFound)
-      .&Unit(Self.UnitName)
-      .Error('Não há preço de venda implantado para o item');
-
-    var LItemVenda := TLojaModelEntityVendaItem.Create;
+    var LVenda := ObterEValidarVenda(ANovoItem.NumVnda, True);
     try
-      LItemVenda.NumVnda := ANovoItem.NumVnda;
-      LItemVenda.CodItem := ANovoItem.CodItem;
-      LItemVenda.NumSeqItem := TLojaModelDaoFactory.New.Venda.Item.ObterUltimoNumSeq(LItemVenda.NumVnda) + 1;
-      LItemVenda.CodSit := sitAtivo;
-      LItemVenda.QtdItem := ANovoItem.QtdItem;
-      LItemVenda.VrPrecoUnit := LPrecoVnda.VrVnda;
-      LItemVenda.VrBruto := RoundTo(LItemVenda.QtdItem * LItemVenda.VrPrecoUnit, -2);
-      LItemVenda.VrDesc := ANovoItem.VrDesc;
-      LItemVenda.VrTotal := LItemVenda.VrBruto - LItemVenda.VrDesc;
-
-      if LItemVenda.VrTotal < 0
+      var LPrecoVnda := TLojaModelDaoFactory.New.Preco.Venda.ObterPrecoVendaAtual(ANovoItem.CodItem);
+      if (LPrecoVnda = nil) and (LItem.FlgTabPreco = 'S')
       then raise EHorseException.New
-        .Status(THTTPStatus.BadRequest)
+        .Status(THTTPStatus.NotFound)
         .&Unit(Self.UnitName)
-        .Error('O valor total do item não pode ser negativo');
+        .Error('Não há preço de venda implantado para o item');
 
-      var LItemInserido := TLojaModelDaoFactory.New.Venda
-        .Item
-        .InserirItem(LItemVenda);
+      var LItemVenda := TLojaModelEntityVendaItem.Create;
+      try
+        LItemVenda.NumVnda := ANovoItem.NumVnda;
+        LItemVenda.CodItem := ANovoItem.CodItem;
+        LItemVenda.NumSeqItem := TLojaModelDaoFactory.New.Venda.Item.ObterUltimoNumSeq(LItemVenda.NumVnda) + 1;
+        LItemVenda.CodSit := sitAtivo;
+        LItemVenda.QtdItem := ANovoItem.QtdItem;
+        if LPrecoVnda = nil
+        then LItemVenda.VrPrecoUnit := ANovoItem.VrPrecoUnit
+        else LItemVenda.VrPrecoUnit := LPrecoVnda.VrVnda;
+        LItemVenda.VrBruto := RoundTo(LItemVenda.QtdItem * LItemVenda.VrPrecoUnit, -2);
+        LItemVenda.VrDesc := ANovoItem.VrDesc;
+        LItemVenda.VrTotal := LItemVenda.VrBruto - LItemVenda.VrDesc;
 
-      Result := EntityToDto(LItemInserido);
-      LItemInserido.Free;
+        if LItemVenda.VrTotal < 0
+        then raise EHorseException.New
+          .Status(THTTPStatus.BadRequest)
+          .&Unit(Self.UnitName)
+          .Error('O valor total do item não pode ser negativo');
 
-      CalculaTotaisVenda(LVenda);
-      var LVendaAtualizada := TLojaModelDaoFactory.New.Venda
-        .Venda
-        .AtualizarVenda(LVenda);
-      LVendaAtualizada.Free;
+        var LItemInserido := TLojaModelDaoFactory.New.Venda
+          .Item
+          .InserirItem(LItemVenda);
 
+        Result := EntityToDto(LItemInserido);
+        LItemInserido.Free;
+
+        CalculaTotaisVenda(LVenda);
+        var LVendaAtualizada := TLojaModelDaoFactory.New.Venda
+          .Venda
+          .AtualizarVenda(LVenda);
+        LVendaAtualizada.Free;
+
+      finally
+        if LPrecoVnda <> nil
+        then LPrecoVnda.Free;
+        LItemVenda.Free;
+      end;
     finally
-      LPrecoVnda.Free;
-      LItemVenda.Free;
+      LVenda.Free;
     end;
   finally
-    LVenda.Free;
+    FreeAndNil(LItem);
   end;
 end;
 
@@ -523,71 +559,75 @@ begin
     .Status(THTTPStatus.NotFound)
     .&Unit(Self.UnitName)
     .Error('Não foi possível encontrar o item informado');
-  LItem.Free;
 
-  var LVenda := ObterEValidarVenda(AItem.NumVnda, True);
   try
-    var LPrecoVnda := TLojaModelDaoFactory.New.Preco.Venda.ObterPrecoVendaAtual(AItem.CodItem);
-
-    if LPrecoVnda = nil
-    then raise EHorseException.New
-      .Status(THTTPStatus.NotFound)
-      .&Unit(Self.UnitName)
-      .Error('Não há preço de venda implantado para o item');
-
-    var LItemVenda := TLojaModelDaoFactory.New.Venda
-      .Item
-      .ObterItem(AItem.NumVnda, AItem.NumSeqItem);
+    var LVenda := ObterEValidarVenda(AItem.NumVnda, True);
     try
-      if LItemVenda = nil
+      var LPrecoVnda := TLojaModelDaoFactory.New.Preco.Venda.ObterPrecoVendaAtual(AItem.CodItem);
+      if (LPrecoVnda = nil) and (LItem.FlgTabPreco = 'S')
       then raise EHorseException.New
         .Status(THTTPStatus.NotFound)
         .&Unit(Self.UnitName)
-        .Error('Não foi possível encontrar item deste sequencial na venda informada');
+        .Error('Não há preço de venda implantado para o item');
 
-      if LItemVenda.CodSit = TLojaModelEntityVendaItemSituacao.sitRemovido
-      then raise EHorseException.New
-        .Status(THTTPStatus.BadRequest)
-        .&Unit(Self.UnitName)
-        .Error('Este item foi removido da venda, portanto não pode ser alterado');
-
-      LItemVenda.CodItem := AItem.CodItem;
-      LItemVenda.NumVnda := AItem.NumVnda;
-      LItemVenda.NumSeqItem := LItemVenda.NumSeqItem;
-
-      LItemVenda.CodSit := AItem.CodSit;
-      LItemVenda.CodItem := AItem.CodItem;
-      LItemVenda.QtdItem := AItem.QtdItem;
-      LItemVenda.VrPrecoUnit := LPrecoVnda.VrVnda;
-      LItemVenda.VrBruto := RoundTo(LItemVenda.QtdItem * LItemVenda.VrPrecoUnit, -2);
-      LItemVenda.VrDesc := AItem.VrDesc;
-      LItemVenda.VrTotal := LItemVenda.VrBruto - LItemVenda.VrDesc;
-
-      if LItemVenda.VrTotal < 0
-      then raise EHorseException.New
-        .Status(THTTPStatus.BadRequest)
-        .&Unit(Self.UnitName)
-        .Error('O valor total do item não pode ser negativo');
-
-      var LItemAtualizado := TLojaModelDaoFactory.New.Venda
+      var LItemVenda := TLojaModelDaoFactory.New.Venda
         .Item
-        .AtulizarItem(LItemVenda);
+        .ObterItem(AItem.NumVnda, AItem.NumSeqItem);
+      try
+        if LItemVenda = nil
+        then raise EHorseException.New
+          .Status(THTTPStatus.NotFound)
+          .&Unit(Self.UnitName)
+          .Error('Não foi possível encontrar item deste sequencial na venda informada');
 
-      Result := EntityToDto(LItemAtualizado);
-      LItemAtualizado.Free;
+        if LItemVenda.CodSit = TLojaModelEntityVendaItemSituacao.sitRemovido
+        then raise EHorseException.New
+          .Status(THTTPStatus.BadRequest)
+          .&Unit(Self.UnitName)
+          .Error('Este item foi removido da venda, portanto não pode ser alterado');
 
-      CalculaTotaisVenda(LVenda);
-      var LVendaAtualizada := TLojaModelDaoFactory.New.Venda
-        .Venda
-        .AtualizarVenda(LVenda);
-      LVendaAtualizada.Free;
+        LItemVenda.CodItem := AItem.CodItem;
+        LItemVenda.NumVnda := AItem.NumVnda;
+        LItemVenda.NumSeqItem := LItemVenda.NumSeqItem;
 
+        LItemVenda.CodSit := AItem.CodSit;
+        LItemVenda.CodItem := AItem.CodItem;
+        LItemVenda.QtdItem := AItem.QtdItem;
+        if LPrecoVnda = nil
+        then LItemVenda.VrPrecoUnit := AItem.VrPrecoUnit
+        else LItemVenda.VrPrecoUnit := LPrecoVnda.VrVnda;
+        LItemVenda.VrBruto := RoundTo(LItemVenda.QtdItem * LItemVenda.VrPrecoUnit, -2);
+        LItemVenda.VrDesc := AItem.VrDesc;
+        LItemVenda.VrTotal := LItemVenda.VrBruto - LItemVenda.VrDesc;
+
+        if LItemVenda.VrTotal < 0
+        then raise EHorseException.New
+          .Status(THTTPStatus.BadRequest)
+          .&Unit(Self.UnitName)
+          .Error('O valor total do item não pode ser negativo');
+
+        var LItemAtualizado := TLojaModelDaoFactory.New.Venda
+          .Item
+          .AtulizarItem(LItemVenda);
+
+        Result := EntityToDto(LItemAtualizado);
+        LItemAtualizado.Free;
+
+        CalculaTotaisVenda(LVenda);
+        var LVendaAtualizada := TLojaModelDaoFactory.New.Venda
+          .Venda
+          .AtualizarVenda(LVenda);
+        LVendaAtualizada.Free;
+
+      finally
+        FreeAndNil(LPrecoVnda);
+        LItemVenda.Free;
+      end;
     finally
-      LPrecoVnda.Free;
-      LItemVenda.Free;
+      LVenda.Free;
     end;
   finally
-    LVenda.Free;
+    FreeAndNil(LItem);
   end;
 end;
 

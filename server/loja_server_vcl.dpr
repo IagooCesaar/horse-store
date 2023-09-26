@@ -7,6 +7,8 @@ uses
   ufrmPrinc in 'ufrmPrinc.pas' {frmPrinc},
   ufrmSobre in 'ufrmSobre.pas' {frmSobre},
   App in 'src\App.pas',
+  uFuncoes in '..\comum\uFuncoes.pas',
+  uMeuBallonHint in '..\comum\uMeuBallonHint.pas',
   Loja.Model.Entity.Itens.Item in 'src\model\entity\itens\Loja.Model.Entity.Itens.Item.pas',
   Loja.Model.Dao.Itens.Item in 'src\model\dao\oficial\itens\Loja.Model.Dao.Itens.Item.pas',
   Loja.Model.Dao.Itens.Factory in 'src\model\dao\oficial\itens\Loja.Model.Dao.Itens.Factory.pas',
@@ -85,13 +87,15 @@ uses
   Loja.Controller.Venda in 'src\controllers\Loja.Controller.Venda.pas',
   Loja.Model.Dto.Req.Venda.EfetivaVenda in 'src\model\dto\Loja.Model.Dto.Req.Venda.EfetivaVenda.pas',
   Loja.Model.Dto.Req.Venda.Item in 'src\model\dto\Loja.Model.Dto.Req.Venda.Item.pas',
-  Loja.Model.Dto.Resp.Venda.Item in 'src\model\dto\Loja.Model.Dto.Resp.Venda.Item.pas';
+  Loja.Model.Dto.Resp.Venda.Item in 'src\model\dto\Loja.Model.Dto.Resp.Venda.Item.pas',
+  Loja.Model.Dto.Resp.Itens.Item in 'src\model\dto\Loja.Model.Dto.Resp.Itens.Item.pas';
 
 {$R *.res}
 
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
+  Application.Title := 'LOJA API SERVER';
   Application.CreateForm(TfrmPrinc, frmPrinc);
   Application.Run;
 end.

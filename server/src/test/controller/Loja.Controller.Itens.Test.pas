@@ -6,14 +6,14 @@ uses
   DUnitX.TestFramework,
   System.SysUtils,
 
-  Loja.Model.Entity.Itens.Item;
+  Loja.Model.Dto.Resp.Itens.Item;
 
 type
   [TestFixture]
   TLojaControllerItensTest = class
   private
     FBaseURL, FUsarname, FPassword: String;
-    function CriarItem(ANome, ACodBarr: string): TLojaModelEntityItensItem;
+    function CriarItem(ANome, ACodBarr: string): TLojaModelDtoRespItensItem;
   public
     [SetupFixture]
     procedure SetupFixture;
@@ -71,7 +71,7 @@ uses
 
 { TLojaControllerItensTest }
 
-function TLojaControllerItensTest.CriarItem(ANome, ACodBarr: string): TLojaModelEntityItensItem;
+function TLojaControllerItensTest.CriarItem(ANome, ACodBarr: string): TLojaModelDtoRespItensItem;
 var LNovoItem : TLojaModelDtoReqItensCriarItem;
 begin
   try
@@ -86,9 +86,8 @@ begin
       .AddBody(TJson.ObjectToClearJsonString(LNovoItem))
       .Post();
 
-    Result := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItem>
+    Result := TJson.ClearJsonAndConvertToObject<TLojaModelDtoRespItensItem>
       (LResponse.Content);
-
   finally
     FreeAndNil(LNovoItem);
   end;
@@ -121,7 +120,7 @@ begin
 
     Assert.AreEqual(201, LResponseCriar.StatusCode);
 
-    var LItemCriado := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItem>
+    var LItemCriado := TJson.ClearJsonAndConvertToObject<TLojaModelDtoRespItensItem>
       (LResponseCriar.Content);
 
     Assert.AreEqual(LDTO.NomItem, LItemCriado.NomItem);
@@ -129,6 +128,8 @@ begin
 
     LDTO.NomItem := 'Nome atualizado';
     LDTO.NumCodBarr := TLojaInfraUtilsFuncoes.GeraStringRandomica(14,1);
+    LDTO.FlgPermSaldNeg := not LItemCriado.FlgPermSaldNeg;
+    LDTO.FlgTabPreco := not LItemCriado.FlgTabPreco;
 
     var LResponse := TRequest.New
       .BasicAuthentication(FUsarname, FPassword)
@@ -140,11 +141,13 @@ begin
 
     Assert.AreEqual(200, LResponse.StatusCode);
 
-    var LItemAtualizado := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItem>
+    var LItemAtualizado := TJson.ClearJsonAndConvertToObject<TLojaModelDtoRespItensItem>
       (LResponse.Content);
 
     Assert.AreEqual(LDTO.NomItem, LItemAtualizado.NomItem);
     Assert.AreEqual(LDTO.NumCodBarr, LItemAtualizado.NumCodBarr);
+    Assert.IsTrue(LItemAtualizado.FlgPermSaldNeg);
+    Assert.IsFalse(LItemAtualizado.FlgTabPreco);
 
     LItemCriado.Free;
     LItemAtualizado.Free;
@@ -169,6 +172,14 @@ begin
       .Post();
 
     Assert.AreEqual(201, LResponse.StatusCode);
+
+    var LItem := TJson.ClearJsonAndConvertToObject<TLojaModelDtoRespItensItem>
+      (LResponse.Content);
+    Assert.AreEqual(LNovoItem.NomItem, LItem.NomItem);
+    Assert.AreEqual(LNovoItem.NumCodBarr, LItem.NumCodBarr);
+    Assert.IsFalse(LItem.FlgPermSaldNeg);
+    Assert.IsTrue(LItem.FlgTabPreco);
+    LItem.Free;
   finally
     FreeAndNil(LNovoItem);
   end;
@@ -191,7 +202,7 @@ begin
 
     Assert.AreEqual(201, LResponseCriar.StatusCode);
 
-    var LItemCriado := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItem>
+    var LItemCriado := TJson.ClearJsonAndConvertToObject<TLojaModelDtoRespItensItem>
       (LResponseCriar.Content);
 
     Assert.AreEqual(LDTO.NomItem, LItemCriado.NomItem);
@@ -286,7 +297,7 @@ begin
     .Post();
 
   Assert.AreEqual(201, LResponseCriar.StatusCode);
-  var LItemCriado := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItem>
+  var LItemCriado := TJson.ClearJsonAndConvertToObject<TLojaModelDtoRespItensItem>
     (LResponseCriar.Content);
 
   var LResponse := TRequest.New
@@ -298,7 +309,7 @@ begin
 
   Assert.AreEqual(200, LResponse.StatusCode);
 
-  var LItem := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItem>
+  var LItem := TJson.ClearJsonAndConvertToObject<TLojaModelDtoRespItensItem>
     (LResponse.Content);
   Assert.AreEqual(LItemCriado.CodItem, LItem.CodItem);
 
@@ -308,7 +319,7 @@ begin
 end;
 
 procedure TLojaControllerItensTest.Test_ObterUmItem_PorCodigoDeBarras;
-var LItem : TLojaModelEntityItensItem;
+var LItem : TLojaModelDtoRespItensItem;
 begin
   var LItemCriado := CriarItem(
     'TLojaControllerItensTest.Test_ObterUmItem_PorCodigoDeBarras',
@@ -323,7 +334,7 @@ begin
 
   Assert.AreEqual(200, LResponse.StatusCode);
   try
-    LItem := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItem>
+    LItem := TJson.ClearJsonAndConvertToObject<TLojaModelDtoRespItensItem>
       (LResponse.Content);
     Assert.AreEqual(LItemCriado.NumCodBarr, LItem.NumCodBarr);
   finally
@@ -346,7 +357,7 @@ begin
 
   Assert.AreEqual(200, LResponse.StatusCode, LResponse.StatusText);
 
-  var LItens := TJson.ClearJsonAndConvertToObject<TLojaModelEntityItensItemLista>
+  var LItens := TJson.ClearJsonAndConvertToObject<TLojaModelDtoRespItensItemLista>
     (LResponse.Content);
   Assert.IsTrue(LItens.Count>0);
 

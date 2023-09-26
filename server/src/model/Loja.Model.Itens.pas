@@ -10,22 +10,25 @@ uses
   Loja.Model.Interfaces,
   Loja.Model.Entity.Itens.Item,
   Loja.Model.Dto.Req.Itens.CriarItem,
-  Loja.Model.Dto.Req.Itens.FiltroItens;
+  Loja.Model.Dto.Req.Itens.FiltroItens,
+  Loja.Model.Dto.Resp.Itens.Item;
 
 type
   TLojaModelItens = class(TInterfacedObject, ILojaModelItens)
   private
+    function EntityToDTO(ASource: TLojaModelEntityItensItem): TLojaModelDtoRespItensItem; overload;
+    function EntityToDTO(ASource: TLojaModelEntityItensItemLista): TLojaModelDtoRespItensItemLista; overload;
   public
     constructor Create;
 	  destructor Destroy; override;
 	  class function New: ILojaModelItens;
 
     { ILojaModelItens }
-    function ObterPorCodigo(ACodItem: Integer): TLojaModelEntityItensItem;
-    function ObterPorNumCodBarr(ANumCodBarr: string): TLojaModelEntityItensItem;
-    function ObterItens(AFiltro: TLojaModelDtoReqItensFiltroItens): TLojaModelEntityItensItemLista;
-    function CriarItem(ANovoItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
-    function AtualizarItem(AItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
+    function ObterPorCodigo(ACodItem: Integer): TLojaModelDtoRespItensItem;
+    function ObterPorNumCodBarr(ANumCodBarr: string): TLojaModelDtoRespItensItem;
+    function ObterItens(AFiltro: TLojaModelDtoReqItensFiltroItens): TLojaModelDtoRespItensItemLista;
+    function CriarItem(ANovoItem: TLojaModelDtoReqItensCriarItem): TLojaModelDtoRespItensItem;
+    function AtualizarItem(AItem: TLojaModelDtoReqItensCriarItem): TLojaModelDtoRespItensItem;
   end;
 
 implementation
@@ -39,7 +42,7 @@ uses
 { TLojaModelItens }
 
 function TLojaModelItens.AtualizarItem(
-  AItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
+  AItem: TLojaModelDtoReqItensCriarItem): TLojaModelDtoRespItensItem;
 const C_NOM_MIN = 4; C_NOM_MAX = 100; C_COD_BAR_MAX = 14;
 begin
   if Length(AItem.NomItem) < C_NOM_MIN
@@ -85,9 +88,12 @@ begin
     end;
   end;
 
-  Result := TLojaModelDaoFactory.New.Itens
+  var LItemAtualizado := TLojaModelDaoFactory.New.Itens
     .Item
     .AtualizarItem(AItem);
+
+  Result := EntityToDTO(LItemAtualizado);
+  LItemAtualizado.Free;
 end;
 
 constructor TLojaModelItens.Create;
@@ -96,7 +102,7 @@ begin
 end;
 
 function TLojaModelItens.CriarItem(
-  ANovoItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
+  ANovoItem: TLojaModelDtoReqItensCriarItem): TLojaModelDtoRespItensItem;
 const C_NOM_MIN = 4; C_NOM_MAX = 100; C_COD_BAR_MAX = 14;
 begin
   if Length(ANovoItem.NomItem) < C_NOM_MIN
@@ -131,9 +137,12 @@ begin
     end;
   end;
 
-  Result := TLojaModelDaoFactory.New.Itens
+  var LNovoItem := TLojaModelDaoFactory.New.Itens
     .Item
     .CriarItem(ANovoItem);
+
+  Result := EntityToDTO(LNovoItem);
+  LNovoItem.Free;
 end;
 
 destructor TLojaModelItens.Destroy;
@@ -142,13 +151,32 @@ begin
   inherited;
 end;
 
+function TLojaModelItens.EntityToDTO(
+  ASource: TLojaModelEntityItensItemLista): TLojaModelDtoRespItensItemLista;
+begin
+  Result := TLojaModelDtoRespItensItemLista.Create;
+  for var LItem in ASource
+  do Result.Add(EntityToDTO(LItem));
+end;
+
+function TLojaModelItens.EntityToDTO(
+  ASource: TLojaModelEntityItensItem): TLojaModelDtoRespItensItem;
+begin
+  Result := TLojaModelDtoRespItensItem.Create;
+  Result.CodItem := ASource.CodItem;
+  Result.NomItem := ASource.NomItem;
+  Result.NumCodBarr := ASource.NumCodBarr;
+  Result.FlgPermSaldNeg := ASource.FlgPermSaldNeg = 'S';
+  Result.FlgTabPreco := ASource.FlgTabPreco = 'S';
+end;
+
 class function TLojaModelItens.New: ILojaModelItens;
 begin
   Result := Self.Create;
 end;
 
 function TLojaModelItens.ObterItens(
-  AFiltro: TLojaModelDtoReqItensFiltroItens): TLojaModelEntityItensItemLista;
+  AFiltro: TLojaModelDtoReqItensFiltroItens): TLojaModelDtoRespItensItemLista;
 begin
   Result := nil;
   if  (Length(AFiltro.NomItem) = 0)
@@ -158,13 +186,18 @@ begin
       .&Unit(Self.UnitName)
       .Error('Você deve informar um critério para filtro');
 
-  Result := TLojaModelDaoFactory.New.Itens
+  AFiltro.NomItem := AnsiUpperCase(AFiltro.NomItem);
+
+  var LItens := TLojaModelDaoFactory.New.Itens
     .Item
     .ObterItens(AFiltro);
+
+  Result := EntityToDTO(LItens);
+  LItens.Free;
 end;
 
 function TLojaModelItens.ObterPorCodigo(
-  ACodItem: Integer): TLojaModelEntityItensItem;
+  ACodItem: Integer): TLojaModelDtoRespItensItem;
 var LItem : TLojaModelEntityItensItem;
 begin
   LItem := TLojaModelDaoFactory.New.Itens
@@ -177,11 +210,12 @@ begin
       .&Unit(Self.UnitName)
       .Error('Não foi possível encontrar o item pelo código informado');
 
-  Result := LItem;
+  Result := EntityToDTO(LItem);
+  LItem.Free;
 end;
 
 function TLojaModelItens.ObterPorNumCodBarr(
-  ANumCodBarr: string): TLojaModelEntityItensItem;
+  ANumCodBarr: string): TLojaModelDtoRespItensItem;
 begin
   var LItem := TLojaModelDaoFactory.New.Itens
     .Item
@@ -193,7 +227,8 @@ begin
       .&Unit(Self.UnitName)
       .Error('Não foi possível encontrar o item pelo código de barras informado');
 
-  Result := LItem;
+  Result := EntityToDTO(LItem);
+  LItem.Free;
 end;
 
 end.

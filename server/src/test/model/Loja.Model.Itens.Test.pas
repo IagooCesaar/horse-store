@@ -119,9 +119,13 @@ begin
     Assert.IsTrue(LItemCriado <> nil);
     Assert.AreEqual(LDto.NomItem, LItemCriado.NomItem, 'O nome não coincide');
     Assert.AreEqual(LDto.NumCodBarr, LItemCriado.NumCodBarr, 'O código de barras não coincide');
+    Assert.IsFalse(LItemCriado.FlgPermSaldNeg);
+    Assert.IsTrue(LItemCriado.FlgTabPreco);
 
     LDto.NomItem := 'Nome atualizado';
     LDto.NumCodBarr := '73826142851';
+    LDto.FlgPermSaldNeg := not LItemCriado.FlgPermSaldNeg;
+    LDto.FlgTabPreco := not LItemCriado.FlgTabPreco;
     LDto.CodItem := LItemCriado.CodItem;
 
     var LItemAtualizado := TLojaModelItens.New
@@ -130,6 +134,8 @@ begin
     Assert.IsTrue(LItemAtualizado <> nil);
     Assert.AreEqual(LDto.NomItem, LItemAtualizado.NomItem, 'O nome não coincide');
     Assert.AreEqual(LDto.NumCodBarr, LItemAtualizado.NumCodBarr, 'O código de barras não coincide');
+    Assert.IsTrue(LItemAtualizado.FlgPermSaldNeg);
+    Assert.IsFalse(LItemAtualizado.FlgTabPreco);
 
     LItemCriado.Free;
     LItemAtualizado.Free;
@@ -152,6 +158,8 @@ begin
     Assert.IsTrue(LItem <> nil);
     Assert.AreEqual(LDTONovoItem.NomItem, LItem.NomItem, 'O nome não coincide');
     Assert.AreEqual(LDTONovoItem.NumCodBarr, Litem.NumCodBarr, 'O código de barras não coincide');
+    Assert.IsFalse(LItem.FlgPermSaldNeg);
+    Assert.IsTrue(LItem.FlgTabPreco);
 
     LItem.Free;
   finally

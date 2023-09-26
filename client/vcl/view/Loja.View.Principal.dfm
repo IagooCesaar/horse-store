@@ -15,6 +15,7 @@ object ViewPrincipal: TViewPrincipal
   WindowState = wsMaximized
   OnActivate = FormActivate
   OnCreate = FormCreate
+  OnShow = FormShow
   TextHeight = 21
   object tbAcoes: TToolBar
     Left = 0
@@ -32,7 +33,7 @@ object ViewPrincipal: TViewPrincipal
     List = True
     ShowCaptions = True
     TabOrder = 0
-    ExplicitHeight = 547
+    ExplicitHeight = 545
     object btnVender: TToolButton
       AlignWithMargins = True
       Left = 0
@@ -79,8 +80,8 @@ object ViewPrincipal: TViewPrincipal
     Width = 856
     Height = 19
     Panels = <>
-    ExplicitTop = 547
-    ExplicitWidth = 852
+    ExplicitTop = 545
+    ExplicitWidth = 854
   end
   object acmAcoes: TActionManager
     ActionBars = <

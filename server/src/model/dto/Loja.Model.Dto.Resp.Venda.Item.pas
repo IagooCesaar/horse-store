@@ -14,18 +14,20 @@ type
     FNumVnda: Integer;
     FNumSeqItem: Integer;
     FCodItem: Integer;
+    FNomItem: String;
+    FFlgTabPreco: Boolean;
     FQtdItem: Integer;
     FVrPrecoUnit: Currency;
     FVrBruto: Currency;
     FVrDesc: Currency;
     FVrTotal: Currency;
     FCodSit: TLojaModelEntityVendaItemSituacao;
-    FNomItem: String;
   public
     property NumVnda: Integer read FNumVnda write FNumVnda;
     property NumSeqItem: Integer read FNumSeqItem write FNumSeqItem;
     property CodItem: Integer read FCodItem write FCodItem;
     property NomItem: String read FNomItem write FNomItem;
+    property FlgTabPreco: Boolean read FFlgTabPreco write FFlgTabPreco;
     property CodSit: TLojaModelEntityVendaItemSituacao read FCodSit write FCodSit;
     property QtdItem: Integer read FQtdItem write FQtdItem;
     property VrPrecoUnit: Currency read FVrPrecoUnit write FVrPrecoUnit;

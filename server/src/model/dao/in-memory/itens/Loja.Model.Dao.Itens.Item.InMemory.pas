@@ -35,9 +35,10 @@ type
 
 implementation
 
+uses
+  System.StrUtils;
+
 { TLojaModelDaoItensItem }
-
-
 
 function TLojaModelDaoItensItemInMemory.AtualizarItem(
   AItem: TLojaModelDtoReqItensCriarItem): TLojaModelEntityItensItem;
@@ -47,6 +48,8 @@ begin
     if LItem.CodItem = AItem.CodItem then begin
       LItem.NomItem := AItem.NomItem;
       LItem.NumCodBarr := AItem.NumCodBarr;
+      LItem.FlgPermSaldNeg := IfThen(AItem.FlgPermSaldNeg, 'S', 'N');
+      LItem.FlgTabPreco := IfThen(AItem.FlgTabPreco, 'S', 'N');
 
       Result := Clone(LItem);
       Break;
@@ -60,6 +63,8 @@ begin
   Result.CodItem := ASource.CodItem;
   Result.NomItem := ASource.NomItem;
   Result.NumCodBarr := ASource.NumCodBarr;
+  Result.FlgPermSaldNeg := ASource.FlgPermSaldNeg;
+  Result.FlgTabPreco := ASource.FlgTabPreco;
 end;
 
 constructor TLojaModelDaoItensItemInMemory.Create;
@@ -79,6 +84,8 @@ begin
   FRepository.Last.CodItem := Lid;
   FRepository.Last.NomItem := ANovoItem.NomItem;
   FRepository.Last.NumCodBarr := ANovoItem.NumCodBarr;
+  FRepository.Last.FlgPermSaldNeg := IfThen(ANovoItem.FlgPermSaldNeg, 'S', 'N');
+  FRepository.Last.FlgTabPreco := IfThen(ANovoItem.FlgTabPreco, 'S', 'N');
 
   Result := Clone(FRepository.Last);
 end;
@@ -105,7 +112,7 @@ begin
   begin
     LValido := True;
     if (AFiltro.NomItem <> '')
-    then if (Pos(AFiltro.NomItem, FRepository[i].NomItem)>0)
+    then if (Pos(AFiltro.NomItem, AnsiUpperCase(FRepository[i].NomItem))>0)
          then LValido := True and LValido
          else LValido := False;
 
