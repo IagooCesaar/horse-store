@@ -93,12 +93,6 @@ inherited ControllerVendas: TControllerVendas
     UpdateOptions.AutoCommitUpdates = True
     Left = 216
     Top = 32
-    object mtItensNUM_SEQ_ITEM: TIntegerField
-      Alignment = taCenter
-      DisplayLabel = 'N'#250'm. Seq.'
-      DisplayWidth = 8
-      FieldName = 'NUM_SEQ_ITEM'
-    end
     object mtItensCOD_ITEM: TIntegerField
       Alignment = taCenter
       DisplayLabel = 'C'#243'd. Item'
@@ -107,14 +101,14 @@ inherited ControllerVendas: TControllerVendas
     end
     object mtItensNOM_ITEM: TStringField
       DisplayLabel = 'Item'
-      DisplayWidth = 40
+      DisplayWidth = 30
       FieldName = 'NOM_ITEM'
       Size = 100
     end
     object mtItensCOD_SIT: TStringField
       Alignment = taCenter
       DisplayLabel = 'Situa'#231#227'o'
-      DisplayWidth = 15
+      DisplayWidth = 12
       FieldName = 'COD_SIT'
       Size = 22
     end
@@ -154,6 +148,12 @@ inherited ControllerVendas: TControllerVendas
       DisplayLabel = 'N'#250'm. Venda'
       DisplayWidth = 5
       FieldName = 'NUM_VNDA'
+    end
+    object mtItensNUM_SEQ_ITEM: TIntegerField
+      Alignment = taCenter
+      DisplayLabel = 'N'#250'm. Seq.'
+      DisplayWidth = 8
+      FieldName = 'NUM_SEQ_ITEM'
     end
     object mtItensFLG_TAB_PRECO: TBooleanField
       DisplayLabel = 'Utiliza Tab. Pre'#231'o'
