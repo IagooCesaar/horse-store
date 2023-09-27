@@ -1,39 +1,35 @@
 inherited ViewVender: TViewVender
   Caption = 'Ponto de Venda'
-  ClientHeight = 679
-  ClientWidth = 1160
   KeyPreview = True
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
   TextHeight = 21
   inherited pModeloClient: TPanel
-    Width = 1160
-    Height = 622
-    ExplicitWidth = 1156
-    ExplicitHeight = 616
+    ExplicitWidth = 1223
+    ExplicitHeight = 599
     object pcPrinc: TPageControl
       Left = 0
       Top = 0
-      Width = 1160
-      Height = 622
+      Width = 1225
+      Height = 602
       ActivePage = tsVenda
       Align = alClient
       TabOrder = 0
-      ExplicitWidth = 1156
-      ExplicitHeight = 616
+      ExplicitWidth = 1223
+      ExplicitHeight = 599
       object tsVenda: TTabSheet
         Caption = ':: Venda  '
         object Panel1: TPanel
           Left = 0
           Top = 0
-          Width = 1152
+          Width = 1217
           Height = 77
           Align = alTop
           Caption = 'Panel1'
           ShowCaption = False
           TabOrder = 0
-          ExplicitWidth = 1148
+          ExplicitWidth = 1215
           object Label1: TLabel
             Left = 16
             Top = 11
@@ -106,18 +102,18 @@ inherited ViewVender: TViewVender
         object GroupBox1: TGroupBox
           Left = 0
           Top = 77
-          Width = 1152
-          Height = 302
+          Width = 1217
+          Height = 282
           Align = alClient
           Caption = ':: Itens da venda  '
           TabOrder = 1
-          ExplicitWidth = 1148
-          ExplicitHeight = 296
+          ExplicitWidth = 1215
+          ExplicitHeight = 279
           object dbgItens: TDBGrid
             Left = 2
             Top = 23
-            Width = 613
-            Height = 277
+            Width = 678
+            Height = 257
             Align = alClient
             DataSource = dsItens
             Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit, dgTitleClick, dgTitleHotTrack]
@@ -130,17 +126,17 @@ inherited ViewVender: TViewVender
             TitleFont.Style = []
           end
           object pControleItens: TPanel
-            Left = 615
+            Left = 680
             Top = 23
             Width = 535
-            Height = 277
+            Height = 257
             Align = alRight
             BevelOuter = bvNone
             Caption = 'pControleItens'
             ShowCaption = False
             TabOrder = 1
-            ExplicitLeft = 611
-            ExplicitHeight = 271
+            ExplicitLeft = 678
+            ExplicitHeight = 254
             object Label12: TLabel
               Left = 6
               Top = 37
@@ -384,25 +380,25 @@ inherited ViewVender: TViewVender
         end
         object pBottom: TPanel
           Left = 0
-          Top = 379
-          Width = 1152
+          Top = 359
+          Width = 1217
           Height = 207
           Align = alBottom
           BevelOuter = bvNone
           Caption = 'pBottom'
           ShowCaption = False
           TabOrder = 2
-          ExplicitTop = 373
-          ExplicitWidth = 1148
+          ExplicitTop = 356
+          ExplicitWidth = 1215
           object GroupBox3: TGroupBox
             Left = 0
             Top = 0
-            Width = 530
+            Width = 595
             Height = 207
             Align = alClient
             Caption = ':: Meios de pagamento  '
             TabOrder = 0
-            ExplicitWidth = 526
+            ExplicitWidth = 593
             object p1: TPanel
               Left = 97
               Top = 23
@@ -501,7 +497,7 @@ inherited ViewVender: TViewVender
             object dbgMeiosPagto: TDBGrid
               Left = 192
               Top = 23
-              Width = 336
+              Width = 401
               Height = 182
               Align = alClient
               DataSource = dsMeiosPagto
@@ -591,14 +587,14 @@ inherited ViewVender: TViewVender
             end
           end
           object GroupBox2: TGroupBox
-            Left = 530
+            Left = 595
             Top = 0
             Width = 622
             Height = 207
             Align = alRight
             Caption = ':: Totais da venda  '
             TabOrder = 1
-            ExplicitLeft = 526
+            ExplicitLeft = 593
             object Label5: TLabel
               Left = 6
               Top = 32
@@ -815,8 +811,6 @@ inherited ViewVender: TViewVender
           Caption = 'Lista de Caixas'
           ShowCaption = False
           TabOrder = 0
-          ExplicitWidth = 1150
-          ExplicitHeight = 479
           object Panel4: TPanel
             Left = 1
             Top = 449
@@ -827,14 +821,12 @@ inherited ViewVender: TViewVender
             Caption = 'Panel3'
             ShowCaption = False
             TabOrder = 0
-            ExplicitTop = 446
-            ExplicitWidth = 1148
             object Label3: TLabel
               AlignWithMargins = True
               Left = 8
               Top = 0
               Width = 320
-              Height = 32
+              Height = 21
               Margins.Left = 8
               Margins.Top = 0
               Margins.Right = 0
@@ -842,7 +834,6 @@ inherited ViewVender: TViewVender
               Align = alLeft
               Caption = 'Duplo clique para visualizar detalhes da venda'
               Layout = tlCenter
-              ExplicitHeight = 21
             end
           end
           object dbgVendas: TDBGrid
@@ -877,7 +868,6 @@ inherited ViewVender: TViewVender
           Caption = 'Panel1'
           ShowCaption = False
           TabOrder = 1
-          ExplicitWidth = 1150
           object Label2: TLabel
             Left = 16
             Top = 16
@@ -956,14 +946,11 @@ inherited ViewVender: TViewVender
     end
   end
   inherited pModeloTop: TPanel
-    Width = 1160
-    ExplicitWidth = 1156
+    ExplicitWidth = 1223
     inherited bvlModeloLinha: TBevel
-      ExplicitWidth = 1231
+      ExplicitWidth = 1225
     end
     inherited lbModeloTitulo: TLabel
-      Width = 1120
-      Height = 37
       Caption = 'Ponto de Venda'
       ExplicitWidth = 147
     end
