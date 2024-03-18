@@ -538,7 +538,7 @@ begin
     .Estoque
     .ObterFechamentosSaldo(LItem.CodItem, LDatIni, LDatFim);
 
-  Assert.AreEqual(1, LFechamentos.Count);
+  Assert.AreEqual(NativeInt(1), LFechamentos.Count);
   LFechamentos.Free;
   LItem.Free;
 end;
@@ -586,7 +586,7 @@ begin
     .Estoque
     .ObterHistoricoMovimento(LItem.CodItem, Now, Now);
 
-  Assert.AreEqual(2, LMovimentos.Count);
+  Assert.AreEqual(NativeInt(2), LMovimentos.Count);
   LMovimentos.Free;
   LItem.Free;
 end;

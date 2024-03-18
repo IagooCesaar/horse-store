@@ -221,7 +221,7 @@ begin
 
   // Mov 1: Saldo de fechamento do caixa anterior
   // Mov 2: Ajuste pois novo caixa está abrindo com saldo <> do saldo do último fechamento
-  Assert.AreEqual(2, LMovimentos.Count);
+  Assert.AreEqual(NativeInt(2), LMovimentos.Count);
 
   // Como novo caixa abriu com valor diferente do ultimo fechamento,
   // fará 2 movimentos para corrigir a diferença, neste caso com sangria
@@ -265,7 +265,7 @@ begin
 
   // Mov 1: Saldo de fechamento do caixa anterior
   // Mov 2: Ajuste pois novo caixa está abrindo com saldo <> do saldo do último fechamento
-  Assert.AreEqual(2, LMovimentos.Count);
+  Assert.AreEqual(NativeInt(2), LMovimentos.Count);
 
   // Como novo caixa abriu com valor diferente do ultimo fechamento,
   // fará 2 movimentos para corrigir a diferença, neste caso com sangria

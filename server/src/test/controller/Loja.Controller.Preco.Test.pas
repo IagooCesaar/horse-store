@@ -322,7 +322,7 @@ begin
   var LHistorico1 := TJson.ClearJsonAndConvertToObject
     <TLojaModelEntityPrecoVendaLista>(LResponse1.Content);
 
-  Assert.AreEqual(4, LHistorico1.Count);
+  Assert.AreEqual(NativeInt(4), LHistorico1.Count);
   Assert.AreEqual(Double(1.99), Double(LHistorico1.First.VrVnda));
   Assert.AreEqual(Double(8.99), Double(LHistorico1.Last.VrVnda));
 
@@ -338,7 +338,7 @@ begin
   var LHistorico2 := TJson.ClearJsonAndConvertToObject
     <TLojaModelEntityPrecoVendaLista>(LResponse2.Content);
 
-  Assert.AreEqual(3, LHistorico2.Count);
+  Assert.AreEqual(NativeInt(3), LHistorico2.Count);
   Assert.AreEqual(Double(2.99), Double(LHistorico2.First.VrVnda));
   Assert.AreEqual(Double(8.99), Double(LHistorico2.Last.VrVnda));
 

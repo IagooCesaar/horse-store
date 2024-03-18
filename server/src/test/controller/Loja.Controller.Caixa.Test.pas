@@ -258,7 +258,7 @@ begin
   var LMovimentos := TJson.ClearJsonAndConvertToObject
     <TLojaModelEntityCaixaMovimentoLista>(LResponseMovimentos.Content);
 
-  Assert.AreEqual(2, LMovimentos.Count);
+  Assert.AreEqual(NativeInt(2), LMovimentos.Count);
   Assert.AreEqual(Double(VrDif), Double(LMovimentos[1].VrMov));
   Assert.IsTrue(LMovimentos[1].CodTipoMov = movEntrada);
   Assert.IsTrue(LMovimentos[1].CodOrigMov = orgReforco);
@@ -339,7 +339,7 @@ begin
   var LMovimentos := TJson.ClearJsonAndConvertToObject
     <TLojaModelEntityCaixaMovimentoLista>(LResponseMovimentos.Content);
 
-  Assert.AreEqual(2, LMovimentos.Count);
+  Assert.AreEqual(NativeInt(2), LMovimentos.Count);
   Assert.AreEqual(Double(VrDif), Double(LMovimentos[1].VrMov));
   Assert.IsTrue(LMovimentos[1].CodTipoMov = movSaida);
   Assert.IsTrue(LMovimentos[1].CodOrigMov = orgSangria);
@@ -1437,7 +1437,7 @@ begin
 
   Assert.IsTrue(LResumo.VrSaldo > 0);
   Assert.AreEqual(
-    Integer(High(TLojaModelEntityCaixaMeioPagamento))+1,
+    NativeInt(High(TLojaModelEntityCaixaMeioPagamento))+1,
     LResumo.MeiosPagto.Count);
 
   LResumo.Free;
