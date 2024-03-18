@@ -236,7 +236,7 @@ begin
     .Preco
     .ObterHistoricoPrecoVendaItem(LItemCriado.CodItem, IncDay(LDat1,1) );
 
-  Assert.AreEqual(4, LHistorico1.Count);
+  Assert.AreEqual(NativeInt(4), LHistorico1.Count);
   Assert.AreEqual(Double(1.99), Double(LHistorico1.First.VrVnda));
   Assert.AreEqual(Double(8.99), Double(LHistorico1.Last.VrVnda));
 
@@ -244,7 +244,7 @@ begin
     .Preco
     .ObterHistoricoPrecoVendaItem(LItemCriado.CodItem, IncDay(LDat2,1) );
 
-  Assert.AreEqual(3, LHistorico2.Count);
+  Assert.AreEqual(NativeInt(3), LHistorico2.Count);
   Assert.AreEqual(Double(2.99), Double(LHistorico2.First.VrVnda));
   Assert.AreEqual(Double(8.99), Double(LHistorico2.Last.VrVnda));
 

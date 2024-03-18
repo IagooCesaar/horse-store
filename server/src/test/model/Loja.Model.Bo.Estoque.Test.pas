@@ -135,8 +135,8 @@ begin
       EndOfTheMonth(EncodeDate(2023, 05, 09))
     );
 
-    Assert.AreEqual(5, LFechamentos.Count);
-    Assert.AreEqual(9, LFechamentos.Last.QtdSaldo);
+    Assert.AreEqual(NativeInt(5), LFechamentos.Count);
+    Assert.AreEqual(NativeInt(9), LFechamentos.Last.QtdSaldo);
 
     LFechamentos.Free;
 
@@ -194,7 +194,7 @@ begin
       LDatMov
     );
 
-    Assert.AreEqual(3, LFechamentos.Count);
+    Assert.AreEqual(NativeInt(3), LFechamentos.Count);
     Assert.AreEqual(8, LFechamentos.Last.QtdSaldo);
 
     LFechamentos.Free;
@@ -228,7 +228,7 @@ begin
       LDatUltFecha
     );
 
-    Assert.AreEqual(3, LFechamentos.Count);
+    Assert.AreEqual(NativeInt(3), LFechamentos.Count);
     Assert.AreEqual(10, LFechamentos.Last.QtdSaldo);
 
     LFechamentos.Free;

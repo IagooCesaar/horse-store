@@ -482,7 +482,7 @@ begin
     var LMeiosPagto := TLojaModelFactory.New.Venda
       .DefinirMeiosPagtoVenda(LVenda.NumVnda, LDtoMeiosPagto);
 
-    Assert.AreEqual(2, LMeiosPagto.Count);
+    Assert.AreEqual(NativeInt(2), LMeiosPagto.Count);
 
 
     LDtoItem.Free;
@@ -580,7 +580,7 @@ begin
     var LMeiosPagto := TLojaModelFactory.New.Venda
       .DefinirMeiosPagtoVenda(LVenda.NumVnda, LDtoMeiosPagto);
 
-    Assert.AreEqual(3, LMeiosPagto.Count);
+    Assert.AreEqual(NativeInt(3), LMeiosPagto.Count);
 
     var LEfetivada := TLojaModelFactory.New.Venda.EfetivarVenda(LVenda.NumVnda);
 
@@ -1041,7 +1041,7 @@ begin
     var LMeiosPagto := TLojaModelFactory.New.Venda
       .DefinirMeiosPagtoVenda(LVenda.NumVnda, LDtoMeiosPagto);
 
-    Assert.AreEqual(0, LMeiosPagto.Count);
+    Assert.AreEqual(NativeInt(0), LMeiosPagto.Count);
 
     LDtoItem.Free;
     LItemVenda.Free;
@@ -1080,7 +1080,7 @@ begin
     var LMeiosPagto := TLojaModelFactory.New.Venda
       .DefinirMeiosPagtoVenda(LVenda.NumVnda, LDtoMeiosPagto);
 
-    Assert.AreEqual(0, LMeiosPagto.Count);
+    Assert.AreEqual(NativeInt(0), LMeiosPagto.Count);
 
     LDtoItem.Free;
     LItemVenda.Free;
@@ -1155,7 +1155,7 @@ begin
 
     var LMeiosPagto := TLojaModelFactory.New.Venda
       .DefinirMeiosPagtoVenda(LNovaVenda.NumVnda, LDtoMeiosPagto);
-    Assert.AreEqual(1, LMeiosPagto.Count);
+    Assert.AreEqual(NativeInt(1), LMeiosPagto.Count);
     LMeiosPagto.Free;
 
     Assert.WillRaiseWithMessageRegex(
@@ -1169,7 +1169,7 @@ begin
     LDtoMeiosPagto.Last.VrTotal := 20.01;
     LMeiosPagto := TLojaModelFactory.New.Venda
       .DefinirMeiosPagtoVenda(LNovaVenda.NumVnda, LDtoMeiosPagto);
-    Assert.AreEqual(1, LMeiosPagto.Count);
+    Assert.AreEqual(NativeInt(1), LMeiosPagto.Count);
     LMeiosPagto.Free;
 
     Assert.WillRaiseWithMessageRegex(
@@ -1483,7 +1483,7 @@ begin
     LItemVenda.Free;
 
     var LItens := TLojaModelFactory.New.Venda.ObterItensVenda(LNovaVenda.NumVnda);
-    Assert.AreEqual(2, LItens.Count);
+    Assert.AreEqual(NativeInt(2), LItens.Count);
 
     LDto.Free;
     LItens.Free;
@@ -1527,7 +1527,7 @@ begin
 
     var LMeiosPagto := TLojaModelFactory.New.Venda.ObterMeiosPagtoVenda(LVenda.NumVnda);
 
-    Assert.AreEqual(2, LMeiosPagto.Count);
+    Assert.AreEqual(NativeInt(2), LMeiosPagto.Count);
 
     LDtoItem.Free;
     LItemVenda.Free;

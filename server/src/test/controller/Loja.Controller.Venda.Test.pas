@@ -2552,7 +2552,7 @@ begin
     var LItens := TJson.ClearJsonAndConvertToObject
       <TLojaModelDtoRespVendaItemLista>(LResponse.Content);
 
-    Assert.AreEqual(2, LItens.Count);
+    Assert.AreEqual(NativeInt(2), LItens.Count);
 
     LDto.Free;
     LItens.Free;
