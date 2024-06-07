@@ -6,6 +6,7 @@ uses
   System.SysUtils,
   System.Classes,
 
+  Loja.Environment.Interfaces,
   Loja.Model.Interfaces,
   Loja.Model.Entity.Caixa.Types,
   Loja.Model.Entity.Caixa.Caixa,
@@ -18,10 +19,12 @@ uses
 
 type
   TLojaModelCaixa = class(TInterfacedObject, ILojaModelCaixa)
+  private
+    FEnvRules: ILojaEnvironmentRuler;
   public
-    constructor Create;
+    constructor Create(AEnvRules: ILojaEnvironmentRuler);
     destructor Destroy; override;
-    class function New: ILojaModelCaixa;
+    class function New(AEnvRules: ILojaEnvironmentRuler): ILojaModelCaixa;
 
     { ILojaModelCaixa }
     function ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
@@ -157,9 +160,9 @@ begin
   Result := LNovoCaixa;
 end;
 
-constructor TLojaModelCaixa.Create;
+constructor TLojaModelCaixa.Create(AEnvRules: ILojaEnvironmentRuler);
 begin
-
+  FEnvRules := AEnvRules;
 end;
 
 function TLojaModelCaixa.CriarReforcoCaixa(
@@ -233,9 +236,9 @@ begin
   end;
 end;
 
-class function TLojaModelCaixa.New: ILojaModelCaixa;
+class function TLojaModelCaixa.New(AEnvRules: ILojaEnvironmentRuler): ILojaModelCaixa;
 begin
-  Result := Self.Create;
+  Result := Self.Create(AEnvRules);
 end;
 
 function TLojaModelCaixa.ObterCaixaAberto: TLojaModelEntityCaixaCaixa;

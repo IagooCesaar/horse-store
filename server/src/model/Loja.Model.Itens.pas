@@ -7,6 +7,7 @@ uses
   System.Classes,
   System.Generics.Collections,
 
+  Loja.Environment.Interfaces,
   Loja.Model.Interfaces,
   Loja.Model.Entity.Itens.Item,
   Loja.Model.Dto.Req.Itens.CriarItem,
@@ -16,12 +17,13 @@ uses
 type
   TLojaModelItens = class(TInterfacedObject, ILojaModelItens)
   private
+    FEnvRules: ILojaEnvironmentRuler;
     function EntityToDTO(ASource: TLojaModelEntityItensItem): TLojaModelDtoRespItensItem; overload;
     function EntityToDTO(ASource: TLojaModelEntityItensItemLista): TLojaModelDtoRespItensItemLista; overload;
   public
-    constructor Create;
+    constructor Create(AEnvRules: ILojaEnvironmentRuler);
 	  destructor Destroy; override;
-	  class function New: ILojaModelItens;
+	  class function New(AEnvRules: ILojaEnvironmentRuler): ILojaModelItens;
 
     { ILojaModelItens }
     function ObterPorCodigo(ACodItem: Integer): TLojaModelDtoRespItensItem;
@@ -96,9 +98,9 @@ begin
   LItemAtualizado.Free;
 end;
 
-constructor TLojaModelItens.Create;
+constructor TLojaModelItens.Create(AEnvRules: ILojaEnvironmentRuler);
 begin
-
+  FEnvRules := AEnvRules;
 end;
 
 function TLojaModelItens.CriarItem(
@@ -170,9 +172,9 @@ begin
   Result.FlgTabPreco := ASource.FlgTabPreco = 'S';
 end;
 
-class function TLojaModelItens.New: ILojaModelItens;
+class function TLojaModelItens.New(AEnvRules: ILojaEnvironmentRuler): ILojaModelItens;
 begin
-  Result := Self.Create;
+  Result := Self.Create(AEnvRules);
 end;
 
 function TLojaModelItens.ObterItens(

@@ -7,6 +7,7 @@ uses
   System.Classes,
   System.Generics.Collections,
 
+  Loja.Environment.Interfaces,
   Loja.Model.Interfaces,
   Loja.Model.Entity.Venda.Types,
   Loja.Model.Entity.Caixa.Types,
@@ -26,15 +27,16 @@ uses
 type
   TLojaModelVenda = class(TInterfacedObject, ILojaModelVenda)
   private
+    FEnvRules: ILojaEnvironmentRuler;
     function EntityToDto(ASource: TLojaModelEntityVendaItem): TLojaModelDtoRespVendaItem;
     function ObterEValidarCaixa: TLojaModelEntityCaixaCaixa;
     function CalculaTotaisVenda(var AVenda: TLojaModelEntityVendaVenda): TLojaModelEntityVendaVenda;
 
     function ObterEValidarVenda(ANumVnda: Integer; AValidarPendente: Boolean): TLojaModelEntityVendaVenda;
   public
-    constructor Create;
+    constructor Create(AEnvRules: ILojaEnvironmentRuler);
     destructor Destroy; override;
-    class function New: ILojaModelVenda;
+    class function New(AEnvRules: ILojaEnvironmentRuler): ILojaModelVenda;
 
     { ILojaModelVenda }
     function ObterVendas(ADatInclIni, ADatInclFim: TDate;
@@ -67,9 +69,9 @@ uses
 
 { TLojaModelVenda }
 
-constructor TLojaModelVenda.Create;
+constructor TLojaModelVenda.Create(AEnvRules: ILojaEnvironmentRuler);
 begin
-
+  FEnvRules := AEnvRules;
 end;
 
 destructor TLojaModelVenda.Destroy;
@@ -78,9 +80,9 @@ begin
   inherited;
 end;
 
-class function TLojaModelVenda.New: ILojaModelVenda;
+class function TLojaModelVenda.New(AEnvRules: ILojaEnvironmentRuler): ILojaModelVenda;
 begin
-  Result := Self.Create;
+  Result := Self.Create(AEnvRules);
 end;
 
 function TLojaModelVenda.EntityToDto(

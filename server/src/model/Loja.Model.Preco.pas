@@ -9,16 +9,19 @@ uses
   System.Generics.Defaults,
   System.DateUtils,
 
+  Loja.Environment.Interfaces,
   Loja.Model.Interfaces,
   Loja.Model.Entity.Preco.Venda,
   Loja.Model.Dto.Req.Preco.CriarPrecoVenda;
 
 type
   TLojaModelPreco = class(TInterfacedObject, ILojaModelPreco)
+  private
+    FEnvRules: ILojaEnvironmentRuler;
   public
-    constructor Create;
+    constructor Create(AEnvRules: ILojaEnvironmentRuler);
     destructor Destroy; override;
-    class function New: ILojaModelPreco;
+    class function New(AEnvRules: ILojaEnvironmentRuler): ILojaModelPreco;
 
     { ILojaModelPreco }
     function CriarPrecoVendaItem(ANovoPreco: TLojaModelDtoReqPrecoCriarPrecoVenda): TLojaModelEntityPrecoVenda;
@@ -36,9 +39,9 @@ uses
 
 { TLojaModelPreco }
 
-constructor TLojaModelPreco.Create;
+constructor TLojaModelPreco.Create(AEnvRules: ILojaEnvironmentRuler);
 begin
-
+  FEnvRules := AEnvRules;
 end;
 
 function TLojaModelPreco.CriarPrecoVendaItem(
@@ -90,9 +93,9 @@ begin
   inherited;
 end;
 
-class function TLojaModelPreco.New: ILojaModelPreco;
+class function TLojaModelPreco.New(AEnvRules: ILojaEnvironmentRuler): ILojaModelPreco;
 begin
-  Result := Self.Create;
+  Result := Self.Create(AEnvRules);
 end;
 
 function TLojaModelPreco.ObterHistoricoPrecoVendaItem(ACodItem: Integer;

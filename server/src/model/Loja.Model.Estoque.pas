@@ -9,6 +9,7 @@ uses
   System.Generics.Defaults,
   System.Generics.Collections,
 
+  Loja.Environment.Interfaces,
   Loja.Model.Interfaces,
   Loja.Model.Entity.Estoque.Movimento,
   Loja.Model.Entity.Estoque.Saldo,
@@ -19,11 +20,12 @@ uses
 type
   TLojaModelEstoque = class(TinterfacedObject, ILojaModelEstoque)
   private
+    FEnvRules: ILojaEnvironmentRuler;
     procedure RealizarFechamentoSaldo(ACodItem: Integer);
   public
-    constructor Create;
+    constructor Create(AEnvRules: ILojaEnvironmentRuler);
 	  destructor Destroy; override;
-	  class function New: ILojaModelEstoque;
+	  class function New(AEnvRules: ILojaEnvironmentRuler): ILojaModelEstoque;
 
     { ILojaModelEstoque }
     function CriarNovoMovimento(ANovoMovimento: TLojaModelDtoReqEstoqueCriarMovimento): TLojaModelEntityEstoqueMovimento;
@@ -46,9 +48,9 @@ uses
 
 { TLojaModelEstoque }
 
-constructor TLojaModelEstoque.Create;
+constructor TLojaModelEstoque.Create(AEnvRules: ILojaEnvironmentRuler);
 begin
-
+  FEnvRules := AEnvRules;
 end;
 
 function TLojaModelEstoque.CriarAcertoEstoque(
@@ -179,9 +181,9 @@ begin
   inherited;
 end;
 
-class function TLojaModelEstoque.New: ILojaModelEstoque;
+class function TLojaModelEstoque.New(AEnvRules: ILojaEnvironmentRuler): ILojaModelEstoque;
 begin
-  Result := Self.Create;
+  Result := Self.Create(AEnvRules);
 end;
 
 function TLojaModelEstoque.ObterFechamentosSaldo(ACodItem: Integer; ADatIni,

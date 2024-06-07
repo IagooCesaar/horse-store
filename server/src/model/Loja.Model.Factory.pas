@@ -49,7 +49,7 @@ uses
 
 function TLojaModelFactory.Caixa: ILojaModelCaixa;
 begin
-  Result := TLojaModelCaixa.New;
+  Result := TLojaModelCaixa.New(Self.Ruler);
 end;
 
 constructor TLojaModelFactory.Create(AEnvRules: ILojaEnvironmentRules);
@@ -65,7 +65,7 @@ end;
 
 function TLojaModelFactory.Estoque: ILojaModelEstoque;
 begin
-  Result := TLojaModelEstoque.New;
+  Result := TLojaModelEstoque.New(Self.Ruler);
 end;
 
 class function TLojaModelFactory.InMemory: ILojaModelFactory;
@@ -75,7 +75,7 @@ end;
 
 function TLojaModelFactory.Itens: ILojaModelItens;
 begin
-  Result := TLojaModelItens.New;
+  Result := TLojaModelItens.New(Self.Ruler);
 end;
 
 class function TLojaModelFactory.New: ILojaModelFactory;
@@ -85,7 +85,7 @@ end;
 
 function TLojaModelFactory.Preco: ILojaModelPreco;
 begin
-  Result := TlojaModelPreco.New;
+  Result := TlojaModelPreco.New(Self.Ruler);
 end;
 
 function TLojaModelFactory.Ruler: ILojaEnvironmentRuler;
@@ -100,7 +100,7 @@ end;
 
 function TLojaModelFactory.Venda: ILojaModelVenda;
 begin
-  Result := TLojaModelVenda.New;
+  Result := TLojaModelVenda.New(Self.Ruler);
 end;
 
 end.
