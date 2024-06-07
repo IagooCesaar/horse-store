@@ -89,7 +89,7 @@ begin
   LDto.DatIni := Now;
   LDto.VrVnda := 1.99;
 
-  var LPreco := TLojaModelFactory.New
+  var LPreco := TLojaModelFactory.InMemory
     .Preco
     .CriarPrecoVendaItem(LDto);
 
@@ -110,7 +110,7 @@ begin
 
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New
+      TLojaModelFactory.InMemory
         .Preco
         .CriarPrecoVendaItem(LDto);
     end,
@@ -130,7 +130,7 @@ begin
   LDto.DatIni := Now;
   LDto.VrVnda := 1.99;
 
-  var LPreco := TLojaModelFactory.New
+  var LPreco := TLojaModelFactory.InMemory
     .Preco
     .CriarPrecoVendaItem(LDto);
 
@@ -138,7 +138,7 @@ begin
 
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New
+      TLojaModelFactory.InMemory
         .Preco
         .CriarPrecoVendaItem(LDto);
     end,
@@ -162,7 +162,7 @@ begin
 
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New
+      TLojaModelFactory.InMemory
         .Preco
         .CriarPrecoVendaItem(LDto);
     end,
@@ -178,7 +178,7 @@ procedure TLojaModelPrecoTest.Test_NaoObterHistoricoPrecoVenda_ItemInexistente;
 begin
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New
+      TLojaModelFactory.InMemory
         .Preco
         .ObterHistoricoPrecoVendaItem(-1, Now);
     end,
@@ -191,7 +191,7 @@ procedure TLojaModelPrecoTest.Test_NaoObterPrecoVendaAtual_ItemInexistente;
 begin
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New
+      TLojaModelFactory.InMemory
         .Preco
         .ObterPrecoVendaAtual(-1);
     end,
@@ -210,7 +210,7 @@ var LDat1, LDat2, LDat3, LDat4: TDateTime;
     LDto.DatIni := ADatIni;
     LDto.VrVnda := AVr;
 
-    var LPreco := TLojaModelFactory.New
+    var LPreco := TLojaModelFactory.InMemory
       .Preco
       .CriarPrecoVendaItem(LDto);
 
@@ -232,7 +232,7 @@ begin
   CriarPrecoVenda(LItemCriado.CodItem, LDat1, 1.99);
   CriarPrecoVenda(LItemCriado.CodItem, LDat2, 2.99);
 
-  var LHistorico1 := TLojaModelFactory.New
+  var LHistorico1 := TLojaModelFactory.InMemory
     .Preco
     .ObterHistoricoPrecoVendaItem(LItemCriado.CodItem, IncDay(LDat1,1) );
 
@@ -240,7 +240,7 @@ begin
   Assert.AreEqual(Double(1.99), Double(LHistorico1.First.VrVnda));
   Assert.AreEqual(Double(8.99), Double(LHistorico1.Last.VrVnda));
 
-  var LHistorico2 := TLojaModelFactory.New
+  var LHistorico2 := TLojaModelFactory.InMemory
     .Preco
     .ObterHistoricoPrecoVendaItem(LItemCriado.CodItem, IncDay(LDat2,1) );
 
@@ -262,7 +262,7 @@ procedure TLojaModelPrecoTest.Test_ObterPrecoVendaAtual;
     LDto.DatIni := ADatIni;
     LDto.VrVnda := AVr;
 
-    var LPreco := TLojaModelFactory.New
+    var LPreco := TLojaModelFactory.InMemory
       .Preco
       .CriarPrecoVendaItem(LDto);
 
@@ -277,7 +277,7 @@ begin
   CriarPrecoVenda(LItemCriado.CodItem, IncDay(Now, -7), 1.99);
   CriarPrecoVenda(LItemCriado.CodItem, IncDay(Now, -1), 2.99);
 
-  var LPrecoAtual := TLojaModelFactory.New
+  var LPrecoAtual := TLojaModelFactory.InMemory
     .Preco
     .ObterPrecoVendaAtual(LItemCriado.CodItem);
 
