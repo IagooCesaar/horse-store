@@ -6,6 +6,7 @@ uses
   System.SysUtils,
   System.Classes,
 
+  Loja.Environment.Interfaces,
   Loja.Model.Interfaces,
   Loja.Model.Entity.Caixa.Types,
   Loja.Model.Entity.Caixa.Caixa,
@@ -18,10 +19,12 @@ uses
 
 type
   TLojaModelCaixa = class(TInterfacedObject, ILojaModelCaixa)
+  private
+    FEnvRules: ILojaEnvironmentRuler;
   public
-    constructor Create;
+    constructor Create(AEnvRules: ILojaEnvironmentRuler);
     destructor Destroy; override;
-    class function New: ILojaModelCaixa;
+    class function New(AEnvRules: ILojaEnvironmentRuler): ILojaModelCaixa;
 
     { ILojaModelCaixa }
     function ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
@@ -61,7 +64,7 @@ begin
 
   AAbertura.DatAbert := Now;
 
-  var LCaixaAberto := TLojaModelDaoFactory.New.Caixa
+  var LCaixaAberto := TLojaModelDaoFactory.New(FEnvRules).Caixa
     .Caixa
     .ObterCaixaAberto;
   if LCaixaAberto <> nil
@@ -77,11 +80,11 @@ begin
     LCaixaAberto.Free;
   end;
 
-  var LUltFechado := TLojaModelDaoFactory.New.Caixa
+  var LUltFechado := TLojaModelDaoFactory.New(FEnvRules).Caixa
     .Caixa
     .ObterUltimoCaixaFechado(AAbertura.DatAbert);
 
-  var LNovoCaixa := TLojaModelDaoFactory.New.Caixa
+  var LNovoCaixa := TLojaModelDaoFactory.New(FEnvRules).Caixa
     .Caixa
     .CriarNovoCaixa(AAbertura);
 
@@ -101,7 +104,7 @@ begin
         LMovAbert.CodOrigMov := orgReforco;
         LMovAbert.VrMov := LVrDin;
 
-        var LMov1 := TLojaModelBoFactory.New.Caixa.CriarMovimentoCaixa(LMovAbert);
+        var LMov1 := TLojaModelBoFactory.New(FEnvRules).Caixa.CriarMovimentoCaixa(LMovAbert);
         LMov1.Free;
       end;
 
@@ -125,7 +128,7 @@ begin
           LMovAbert.CodOrigMov := orgSangria;
         end;
 
-        var Mov2 := TLojaModelBoFactory.New.Caixa.CriarMovimentoCaixa(LMovAbert);
+        var Mov2 := TLojaModelBoFactory.New(FEnvRules).Caixa.CriarMovimentoCaixa(LMovAbert);
         Mov2.Free;
       end;
     finally
@@ -147,7 +150,7 @@ begin
       LMovAbert.CodTipoMov := movEntrada;
       LMovAbert.CodOrigMov := orgReforco;
 
-      var LMovimento := TLojaModelBoFactory.New.Caixa.CriarMovimentoCaixa(LMovAbert);
+      var LMovimento := TLojaModelBoFactory.New(FEnvRules).Caixa.CriarMovimentoCaixa(LMovAbert);
       LMovimento.Free;
     finally
       LMovAbert.Free;
@@ -157,9 +160,9 @@ begin
   Result := LNovoCaixa;
 end;
 
-constructor TLojaModelCaixa.Create;
+constructor TLojaModelCaixa.Create(AEnvRules: ILojaEnvironmentRuler);
 begin
-
+  FEnvRules := AEnvRules;
 end;
 
 function TLojaModelCaixa.CriarReforcoCaixa(
@@ -168,7 +171,7 @@ begin
   AMovimento.CodMeioPagto := pagDinheiro;
   AMovimento.CodOrigMov := orgReforco;
 
-  Result := TLojaModelBoFactory.New.Caixa.CriarMovimentoCaixa(AMovimento);
+  Result := TLojaModelBoFactory.New(FEnvRules).Caixa.CriarMovimentoCaixa(AMovimento);
 end;
 
 function TLojaModelCaixa.CriarSangriaCaixa(
@@ -177,7 +180,7 @@ begin
   AMovimento.CodMeioPagto := pagDinheiro;
   AMovimento.CodOrigMov := orgSangria;
 
-  Result := TLojaModelBoFactory.New.Caixa.CriarMovimentoCaixa(AMovimento);
+  Result := TLojaModelBoFactory.New(FEnvRules).Caixa.CriarMovimentoCaixa(AMovimento);
 end;
 
 destructor TLojaModelCaixa.Destroy;
@@ -195,7 +198,7 @@ begin
     .&Unit(Self.UnitName)
     .Error('O código de caixa informado é inválido');
 
-  var LCaixa := TLojaModelDaoFactory.New.Caixa
+  var LCaixa := TLojaModelDaoFactory.New(FEnvRules).Caixa
     .Caixa
     .ObterCaixaPorCodigo(AFechamento.CodCaixa);
 
@@ -224,7 +227,7 @@ begin
           [LMeioPagto.CodMeioPagto.Name]));
     end;
 
-    Result := TLojaModelDaoFactory.New.Caixa
+    Result := TLojaModelDaoFactory.New(FEnvRules).Caixa
       .Caixa
       .AtualizarFechamentoCaixa(AFechamento.CodCaixa, Now, LResumo.VrSaldo);
 
@@ -233,14 +236,14 @@ begin
   end;
 end;
 
-class function TLojaModelCaixa.New: ILojaModelCaixa;
+class function TLojaModelCaixa.New(AEnvRules: ILojaEnvironmentRuler): ILojaModelCaixa;
 begin
-  Result := Self.Create;
+  Result := Self.Create(AEnvRules);
 end;
 
 function TLojaModelCaixa.ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
 begin
-  Result := TLojaModelBoFactory.New.Caixa
+  Result := TLojaModelBoFactory.New(FEnvRules).Caixa
     .ObterCaixaAberto;
 end;
 
@@ -253,7 +256,7 @@ begin
     .&Unit(Self.UnitName)
     .Error('O código de caixa informado é inválido');
 
-  Result := TLojaModelDaoFactory.New.Caixa
+  Result := TLojaModelDaoFactory.New(FEnvRules).Caixa
     .Caixa
     .ObterCaixaPorCodigo(ACodCaixa);
 end;
@@ -267,7 +270,7 @@ begin
     .&Unit(Self.UnitName)
     .Error('A data inicial deve ser inferior à data final em pelo menos 1 dia');
 
-  Result := TLojaModelDaoFactory.New.Caixa
+  Result := TLojaModelDaoFactory.New(FEnvRules).Caixa
     .Caixa
     .ObterCaixasPorDataAbertura(ADatIni, ADatFim);
 end;
@@ -281,7 +284,7 @@ begin
     .&Unit(Self.UnitName)
     .Error('O código de caixa informado é inválido');
 
-  var LCaixa := TLojaModelDaoFactory.New.Caixa
+  var LCaixa := TLojaModelDaoFactory.New(FEnvRules).Caixa
     .Caixa
     .ObterCaixaPorCodigo(ACodCaixa);
 
@@ -292,7 +295,7 @@ begin
     .Error('O código de caixa informado não existe');
   LCaixa.Free;
 
-  Result := TLojaModelDaoFactory.New.Caixa
+  Result := TLojaModelDaoFactory.New(FEnvRules).Caixa
     .Movimento
     .ObterMovimentoPorCaixa(ACodCaixa);
 end;
@@ -301,7 +304,7 @@ function TLojaModelCaixa.ObterResumoCaixa(
   ACodCaixa: Integer): TLojaModelDtoRespCaixaResumoCaixa;
 begin
   var LMovimentos := ObterMovimentoCaixa(ACodCaixa);
-  var LCaixa := TLojaModelDaoFactory.New.Caixa
+  var LCaixa := TLojaModelDaoFactory.New(FEnvRules).Caixa
     .Caixa
     .ObterCaixaPorCodigo(ACodCaixa);
 

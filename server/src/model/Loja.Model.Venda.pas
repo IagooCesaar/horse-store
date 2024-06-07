@@ -7,6 +7,7 @@ uses
   System.Classes,
   System.Generics.Collections,
 
+  Loja.Environment.Interfaces,
   Loja.Model.Interfaces,
   Loja.Model.Entity.Venda.Types,
   Loja.Model.Entity.Caixa.Types,
@@ -26,15 +27,16 @@ uses
 type
   TLojaModelVenda = class(TInterfacedObject, ILojaModelVenda)
   private
+    FEnvRules: ILojaEnvironmentRuler;
     function EntityToDto(ASource: TLojaModelEntityVendaItem): TLojaModelDtoRespVendaItem;
     function ObterEValidarCaixa: TLojaModelEntityCaixaCaixa;
     function CalculaTotaisVenda(var AVenda: TLojaModelEntityVendaVenda): TLojaModelEntityVendaVenda;
 
     function ObterEValidarVenda(ANumVnda: Integer; AValidarPendente: Boolean): TLojaModelEntityVendaVenda;
   public
-    constructor Create;
+    constructor Create(AEnvRules: ILojaEnvironmentRuler);
     destructor Destroy; override;
-    class function New: ILojaModelVenda;
+    class function New(AEnvRules: ILojaEnvironmentRuler): ILojaModelVenda;
 
     { ILojaModelVenda }
     function ObterVendas(ADatInclIni, ADatInclFim: TDate;
@@ -67,9 +69,9 @@ uses
 
 { TLojaModelVenda }
 
-constructor TLojaModelVenda.Create;
+constructor TLojaModelVenda.Create(AEnvRules: ILojaEnvironmentRuler);
 begin
-
+  FEnvRules := AEnvRules;
 end;
 
 destructor TLojaModelVenda.Destroy;
@@ -78,9 +80,9 @@ begin
   inherited;
 end;
 
-class function TLojaModelVenda.New: ILojaModelVenda;
+class function TLojaModelVenda.New(AEnvRules: ILojaEnvironmentRuler): ILojaModelVenda;
 begin
-  Result := Self.Create;
+  Result := Self.Create(AEnvRules);
 end;
 
 function TLojaModelVenda.EntityToDto(
@@ -88,7 +90,7 @@ function TLojaModelVenda.EntityToDto(
 begin
   Result := nil;
 
-  var LItem := TLojaModelDaoFactory.New.Itens
+  var LItem := TLojaModelDaoFactory.New(FEnvRules).Itens
     .Item
     .ObterPorCodigo(ASource.CodItem);
 
@@ -112,7 +114,7 @@ function TLojaModelVenda.ObterEValidarCaixa: TLojaModelEntityCaixaCaixa;
 begin
   Result := nil;
 
-  var LCaixa := TLojaModelBoFactory.New.Caixa.ObterCaixaAberto;
+  var LCaixa := TLojaModelBoFactory.New(FEnvRules).Caixa.ObterCaixaAberto;
 
   if LCaixa = nil
   then raise EHorseException.New
@@ -136,7 +138,7 @@ end;
 function TLojaModelVenda.CalculaTotaisVenda(
   var AVenda: TLojaModelEntityVendaVenda): TLojaModelEntityVendaVenda;
 begin
-  var LItens := TLojaModelDaoFactory.New.Venda
+  var LItens := TLojaModelDaoFactory.New(FEnvRules).Venda
     .Item
     .ObterItensVenda(AVenda.NumVnda);
 
@@ -171,7 +173,7 @@ begin
     .&Unit(Self.UnitName)
     .Error('O número de venda informado é inválido');
 
-  var LVenda := TLojaModelDaoFactory.New.Venda
+  var LVenda := TLojaModelDaoFactory.New(FEnvRules).Venda
     .Venda
     .ObterVenda(ANumVnda);
 
@@ -205,7 +207,7 @@ begin
     .&Unit(Self.UnitName)
     .Error('A data inicial deve ser inferior à data final em pelo menos 1 dia');
 
-  Result := TLojaModelDaoFactory.New.Venda
+  Result := TLojaModelDaoFactory.New(FEnvRules).Venda
     .Venda
     .ObterVendas(ADatInclIni, ADatInclFim, ACodSit);
 end;
@@ -218,7 +220,7 @@ begin
   var LVenda := ObterEValidarVenda(ANumVnda, False);
 
   CalculaTotaisVenda(LVenda);
-  Result := TLojaModelDaoFactory.New.Venda
+  Result := TLojaModelDaoFactory.New(FEnvRules).Venda
     .Venda
     .AtualizarVenda(LVenda);
   LVenda.Free;
@@ -238,7 +240,7 @@ begin
   LNovaVenda.VrDesc := 0;
   LNovaVenda.VrTotal := 0;
 
-  var LVenda := TLojaModelDaoFactory.New.Venda
+  var LVenda := TLojaModelDaoFactory.New(FEnvRules).Venda
     .Venda
     .NovaVenda(LNovaVenda);
 
@@ -257,7 +259,7 @@ begin
     LVenda.CodSit := sitCancelada;
     LVenda.DatConcl := Now;
 
-    Result := TLojaModelDaoFactory.New.Venda
+    Result := TLojaModelDaoFactory.New(FEnvRules).Venda
       .Venda
       .AtualizarVenda(LVenda);
   finally
@@ -273,11 +275,11 @@ begin
 
   var LCaixa := ObterEValidarCaixa;
 
-  var LItens := TLojaModelDaoFactory.New.Venda
+  var LItens := TLojaModelDaoFactory.New(FEnvRules).Venda
     .Item
     .ObterItensVenda(ANumVnda);
 
-  var LMeiosPagto := TLojaModelDaoFactory.New.Venda
+  var LMeiosPagto := TLojaModelDaoFactory.New(FEnvRules).Venda
     .MeioPagto
     .ObterMeiosPagtoVenda(ANumVnda);
 
@@ -339,11 +341,12 @@ begin
 
       for var LKey in LQtdItens.Keys
       do begin
-        var LSaldo := TLojaModelFactory.New.Estoque.ObterSaldoAtualItem(LKey);
+        var LSaldo := TLojaModelFactory.New(FEnvRules)
+          .Estoque.ObterSaldoAtualItem(LKey);
         try
           if LSaldo.QtdSaldoAtu < LQtdItens.Items[LKey]
           then begin
-            var LItem := TLojaModelFactory.New.Itens.ObterPorCodigo(LKey);
+            var LItem := TLojaModelFactory.New(FEnvRules).Itens.ObterPorCodigo(LKey);
             try
               if not LItem.FlgPermSaldNeg
               then raise EHorseException.New
@@ -395,7 +398,7 @@ begin
     LVenda.DatConcl := Now;
     LVenda.CodSit := sitEfetivada;
 
-    Result := TLojaModelDaoFactory.New.Venda
+    Result := TLojaModelDaoFactory.New(FEnvRules).Venda
       .Venda
       .AtualizarVenda(LVenda);
 
@@ -413,7 +416,7 @@ begin
       LMovCaixa.VrMov := LMeioPagto.VrTotal;
       LMovCaixa.CodMeioPagto := LMeioPagto.CodMeioPagto;
 
-      var LMovimento := TLojaModelBoFactory.New.Caixa.CriarMovimentoCaixa(LMovCaixa);
+      var LMovimento := TLojaModelBoFactory.New(FEnvRules).Caixa.CriarMovimentoCaixa(LMovCaixa);
       LMovimento.Free;
 
     end;
@@ -434,7 +437,7 @@ begin
       LMovEstq.DscMot := Format('Referente à Venda %d, Item Seq. %d',[
         LItem.NumVnda, LItem.NumSeqItem]);
 
-      var LMovimento := TLojaModelFactory.New
+      var LMovimento := TLojaModelFactory.New(FEnvRules)
         .Estoque
         .CriarNovoMovimento(LMovEstq);
       LMovimento.Free;
@@ -456,7 +459,7 @@ begin
 
   var LVenda := ObterEValidarVenda(ANumVnda, False);
 
-  var LItens := TLojaModelDaoFactory.New.Venda
+  var LItens := TLojaModelDaoFactory.New(FEnvRules).Venda
     .Item
     .ObterItensVenda(ANumVnda);
 
@@ -479,7 +482,7 @@ begin
     .&Unit(Self.UnitName)
     .Error('A quantidade do item vendido deverá ser superior a zero');
 
-  var LItem := TLojaModelDaoFactory.New.Itens.Item.ObterPorCodigo(ANovoItem.CodItem);
+  var LItem := TLojaModelDaoFactory.New(FEnvRules).Itens.Item.ObterPorCodigo(ANovoItem.CodItem);
   if LItem = nil
   then raise EHorseException.New
     .Status(THTTPStatus.NotFound)
@@ -489,7 +492,7 @@ begin
   try
     var LVenda := ObterEValidarVenda(ANovoItem.NumVnda, True);
     try
-      var LPrecoVnda := TLojaModelDaoFactory.New.Preco.Venda.ObterPrecoVendaAtual(ANovoItem.CodItem);
+      var LPrecoVnda := TLojaModelDaoFactory.New(FEnvRules).Preco.Venda.ObterPrecoVendaAtual(ANovoItem.CodItem);
       if (LPrecoVnda = nil) and (LItem.FlgTabPreco = 'S')
       then raise EHorseException.New
         .Status(THTTPStatus.NotFound)
@@ -500,7 +503,7 @@ begin
       try
         LItemVenda.NumVnda := ANovoItem.NumVnda;
         LItemVenda.CodItem := ANovoItem.CodItem;
-        LItemVenda.NumSeqItem := TLojaModelDaoFactory.New.Venda.Item.ObterUltimoNumSeq(LItemVenda.NumVnda) + 1;
+        LItemVenda.NumSeqItem := TLojaModelDaoFactory.New(FEnvRules).Venda.Item.ObterUltimoNumSeq(LItemVenda.NumVnda) + 1;
         LItemVenda.CodSit := sitAtivo;
         LItemVenda.QtdItem := ANovoItem.QtdItem;
         if LPrecoVnda = nil
@@ -516,7 +519,7 @@ begin
           .&Unit(Self.UnitName)
           .Error('O valor total do item não pode ser negativo');
 
-        var LItemInserido := TLojaModelDaoFactory.New.Venda
+        var LItemInserido := TLojaModelDaoFactory.New(FEnvRules).Venda
           .Item
           .InserirItem(LItemVenda);
 
@@ -524,7 +527,7 @@ begin
         LItemInserido.Free;
 
         CalculaTotaisVenda(LVenda);
-        var LVendaAtualizada := TLojaModelDaoFactory.New.Venda
+        var LVendaAtualizada := TLojaModelDaoFactory.New(FEnvRules).Venda
           .Venda
           .AtualizarVenda(LVenda);
         LVendaAtualizada.Free;
@@ -553,7 +556,7 @@ begin
     .&Unit(Self.UnitName)
     .Error('A quantidade do item vendido deverá ser superior a zero');
 
-  var LItem := TLojaModelDaoFactory.New.Itens.Item.ObterPorCodigo(AItem.CodItem);
+  var LItem := TLojaModelDaoFactory.New(FEnvRules).Itens.Item.ObterPorCodigo(AItem.CodItem);
   if LItem = nil
   then raise EHorseException.New
     .Status(THTTPStatus.NotFound)
@@ -563,14 +566,14 @@ begin
   try
     var LVenda := ObterEValidarVenda(AItem.NumVnda, True);
     try
-      var LPrecoVnda := TLojaModelDaoFactory.New.Preco.Venda.ObterPrecoVendaAtual(AItem.CodItem);
+      var LPrecoVnda := TLojaModelDaoFactory.New(FEnvRules).Preco.Venda.ObterPrecoVendaAtual(AItem.CodItem);
       if (LPrecoVnda = nil) and (LItem.FlgTabPreco = 'S')
       then raise EHorseException.New
         .Status(THTTPStatus.NotFound)
         .&Unit(Self.UnitName)
         .Error('Não há preço de venda implantado para o item');
 
-      var LItemVenda := TLojaModelDaoFactory.New.Venda
+      var LItemVenda := TLojaModelDaoFactory.New(FEnvRules).Venda
         .Item
         .ObterItem(AItem.NumVnda, AItem.NumSeqItem);
       try
@@ -606,7 +609,7 @@ begin
           .&Unit(Self.UnitName)
           .Error('O valor total do item não pode ser negativo');
 
-        var LItemAtualizado := TLojaModelDaoFactory.New.Venda
+        var LItemAtualizado := TLojaModelDaoFactory.New(FEnvRules).Venda
           .Item
           .AtulizarItem(LItemVenda);
 
@@ -614,7 +617,7 @@ begin
         LItemAtualizado.Free;
 
         CalculaTotaisVenda(LVenda);
-        var LVendaAtualizada := TLojaModelDaoFactory.New.Venda
+        var LVendaAtualizada := TLojaModelDaoFactory.New(FEnvRules).Venda
           .Venda
           .AtualizarVenda(LVenda);
         LVendaAtualizada.Free;
@@ -638,7 +641,7 @@ begin
 
   var LVenda := ObterEValidarVenda(ANumVnda, False);
 
-  Result := TLojaModelDaoFactory.New.Venda
+  Result := TLojaModelDaoFactory.New(FEnvRules).Venda
     .MeioPagto
     .ObterMeiosPagtoVenda(ANumVnda);
 
@@ -658,7 +661,7 @@ begin
       .&Unit(Self.UnitName)
       .Error('É necessário informar ao menos um meio de pagamento');
 
-    TLojaModelDaoFactory.New.Venda
+    TLojaModelDaoFactory.New(FEnvRules).Venda
       .MeioPagto
       .RemoverMeiosPagtoVenda(ANumVnda);
 
@@ -677,7 +680,7 @@ begin
       LMeioPagto.NumSeqMeioPagto := LNumSeq;
       LMeioPagto.NumVnda := ANumVnda;
 
-      var LNovo := TLojaModelDaoFactory.New.Venda
+      var LNovo := TLojaModelDaoFactory.New(FEnvRules).Venda
         .MeioPagto
         .InserirMeioPagto(LMeioPagto);
 

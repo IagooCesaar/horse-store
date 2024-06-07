@@ -109,7 +109,10 @@ uses
   Loja.Model.Dto.Resp.Venda.Item in 'src\model\dto\Loja.Model.Dto.Resp.Venda.Item.pas',
   Loja.Controller.Venda.Test in 'src\test\controller\Loja.Controller.Venda.Test.pas',
   Loja.Model.Venda.Test in 'src\test\model\Loja.Model.Venda.Test.pas',
-  Loja.Model.Dto.Resp.Itens.Item in 'src\model\dto\Loja.Model.Dto.Resp.Itens.Item.pas';
+  Loja.Model.Dto.Resp.Itens.Item in 'src\model\dto\Loja.Model.Dto.Resp.Itens.Item.pas',
+  Loja.Environment.Rules in 'src\env\Loja.Environment.Rules.pas',
+  Loja.Environment.Factory in 'src\env\Loja.Environment.Factory.pas',
+  Loja.Environment.Interfaces in 'src\env\Loja.Environment.Interfaces.pas';
 
 {$IFNDEF TESTINSIGHT}
 var
@@ -155,6 +158,8 @@ begin
       System.ExitCode := EXIT_ERRORS;
 
     {$IFNDEF CI}
+    TDUnitX.Options.ExitBehavior := TDUnitXExitBehavior.Pause;
+
     //We don't want this happening when running under CI.
     if TDUnitX.Options.ExitBehavior = TDUnitXExitBehavior.Pause then
     begin

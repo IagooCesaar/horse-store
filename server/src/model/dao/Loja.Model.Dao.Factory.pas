@@ -5,6 +5,8 @@ interface
 uses
   System.Classes,
   System.SysUtils,
+
+  Loja.Environment.Interfaces,
   Loja.Model.Dao.Interfaces,
   Loja.Model.Dao.Itens.Interfaces,
   Loja.Model.Dao.Estoque.Interfaces,
@@ -15,13 +17,15 @@ uses
 type
   TLojaModelDaoFactory = class(TNoRefCountObject, ILojaModelDaoFactory)
   private
+    FEnvRules: ILojaEnvironmentRuler;
     class var FFactory: TLojaModelDaoFactory;
+
+    function InMemory: Boolean;
   public
-    constructor Create;
+    constructor Create(AEnvRules: ILojaEnvironmentRuler);
 	  destructor Destroy; override;
 
-    class var InMemory: Boolean;
-	  class function New: ILojaModelDaoFactory;
+	  class function New(AEnvRules: ILojaEnvironmentRuler): ILojaModelDaoFactory;
     class destructor UnInitialize;
 
     { ILojaModelDaoFactory }
@@ -56,9 +60,9 @@ begin
   else Result := TLojaModelDaoCaixaFactoryInMemory.GetInstance;
 end;
 
-constructor TLojaModelDaoFactory.Create;
+constructor TLojaModelDaoFactory.Create(AEnvRules: ILojaEnvironmentRuler);
 begin
-
+  FEnvRules := AEnvRules;
 end;
 
 destructor TLojaModelDaoFactory.Destroy;
@@ -74,6 +78,11 @@ begin
   else Result := TLojaModelDaoEstoqueFactoryInMemory.GetInstance;
 end;
 
+function TLojaModelDaoFactory.InMemory: Boolean;
+begin
+  Result := FEnvRules.Rules.Kind = envInMemory;
+end;
+
 function TLojaModelDaoFactory.Itens: ILojaModelDaoItensFactory;
 begin
   if not InMemory
@@ -81,10 +90,11 @@ begin
   else Result := TLojaModelDaoItensFactoryInMemory.GetInstance;
 end;
 
-class function TLojaModelDaoFactory.New: ILojaModelDaoFactory;
+class function TLojaModelDaoFactory.New(AEnvRules: ILojaEnvironmentRuler): ILojaModelDaoFactory;
 begin
   if not Assigned(FFactory)
-  then FFactory := TLojaModelDaoFactory.Create;
+  then FFactory := TLojaModelDaoFactory.Create(AEnvRules);
+  FFactory.FEnvRules := AEnvRules;
 
   Result := FFactory;
 end;
@@ -108,9 +118,6 @@ begin
   then Result := TLojaModelDaoVendaFactory.New
   else Result := TLojaModelDaoVendaFactoryInMemory.GetInstance;
 end;
-
-initialization
-  TLojaModelDaoFactory.InMemory := False;
 
 end.
 

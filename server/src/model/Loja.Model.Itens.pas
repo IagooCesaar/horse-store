@@ -7,6 +7,7 @@ uses
   System.Classes,
   System.Generics.Collections,
 
+  Loja.Environment.Interfaces,
   Loja.Model.Interfaces,
   Loja.Model.Entity.Itens.Item,
   Loja.Model.Dto.Req.Itens.CriarItem,
@@ -16,12 +17,13 @@ uses
 type
   TLojaModelItens = class(TInterfacedObject, ILojaModelItens)
   private
+    FEnvRules: ILojaEnvironmentRuler;
     function EntityToDTO(ASource: TLojaModelEntityItensItem): TLojaModelDtoRespItensItem; overload;
     function EntityToDTO(ASource: TLojaModelEntityItensItemLista): TLojaModelDtoRespItensItemLista; overload;
   public
-    constructor Create;
+    constructor Create(AEnvRules: ILojaEnvironmentRuler);
 	  destructor Destroy; override;
-	  class function New: ILojaModelItens;
+	  class function New(AEnvRules: ILojaEnvironmentRuler): ILojaModelItens;
 
     { ILojaModelItens }
     function ObterPorCodigo(ACodItem: Integer): TLojaModelDtoRespItensItem;
@@ -63,7 +65,7 @@ begin
     .&Unit(Self.UnitName)
     .Error(Format('O código de barras deverá ter no máximo %d caracteres', [ C_NOM_MAX ]));
 
-  var LItem := TLojaModelDaoFactory.New.Itens
+  var LItem := TLojaModelDaoFactory.New(FEnvRules).Itens
     .Item
     .ObterPorCodigo(AItem.CodItem);
 
@@ -76,7 +78,7 @@ begin
 
   if AItem.NumCodBarr <> ''
   then begin
-    var LItemExiteCodBarr := TLojaModelDaoFactory.New.Itens.Item.ObterPorNumCodBarr(AItem.NumCodBarr);
+    var LItemExiteCodBarr := TLojaModelDaoFactory.New(FEnvRules).Itens.Item.ObterPorNumCodBarr(AItem.NumCodBarr);
     if (LItemExiteCodBarr <> nil) and (LItemExiteCodBarr.CodItem <> AItem.CodItem)
     then try
       raise EHorseException.New
@@ -88,7 +90,7 @@ begin
     end;
   end;
 
-  var LItemAtualizado := TLojaModelDaoFactory.New.Itens
+  var LItemAtualizado := TLojaModelDaoFactory.New(FEnvRules).Itens
     .Item
     .AtualizarItem(AItem);
 
@@ -96,9 +98,9 @@ begin
   LItemAtualizado.Free;
 end;
 
-constructor TLojaModelItens.Create;
+constructor TLojaModelItens.Create(AEnvRules: ILojaEnvironmentRuler);
 begin
-
+  FEnvRules := AEnvRules;
 end;
 
 function TLojaModelItens.CriarItem(
@@ -125,7 +127,7 @@ begin
 
   if ANovoItem.NumCodBarr <> ''
   then begin
-    var LItem := TLojaModelDaoFactory.New.Itens.Item.ObterPorNumCodBarr(ANovoItem.NumCodBarr);
+    var LItem := TLojaModelDaoFactory.New(FEnvRules).Itens.Item.ObterPorNumCodBarr(ANovoItem.NumCodBarr);
     if LItem <> nil
     then try
       raise EHorseException.New
@@ -137,7 +139,7 @@ begin
     end;
   end;
 
-  var LNovoItem := TLojaModelDaoFactory.New.Itens
+  var LNovoItem := TLojaModelDaoFactory.New(FEnvRules).Itens
     .Item
     .CriarItem(ANovoItem);
 
@@ -170,9 +172,9 @@ begin
   Result.FlgTabPreco := ASource.FlgTabPreco = 'S';
 end;
 
-class function TLojaModelItens.New: ILojaModelItens;
+class function TLojaModelItens.New(AEnvRules: ILojaEnvironmentRuler): ILojaModelItens;
 begin
-  Result := Self.Create;
+  Result := Self.Create(AEnvRules);
 end;
 
 function TLojaModelItens.ObterItens(
@@ -188,7 +190,7 @@ begin
 
   AFiltro.NomItem := AnsiUpperCase(AFiltro.NomItem);
 
-  var LItens := TLojaModelDaoFactory.New.Itens
+  var LItens := TLojaModelDaoFactory.New(FEnvRules).Itens
     .Item
     .ObterItens(AFiltro);
 
@@ -200,7 +202,7 @@ function TLojaModelItens.ObterPorCodigo(
   ACodItem: Integer): TLojaModelDtoRespItensItem;
 var LItem : TLojaModelEntityItensItem;
 begin
-  LItem := TLojaModelDaoFactory.New.Itens
+  LItem := TLojaModelDaoFactory.New(FEnvRules).Itens
     .Item
     .ObterPorCodigo(ACodItem);
 
@@ -217,7 +219,7 @@ end;
 function TLojaModelItens.ObterPorNumCodBarr(
   ANumCodBarr: string): TLojaModelDtoRespItensItem;
 begin
-  var LItem := TLojaModelDaoFactory.New.Itens
+  var LItem := TLojaModelDaoFactory.New(FEnvRules).Itens
     .Item
     .ObterPorNumCodBarr(ANumCodBarr);
 

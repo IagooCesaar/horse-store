@@ -8,15 +8,19 @@ uses
   System.DateUtils,
   System.Generics.Defaults,
   System.Generics.Collections,
+
+  Loja.Environment.Interfaces,
   Loja.Model.Bo.Interfaces;
 
 type
   TLojaModelBoEstoque = class(TInterfacedObject,
     ILojaModelBoEstoque, ILojaModelBoEstoqueFechamentoSaldo)
+  private
+    FEnvRules: ILojaEnvironmentRuler;
   public
-    constructor Create;
+    constructor Create(AEnvRules: ILojaEnvironmentRuler);
     destructor Destroy; override;
-    class function New: ILojaModelBoEstoque;
+    class function New(AEnvRules: ILojaEnvironmentRuler): ILojaModelBoEstoque;
 
     { ILojaModelBoEstoque }
     function FechamentoSaldo: ILojaModelBoEstoqueFechamentoSaldo;
@@ -43,9 +47,9 @@ uses
 
 { TLojaModelBoEstoque }
 
-constructor TLojaModelBoEstoque.Create;
+constructor TLojaModelBoEstoque.Create(AEnvRules: ILojaEnvironmentRuler);
 begin
-
+  FEnvRules := AEnvRules;
 end;
 
 function TLojaModelBoEstoque.CriarNovoFechamento(ACodItem: Integer;
@@ -53,7 +57,7 @@ function TLojaModelBoEstoque.CriarNovoFechamento(ACodItem: Integer;
 var LFechamento: TLojaModelEntityEstoqueSaldo;
 begin
   Result := Self;
-  LFechamento := TLojaModelDaoFactory.New.Estoque
+  LFechamento := TLojaModelDaoFactory.New(FEnvRules).Estoque
     .Saldo
     .ObterFechamentoItem(ACodItem, ADatRef);
   if LFechamento <> nil
@@ -69,7 +73,7 @@ begin
     FreeAndNil(LFechamento);
   end;
 
-  LFechamento := TLojaModelDaoFactory.New.Estoque
+  LFechamento := TLojaModelDaoFactory.New(FEnvRules).Estoque
     .Saldo
     .CriarFechamentoSaldoItem(ACodItem, ADatRef, ASaldo);
   LFechamento.Free;
@@ -103,7 +107,7 @@ begin
   Result := Self;
   // Realiza fechamento de saldo mensal até mês anterior
   try
-    LUltFechamento := TLojaModelDaoFactory.New.Estoque
+    LUltFechamento := TLojaModelDaoFactory.New(FEnvRules).Estoque
       .Saldo
       .ObterUltimoFechamentoItem(ACodItem);
 
@@ -126,7 +130,7 @@ begin
     begin
       LDatIni := LDatUltFech+1;
 
-      LMovimentos := TLojaModelDaoFactory.New.Estoque
+      LMovimentos := TLojaModelDaoFactory.New(FEnvRules).Estoque
         .Movimento
         .ObterMovimentoItemEntreDatas(ACodItem, LDatIni, LDatFim);
       try
@@ -213,9 +217,9 @@ begin
   end;
 end;
 
-class function TLojaModelBoEstoque.New: ILojaModelBoEstoque;
+class function TLojaModelBoEstoque.New(AEnvRules: ILojaEnvironmentRuler): ILojaModelBoEstoque;
 begin
-  Result := Self.Create;
+  Result := Self.Create(AEnvRules);
 end;
 
 end.

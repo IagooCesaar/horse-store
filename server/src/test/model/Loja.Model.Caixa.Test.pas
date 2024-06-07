@@ -130,6 +130,7 @@ uses
   System.SysUtils,
   System.DateUtils,
 
+  Loja.Environment.Interfaces,
   Loja.Model.Factory,
   Loja.Model.Dao.Interfaces,
   Loja.Model.Dao.Factory,
@@ -143,6 +144,11 @@ uses
 
 { TLojaModelCaixaTest }
 
+function InMemory: ILojaEnvironmentRuler;
+begin
+  Result := TLojaModelFactory.InMemory.Ruler;
+end;
+
 procedure TLojaModelCaixaTest.Setup;
 begin
   FCritical.Acquire;
@@ -150,7 +156,7 @@ end;
 
 procedure TLojaModelCaixaTest.SetupFixture;
 begin
-  TLojaModelDaoFactory.InMemory := True;
+
   FCritical := TCriticalSection.Create;
 end;
 
@@ -163,7 +169,7 @@ procedure TLojaModelCaixaTest.TearDownFixture;
 begin
   FCaixa.Free;
   FCritical.Free;
-  TLojaModelDaoFactory.InMemory := False;
+
 end;
 
 procedure TLojaModelCaixaTest.Test_AberturaDeCaixa;
@@ -172,16 +178,16 @@ begin
   LAbertura.DatAbert := Now;
   LAbertura.VrAbert := 10;
 
-  FCaixa := TLojaModelFactory.New.Caixa.AberturaCaixa(LAbertura);
+  FCaixa := TLojaModelFactory.InMemory.Caixa.AberturaCaixa(LAbertura);
 
   Assert.AreEqual(LAbertura.VrAbert, FCaixa.VrAbert);
   Assert.AreEqual(LAbertura.DatAbert, FCaixa.DatAbert);
 
-  var LMovimentos := TLojaModelFactory.New.Caixa.ObterMovimentoCaixa(FCaixa.CodCaixa);
+  var LMovimentos := TLojaModelFactory.InMemory.Caixa.ObterMovimentoCaixa(FCaixa.CodCaixa);
 
   Assert.IsTrue(LMovimentos.Count >= 1);
 
-  var LResumo := TLojaModelFactory.New.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
+  var LResumo := TLojaModelFactory.InMemory.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
   Assert.AreEqual(Double(10), Double(LResumo.MeiosPagto.Get(pagDinheiro).VrTotal));
 
   LAbertura.Free;
@@ -191,7 +197,7 @@ end;
 
 procedure TLojaModelCaixaTest.Test_AberturaDeCaixa_NovaAbertura_ComReforco;
 begin
-  var LResumo := TLojaModelFactory.New.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
+  var LResumo := TLojaModelFactory.InMemory.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
   var VrFecha := LResumo.VrSaldo;
   var VrDif := 4.00;
   LResumo.Free;
@@ -199,7 +205,7 @@ begin
 
   WriteLn(Format('Valor Fechamento: %8.2f', [VrFecha] ));
 
-  var LCaixaFechado := TLojaModelDaoFactory.New.Caixa.Caixa.AtualizarFechamentoCaixa(
+  var LCaixaFechado := TLojaModelDaoFactory.New(InMemory).Caixa.Caixa.AtualizarFechamentoCaixa(
     FCaixa.CodCaixa,
     Now,
     VrFecha
@@ -210,14 +216,14 @@ begin
   LAbertura.VrAbert := VrFecha + VrDif;
 
   FCaixa.Free;
-  FCaixa := TLojaModelFactory.New.Caixa.AberturaCaixa(LAbertura);
+  FCaixa := TLojaModelFactory.InMemory.Caixa.AberturaCaixa(LAbertura);
 
   WriteLn(Format('Valor Abertura: %8.2f / Caixa: %d', [FCaixa.VrAbert, FCaixa.CodCaixa] ));
 
   Assert.AreEqual(LAbertura.VrAbert, FCaixa.VrAbert);
   Assert.AreEqual(LAbertura.DatAbert, FCaixa.DatAbert);
 
-  var LMovimentos := TLojaModelFactory.New.Caixa.ObterMovimentoCaixa(FCaixa.CodCaixa);
+  var LMovimentos := TLojaModelFactory.InMemory.Caixa.ObterMovimentoCaixa(FCaixa.CodCaixa);
 
   // Mov 1: Saldo de fechamento do caixa anterior
   // Mov 2: Ajuste pois novo caixa está abrindo com saldo <> do saldo do último fechamento
@@ -240,12 +246,12 @@ end;
 
 procedure TLojaModelCaixaTest.Test_AberturaDeCaixa_NovaAbertura_ComSangria;
 begin
-  var LResumo := TLojaModelFactory.New.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
+  var LResumo := TLojaModelFactory.InMemory.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
   var VrFecha := LResumo.VrSaldo;
   var VrDif := 2.00;
   LResumo.Free;
 
-  var LCaixaFechado := TLojaModelDaoFactory.New.Caixa.Caixa.AtualizarFechamentoCaixa(
+  var LCaixaFechado := TLojaModelDaoFactory.New(InMemory).Caixa.Caixa.AtualizarFechamentoCaixa(
     FCaixa.CodCaixa,
     Now,
     VrFecha
@@ -256,12 +262,12 @@ begin
   LAbertura.VrAbert := VrFecha - VrDif;
 
   FCaixa.Free;
-  FCaixa := TLojaModelFactory.New.Caixa.AberturaCaixa(LAbertura);
+  FCaixa := TLojaModelFactory.InMemory.Caixa.AberturaCaixa(LAbertura);
 
   Assert.AreEqual(LAbertura.VrAbert, FCaixa.VrAbert);
   Assert.AreEqual(LAbertura.DatAbert, FCaixa.DatAbert);
 
-  var LMovimentos := TLojaModelFactory.New.Caixa.ObterMovimentoCaixa(FCaixa.CodCaixa);
+  var LMovimentos := TLojaModelFactory.InMemory.Caixa.ObterMovimentoCaixa(FCaixa.CodCaixa);
 
   // Mov 1: Saldo de fechamento do caixa anterior
   // Mov 2: Ajuste pois novo caixa está abrindo com saldo <> do saldo do último fechamento
@@ -285,7 +291,7 @@ begin
   LDatIni := Trunc(Now-1);
   LDatFim := Trunc(Now+1);
 
-  var LCaixas := TLojaModelFactory.New.Caixa.ObterCaixasPorDataAbertura(LDatIni, LDatFim);
+  var LCaixas := TLojaModelFactory.InMemory.Caixa.ObterCaixasPorDataAbertura(LDatIni, LDatFim);
 
   Assert.IsTrue(LCaixas.Count>0);
 
@@ -299,7 +305,7 @@ begin
   LDtoMov.VrMov := 20.00;
   LDtoMov.DscObs := 'Reforço de Caixa';
 
-  var LMovimento := TLojaModelFactory.New.Caixa.CriarReforcoCaixa(LDtoMov);
+  var LMovimento := TLojaModelFactory.InMemory.Caixa.CriarReforcoCaixa(LDtoMov);
 
   Assert.IsTrue(LMovimento.CodTipoMov = movEntrada);
   Assert.IsTrue(LMovimento.CodOrigMov = orgReforco);
@@ -312,7 +318,7 @@ end;
 
 procedure TLojaModelCaixaTest.Test_CriarMovimento_SangriaCaixa;
 begin
-  var LResumo := TLojaModelFactory.New.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
+  var LResumo := TLojaModelFactory.InMemory.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
   var VrSaldo := LResumo.VrSaldo;
   LResumo.Free;
 
@@ -324,7 +330,7 @@ begin
   LDtoMov.VrMov := 0.50;
   LDtoMov.DscObs := 'Sangria de Caixa';
 
-  var LMovimento := TLojaModelFactory.New.Caixa.CriarSangriaCaixa(LDtoMov);
+  var LMovimento := TLojaModelFactory.InMemory.Caixa.CriarSangriaCaixa(LDtoMov);
 
   Assert.IsTrue(LMovimento.CodTipoMov = movSaida);
   Assert.IsTrue(LMovimento.CodOrigMov = orgSangria);
@@ -337,7 +343,7 @@ end;
 
 procedure TLojaModelCaixaTest.Test_CriarMovimento_SangriaCaixa_Total;
 begin
-  var LResumo := TLojaModelFactory.New.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
+  var LResumo := TLojaModelFactory.InMemory.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
   var VrSaldo := LResumo.VrSaldo;
   LResumo.Free;
 
@@ -349,14 +355,14 @@ begin
   LDtoMov.VrMov := VrSaldo;
   LDtoMov.DscObs := 'Sangria de Caixa';
 
-  var LMovimento := TLojaModelFactory.New.Caixa.CriarSangriaCaixa(LDtoMov);
+  var LMovimento := TLojaModelFactory.InMemory.Caixa.CriarSangriaCaixa(LDtoMov);
 
   Assert.IsTrue(LMovimento.CodTipoMov = movSaida);
   Assert.IsTrue(LMovimento.CodOrigMov = orgSangria);
   Assert.IsTrue(LMovimento.CodMeioPagto = pagDinheiro);
   Assert.AreEqual(Double(LDtoMov.VrMov), Double(LMovimento.VrMov));
 
-  LResumo := TLojaModelFactory.New.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
+  LResumo := TLojaModelFactory.InMemory.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
   Assert.AreEqual(Double(0), Double(LResumo.VrSaldo));
 
   LDtoMov.Free;
@@ -366,7 +372,7 @@ end;
 
 procedure TLojaModelCaixaTest.Test_FecharCaixa;
 begin
-  var LResumo := TLojaModelFactory.New.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
+  var LResumo := TLojaModelFactory.InMemory.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
 
   var LFechamento := TLojaModelDtoReqCaixaFechamento.Create;
   LFechamento.CodCaixa := FCaixa.CodCaixa;
@@ -378,7 +384,7 @@ begin
       LMeioPagto.VrTotal;
   end;
 
-  var LCaixaFechado := TLojaModelFactory.New.Caixa.FechamentoCaixa(LFechamento);
+  var LCaixaFechado := TLojaModelFactory.InMemory.Caixa.FechamentoCaixa(LFechamento);
 
   Assert.AreEqual(sitFechado, LCaixaFechado.CodSit);
 
@@ -387,7 +393,7 @@ begin
   LAbertura.VrAbert := LResumo.VrSaldo;
 
   FCaixa.Free;
-  FCaixa := TLojaModelFactory.New.Caixa.AberturaCaixa(LAbertura);
+  FCaixa := TLojaModelFactory.InMemory.Caixa.AberturaCaixa(LAbertura);
 
   LFechamento.Free;
   LResumo.Free;
@@ -403,7 +409,7 @@ begin
 
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New.Caixa.AberturaCaixa(LAbertura);
+      TLojaModelFactory.InMemory.Caixa.AberturaCaixa(LAbertura);
     end,
     EHorseException,
     'Há um caixa aberto'
@@ -420,7 +426,7 @@ begin
 
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New.Caixa.AberturaCaixa(LAbertura);
+      TLojaModelFactory.InMemory.Caixa.AberturaCaixa(LAbertura);
     end,
     EHorseException,
     'O caixa não poderá ser aberto com valor negativo'
@@ -431,11 +437,11 @@ end;
 
 procedure TLojaModelCaixaTest.Test_NaoCriarMovimento_CaixaFechado;
 begin
-  var LResumo := TLojaModelFactory.New.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
+  var LResumo := TLojaModelFactory.InMemory.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
   var VrFecha := LResumo.VrSaldo;
   LResumo.Free;
 
-  var LCaixaFechado := TLojaModelDaoFactory.New.Caixa.Caixa.AtualizarFechamentoCaixa(
+  var LCaixaFechado := TLojaModelDaoFactory.New(InMemory).Caixa.Caixa.AtualizarFechamentoCaixa(
     FCaixa.CodCaixa,
     Now,
     VrFecha
@@ -446,7 +452,7 @@ begin
   LAbertura.VrAbert := VrFecha;
 
   FCaixa.Free;
-  FCaixa := TLojaModelFactory.New.Caixa.AberturaCaixa(LAbertura);
+  FCaixa := TLojaModelFactory.InMemory.Caixa.AberturaCaixa(LAbertura);
   LAbertura.Free;
 
 
@@ -457,7 +463,7 @@ begin
 
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New.Caixa.CriarReforcoCaixa(LDtoMov);
+      TLojaModelFactory.InMemory.Caixa.CriarReforcoCaixa(LDtoMov);
     end,
     EHorseException,
     'O caixa informado não está na stuação "Aberto"'
@@ -476,7 +482,7 @@ begin
 
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New.Caixa.CriarReforcoCaixa(LDtoMov);
+      TLojaModelFactory.InMemory.Caixa.CriarReforcoCaixa(LDtoMov);
     end,
     EHorseException,
     'O código de caixa informado não existe'
@@ -494,7 +500,7 @@ begin
 
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New.Caixa.CriarReforcoCaixa(LDtoMov);
+      TLojaModelFactory.InMemory.Caixa.CriarReforcoCaixa(LDtoMov);
     end,
     EHorseException,
     'O código de caixa informado é inválido'
@@ -512,7 +518,7 @@ begin
 
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New.Caixa.CriarSangriaCaixa(LDtoMov);
+      TLojaModelFactory.InMemory.Caixa.CriarSangriaCaixa(LDtoMov);
     end,
     EHorseException,
     'O valor do movimento deverá ser superior a zero'
@@ -530,7 +536,7 @@ begin
 
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New.Caixa.CriarReforcoCaixa(LDtoMov);
+      TLojaModelFactory.InMemory.Caixa.CriarReforcoCaixa(LDtoMov);
     end,
     EHorseException,
     'A observação deverá ter no máximo'
@@ -548,7 +554,7 @@ begin
 
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New.Caixa.CriarReforcoCaixa(LDtoMov);
+      TLojaModelFactory.InMemory.Caixa.CriarReforcoCaixa(LDtoMov);
     end,
     EHorseException,
     'A observação deverá ter no mínimo'
@@ -563,13 +569,13 @@ begin
   LDtoMov.CodCaixa := FCaixa.CodCaixa;
   LDtoMov.DscObs := 'Saldo Insuficiente';
 
-  var LResumo := TLojaModelFactory.New.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
+  var LResumo := TLojaModelFactory.InMemory.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
   LDtoMov.VrMov := LResumo.VrSaldo + 1;
   LResumo.Free;
 
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New.Caixa.CriarSangriaCaixa(LDtoMov);
+      TLojaModelFactory.InMemory.Caixa.CriarSangriaCaixa(LDtoMov);
     end,
     EHorseException,
     'Não há saldo disponível em dinheiro para realizar este tipo de movimento'
@@ -587,7 +593,7 @@ begin
 
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New.Caixa.CriarReforcoCaixa(LDtoMov);
+      TLojaModelFactory.InMemory.Caixa.CriarReforcoCaixa(LDtoMov);
     end,
     EHorseException,
     'Você deverá informar uma observação para este tipo de movimento'
@@ -599,8 +605,8 @@ end;
 
 procedure TLojaModelCaixaTest.Test_NaoFecharCaixa_CaixaFechado;
 begin
-  var LResumo := TLojaModelFactory.New.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
-  var LCaixaFechado := TLojaModelDaoFactory.New.Caixa.Caixa.AtualizarFechamentoCaixa(
+  var LResumo := TLojaModelFactory.InMemory.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
+  var LCaixaFechado := TLojaModelDaoFactory.New(InMemory).Caixa.Caixa.AtualizarFechamentoCaixa(
     FCaixa.CodCaixa,
     Now,
     LResumo.VrSaldo
@@ -611,14 +617,14 @@ begin
   LAbertura.VrAbert := LResumo.VrSaldo;
 
   FCaixa.Free;
-  FCaixa := TLojaModelFactory.New.Caixa.AberturaCaixa(LAbertura);
+  FCaixa := TLojaModelFactory.InMemory.Caixa.AberturaCaixa(LAbertura);
 
   var LFechamento := TLojaModelDtoReqCaixaFechamento.Create;
   LFechamento.CodCaixa := LCaixaFechado.CodCaixa;
 
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New.Caixa.FechamentoCaixa(LFechamento);
+      TLojaModelFactory.InMemory.Caixa.FechamentoCaixa(LFechamento);
     end,
     EHorseException,
     'Este caixa já se encontra fechado'
@@ -637,7 +643,7 @@ begin
 
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New.Caixa.FechamentoCaixa(LFechamento);
+      TLojaModelFactory.InMemory.Caixa.FechamentoCaixa(LFechamento);
     end,
     EHorseException,
     'O código de caixa informado não existe'
@@ -653,7 +659,7 @@ begin
 
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New.Caixa.FechamentoCaixa(LFechamento);
+      TLojaModelFactory.InMemory.Caixa.FechamentoCaixa(LFechamento);
     end,
     EHorseException,
     'O código de caixa informado é inválido'
@@ -664,7 +670,7 @@ end;
 
 procedure TLojaModelCaixaTest.Test_NaoFecharCaixa_ValorNaoConfere;
 begin
-  var LResumo := TLojaModelFactory.New.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
+  var LResumo := TLojaModelFactory.InMemory.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
 
   var LFechamento := TLojaModelDtoReqCaixaFechamento.Create;
   LFechamento.CodCaixa := FCaixa.CodCaixa;
@@ -674,7 +680,7 @@ begin
 
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New.Caixa.FechamentoCaixa(LFechamento);
+      TLojaModelFactory.InMemory.Caixa.FechamentoCaixa(LFechamento);
     end,
     EHorseException,
     'não confere. Verifique novamente'
@@ -692,7 +698,7 @@ begin
 
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New.Caixa.ObterCaixasPorDataAbertura(LDatIni, LDatFim);
+      TLojaModelFactory.InMemory.Caixa.ObterCaixasPorDataAbertura(LDatIni, LDatFim);
     end,
     EHorseException,
     'A data inicial deve ser inferior à data final em pelo menos 1 dia'
@@ -705,7 +711,7 @@ begin
   LDatIni := Trunc(Now+1);
   LDatFim := Trunc(Now+2);
 
-  var LCaixas := TLojaModelFactory.New.Caixa.ObterCaixasPorDataAbertura(LDatIni, LDatFim);
+  var LCaixas := TLojaModelFactory.InMemory.Caixa.ObterCaixasPorDataAbertura(LDatIni, LDatFim);
 
   Assert.IsTrue(LCaixas.Count=0);
 
@@ -714,11 +720,11 @@ end;
 
 procedure TLojaModelCaixaTest.Test_NaoObterCaixa_Aberto;
 begin
-  var LResumo := TLojaModelFactory.New.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
+  var LResumo := TLojaModelFactory.InMemory.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
   var VrFecha := LResumo.VrSaldo;
   LResumo.Free;
 
-  var LCaixaFechado := TLojaModelDaoFactory.New.Caixa.Caixa.AtualizarFechamentoCaixa(
+  var LCaixaFechado := TLojaModelDaoFactory.New(InMemory).Caixa.Caixa.AtualizarFechamentoCaixa(
     FCaixa.CodCaixa,
     Now,
     VrFecha
@@ -726,7 +732,7 @@ begin
   LCaixaFechado.Free;
 
   // Não haverá caixa aberto
-  var LCaixa := TLojaModelFactory.New.Caixa.ObterCaixaAberto;
+  var LCaixa := TLojaModelFactory.InMemory.Caixa.ObterCaixaAberto;
   Assert.IsNull(LCaixa);
 
   var LAbertura := TLojaModelDtoReqCaixaAbertura.Create;
@@ -734,13 +740,13 @@ begin
   LAbertura.VrAbert := VrFecha;
 
   FCaixa.Free;
-  FCaixa := TLojaModelFactory.New.Caixa.AberturaCaixa(LAbertura);
+  FCaixa := TLojaModelFactory.InMemory.Caixa.AberturaCaixa(LAbertura);
   LAbertura.Free;
 end;
 
 procedure TLojaModelCaixaTest.Test_NaoObterCaixa_CodigoInexistente;
 begin
-  var LCaixa := TLojaModelFactory.New.Caixa.ObterCaixaPorCodigo(FCaixa.CodCaixa+1);
+  var LCaixa := TLojaModelFactory.InMemory.Caixa.ObterCaixaPorCodigo(FCaixa.CodCaixa+1);
   Assert.IsNull(LCaixa);
 end;
 
@@ -748,7 +754,7 @@ procedure TLojaModelCaixaTest.Test_NaoObterCaixa_CodigoInvalido;
 begin
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New.Caixa.ObterCaixaPorCodigo(-1);
+      TLojaModelFactory.InMemory.Caixa.ObterCaixaPorCodigo(-1);
     end,
     EHorseException,
     'O código de caixa informado é inválido'
@@ -757,14 +763,14 @@ end;
 
 procedure TLojaModelCaixaTest.Test_ObterCaixa_Aberto;
 begin
-  var LCaixa := TLojaModelFactory.New.Caixa.ObterCaixaAberto;
+  var LCaixa := TLojaModelFactory.InMemory.Caixa.ObterCaixaAberto;
   Assert.IsTrue(LCaixa <> nil);
   LCaixa.Free;
 end;
 
 procedure TLojaModelCaixaTest.Test_ObterCaixa_PorCodigo;
 begin
-  var LCaixa := TLojaModelFactory.New.Caixa.ObterCaixaPorCodigo(FCaixa.CodCaixa);
+  var LCaixa := TLojaModelFactory.InMemory.Caixa.ObterCaixaPorCodigo(FCaixa.CodCaixa);
   Assert.AreEqual(FCaixa.CodCaixa, LCaixa.CodCaixa);
   LCaixa.Free;
 end;
@@ -773,7 +779,7 @@ procedure TLojaModelCaixaTest.Test_NaoObterMovimento_CaixaInexistente;
 begin
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New.Caixa.ObterMovimentoCaixa(FCaixa.CodCaixa+1);
+      TLojaModelFactory.InMemory.Caixa.ObterMovimentoCaixa(FCaixa.CodCaixa+1);
     end,
     EHorseException,
     'O código de caixa informado não existe'
@@ -784,7 +790,7 @@ procedure TLojaModelCaixaTest.Test_NaoObterMovimento_CaixaInvalido;
 begin
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New.Caixa.ObterMovimentoCaixa(-1);
+      TLojaModelFactory.InMemory.Caixa.ObterMovimentoCaixa(-1);
     end,
     EHorseException,
     'O código de caixa informado é inválido'

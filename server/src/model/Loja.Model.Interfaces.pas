@@ -7,6 +7,8 @@ uses
   System.Classes,
   System.Generics.Collections,
 
+  Loja.Environment.Interfaces,
+
   Loja.Model.Entity.Itens.Item,
   Loja.Model.Dto.Req.Itens.CriarItem,
   Loja.Model.Dto.Req.Itens.FiltroItens,
@@ -94,6 +96,8 @@ type
 
   ILojaModelFactory = interface
     ['{FBA02FC1-F0C9-4969-BF2A-AA7662040FC8}']
+    function Ruler: ILojaEnvironmentRuler;
+
     function Itens: ILojaModelItens;
     function Estoque: ILojaModelEstoque;
     function Preco: ILojaModelPreco;

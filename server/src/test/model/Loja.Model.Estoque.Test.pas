@@ -96,6 +96,7 @@ uses
   Loja.Model.Dao.Interfaces,
   Loja.Model.Dao.Factory,
 
+  Loja.Environment.Interfaces,
   Loja.Model.Factory,
   Loja.Model.Dto.Req.Itens.CriarItem,
   Loja.Model.Dto.Req.Estoque.CriarMovimento,
@@ -107,6 +108,11 @@ uses
 
 { TLojaModelEstoqueTest }
 
+function InMemory: ILojaEnvironmentRuler;
+begin
+  Result := TLojaModelFactory.InMemory.Ruler;
+end;
+
 function TLojaModelEstoqueTest.CriarItem: TLojaModelEntityItensItem;
 var
   LDTONovoMovimento : TLojaModelDtoReqEstoqueCriarMovimento;
@@ -115,7 +121,7 @@ begin
   LDTONovoItem := TLojaModelDtoReqItensCriarItem.Create;
   try
     LDTONovoItem.NomItem := 'TLojaModelEstoqueTest.CriarItem';
-    Result := TLojaModelDaoFactory.New.Itens.Item.CriarItem(LDTONovoItem);
+    Result := TLojaModelDaoFactory.New(InMemory).Itens.Item.CriarItem(LDTONovoItem);
   finally
     LDTONovoItem.Free;
   end;
@@ -126,13 +132,13 @@ var
   LDTONovoMovimento : TLojaModelDtoReqEstoqueCriarMovimento;
   LDTONovoItem: TLojaModelDtoReqItensCriarItem;
 begin
-  TLojaModelDaoFactory.InMemory := True;
+
   FItem := CriarItem;
 end;
 
 procedure TLojaModelEstoqueTest.TearDownFixture;
 begin
-  TLojaModelDaoFactory.InMemory := False;
+
 
   FreeAndNil(FItem);
 end;
@@ -146,7 +152,7 @@ begin
     LAcerto.QtdSaldoReal := 4;
     LAcerto.DscMot := 'Teste';
 
-    var LMovimento := TLojaModelFactory.New
+    var LMovimento := TLojaModelFactory.InMemory
       .Estoque
       .CriarAcertoEstoque(LAcerto);
 
@@ -171,7 +177,7 @@ begin
     LDTONovoMovimento.CodOrigMov := TLojaModelEntityEstoqueOrigemMovimento.orgAcerto;
     LDTONovoMovimento.DscMot := 'Teste';
 
-    var LMovimento := TLojaModelFactory.New
+    var LMovimento := TLojaModelFactory.InMemory
       .Estoque
       .CriarNovoMovimento(LDTONovoMovimento);
 
@@ -194,7 +200,7 @@ begin
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelFactory.New
+        TLojaModelFactory.InMemory
           .Estoque
           .CriarAcertoEstoque(LAcerto);
       end,
@@ -216,14 +222,14 @@ begin
     LAcerto.QtdSaldoReal := 40;
     LAcerto.DscMot := 'Motivo';
 
-    var LMovimento := TLojaModelFactory.New
+    var LMovimento := TLojaModelFactory.InMemory
       .Estoque
       .CriarAcertoEstoque(LAcerto);
     LMovimento.Free;
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelFactory.New
+        TLojaModelFactory.InMemory
           .Estoque
           .CriarAcertoEstoque(LAcerto);
       end,
@@ -247,7 +253,7 @@ begin
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelFactory.New
+        TLojaModelFactory.InMemory
           .Estoque
           .CriarAcertoEstoque(LAcerto);
       end,
@@ -270,7 +276,7 @@ begin
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelFactory.New
+        TLojaModelFactory.InMemory
           .Estoque
           .CriarAcertoEstoque(LAcerto);
       end,
@@ -297,7 +303,7 @@ begin
 
     Assert.WillRaiseWithMessage(
       procedure begin
-        TLojaModelFactory.New
+        TLojaModelFactory.InMemory
           .Estoque
           .CriarNovoMovimento(LDTONovoMovimento);
       end,
@@ -324,7 +330,7 @@ begin
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelFactory.New
+        TLojaModelFactory.InMemory
           .Estoque
           .CriarNovoMovimento(LDTONovoMovimento);
       end,
@@ -351,7 +357,7 @@ begin
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelFactory.New
+        TLojaModelFactory.InMemory
           .Estoque
           .CriarNovoMovimento(LDTONovoMovimento);
       end,
@@ -378,7 +384,7 @@ begin
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelFactory.New
+        TLojaModelFactory.InMemory
           .Estoque
           .CriarNovoMovimento(LDTONovoMovimento);
       end,
@@ -405,7 +411,7 @@ begin
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelFactory.New
+        TLojaModelFactory.InMemory
           .Estoque
           .CriarNovoMovimento(LDTONovoMovimento);
       end,
@@ -432,7 +438,7 @@ begin
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelFactory.New
+        TLojaModelFactory.InMemory
           .Estoque
           .CriarNovoMovimento(LDTONovoMovimento);
       end,
@@ -448,7 +454,7 @@ procedure TLojaModelEstoqueTest.Test_NaoObterFechamentoSaldo_InicioSuperiorFim;
 begin
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New
+      TLojaModelFactory.InMemory
         .Estoque
         .ObterFechamentosSaldo(-1, Now+1, Now);
     end,
@@ -464,7 +470,7 @@ begin
 
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New
+      TLojaModelFactory.InMemory
         .Estoque
         .ObterFechamentosSaldo(-1, LDatIni, LDatFim);
     end,
@@ -477,7 +483,7 @@ procedure TLojaModelEstoqueTest.Test_NaoObterHistoricoMovimento_InicioSuperiorFi
 begin
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New
+      TLojaModelFactory.InMemory
         .Estoque
         .ObterHistoricoMovimento(1, Now+1, Now);
     end,
@@ -490,7 +496,7 @@ procedure TLojaModelEstoqueTest.Test_NaoObterHistoricoMovimento_ItemInexistente;
 begin
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New
+      TLojaModelFactory.InMemory
         .Estoque
         .ObterHistoricoMovimento(-1, Now, Now);
     end,
@@ -503,7 +509,7 @@ procedure TLojaModelEstoqueTest.Test_NaoObterSaldoAtualItem_ItemInexistente;
 begin
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New
+      TLojaModelFactory.InMemory
         .Estoque
         .ObterSaldoAtualItem(-1);
     end,
@@ -522,7 +528,7 @@ begin
     LAcerto.QtdSaldoReal := 4;
     LAcerto.DscMot := 'Teste';
 
-    var LMovimento := TLojaModelFactory.New
+    var LMovimento := TLojaModelFactory.InMemory
       .Estoque
       .CriarAcertoEstoque(LAcerto);
 
@@ -534,7 +540,7 @@ begin
   var LDatIni := StartOfTheMonth(IncMonth(Now, -1));
   var LDatFim := EndOfTheMonth(Now);
 
-  var LFechamentos := TLojaModelFactory.New
+  var LFechamentos := TLojaModelFactory.InMemory
     .Estoque
     .ObterFechamentosSaldo(LItem.CodItem, LDatIni, LDatFim);
 
@@ -557,7 +563,7 @@ begin
     LDTONovoMovimento.CodOrigMov := TLojaModelEntityEstoqueOrigemMovimento.orgCompra;
     LDTONovoMovimento.DscMot := 'Teste';
 
-    var LMovimento := TLojaModelFactory.New
+    var LMovimento := TLojaModelFactory.InMemory
       .Estoque
       .CriarNovoMovimento(LDTONovoMovimento);
     LMovimento.Free;
@@ -574,7 +580,7 @@ begin
     LDTONovoMovimento.CodOrigMov := TLojaModelEntityEstoqueOrigemMovimento.orgVenda;
     LDTONovoMovimento.DscMot := 'Teste';
 
-    var LMovimento := TLojaModelFactory.New
+    var LMovimento := TLojaModelFactory.InMemory
       .Estoque
       .CriarNovoMovimento(LDTONovoMovimento);
     LMovimento.Free;
@@ -582,7 +588,7 @@ begin
     LDTONovoMovimento.Free;
   end;
 
-  var LMovimentos := TLojaModelFactory.New
+  var LMovimentos := TLojaModelFactory.InMemory
     .Estoque
     .ObterHistoricoMovimento(LItem.CodItem, Now, Now);
 
@@ -605,7 +611,7 @@ begin
     LDTONovoMovimento.CodOrigMov := TLojaModelEntityEstoqueOrigemMovimento.orgCompra;
     LDTONovoMovimento.DscMot := 'Teste';
 
-    var LMovimento := TLojaModelFactory.New
+    var LMovimento := TLojaModelFactory.InMemory
       .Estoque
       .CriarNovoMovimento(LDTONovoMovimento);
     LMovimento.Free;
@@ -622,7 +628,7 @@ begin
     LDTONovoMovimento.CodOrigMov := TLojaModelEntityEstoqueOrigemMovimento.orgVenda;
     LDTONovoMovimento.DscMot := 'Teste';
 
-    var LMovimento := TLojaModelFactory.New
+    var LMovimento := TLojaModelFactory.InMemory
       .Estoque
       .CriarNovoMovimento(LDTONovoMovimento);
     LMovimento.Free;
@@ -630,7 +636,7 @@ begin
     LDTONovoMovimento.Free;
   end;
 
-  var LSaldo := TLojaModelFactory.New
+  var LSaldo := TLojaModelFactory.InMemory
     .Estoque
     .ObterSaldoAtualItem(LItem.CodItem);
 
@@ -642,7 +648,7 @@ end;
 procedure TLojaModelEstoqueTest.Test_ObterSaldoAtualItem_SemFechamento;
 begin
   var LItem := CriarItem;
-  var LSaldo := TLojaModelFactory.New
+  var LSaldo := TLojaModelFactory.InMemory
     .Estoque
     .ObterSaldoAtualItem(LItem.CodItem);
 

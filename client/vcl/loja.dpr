@@ -44,7 +44,10 @@ uses
   Loja.View.Venda.InserirMeioPagto in 'view\Loja.View.Venda.InserirMeioPagto.pas' {ViewVendaInserirMeioPagto},
   Loja.View.Sobre in 'view\Loja.View.Sobre.pas' {ViewSobre},
   uFuncoes in '..\..\comum\uFuncoes.pas',
-  uMeuBallonHint in '..\..\comum\uMeuBallonHint.pas';
+  uMeuBallonHint in '..\..\comum\uMeuBallonHint.pas',
+  Loja.Environment.Interfaces in '..\..\server\src\env\Loja.Environment.Interfaces.pas',
+  Loja.Environment.Factory in '..\..\server\src\env\Loja.Environment.Factory.pas',
+  Loja.Environment.Rules in '..\..\server\src\env\Loja.Environment.Rules.pas';
 
 {$R *.res}
 

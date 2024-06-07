@@ -9,16 +9,19 @@ uses
   System.Generics.Defaults,
   System.DateUtils,
 
+  Loja.Environment.Interfaces,
   Loja.Model.Interfaces,
   Loja.Model.Entity.Preco.Venda,
   Loja.Model.Dto.Req.Preco.CriarPrecoVenda;
 
 type
   TLojaModelPreco = class(TInterfacedObject, ILojaModelPreco)
+  private
+    FEnvRules: ILojaEnvironmentRuler;
   public
-    constructor Create;
+    constructor Create(AEnvRules: ILojaEnvironmentRuler);
     destructor Destroy; override;
-    class function New: ILojaModelPreco;
+    class function New(AEnvRules: ILojaEnvironmentRuler): ILojaModelPreco;
 
     { ILojaModelPreco }
     function CriarPrecoVendaItem(ANovoPreco: TLojaModelDtoReqPrecoCriarPrecoVenda): TLojaModelEntityPrecoVenda;
@@ -36,9 +39,9 @@ uses
 
 { TLojaModelPreco }
 
-constructor TLojaModelPreco.Create;
+constructor TLojaModelPreco.Create(AEnvRules: ILojaEnvironmentRuler);
 begin
-
+  FEnvRules := AEnvRules;
 end;
 
 function TLojaModelPreco.CriarPrecoVendaItem(
@@ -52,7 +55,7 @@ begin
     .&Unit(Self.UnitName)
     .Error('O valor de venda deve ser maior que zero');
 
-  var LItem := TLojaModelDaoFactory.New.Itens
+  var LItem := TLojaModelDaoFactory.New(FEnvRules).Itens
     .Item
     .ObterPorCodigo(ANovoPreco.CodItem);
   if LItem = nil
@@ -62,7 +65,7 @@ begin
     .Error('Não foi possível encontrar o item pelo código informado');
   LItem.Free;
 
-  var LPrecoVigente := TLojaModelDaoFactory.New.Preco
+  var LPrecoVigente := TLojaModelDaoFactory.New(FEnvRules).Preco
     .Venda.
     ObterPrecoVendaVigente(ANovoPreco.CodItem, ANovoPreco.DatIni);
   if LPrecoVigente <> nil
@@ -76,7 +79,7 @@ begin
     LPrecoVigente.Free;
   end;
 
-  var LPreco := TLojaModelDaoFactory.New.Preco
+  var LPreco := TLojaModelDaoFactory.New(FEnvRules).Preco
     .Venda
     .CriarPrecoVendaItem(ANovoPreco);
 
@@ -90,9 +93,9 @@ begin
   inherited;
 end;
 
-class function TLojaModelPreco.New: ILojaModelPreco;
+class function TLojaModelPreco.New(AEnvRules: ILojaEnvironmentRuler): ILojaModelPreco;
 begin
-  Result := Self.Create;
+  Result := Self.Create(AEnvRules);
 end;
 
 function TLojaModelPreco.ObterHistoricoPrecoVendaItem(ACodItem: Integer;
@@ -100,7 +103,7 @@ function TLojaModelPreco.ObterHistoricoPrecoVendaItem(ACodItem: Integer;
 begin
   Result := nil;
 
-  var LItem := TLojaModelDaoFactory.New.Itens
+  var LItem := TLojaModelDaoFactory.New(FEnvRules).Itens
     .Item
     .ObterPorCodigo(ACodItem);
   if LItem = nil
@@ -110,7 +113,7 @@ begin
     .Error('Não foi possível encontrar o item pelo código informado');
   LItem.Free;
 
-  var LHistorico := TLojaModelDaoFactory.New.Preco
+  var LHistorico := TLojaModelDaoFactory.New(FEnvRules).Preco
     .Venda.
     ObterHistoricoPrecoVendaItem(ACodItem, ADatRef);
 
@@ -136,7 +139,7 @@ function TLojaModelPreco.ObterPrecoVendaAtual(
 begin
   Result := Nil;
 
-  var LItem := TLojaModelDaoFactory.New.Itens
+  var LItem := TLojaModelDaoFactory.New(FEnvRules).Itens
     .Item
     .ObterPorCodigo(ACodItem);
   if LItem = nil
@@ -146,7 +149,7 @@ begin
     .Error('Não foi possível encontrar o item pelo código informado');
   LItem.Free;
 
-  var LPrecoVigente := TLojaModelDaoFactory.New.Preco
+  var LPrecoVigente := TLojaModelDaoFactory.New(FEnvRules).Preco
     .Venda
     .ObterPrecoVendaAtual(ACodItem);
 

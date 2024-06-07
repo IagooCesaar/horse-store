@@ -77,6 +77,9 @@ uses
   Horse,
   Horse.Exception,
 
+  Loja.Environment.Interfaces,
+  Loja.Model.Factory,
+
   Loja.Model.Dao.Interfaces,
   Loja.Model.Dao.Factory,
 
@@ -85,6 +88,11 @@ uses
   Loja.Model.Dto.Req.Itens.FiltroItens,
   Loja.infra.Utils.Funcoes;
 
+function InMemory: ILojaEnvironmentRuler;
+begin
+  Result := TLojaModelFactory.InMemory.Ruler;
+end;
+
 procedure TLojaModelItensTest.Setup;
 begin
 
@@ -92,7 +100,7 @@ end;
 
 procedure TLojaModelItensTest.SetupFixture;
 begin
-  TLojaModelDaoFactory.InMemory := True;
+
 end;
 
 procedure TLojaModelItensTest.TearDown;
@@ -101,7 +109,7 @@ end;
 
 procedure TLojaModelItensTest.TearDownFixture;
 begin
-  TLojaModelDaoFactory.InMemory := False;
+
 end;
 
 
@@ -113,7 +121,7 @@ begin
     LDto.NomItem := 'Novo Item';
     LDto.NumCodBarr := '192837645';
 
-    var LItemCriado := TLojaModelItens.New
+    var LItemCriado := TLojaModelItens.New(InMemory)
       .CriarItem(LDto);
 
     Assert.IsTrue(LItemCriado <> nil);
@@ -128,7 +136,7 @@ begin
     LDto.FlgTabPreco := not LItemCriado.FlgTabPreco;
     LDto.CodItem := LItemCriado.CodItem;
 
-    var LItemAtualizado := TLojaModelItens.New
+    var LItemAtualizado := TLojaModelItens.New(InMemory)
       .AtualizarItem(LDto);
 
     Assert.IsTrue(LItemAtualizado <> nil);
@@ -152,7 +160,7 @@ begin
     LDTONovoItem.NomItem := 'Novo Item';
     LDTONovoItem.NumCodBarr := '123456789';
 
-    var LItem := TLojaModelItens.New
+    var LItem := TLojaModelItens.New(InMemory)
       .CriarItem(LDTONovoItem);
 
     Assert.IsTrue(LItem <> nil);
@@ -175,7 +183,7 @@ begin
     LDto.NomItem := 'Novo Item';
     LDto.NumCodBarr := '164379285';
 
-    var LItemCriado := TLojaModelItens.New
+    var LItemCriado := TLojaModelItens.New(InMemory)
       .CriarItem(LDto);
 
     Assert.IsTrue(LItemCriado <> nil);
@@ -188,7 +196,7 @@ begin
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelItens.New
+        TLojaModelItens.New(InMemory)
           .AtualizarItem(LDto);
       end,
       EHorseException,
@@ -209,7 +217,7 @@ begin
     LDto.NomItem := 'Novo Item';
     LDto.NumCodBarr := '794613825';
 
-    var LItemCriado := TLojaModelItens.New
+    var LItemCriado := TLojaModelItens.New(InMemory)
       .CriarItem(LDto);
 
     Assert.IsTrue(LItemCriado <> nil);
@@ -223,7 +231,7 @@ begin
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelItens.New
+        TLojaModelItens.New(InMemory)
           .AtualizarItem(LDto);
       end,
       EHorseException,
@@ -244,7 +252,7 @@ begin
     LDto.NomItem := 'Novo Item';
     LDto.NumCodBarr := '147258369';
 
-    var LItemCriado := TLojaModelItens.New
+    var LItemCriado := TLojaModelItens.New(InMemory)
       .CriarItem(LDto);
 
     Assert.IsTrue(LItemCriado <> nil);
@@ -257,7 +265,7 @@ begin
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelItens.New
+        TLojaModelItens.New(InMemory)
           .AtualizarItem(LDto);
       end,
       EHorseException,
@@ -279,14 +287,14 @@ begin
     LDTONovoItem.NomItem := 'Novo Item 1';
     LDTONovoItem.NumCodBarr := LNumCodBarr;
 
-    var LItem1 := TLojaModelItens.New.CriarItem(LDTONovoItem);
+    var LItem1 := TLojaModelItens.New(InMemory).CriarItem(LDTONovoItem);
     Assert.IsTrue(LItem1 <> nil);
     LItem1.Free;
 
     LDTONovoItem.NomItem := 'Novo Item 2';
     LDTONovoItem.NumCodBarr := '';
 
-    var LItem2 := TLojaModelItens.New.CriarItem(LDTONovoItem);
+    var LItem2 := TLojaModelItens.New(InMemory).CriarItem(LDTONovoItem);
     Assert.IsTrue(LItem2 <> nil);
 
     LDTONovoItem.CodItem := LItem2.CodItem;
@@ -295,7 +303,7 @@ begin
     try
       Assert.WillRaiseWithMessageRegex(
         procedure begin
-          TLojaModelItens.New
+          TLojaModelItens.New(InMemory)
             .AtualizarItem(LDTONovoItem);
         end,
         EHorseException,
@@ -317,7 +325,7 @@ begin
     LDto.NomItem := 'Novo Item';
     LDto.NumCodBarr := '739182465';
 
-    var LItemCriado := TLojaModelItens.New
+    var LItemCriado := TLojaModelItens.New(InMemory)
       .CriarItem(LDto);
 
     Assert.IsTrue(LItemCriado <> nil);
@@ -330,7 +338,7 @@ begin
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelItens.New
+        TLojaModelItens.New(InMemory)
           .AtualizarItem(LDto);
       end,
       EHorseException,
@@ -352,7 +360,7 @@ begin
     LDTONovoItem.NumCodBarr := '0123456789012345';
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelItens.New
+        TLojaModelItens.New(InMemory)
           .CriarItem(LDTONovoItem);
       end,
       EHorseException,
@@ -371,13 +379,13 @@ begin
     LDTONovoItem.NomItem := 'Novo Item';
     LDTONovoItem.NumCodBarr := TLojaInfraUtilsFuncoes.GeraStringRandomica(14,1);
 
-    var LItem := TLojaModelItens.New.CriarItem(LDTONovoItem);
+    var LItem := TLojaModelItens.New(InMemory).CriarItem(LDTONovoItem);
     Assert.IsTrue(LItem <> nil);
 
     try
       Assert.WillRaiseWithMessageRegex(
         procedure begin
-          TLojaModelItens.New
+          TLojaModelItens.New(InMemory)
             .CriarItem(LDTONovoItem);
         end,
         EHorseException,
@@ -400,7 +408,7 @@ begin
       '01234567890123456789012345678901234567890123456789AAAAAA';
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelItens.New
+        TLojaModelItens.New(InMemory)
           .CriarItem(LDTONovoItem);
       end,
       EHorseException,
@@ -419,7 +427,7 @@ begin
     LDTONovoItem.NomItem := 'abc';
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelItens.New
+        TLojaModelItens.New(InMemory)
           .CriarItem(LDTONovoItem);
       end,
       EHorseException,
@@ -438,7 +446,7 @@ begin
   try
     Assert.WillRaiseWithMessage(
       procedure begin
-        TLojaModelItens.New.ObterItens(LFiltro);
+        TLojaModelItens.New(InMemory).ObterItens(LFiltro);
       end,
       EHorseException,
       'Você deve informar um critério para filtro'
@@ -452,7 +460,7 @@ procedure TLojaModelItensTest.Test_NaoObterItemInexistente;
 begin
   Assert.WillRaiseWithMessage(
     procedure begin
-      TLojaModelItens.New
+      TLojaModelItens.New(InMemory)
         .ObterPorCodigo(0);
     end,
     EHorseException,
@@ -464,7 +472,7 @@ procedure TLojaModelItensTest.Test_NaoObterItemNumCodBarInexistente;
 begin
   Assert.WillRaiseWithMessage(
     procedure begin
-      TLojaModelItens.New
+      TLojaModelItens.New(InMemory)
         .ObterPorNumCodBarr('9182,456');
     end,
     EHorseException,
@@ -480,11 +488,11 @@ begin
     LDTONovoItem.NomItem := 'Novo Item';
     LDTONovoItem.NumCodBarr := '1919191919';
 
-    var LItemCriado := TLojaModelDaoFactory.New.Itens
+    var LItemCriado := TLojaModelDaoFactory.New(InMemory).Itens
       .Item
       .CriarItem(LDTONovoItem);
 
-    var LItem := TLojaModelItens.New
+    var LItem := TLojaModelItens.New(InMemory)
       .ObterPorCodigo(LItemCriado.CodItem);
 
     Assert.IsTrue(Assigned(LItem), 'Não foi possível encontrar o item código 1');
@@ -505,11 +513,11 @@ begin
     LDTONovoItem.NomItem := 'Novo Item';
     LDTONovoItem.NumCodBarr := '987654321';
 
-    var LItemCriado := TLojaModelDaoFactory.New.Itens
+    var LItemCriado := TLojaModelDaoFactory.New(InMemory).Itens
       .Item
       .CriarItem(LDTONovoItem);
 
-    var LItem := TLojaModelItens.New
+    var LItem := TLojaModelItens.New(InMemory)
       .ObterPorNumCodBarr(LItemCriado.NumCodBarr);
 
     Assert.IsTrue(Assigned(LItem), 'Não foi possível encontrar o item');
@@ -532,7 +540,7 @@ begin
     LDTONovoItem.NomItem := 'Pesquisar Item';
     LDTONovoItem.NumCodBarr := '1919191919';
 
-    var LItemCriado := TLojaModelDaoFactory.New.Itens
+    var LItemCriado := TLojaModelDaoFactory.New(InMemory).Itens
       .Item
       .CriarItem(LDTONovoItem);
 
@@ -540,7 +548,7 @@ begin
     try
       LDTOFiltro.NomItem := 'Pesq';
 
-      var LItens := TLojaModelItens.New
+      var LItens := TLojaModelItens.New(InMemory)
         .ObterItens(LDTOFiltro);
 
       Assert.IsTrue(Assigned(LItens));
@@ -554,7 +562,7 @@ begin
     try
       LDTOFiltro.NumCodBarr := '19';
 
-      var LItens := TLojaModelItens.New
+      var LItens := TLojaModelItens.New(InMemory)
         .ObterItens(LDTOFiltro);
 
       Assert.IsTrue(Assigned(LItens));

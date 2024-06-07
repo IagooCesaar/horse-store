@@ -7,16 +7,26 @@ uses
   System.Classes,
   System.Generics.Collections,
 
+  Loja.Environment.Interfaces,
   Loja.Model.Interfaces,
   Loja.Model.Entity.Itens.Item;
 
 type
-  TLojaModelFactory = class(TInterfacedObject, ILojaModelFactory)
+  TLojaModelFactory = class(TInterfacedObject,
+    ILojaModelFactory, ILojaEnvironmentRuler)
   private
+    FRules: ILojaEnvironmentRules;
+
   public
-    constructor Create;
+    constructor Create(AEnvRules: ILojaEnvironmentRules);
 	  destructor Destroy; override;
-	  class function New: ILojaModelFactory;
+	  class function New: ILojaModelFactory; overload;
+    class function New(ARuler: ILojaEnvironmentRuler): ILojaModelFactory; overload;
+    class function InMemory: ILojaModelFactory;
+
+    { ILojaEnvironmentRuler }
+    function Rules: ILojaEnvironmentRules;
+    function Ruler: ILojaEnvironmentRuler;
 
     { ILojaModelFactory }
     function Itens: ILojaModelItens;
@@ -29,6 +39,7 @@ type
 implementation
 
 uses
+  Loja.Environment.Factory,
   Loja.Model.Itens,
   Loja.Model.Estoque,
   Loja.Model.Preco,
@@ -39,12 +50,12 @@ uses
 
 function TLojaModelFactory.Caixa: ILojaModelCaixa;
 begin
-  Result := TLojaModelCaixa.New;
+  Result := TLojaModelCaixa.New(Self.Ruler);
 end;
 
-constructor TLojaModelFactory.Create;
+constructor TLojaModelFactory.Create(AEnvRules: ILojaEnvironmentRules);
 begin
-
+  FRules := AEnvRules;
 end;
 
 destructor TLojaModelFactory.Destroy;
@@ -55,27 +66,47 @@ end;
 
 function TLojaModelFactory.Estoque: ILojaModelEstoque;
 begin
-  Result := TLojaModelEstoque.New;
+  Result := TLojaModelEstoque.New(Self.Ruler);
+end;
+
+class function TLojaModelFactory.InMemory: ILojaModelFactory;
+begin
+  Result := Self.Create(TLojaEnvironmentFactory.New.InMemory);
 end;
 
 function TLojaModelFactory.Itens: ILojaModelItens;
 begin
-  Result := TLojaModelItens.New;
+  Result := TLojaModelItens.New(Self.Ruler);
+end;
+
+class function TLojaModelFactory.New(ARuler: ILojaEnvironmentRuler): ILojaModelFactory;
+begin
+  Result := Self.Create(ARuler.Rules);
 end;
 
 class function TLojaModelFactory.New: ILojaModelFactory;
 begin
-  Result := Self.Create;
+  Result := Self.Create(TLojaEnvironmentFactory.New.Oficial);
 end;
 
 function TLojaModelFactory.Preco: ILojaModelPreco;
 begin
-  Result := TlojaModelPreco.New;
+  Result := TlojaModelPreco.New(Self.Ruler);
+end;
+
+function TLojaModelFactory.Ruler: ILojaEnvironmentRuler;
+begin
+  Result := Self;
+end;
+
+function TLojaModelFactory.Rules: ILojaEnvironmentRules;
+begin
+  Result := FRules;
 end;
 
 function TLojaModelFactory.Venda: ILojaModelVenda;
 begin
-  Result := TLojaModelVenda.New;
+  Result := TLojaModelVenda.New(Self.Ruler);
 end;
 
 end.

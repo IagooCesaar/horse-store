@@ -157,6 +157,7 @@ uses
   Horse.Exception,
   System.DateUtils,
 
+  Loja.Environment.Interfaces,
   Loja.Model.Factory,
   Loja.Model.Dao.Factory,
 
@@ -175,13 +176,18 @@ uses
 
 { TLojaModelVendaTest }
 
+function InMemory: ILojaEnvironmentRuler;
+begin
+  Result := TLojaModelFactory.InMemory.Ruler;
+end;
+
 procedure TLojaModelVendaTest.AbrirCaixa(
   AVrAbert: Currency);
 begin
   var LAbertura := TLojaModelDtoReqCaixaAbertura.Create;
   try
     LAbertura.VrAbert := AVrAbert;
-    FCaixa := TLojaModelFactory.New.Caixa.AberturaCaixa(LAbertura);
+    FCaixa := TLojaModelFactory.InMemory.Caixa.AberturaCaixa(LAbertura);
   finally
     LAbertura.Free;
   end;
@@ -196,7 +202,7 @@ begin
     LDTONovoItem.NomItem := ANome;
     LDTONovoItem.NumCodBarr := ACodBarr;
     LDTONovoItem.FlgTabPreco := ATabPreco;
-    Result := TLojaModelDaoFactory.New.Itens.Item.CriarItem(LDTONovoItem);
+    Result := TLojaModelDaoFactory.New(InMemory).Itens.Item.CriarItem(LDTONovoItem);
   finally
     LDTONovoItem.Free;
   end;
@@ -211,7 +217,7 @@ begin
     LDto.DatIni := ADatIni;
     LDto.VrVnda := AVrVnda;
 
-    Result := TLojaModelFactory.New
+    Result := TLojaModelFactory.InMemory
       .Preco
       .CriarPrecoVendaItem(LDto);
   finally
@@ -221,12 +227,12 @@ end;
 
 procedure TLojaModelVendaTest.FecharCaixaAtual;
 begin
-  var LCaixaAberto := TLojaModelFactory.New.Caixa.ObterCaixaAberto;
+  var LCaixaAberto := TLojaModelFactory.InMemory.Caixa.ObterCaixaAberto;
   if LCaixaAberto = nil
   then Exit;
 
   try
-    var LResumo := TLojaModelFactory.New.Caixa.ObterResumoCaixa(LCaixaAberto.CodCaixa);
+    var LResumo := TLojaModelFactory.InMemory.Caixa.ObterResumoCaixa(LCaixaAberto.CodCaixa);
 
     var LFechamento := TLojaModelDtoReqCaixaFechamento.Create;
     LFechamento.CodCaixa := LCaixaAberto.CodCaixa;
@@ -239,7 +245,7 @@ begin
     end;
 
     try
-      var LCaixaFechado := TLojaModelFactory.New.Caixa.FechamentoCaixa(LFechamento);
+      var LCaixaFechado := TLojaModelFactory.InMemory.Caixa.FechamentoCaixa(LFechamento);
       LCaixaFechado.Free;
     finally
       LResumo.Free;
@@ -262,7 +268,7 @@ begin
     LAcerto.QtdSaldoReal := AQtdSaldoReal;
     LAcerto.DscMot := 'TLojaModelVendaTest';
 
-    var LMovimento := TLojaModelFactory.New
+    var LMovimento := TLojaModelFactory.InMemory
       .Estoque
       .CriarAcertoEstoque(LAcerto);
     LMovimento.Free;
@@ -273,7 +279,7 @@ end;
 
 procedure TLojaModelVendaTest.SetupFixture;
 begin
-  TLojaModelDaoFactory.InMemory := True;
+
 
   FCaixa := nil;
   FecharCaixaAtual;
@@ -284,12 +290,12 @@ procedure TLojaModelVendaTest.TearDownFixture;
 begin
   FecharCaixaAtual;
 
-  TLojaModelDaoFactory.InMemory := False;
+
 end;
 
 procedure TLojaModelVendaTest.Test_AtualizarItemVenda;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   var LItem := CriarItem('Teste atualizar na venda','');
   var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
   RealizarAcertoEstoque(LItem.CodItem, 2);
@@ -300,25 +306,25 @@ begin
     LDto.CodItem := LItem.CodItem;
     LDto.QtdItem := 2;
 
-    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
+    var LItemVenda := TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDto);
 
     Assert.AreEqual(Double(20), Double(LItemVenda.VrTotal));
     Assert.AreEqual(TLojaModelEntityVendaItemSituacao.sitAtivo.ToString,
       LItemVenda.CodSit.ToString);
 
-    var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+    var LVenda := TLojaModelFactory.InMemory.Venda.ObterVenda(LNovaVenda.NumVnda);
 
     Assert.AreEqual(Double(20), Double(LVenda.VrTotal));
 
     LDto.NumSeqItem := LItemVenda.NumSeqItem;
     LDto.QtdItem := 3;
 
-    var LItemAtualizado := TLojaModelFactory.New.Venda.AtualizarItemVenda(LDto);
+    var LItemAtualizado := TLojaModelFactory.InMemory.Venda.AtualizarItemVenda(LDto);
     Assert.AreEqual(Double(30), Double(LItemAtualizado.VrTotal));
     Assert.AreEqual(TLojaModelEntityVendaItemSituacao.sitAtivo.ToString,
       LItemAtualizado.CodSit.ToString);
 
-    var LVendaAtualizada := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+    var LVendaAtualizada := TLojaModelFactory.InMemory.Venda.ObterVenda(LNovaVenda.NumVnda);
     Assert.AreEqual(Double(30), Double(LVendaAtualizada.VrTotal));
 
     LDto.Free;
@@ -336,7 +342,7 @@ end;
 
 procedure TLojaModelVendaTest.Test_AtualizarItemVenda_RemoverItem;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   var LItem := CriarItem('Teste atualizar na venda','');
   var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
   RealizarAcertoEstoque(LItem.CodItem, 2);
@@ -347,13 +353,13 @@ begin
     LDto.CodItem := LItem.CodItem;
     LDto.QtdItem := 2;
 
-    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
+    var LItemVenda := TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDto);
 
     Assert.AreEqual(Double(20), Double(LItemVenda.VrTotal));
     Assert.AreEqual(TLojaModelEntityVendaItemSituacao.sitAtivo.ToString,
       LItemVenda.CodSit.ToString);
 
-    var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+    var LVenda := TLojaModelFactory.InMemory.Venda.ObterVenda(LNovaVenda.NumVnda);
 
     Assert.AreEqual(Double(20), Double(LVenda.VrTotal));
 
@@ -361,12 +367,12 @@ begin
     LDto.QtdItem := 3;
     LDto.CodSit := TLojaModelEntityVendaItemSituacao.sitRemovido;
 
-    var LItemAtualizado := TLojaModelFactory.New.Venda.AtualizarItemVenda(LDto);
+    var LItemAtualizado := TLojaModelFactory.InMemory.Venda.AtualizarItemVenda(LDto);
     Assert.AreEqual(Double(30), Double(LItemAtualizado.VrTotal));
     Assert.AreEqual(TLojaModelEntityVendaItemSituacao.sitRemovido.ToString,
       LItemAtualizado.CodSit.ToString);
 
-    var LVendaAtualizada := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+    var LVendaAtualizada := TLojaModelFactory.InMemory.Venda.ObterVenda(LNovaVenda.NumVnda);
     Assert.AreEqual(Double(0), Double(LVendaAtualizada.VrTotal));
 
     LDto.Free;
@@ -384,7 +390,7 @@ end;
 
 procedure TLojaModelVendaTest.Test_AtualizarItemVenda_SemTabPreco;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   var LItem1 := CriarItem('Teste atualizar na venda','');
   var LItem2 := CriarItem('Item sem tabela de preço','', False);
   var LPreco := CriarPrecoVenda(LItem1.CodItem, 10, Now);
@@ -397,13 +403,13 @@ begin
     LDto.CodItem := LItem1.CodItem;
     LDto.QtdItem := 2;
 
-    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
+    var LItemVenda := TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDto);
 
     Assert.AreEqual(Double(20), Double(LItemVenda.VrTotal));
     Assert.AreEqual(TLojaModelEntityVendaItemSituacao.sitAtivo.ToString,
       LItemVenda.CodSit.ToString);
 
-    var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+    var LVenda := TLojaModelFactory.InMemory.Venda.ObterVenda(LNovaVenda.NumVnda);
 
     Assert.AreEqual(Double(20), Double(LVenda.VrTotal));
 
@@ -411,12 +417,12 @@ begin
     LDto.NumSeqItem := LItemVenda.NumSeqItem;
     LDto.QtdItem := 3;
 
-    var LItemAtualizado := TLojaModelFactory.New.Venda.AtualizarItemVenda(LDto);
+    var LItemAtualizado := TLojaModelFactory.InMemory.Venda.AtualizarItemVenda(LDto);
     Assert.AreEqual(Double(0), Double(LItemAtualizado.VrTotal));
     Assert.AreEqual(TLojaModelEntityVendaItemSituacao.sitAtivo.ToString,
       LItemAtualizado.CodSit.ToString);
 
-    var LVendaAtualizada := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+    var LVendaAtualizada := TLojaModelFactory.InMemory.Venda.ObterVenda(LNovaVenda.NumVnda);
     Assert.AreEqual(Double(0), Double(LVendaAtualizada.VrTotal));
 
     LDto.Free;
@@ -435,9 +441,9 @@ end;
 
 procedure TLojaModelVendaTest.Test_CancelarVenda;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   try
-    var LCancelada := TLojaModelFactory.New.Venda.CancelarVenda(LNovaVenda.NumVnda);
+    var LCancelada := TLojaModelFactory.InMemory.Venda.CancelarVenda(LNovaVenda.NumVnda);
     Assert.AreEqual(TLojaModelEntityVendaSituacao.sitCancelada.ToString, LCancelada.CodSit.ToString);
     LCancelada.Free;
   finally
@@ -447,7 +453,7 @@ end;
 
 procedure TLojaModelVendaTest.Test_DefinirMeiosPagamento;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   var LItem := CriarItem('Teste inserir na venda','');
   var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
   RealizarAcertoEstoque(LItem.CodItem, 2);
@@ -458,13 +464,13 @@ begin
     LDtoItem.CodItem := LItem.CodItem;
     LDtoItem.QtdItem := 2;
 
-    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
+    var LItemVenda := TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDtoItem);
 
     Assert.AreEqual(Double(20), Double(LItemVenda.VrTotal));
     Assert.AreEqual(TLojaModelEntityVendaItemSituacao.sitAtivo.ToString,
       LItemVenda.CodSit.ToString);
 
-    var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+    var LVenda := TLojaModelFactory.InMemory.Venda.ObterVenda(LNovaVenda.NumVnda);
 
     Assert.AreEqual(Double(20), Double(LVenda.VrTotal));
 
@@ -479,7 +485,7 @@ begin
     LDtoMeiosPagto.Last.VrTotal := 10;
     LDtoMeiosPagto.Last.QtdParc := 1;
 
-    var LMeiosPagto := TLojaModelFactory.New.Venda
+    var LMeiosPagto := TLojaModelFactory.InMemory.Venda
       .DefinirMeiosPagtoVenda(LVenda.NumVnda, LDtoMeiosPagto);
 
     Assert.AreEqual(NativeInt(2), LMeiosPagto.Count);
@@ -506,7 +512,7 @@ begin
   LDatIni := StartOfTheDay(Now);
   LDatFim := EndOfTheDay(Now);
 
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   var LItem1 := CriarItem('Item 1','');
   RealizarAcertoEstoque(LItem1.CodItem, 3);
 
@@ -524,7 +530,7 @@ begin
     LDtoItem.CodItem := LItem1.CodItem;
     LDtoItem.QtdItem := 2;
     // Inserir  item 1, 2 * 10 = 20,00
-    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
+    var LItemVenda := TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDtoItem);
 
     Assert.AreEqual(Double(20), Double(LItemVenda.VrTotal));
     Assert.AreEqual(TLojaModelEntityVendaItemSituacao.sitAtivo.ToString,
@@ -534,7 +540,7 @@ begin
 
     // Inserir item 1, 1 * 10 = 10,00
     LDtoItem.QtdItem := 1;
-    LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
+    LItemVenda := TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDtoItem);
 
     Assert.AreEqual(Double(10), Double(LItemVenda.VrTotal));
     Assert.AreEqual(TLojaModelEntityVendaItemSituacao.sitAtivo.ToString,
@@ -545,7 +551,7 @@ begin
     LDtoItem.CodItem := LItem2.CodItem;
     LDtoItem.QtdItem := 3;
     LDtoItem.VrDesc := 5;
-    LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
+    LItemVenda := TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDtoItem);
 
     Assert.AreEqual(Double(40), Double(LItemVenda.VrTotal));
     Assert.AreEqual(TLojaModelEntityVendaItemSituacao.sitAtivo.ToString,
@@ -554,7 +560,7 @@ begin
     LItemVenda.Free;
 
     // Certificando Total da Venda
-    var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+    var LVenda := TLojaModelFactory.InMemory.Venda.ObterVenda(LNovaVenda.NumVnda);
 
     Assert.AreEqual(Double(70), Double(LVenda.VrTotal));
     Assert.AreEqual(Double(5), Double(LVenda.VrDesc));
@@ -577,39 +583,39 @@ begin
     LDtoMeiosPagto.Last.VrTotal := 20;
     LDtoMeiosPagto.Last.QtdParc := 1;
 
-    var LMeiosPagto := TLojaModelFactory.New.Venda
+    var LMeiosPagto := TLojaModelFactory.InMemory.Venda
       .DefinirMeiosPagtoVenda(LVenda.NumVnda, LDtoMeiosPagto);
 
     Assert.AreEqual(NativeInt(3), LMeiosPagto.Count);
 
-    var LEfetivada := TLojaModelFactory.New.Venda.EfetivarVenda(LVenda.NumVnda);
+    var LEfetivada := TLojaModelFactory.InMemory.Venda.EfetivarVenda(LVenda.NumVnda);
 
     Assert.AreEqual(TLojaModelEntityVendaSituacao.sitEfetivada,
       LEfetivada.CodSit);
 
     //Certificar que o saldo do item foi consumido
-    var LSaldo := TLojaModelFactory.New.Estoque.ObterSaldoAtualItem(LItem1.CodItem);
+    var LSaldo := TLojaModelFactory.InMemory.Estoque.ObterSaldoAtualItem(LItem1.CodItem);
     Assert.AreEqual(0, LSaldo.QtdSaldoAtu);
     LSaldo.Free;
 
-    LSaldo := TLojaModelFactory.New.Estoque.ObterSaldoAtualItem(LItem2.CodItem);
+    LSaldo := TLojaModelFactory.InMemory.Estoque.ObterSaldoAtualItem(LItem2.CodItem);
     Assert.AreEqual(0, LSaldo.QtdSaldoAtu);
     LSaldo.Free;
 
-    var LMovEstoque := TLojaModelFactory.New.Estoque.ObterHistoricoMovimento(LItem1.CodItem,
+    var LMovEstoque := TLojaModelFactory.InMemory.Estoque.ObterHistoricoMovimento(LItem1.CodItem,
       LDatIni, LDatFim);
 
     Assert.IsTrue(LMovEstoque.Count = 3);
     LMovEstoque.Free;
 
-    LMovEstoque := TLojaModelFactory.New.Estoque.ObterHistoricoMovimento(LItem2.CodItem,
+    LMovEstoque := TLojaModelFactory.InMemory.Estoque.ObterHistoricoMovimento(LItem2.CodItem,
       LDatIni, LDatFim);
 
     Assert.IsTrue(LMovEstoque.Count = 2);
     LMovEstoque.Free;
 
     //Certificar que houve movimento de caixa
-    var LResumoCaixa := TLojaModelFactory.New.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
+    var LResumoCaixa := TLojaModelFactory.InMemory.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
 
     Assert.AreEqual(Double(40),
       Double(LResumoCaixa.MeiosPagto.Get(pagCartaoCredito).VrTotal)
@@ -621,7 +627,7 @@ begin
       Double(LResumoCaixa.MeiosPagto.Get(pagPix).VrTotal)
     );
 
-    var LMovCaixa := TLojaModelFactory.New.Caixa.ObterMovimentoCaixa(FCaixa.CodCaixa);
+    var LMovCaixa := TLojaModelFactory.InMemory.Caixa.ObterMovimentoCaixa(FCaixa.CodCaixa);
     Assert.IsTrue(LMovCaixa.Count >= 3);
 
     LDtoItem.Free;
@@ -640,7 +646,7 @@ end;
 
 procedure TLojaModelVendaTest.Test_IniciarVenda;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   Assert.IsNotNull(LNovaVenda);
   Assert.AreEqual(TLojaModelEntityVendaSituacao.sitPendente.ToString, LNovaVenda.CodSit.ToString);
   LNovaVenda.Free;
@@ -648,7 +654,7 @@ end;
 
 procedure TLojaModelVendaTest.Test_InserirItemVenda;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   var LItem := CriarItem('Teste inserir na venda','');
   var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
   RealizarAcertoEstoque(LItem.CodItem, 2);
@@ -659,13 +665,13 @@ begin
     LDto.CodItem := LItem.CodItem;
     LDto.QtdItem := 2;
 
-    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
+    var LItemVenda := TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDto);
 
     Assert.AreEqual(Double(20), Double(LItemVenda.VrTotal));
     Assert.AreEqual(TLojaModelEntityVendaItemSituacao.sitAtivo.ToString,
       LItemVenda.CodSit.ToString);
 
-    var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+    var LVenda := TLojaModelFactory.InMemory.Venda.ObterVenda(LNovaVenda.NumVnda);
 
     Assert.AreEqual(Double(20), Double(LVenda.VrTotal));
 
@@ -681,7 +687,7 @@ end;
 
 procedure TLojaModelVendaTest.Test_InserirItemVenda_SemTabPreco;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   var LItem := CriarItem('Teste inserir na venda','', false);
   RealizarAcertoEstoque(LItem.CodItem, 2);
 
@@ -691,13 +697,13 @@ begin
     LDto.CodItem := LItem.CodItem;
     LDto.QtdItem := 2;
 
-    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
+    var LItemVenda := TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDto);
 
     Assert.AreEqual(Double(0), Double(LItemVenda.VrTotal));
     Assert.AreEqual(TLojaModelEntityVendaItemSituacao.sitAtivo.ToString,
       LItemVenda.CodSit.ToString);
 
-    var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+    var LVenda := TLojaModelFactory.InMemory.Venda.ObterVenda(LNovaVenda.NumVnda);
 
     Assert.AreEqual(Double(0), Double(LVenda.VrTotal));
 
@@ -712,7 +718,7 @@ end;
 
 procedure TLojaModelVendaTest.Test_NaoAtualizarItemVenda_ItemInexistente;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   var LItem := CriarItem('Teste atualizar na venda','');
   var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
   RealizarAcertoEstoque(LItem.CodItem, 2);
@@ -723,15 +729,15 @@ begin
     LDto.CodItem := LItem.CodItem;
     LDto.QtdItem := 2;
 
-    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
-    var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+    var LItemVenda := TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDto);
+    var LVenda := TLojaModelFactory.InMemory.Venda.ObterVenda(LNovaVenda.NumVnda);
 
     LDto.NumSeqItem := LItemVenda.NumSeqItem;
     LDto.CodItem := MaxInt;
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelFactory.New.Venda.AtualizarItemVenda(LDto);
+        TLojaModelFactory.InMemory.Venda.AtualizarItemVenda(LDto);
       end,
       EHorseException,
       'Não foi possível encontrar o item informado'
@@ -749,7 +755,7 @@ end;
 
 procedure TLojaModelVendaTest.Test_NaoAtualizarItemVenda_ItemNaoInserido;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   var LItem := CriarItem('Teste atualizar na venda','');
   var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
   RealizarAcertoEstoque(LItem.CodItem, 2);
@@ -763,7 +769,7 @@ begin
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelFactory.New.Venda.AtualizarItemVenda(LDto);
+        TLojaModelFactory.InMemory.Venda.AtualizarItemVenda(LDto);
       end,
       EHorseException,
       'Não foi possível encontrar item deste sequencial na venda informada'
@@ -780,7 +786,7 @@ end;
 
 procedure TLojaModelVendaTest.Test_NaoAtualizarItemVenda_ItemRemovido;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   var LItem := CriarItem('Teste atualizar na venda','');
   var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
   RealizarAcertoEstoque(LItem.CodItem, 2);
@@ -791,22 +797,22 @@ begin
     LDto.CodItem := LItem.CodItem;
     LDto.QtdItem := 2;
 
-    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
-    var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+    var LItemVenda := TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDto);
+    var LVenda := TLojaModelFactory.InMemory.Venda.ObterVenda(LNovaVenda.NumVnda);
 
     LDto.NumSeqItem := LItemVenda.NumSeqItem;
     LDto.QtdItem := 3;
     LDto.CodSit := TLojaModelEntityVendaItemSituacao.sitRemovido;
 
-    var LItemAtualizado := TLojaModelFactory.New.Venda.AtualizarItemVenda(LDto);
-    var LVendaAtualizada := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+    var LItemAtualizado := TLojaModelFactory.InMemory.Venda.AtualizarItemVenda(LDto);
+    var LVendaAtualizada := TLojaModelFactory.InMemory.Venda.ObterVenda(LNovaVenda.NumVnda);
 
     LDto.QtdItem := 1;
     LDto.CodSit := TLojaModelEntityVendaItemSituacao.sitAtivo;
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelFactory.New.Venda.AtualizarItemVenda(LDto);
+        TLojaModelFactory.InMemory.Venda.AtualizarItemVenda(LDto);
       end,
       EHorseException,
       'Este item foi removido da venda, portanto não pode ser alterado'
@@ -827,7 +833,7 @@ end;
 
 procedure TLojaModelVendaTest.Test_NaoAtualizarItemVenda_QuantidadeInvalida;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   var LItem := CriarItem('Teste atualizar na venda','');
   var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
   RealizarAcertoEstoque(LItem.CodItem, 2);
@@ -838,15 +844,15 @@ begin
     LDto.CodItem := LItem.CodItem;
     LDto.QtdItem := 2;
 
-    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
-    var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+    var LItemVenda := TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDto);
+    var LVenda := TLojaModelFactory.InMemory.Venda.ObterVenda(LNovaVenda.NumVnda);
 
     LDto.NumSeqItem := LItemVenda.NumSeqItem;
     LDto.QtdItem := -1;
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelFactory.New.Venda.AtualizarItemVenda(LDto);
+        TLojaModelFactory.InMemory.Venda.AtualizarItemVenda(LDto);
       end,
       EHorseException,
       'A quantidade do item vendido deverá ser superior a zero'
@@ -864,7 +870,7 @@ end;
 
 procedure TLojaModelVendaTest.Test_NaoAtualizarItemVenda_SemPrecoImplantado;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   var LItem1 := CriarItem('Teste atualizar na venda','');
   var LItem2 := CriarItem('Teste atualizar na venda sem preço','');
   var LPreco := CriarPrecoVenda(LItem1.CodItem, 10, Now);
@@ -876,15 +882,15 @@ begin
     LDto.CodItem := LItem1.CodItem;
     LDto.QtdItem := 2;
 
-    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
-    var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+    var LItemVenda := TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDto);
+    var LVenda := TLojaModelFactory.InMemory.Venda.ObterVenda(LNovaVenda.NumVnda);
 
     LDto.NumSeqItem := LItemVenda.NumSeqItem;
     LDto.CodItem := LItem2.CodItem;
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelFactory.New.Venda.AtualizarItemVenda(LDto);
+        TLojaModelFactory.InMemory.Venda.AtualizarItemVenda(LDto);
       end,
       EHorseException,
       'Não há preço de venda implantado para o item'
@@ -903,7 +909,7 @@ end;
 
 procedure TLojaModelVendaTest.Test_NaoAtualizarItemVenda_ValorTotalNegativo;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   var LItem := CriarItem('Teste atualizar na venda','');
   var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
   RealizarAcertoEstoque(LItem.CodItem, 2);
@@ -914,15 +920,15 @@ begin
     LDto.CodItem := LItem.CodItem;
     LDto.QtdItem := 2;
 
-    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
-    var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+    var LItemVenda := TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDto);
+    var LVenda := TLojaModelFactory.InMemory.Venda.ObterVenda(LNovaVenda.NumVnda);
 
     LDto.NumSeqItem := LItemVenda.NumSeqItem;
     LDto.VrDesc := 100;
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelFactory.New.Venda.AtualizarItemVenda(LDto);
+        TLojaModelFactory.InMemory.Venda.AtualizarItemVenda(LDto);
       end,
       EHorseException,
       'O valor total do item não pode ser negativo'
@@ -942,7 +948,7 @@ procedure TLojaModelVendaTest.Test_NaoCancelarVenda_Inexistente;
 begin
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New.Venda.CancelarVenda(MaxInt);
+      TLojaModelFactory.InMemory.Venda.CancelarVenda(MaxInt);
     end,
     EHorseException,
     'Não foi possível encontrar a venda pelo número informado'
@@ -951,14 +957,14 @@ end;
 
 procedure TLojaModelVendaTest.Test_NaoCancelarVenda_NaoPendente;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   try
-    var LCancelada := TLojaModelFactory.New.Venda.CancelarVenda(LNovaVenda.NumVnda);
+    var LCancelada := TLojaModelFactory.InMemory.Venda.CancelarVenda(LNovaVenda.NumVnda);
     LCancelada.Free;
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelFactory.New.Venda.CancelarVenda(LNovaVenda.NumVnda);
+        TLojaModelFactory.InMemory.Venda.CancelarVenda(LNovaVenda.NumVnda);
       end,
       EHorseException,
       'A venda informada não está Pendente'
@@ -972,7 +978,7 @@ procedure TLojaModelVendaTest.Test_NaoCancelarVenda_NumeroInvalido;
 begin
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New.Venda.CancelarVenda(-1);
+      TLojaModelFactory.InMemory.Venda.CancelarVenda(-1);
     end,
     EHorseException,
     'O número de venda informado é inválido'
@@ -981,7 +987,7 @@ end;
 
 procedure TLojaModelVendaTest.Test_NaoDefinirMeiosPagamento_MeiosNaoInformados;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   var LItem := CriarItem('Teste inserir na venda','');
   var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
   RealizarAcertoEstoque(LItem.CodItem, 2);
@@ -992,13 +998,13 @@ begin
     LDtoItem.CodItem := LItem.CodItem;
     LDtoItem.QtdItem := 2;
 
-    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
-    var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+    var LItemVenda := TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDtoItem);
+    var LVenda := TLojaModelFactory.InMemory.Venda.ObterVenda(LNovaVenda.NumVnda);
     var LDtoMeiosPagto := TLojaModelEntityVendaMeioPagtoLista.Create;
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelFactory.New.Venda
+        TLojaModelFactory.InMemory.Venda
           .DefinirMeiosPagtoVenda(LVenda.NumVnda, LDtoMeiosPagto);
       end,
       EHorseException,
@@ -1018,7 +1024,7 @@ end;
 
 procedure TLojaModelVendaTest.Test_NaoDefinirMeiosPagamento_ParcelasNaoDefinidas;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   var LItem := CriarItem('Teste inserir na venda','');
   var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
   RealizarAcertoEstoque(LItem.CodItem, 2);
@@ -1029,8 +1035,8 @@ begin
     LDtoItem.CodItem := LItem.CodItem;
     LDtoItem.QtdItem := 2;
 
-    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
-    var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+    var LItemVenda := TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDtoItem);
+    var LVenda := TLojaModelFactory.InMemory.Venda.ObterVenda(LNovaVenda.NumVnda);
     var LDtoMeiosPagto := TLojaModelEntityVendaMeioPagtoLista.Create;
 
     LDtoMeiosPagto.Add(TLojaModelEntityVendaMeioPagto.Create);
@@ -1038,7 +1044,7 @@ begin
     LDtoMeiosPagto.Last.QtdParc := 0;
     LDtoMeiosPagto.Last.VrTotal := 20;
 
-    var LMeiosPagto := TLojaModelFactory.New.Venda
+    var LMeiosPagto := TLojaModelFactory.InMemory.Venda
       .DefinirMeiosPagtoVenda(LVenda.NumVnda, LDtoMeiosPagto);
 
     Assert.AreEqual(NativeInt(0), LMeiosPagto.Count);
@@ -1057,7 +1063,7 @@ end;
 
 procedure TLojaModelVendaTest.Test_NaoDefinirMeiosPagamento_ValorNaoDefinido;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   var LItem := CriarItem('Teste inserir na venda','');
   var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
   RealizarAcertoEstoque(LItem.CodItem, 2);
@@ -1068,8 +1074,8 @@ begin
     LDtoItem.CodItem := LItem.CodItem;
     LDtoItem.QtdItem := 2;
 
-    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
-    var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+    var LItemVenda := TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDtoItem);
+    var LVenda := TLojaModelFactory.InMemory.Venda.ObterVenda(LNovaVenda.NumVnda);
     var LDtoMeiosPagto := TLojaModelEntityVendaMeioPagtoLista.Create;
 
     LDtoMeiosPagto.Add(TLojaModelEntityVendaMeioPagto.Create);
@@ -1077,7 +1083,7 @@ begin
     LDtoMeiosPagto.Last.QtdParc := 1;
     LDtoMeiosPagto.Last.VrTotal := 0;
 
-    var LMeiosPagto := TLojaModelFactory.New.Venda
+    var LMeiosPagto := TLojaModelFactory.InMemory.Venda
       .DefinirMeiosPagtoVenda(LVenda.NumVnda, LDtoMeiosPagto);
 
     Assert.AreEqual(NativeInt(0), LMeiosPagto.Count);
@@ -1095,7 +1101,7 @@ begin
 end;
 procedure TLojaModelVendaTest.Test_NaoEfetivarVenda_ItemSaldoInsuficiente;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   var LItem1 := CriarItem('Item 1','');
   RealizarAcertoEstoque(LItem1.CodItem, 3);
 
@@ -1108,15 +1114,15 @@ begin
     LDtoItem.CodItem := LItem1.CodItem;
     LDtoItem.QtdItem := 2;
 
-    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
+    var LItemVenda := TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDtoItem);
     LItemVenda.Free;
 
-    LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
+    LItemVenda := TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDtoItem);
     LItemVenda.Free;
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelFactory.New.Venda.EfetivarVenda(LNovaVenda.NumVnda);
+        TLojaModelFactory.InMemory.Venda.EfetivarVenda(LNovaVenda.NumVnda);
       end,
       EHorseException,
       'Não há saldo disponível para o item'
@@ -1131,7 +1137,7 @@ end;
 
 procedure TLojaModelVendaTest.Test_NaoEfetivarVenda_MeiosPagtoInsuficiente;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   var LItem1 := CriarItem('Item 1','');
   RealizarAcertoEstoque(LItem1.CodItem, 2);
 
@@ -1144,7 +1150,7 @@ begin
     LDtoItem.CodItem := LItem1.CodItem;
     LDtoItem.QtdItem := 2;
 
-    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
+    var LItemVenda := TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDtoItem);
     LItemVenda.Free;
 
     var LDtoMeiosPagto := TLojaModelEntityVendaMeioPagtoLista.Create;
@@ -1153,28 +1159,28 @@ begin
     LDtoMeiosPagto.Last.VrTotal := 19.99;
     LDtoMeiosPagto.Last.QtdParc := 1;
 
-    var LMeiosPagto := TLojaModelFactory.New.Venda
+    var LMeiosPagto := TLojaModelFactory.InMemory.Venda
       .DefinirMeiosPagtoVenda(LNovaVenda.NumVnda, LDtoMeiosPagto);
     Assert.AreEqual(NativeInt(1), LMeiosPagto.Count);
     LMeiosPagto.Free;
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelFactory.New.Venda.EfetivarVenda(LNovaVenda.NumVnda);
+        TLojaModelFactory.InMemory.Venda.EfetivarVenda(LNovaVenda.NumVnda);
       end,
       EHorseException,
       'Os valores informados nos meios de pagamentos'
     );
 
     LDtoMeiosPagto.Last.VrTotal := 20.01;
-    LMeiosPagto := TLojaModelFactory.New.Venda
+    LMeiosPagto := TLojaModelFactory.InMemory.Venda
       .DefinirMeiosPagtoVenda(LNovaVenda.NumVnda, LDtoMeiosPagto);
     Assert.AreEqual(NativeInt(1), LMeiosPagto.Count);
     LMeiosPagto.Free;
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelFactory.New.Venda.EfetivarVenda(LNovaVenda.NumVnda);
+        TLojaModelFactory.InMemory.Venda.EfetivarVenda(LNovaVenda.NumVnda);
       end,
       EHorseException,
       'Os valores informados nos meios de pagamentos'
@@ -1190,11 +1196,11 @@ end;
 
 procedure TLojaModelVendaTest.Test_NaoEfetivarVenda_SemItens;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   try
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelFactory.New.Venda.EfetivarVenda(LNovaVenda.NumVnda);
+        TLojaModelFactory.InMemory.Venda.EfetivarVenda(LNovaVenda.NumVnda);
       end,
       EHorseException,
       'Não há itens na venda'
@@ -1206,7 +1212,7 @@ end;
 
 procedure TLojaModelVendaTest.Test_NaoEfetivarVenda_SemItensAtivos;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   var LItem1 := CriarItem('Item 1','');
   RealizarAcertoEstoque(LItem1.CodItem, 2);
 
@@ -1219,21 +1225,21 @@ begin
     LDtoItem.CodItem := LItem1.CodItem;
     LDtoItem.QtdItem := 2;
 
-    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
+    var LItemVenda := TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDtoItem);
     Assert.AreEqual(Double(20), Double(LItemVenda.VrTotal));
 
     LDtoItem.CodSit := TLojaModelEntityVendaItemSituacao.sitRemovido;
     LDtoItem.NumSeqItem := LItemVenda.NumSeqItem;
     LItemVenda.Free;
 
-    LItemVenda := TLojaModelFactory.New.Venda.AtualizarItemVenda(LDtoItem);
+    LItemVenda := TLojaModelFactory.InMemory.Venda.AtualizarItemVenda(LDtoItem);
     Assert.AreEqual(TLojaModelEntityVendaItemSituacao.sitRemovido.ToString,
       LItemVenda.CodSit.ToString);
     LItemVenda.Free;
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelFactory.New.Venda.EfetivarVenda(LNovaVenda.NumVnda);
+        TLojaModelFactory.InMemory.Venda.EfetivarVenda(LNovaVenda.NumVnda);
       end,
       EHorseException,
       'Não há itens ativos na venda'
@@ -1248,7 +1254,7 @@ end;
 
 procedure TLojaModelVendaTest.Test_NaoEfetivarVenda_SemMeiosPagto;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   var LItem1 := CriarItem('Item 1','');
   RealizarAcertoEstoque(LItem1.CodItem, 2);
 
@@ -1261,12 +1267,12 @@ begin
     LDtoItem.CodItem := LItem1.CodItem;
     LDtoItem.QtdItem := 2;
 
-    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
+    var LItemVenda := TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDtoItem);
     LItemVenda.Free;
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelFactory.New.Venda.EfetivarVenda(LNovaVenda.NumVnda);
+        TLojaModelFactory.InMemory.Venda.EfetivarVenda(LNovaVenda.NumVnda);
       end,
       EHorseException,
       'Não há meios de pagamento definidos na venda'
@@ -1285,7 +1291,7 @@ begin
 
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New.Venda.NovaVenda;
+      TLojaModelFactory.InMemory.Venda.NovaVenda;
     end,
     EHorseException,
     'Não há caixa aberto'
@@ -1296,7 +1302,7 @@ end;
 
 procedure TLojaModelVendaTest.Test_NaoInserirItemVenda_ItemInexistente;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
 
   try
     var LDto := TLojaModelDtoReqVendaItem.Create;
@@ -1306,7 +1312,7 @@ begin
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
+        TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDto);
       end,
       EHorseException,
       'Não foi possível encontrar o item informado'
@@ -1320,7 +1326,7 @@ end;
 
 procedure TLojaModelVendaTest.Test_NaoInserirItemVenda_QuantidadeInvalida;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   var LItem := CriarItem('Teste inserir na venda','');
   var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
   RealizarAcertoEstoque(LItem.CodItem, 2);
@@ -1333,7 +1339,7 @@ begin
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
+        TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDto);
       end,
       EHorseException,
       'A quantidade do item vendido deverá ser superior a zero'
@@ -1350,7 +1356,7 @@ end;
 procedure TLojaModelVendaTest.Test_NaoInserirItemVenda_SemPrecoImplantado;
 begin
 
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   var LItem := CriarItem('Teste inserir na venda','');
 
   try
@@ -1361,7 +1367,7 @@ begin
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
+        TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDto);
       end,
       EHorseException,
       'Não há preço de venda implantado para o item'
@@ -1376,7 +1382,7 @@ end;
 
 procedure TLojaModelVendaTest.Test_NaoInserirItemVenda_ValorTotalNegativo;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   var LItem := CriarItem('Teste inserir na venda','');
   var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
   RealizarAcertoEstoque(LItem.CodItem, 2);
@@ -1390,7 +1396,7 @@ begin
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
+        TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDto);
       end,
       EHorseException,
       'O valor total do item não pode ser negativo'
@@ -1406,12 +1412,12 @@ end;
 
 procedure TLojaModelVendaTest.Test_NaoInserirItemVenda_VendaNaoPendente;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   var LItem := CriarItem('Teste inserir na venda','');
   var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
   RealizarAcertoEstoque(LItem.CodItem, 2);
 
-  var LCancelada := TLojaModelFactory.New.Venda.CancelarVenda(LNovaVenda.NumVnda);
+  var LCancelada := TLojaModelFactory.InMemory.Venda.CancelarVenda(LNovaVenda.NumVnda);
   LCancelada.Free;
 
   try
@@ -1423,7 +1429,7 @@ begin
 
     Assert.WillRaiseWithMessageRegex(
       procedure begin
-        TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
+        TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDto);
       end,
       EHorseException,
       'A venda informada não está Pendente'
@@ -1441,7 +1447,7 @@ procedure TLojaModelVendaTest.Test_NaoObterItensVenda_VendaInexistente;
 begin
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New.Venda.ObterItensVenda(MaxInt);
+      TLojaModelFactory.InMemory.Venda.ObterItensVenda(MaxInt);
     end,
     EHorseException,
     'Não foi possível encontrar a venda pelo número informado'
@@ -1456,7 +1462,7 @@ begin
 
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelFactory.New.Venda.ObterVendas(LDatIni, LDatFim,
+      TLojaModelFactory.InMemory.Venda.ObterVendas(LDatIni, LDatFim,
         TLojaModelEntityVendaSituacao.sitPendente);
     end,
     EHorseException,
@@ -1465,7 +1471,7 @@ begin
 end;
 procedure TLojaModelVendaTest.Test_ObterItensVenda;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   var LItem := CriarItem('Teste inserir na venda','');
   var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
   RealizarAcertoEstoque(LItem.CodItem, 2);
@@ -1476,13 +1482,13 @@ begin
     LDto.CodItem := LItem.CodItem;
     LDto.QtdItem := 2;
 
-    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
+    var LItemVenda := TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDto);
     LItemVenda.Free;
 
-    LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDto);
+    LItemVenda := TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDto);
     LItemVenda.Free;
 
-    var LItens := TLojaModelFactory.New.Venda.ObterItensVenda(LNovaVenda.NumVnda);
+    var LItens := TLojaModelFactory.InMemory.Venda.ObterItensVenda(LNovaVenda.NumVnda);
     Assert.AreEqual(NativeInt(2), LItens.Count);
 
     LDto.Free;
@@ -1496,7 +1502,7 @@ end;
 
 procedure TLojaModelVendaTest.Test_ObterMeiosPagamento;
 begin
-  var LNovaVenda := TLojaModelFactory.New.Venda.NovaVenda;
+  var LNovaVenda := TLojaModelFactory.InMemory.Venda.NovaVenda;
   var LItem := CriarItem('Teste inserir na venda','');
   var LPreco := CriarPrecoVenda(LITem.CodItem, 10, Now);
   RealizarAcertoEstoque(LItem.CodItem, 2);
@@ -1507,9 +1513,9 @@ begin
     LDtoItem.CodItem := LItem.CodItem;
     LDtoItem.QtdItem := 2;
 
-    var LItemVenda := TLojaModelFactory.New.Venda.InserirItemVenda(LDtoItem);
+    var LItemVenda := TLojaModelFactory.InMemory.Venda.InserirItemVenda(LDtoItem);
 
-    var LVenda := TLojaModelFactory.New.Venda.ObterVenda(LNovaVenda.NumVnda);
+    var LVenda := TLojaModelFactory.InMemory.Venda.ObterVenda(LNovaVenda.NumVnda);
 
     var LDtoMeiosPagto := TLojaModelEntityVendaMeioPagtoLista.Create;
     LDtoMeiosPagto.Add(TLojaModelEntityVendaMeioPagto.Create);
@@ -1522,10 +1528,10 @@ begin
     LDtoMeiosPagto.Last.VrTotal := 10;
     LDtoMeiosPagto.Last.QtdParc := 1;
 
-    var LMeiosPagtoDinidos := TLojaModelFactory.New.Venda
+    var LMeiosPagtoDinidos := TLojaModelFactory.InMemory.Venda
       .DefinirMeiosPagtoVenda(LVenda.NumVnda, LDtoMeiosPagto);
 
-    var LMeiosPagto := TLojaModelFactory.New.Venda.ObterMeiosPagtoVenda(LVenda.NumVnda);
+    var LMeiosPagto := TLojaModelFactory.InMemory.Venda.ObterMeiosPagtoVenda(LVenda.NumVnda);
 
     Assert.AreEqual(NativeInt(2), LMeiosPagto.Count);
 
@@ -1553,19 +1559,19 @@ begin
   LDatIni := Trunc(Now);
   LDatFim := Trunc(Now+1);
 
-  var LVendasPendentes := TLojaModelFactory.New.Venda.ObterVendas(LDatIni, LDatFim,
+  var LVendasPendentes := TLojaModelFactory.InMemory.Venda.ObterVendas(LDatIni, LDatFim,
     TLojaModelEntityVendaSituacao.sitPendente);
 
   Assert.IsTrue(LVendasPendentes.Count >= 1);
   LVendasPendentes.Free;
 
-  var LVendasCanceladas := TLojaModelFactory.New.Venda.ObterVendas(LDatIni, LDatFim,
+  var LVendasCanceladas := TLojaModelFactory.InMemory.Venda.ObterVendas(LDatIni, LDatFim,
     TLojaModelEntityVendaSituacao.sitCancelada);
 
   Assert.IsTrue(LVendasCanceladas.Count >= 1);
   LVendasCanceladas.Free;
 
-  var LVendasEfetivadas := TLojaModelFactory.New.Venda.ObterVendas(LDatIni, LDatFim,
+  var LVendasEfetivadas := TLojaModelFactory.InMemory.Venda.ObterVendas(LDatIni, LDatFim,
     TLojaModelEntityVendaSituacao.sitCancelada);
 
   Assert.IsTrue(LVendasEfetivadas.Count >= 1);

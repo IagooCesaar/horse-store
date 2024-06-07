@@ -9,6 +9,7 @@ uses
   System.Generics.Defaults,
   System.Generics.Collections,
 
+  Loja.Environment.Interfaces,
   Loja.Model.Interfaces,
   Loja.Model.Entity.Estoque.Movimento,
   Loja.Model.Entity.Estoque.Saldo,
@@ -19,11 +20,12 @@ uses
 type
   TLojaModelEstoque = class(TinterfacedObject, ILojaModelEstoque)
   private
+    FEnvRules: ILojaEnvironmentRuler;
     procedure RealizarFechamentoSaldo(ACodItem: Integer);
   public
-    constructor Create;
+    constructor Create(AEnvRules: ILojaEnvironmentRuler);
 	  destructor Destroy; override;
-	  class function New: ILojaModelEstoque;
+	  class function New(AEnvRules: ILojaEnvironmentRuler): ILojaModelEstoque;
 
     { ILojaModelEstoque }
     function CriarNovoMovimento(ANovoMovimento: TLojaModelDtoReqEstoqueCriarMovimento): TLojaModelEntityEstoqueMovimento;
@@ -46,9 +48,9 @@ uses
 
 { TLojaModelEstoque }
 
-constructor TLojaModelEstoque.Create;
+constructor TLojaModelEstoque.Create(AEnvRules: ILojaEnvironmentRuler);
 begin
-
+  FEnvRules := AEnvRules;
 end;
 
 function TLojaModelEstoque.CriarAcertoEstoque(
@@ -72,7 +74,8 @@ begin
     .&Unit(Self.UnitName)
     .Error('Não é permitido estoque negativo');
 
-  LItem := TLojaModelDaoFactory.New.Itens.Item.ObterPorCodigo(AAcertoEstoque.CodItem);
+  LItem := TLojaModelDaoFactory.New(FEnvRules)
+    .Itens.Item.ObterPorCodigo(AAcertoEstoque.CodItem);
   if LItem = nil
   then raise EHorseException.New
     .Status(THTTPStatus.NotFound)
@@ -160,7 +163,7 @@ begin
       .Error('Não foi possível reconhecer o tipo de movimento de estoque');}
   end;
 
-  LItem := TLojaModelDaoFactory.New.Itens.Item.ObterPorCodigo(ANovoMovimento.CodItem);
+  LItem := TLojaModelDaoFactory.New(FEnvRules).Itens.Item.ObterPorCodigo(ANovoMovimento.CodItem);
   if LItem = nil
   then raise EHorseException.New
     .Status(THTTPStatus.NotFound)
@@ -168,7 +171,7 @@ begin
     .Error('O item informado não existe');
   LItem.Free;
 
-  Result := TLojaModelDaoFactory.New.Estoque
+  Result := TLojaModelDaoFactory.New(FEnvRules).Estoque
     .Movimento
     .CriarNovoMovimento(ANovoMovimento);
 end;
@@ -179,9 +182,9 @@ begin
   inherited;
 end;
 
-class function TLojaModelEstoque.New: ILojaModelEstoque;
+class function TLojaModelEstoque.New(AEnvRules: ILojaEnvironmentRuler): ILojaModelEstoque;
 begin
-  Result := Self.Create;
+  Result := Self.Create(AEnvRules);
 end;
 
 function TLojaModelEstoque.ObterFechamentosSaldo(ACodItem: Integer; ADatIni,
@@ -197,7 +200,7 @@ begin
     .&Unit(Self.UnitName)
     .Error('A data inicial deve ser inferior à data final em pelo menos 1 dia');
 
-  var LItem := TLojaModelDaoFactory.New.Itens.Item.ObterPorCodigo(ACodItem);
+  var LItem := TLojaModelDaoFactory.New(FEnvRules).Itens.Item.ObterPorCodigo(ACodItem);
   if LItem = nil
   then raise EHorseException.New
     .Status(THTTPStatus.NotFound)
@@ -205,7 +208,7 @@ begin
     .Error('O item informado não existe');
   LItem.Free;
 
-  Result := TLojaModelDaoFactory.New.Estoque
+  Result := TLojaModelDaoFactory.New(FEnvRules).Estoque
     .Saldo
     .ObterFechamentosItem(ACodItem, ADatIni, ADatFim);
 end;
@@ -223,7 +226,7 @@ begin
     .&Unit(Self.UnitName)
     .Error('A data inicial deve ser inferior à data final em pelo menos 1 dia');
 
-  var LItem := TLojaModelDaoFactory.New.Itens.Item.ObterPorCodigo(ACodItem);
+  var LItem := TLojaModelDaoFactory.New(FEnvRules).Itens.Item.ObterPorCodigo(ACodItem);
   if LItem = nil
   then raise EHorseException.New
     .Status(THTTPStatus.NotFound)
@@ -231,7 +234,7 @@ begin
     .Error('O item informado não existe');
   LItem.Free;
 
-  var LMovimentos := TLojaModelDaoFactory.New.Estoque
+  var LMovimentos := TLojaModelDaoFactory.New(FEnvRules).Estoque
         .Movimento
         .ObterMovimentoItemEntreDatas(ACodItem, ADatIni, ADatFim);
 
@@ -244,7 +247,7 @@ var
   LUltSaldo: Integer;
   LDatIni, LDatFim : TDateTime;
 begin
-  var LItem := TLojaModelDaoFactory.New.Itens.Item.ObterPorCodigo(ACodItem);
+  var LItem := TLojaModelDaoFactory.New(FEnvRules).Itens.Item.ObterPorCodigo(ACodItem);
   if LItem = nil
   then raise EHorseException.New
     .Status(THTTPStatus.NotFound)
@@ -256,7 +259,7 @@ begin
 
   Result := TLojaModelDtoRespEstoqueSaldoItem.Create;
   Result.CodItem := ACodItem;
-  Result.UltimoFechamento := TLojaModelDaoFactory.New.Estoque
+  Result.UltimoFechamento := TLojaModelDaoFactory.New(FEnvRules).Estoque
     .Saldo
     .ObterUltimoFechamentoItem(ACodItem);
 
@@ -273,7 +276,7 @@ begin
   LDatIni := StartOfTheDay(LDatIni);
   LDatFim := EndOfTheDay(Now);
 
-  Result.UltimosMovimentos := TLojaModelDaoFactory.New.Estoque
+  Result.UltimosMovimentos := TLojaModelDaoFactory.New(FEnvRules).Estoque
     .Movimento
     .ObterMovimentoItemEntreDatas(ACodItem, LDatIni, LDatFim);
 
@@ -295,7 +298,7 @@ end;
 
 procedure TLojaModelEstoque.RealizarFechamentoSaldo(ACodItem: Integer);
 begin
-  TLojaModelBoFactory.New.Estoque
+  TLojaModelBoFactory.New(FEnvRules).Estoque
     .FechamentoSaldo
     .FecharSaldoMensalItem(ACodItem);
 end;
