@@ -18,9 +18,10 @@ type
     FRules: ILojaEnvironmentRules;
 
   public
-    constructor Create;
+    constructor Create(AEnvRules: ILojaEnvironmentRules);
 	  destructor Destroy; override;
 	  class function New: ILojaModelFactory;
+    class function InMemory: ILojaModelFactory;
 
     { ILojaEnvironmentRuler }
     function Rules: ILojaEnvironmentRules;
@@ -37,6 +38,7 @@ type
 implementation
 
 uses
+  Loja.Environment.Factory,
   Loja.Model.Itens,
   Loja.Model.Estoque,
   Loja.Model.Preco,
@@ -50,9 +52,9 @@ begin
   Result := TLojaModelCaixa.New;
 end;
 
-constructor TLojaModelFactory.Create;
+constructor TLojaModelFactory.Create(AEnvRules: ILojaEnvironmentRules);
 begin
-
+  FRules := AEnvRules;
 end;
 
 destructor TLojaModelFactory.Destroy;
@@ -66,6 +68,11 @@ begin
   Result := TLojaModelEstoque.New;
 end;
 
+class function TLojaModelFactory.InMemory: ILojaModelFactory;
+begin
+  Result := Self.Create(TLojaEnvironmentFactory.New.InMemory);
+end;
+
 function TLojaModelFactory.Itens: ILojaModelItens;
 begin
   Result := TLojaModelItens.New;
@@ -73,7 +80,7 @@ end;
 
 class function TLojaModelFactory.New: ILojaModelFactory;
 begin
-  Result := Self.Create;
+  Result := Self.Create(TLojaEnvironmentFactory.New.Oficial);
 end;
 
 function TLojaModelFactory.Preco: ILojaModelPreco;
