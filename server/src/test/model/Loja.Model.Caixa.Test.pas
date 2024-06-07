@@ -130,6 +130,7 @@ uses
   System.SysUtils,
   System.DateUtils,
 
+  Loja.Environment.Interfaces,
   Loja.Model.Factory,
   Loja.Model.Dao.Interfaces,
   Loja.Model.Dao.Factory,
@@ -143,6 +144,11 @@ uses
 
 { TLojaModelCaixaTest }
 
+function InMemory: ILojaEnvironmentRuler;
+begin
+  Result := TLojaModelFactory.InMemory.Ruler;
+end;
+
 procedure TLojaModelCaixaTest.Setup;
 begin
   FCritical.Acquire;
@@ -150,7 +156,7 @@ end;
 
 procedure TLojaModelCaixaTest.SetupFixture;
 begin
-  TLojaModelDaoFactory.InMemory := True;
+
   FCritical := TCriticalSection.Create;
 end;
 
@@ -163,7 +169,7 @@ procedure TLojaModelCaixaTest.TearDownFixture;
 begin
   FCaixa.Free;
   FCritical.Free;
-  TLojaModelDaoFactory.InMemory := False;
+
 end;
 
 procedure TLojaModelCaixaTest.Test_AberturaDeCaixa;
@@ -199,7 +205,7 @@ begin
 
   WriteLn(Format('Valor Fechamento: %8.2f', [VrFecha] ));
 
-  var LCaixaFechado := TLojaModelDaoFactory.New.Caixa.Caixa.AtualizarFechamentoCaixa(
+  var LCaixaFechado := TLojaModelDaoFactory.New(InMemory).Caixa.Caixa.AtualizarFechamentoCaixa(
     FCaixa.CodCaixa,
     Now,
     VrFecha
@@ -245,7 +251,7 @@ begin
   var VrDif := 2.00;
   LResumo.Free;
 
-  var LCaixaFechado := TLojaModelDaoFactory.New.Caixa.Caixa.AtualizarFechamentoCaixa(
+  var LCaixaFechado := TLojaModelDaoFactory.New(InMemory).Caixa.Caixa.AtualizarFechamentoCaixa(
     FCaixa.CodCaixa,
     Now,
     VrFecha
@@ -435,7 +441,7 @@ begin
   var VrFecha := LResumo.VrSaldo;
   LResumo.Free;
 
-  var LCaixaFechado := TLojaModelDaoFactory.New.Caixa.Caixa.AtualizarFechamentoCaixa(
+  var LCaixaFechado := TLojaModelDaoFactory.New(InMemory).Caixa.Caixa.AtualizarFechamentoCaixa(
     FCaixa.CodCaixa,
     Now,
     VrFecha
@@ -600,7 +606,7 @@ end;
 procedure TLojaModelCaixaTest.Test_NaoFecharCaixa_CaixaFechado;
 begin
   var LResumo := TLojaModelFactory.InMemory.Caixa.ObterResumoCaixa(FCaixa.CodCaixa);
-  var LCaixaFechado := TLojaModelDaoFactory.New.Caixa.Caixa.AtualizarFechamentoCaixa(
+  var LCaixaFechado := TLojaModelDaoFactory.New(InMemory).Caixa.Caixa.AtualizarFechamentoCaixa(
     FCaixa.CodCaixa,
     Now,
     LResumo.VrSaldo
@@ -718,7 +724,7 @@ begin
   var VrFecha := LResumo.VrSaldo;
   LResumo.Free;
 
-  var LCaixaFechado := TLojaModelDaoFactory.New.Caixa.Caixa.AtualizarFechamentoCaixa(
+  var LCaixaFechado := TLojaModelDaoFactory.New(InMemory).Caixa.Caixa.AtualizarFechamentoCaixa(
     FCaixa.CodCaixa,
     Now,
     VrFecha

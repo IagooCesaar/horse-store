@@ -40,6 +40,8 @@ uses
   Horse,
   Horse.Exception,
 
+  Loja.Environment.Interfaces,
+  Loja.Model.Factory,
   Loja.Model.Dao.Factory,
   Loja.Model.Bo.Factory,
 
@@ -49,6 +51,11 @@ uses
 
 { TLojaModelBoEstoqueTest }
 
+function InMemory: ILojaEnvironmentRuler;
+begin
+  Result := TLojaModelFactory.InMemory.Ruler;
+end;
+
 function TLojaModelBoEstoqueTest.CriarItem: TLojaModelEntityItensItem;
 var
   LDTONovoMovimento : TLojaModelDtoReqEstoqueCriarMovimento;
@@ -57,7 +64,7 @@ begin
   LDTONovoItem := TLojaModelDtoReqItensCriarItem.Create;
   try
     LDTONovoItem.NomItem := 'TLojaModelBoEstoqueTest.CriarItem';
-    Result := TLojaModelDaoFactory.New.Itens.Item.CriarItem(LDTONovoItem);
+    Result := TLojaModelDaoFactory.New(InMemory).Itens.Item.CriarItem(LDTONovoItem);
   finally
     LDTONovoItem.Free;
   end;
@@ -65,12 +72,12 @@ end;
 
 procedure TLojaModelBoEstoqueTest.SetupFixture;
 begin
-  TLojaModelDaoFactory.InMemory := True;
+
 end;
 
 procedure TLojaModelBoEstoqueTest.TearDownFixture;
 begin
-  TLojaModelDaoFactory.InMemory := False;
+
 end;
 
 procedure TLojaModelBoEstoqueTest.Test_CriarFechamentosSaldo;
@@ -91,7 +98,7 @@ begin
     LDTOMovimento.CodOrigMov := orgCompra;
     LDTOMovimento.DscMot := '';
 
-    var M1 := TLojaModelDaoFactory.New.Estoque.Movimento.CriarNovoMovimento(LDTOMovimento);
+    var M1 := TLojaModelDaoFactory.New(InMemory).Estoque.Movimento.CriarNovoMovimento(LDTOMovimento);
     M1.Free;
 
     LDTOMovimento.DatMov := EncodeDate(2023, 02, 09);
@@ -99,7 +106,7 @@ begin
     LDTOMovimento.CodTipoMov := movSaida;
     LDTOMovimento.CodOrigMov := orgVenda;
 
-    var M2 := TLojaModelDaoFactory.New.Estoque.Movimento.CriarNovoMovimento(LDTOMovimento);
+    var M2 := TLojaModelDaoFactory.New(InMemory).Estoque.Movimento.CriarNovoMovimento(LDTOMovimento);
     M2.Free;
 
     LDTOMovimento.DatMov := EncodeDate(2023, 02, 25);
@@ -107,7 +114,7 @@ begin
     LDTOMovimento.CodTipoMov := movSaida;
     LDTOMovimento.CodOrigMov := orgVenda;
 
-    var M3 := TLojaModelDaoFactory.New.Estoque.Movimento.CriarNovoMovimento(LDTOMovimento);
+    var M3 := TLojaModelDaoFactory.New(InMemory).Estoque.Movimento.CriarNovoMovimento(LDTOMovimento);
     M3.Free;
 
     LDTOMovimento.DatMov := EncodeDate(2023, 04, 10);
@@ -115,7 +122,7 @@ begin
     LDTOMovimento.CodTipoMov := movEntrada;
     LDTOMovimento.CodOrigMov := orgCompra;
 
-    var M4 := TLojaModelDaoFactory.New.Estoque.Movimento.CriarNovoMovimento(LDTOMovimento);
+    var M4 := TLojaModelDaoFactory.New(InMemory).Estoque.Movimento.CriarNovoMovimento(LDTOMovimento);
     M4.Free;
 
     LDTOMovimento.DatMov := EncodeDate(2023, 05, 09);
@@ -123,13 +130,13 @@ begin
     LDTOMovimento.CodTipoMov := movSaida;
     LDTOMovimento.CodOrigMov := orgVenda;
 
-    var M5 := TLojaModelDaoFactory.New.Estoque.Movimento.CriarNovoMovimento(LDTOMovimento);
+    var M5 := TLojaModelDaoFactory.New(InMemory).Estoque.Movimento.CriarNovoMovimento(LDTOMovimento);
     M5.Free;
 
-    TLojaModelBoFactory.New.Estoque.FechamentoSaldo.FecharSaldoMensalItem(LDTOMovimento.CodItem);
+    TLojaModelBoFactory.New(InMemory).Estoque.FechamentoSaldo.FecharSaldoMensalItem(LDTOMovimento.CodItem);
 
     //Obter lista de fechamentos de um item
-    var LFechamentos := TLojaModelDaoFactory.New.Estoque.Saldo.ObterFechamentosItem(
+    var LFechamentos := TLojaModelDaoFactory.New(InMemory).Estoque.Saldo.ObterFechamentosItem(
       LDTOMovimento.CodItem,
       EndOfTheMonth(EncodeDate(2023, 01, 15)),
       EndOfTheMonth(EncodeDate(2023, 05, 09))
@@ -163,10 +170,10 @@ begin
     LDTOMovimento.CodOrigMov := orgCompra;
     LDTOMovimento.DscMot := '';
 
-    var M1 := TLojaModelDaoFactory.New.Estoque.Movimento.CriarNovoMovimento(LDTOMovimento);
+    var M1 := TLojaModelDaoFactory.New(InMemory).Estoque.Movimento.CriarNovoMovimento(LDTOMovimento);
     M1.Free;
 
-    var F1 := TLojaModelDaoFactory.New.Estoque.Saldo.CriarFechamentoSaldoItem(
+    var F1 := TLojaModelDaoFactory.New(InMemory).Estoque.Saldo.CriarFechamentoSaldoItem(
       LDTOMovimento.CodItem,
       EndOfTheMonth(LDTOMovimento.DatMov),
       LDTOMovimento.QtdMov
@@ -180,15 +187,15 @@ begin
     LDTOMovimento.CodTipoMov := movSaida;
     LDTOMovimento.CodOrigMov := orgVenda;
 
-    var M2 := TLojaModelDaoFactory.New.Estoque.Movimento.CriarNovoMovimento(LDTOMovimento);
+    var M2 := TLojaModelDaoFactory.New(InMemory).Estoque.Movimento.CriarNovoMovimento(LDTOMovimento);
     M2.Free;
 
-    TLojaModelBoFactory.New.Estoque.FechamentoSaldo.FecharSaldoMensalItem(LDTOMovimento.CodItem);
+    TLojaModelBoFactory.New(InMemory).Estoque.FechamentoSaldo.FecharSaldoMensalItem(LDTOMovimento.CodItem);
 
     LDatMov := EndOfTheMonth(LDatMov);
 
     //Obter lista de fechamentos de um item
-    var LFechamentos := TLojaModelDaoFactory.New.Estoque.Saldo.ObterFechamentosItem(
+    var LFechamentos := TLojaModelDaoFactory.New(InMemory).Estoque.Saldo.ObterFechamentosItem(
       LDTOMovimento.CodItem,
       LDatPrimFecha,
       LDatMov
@@ -212,17 +219,17 @@ begin
 
   var LItem := CriarItem;
   try
-    var F1 := TLojaModelDaoFactory.New.Estoque.Saldo.CriarFechamentoSaldoItem(
+    var F1 := TLojaModelDaoFactory.New(InMemory).Estoque.Saldo.CriarFechamentoSaldoItem(
       LItem.CodItem,
       LDatPrimFecha,
       10
     );
     F1.Free;
 
-    TLojaModelBoFactory.New.Estoque.FechamentoSaldo.FecharSaldoMensalItem(LItem.CodItem);
+    TLojaModelBoFactory.New(InMemory).Estoque.FechamentoSaldo.FecharSaldoMensalItem(LItem.CodItem);
 
     //Obter lista de fechamentos de um item
-    var LFechamentos := TLojaModelDaoFactory.New.Estoque.Saldo.ObterFechamentosItem(
+    var LFechamentos := TLojaModelDaoFactory.New(InMemory).Estoque.Saldo.ObterFechamentosItem(
       LItem.CodItem,
       LDatPrimFecha,
       LDatUltFecha
@@ -241,7 +248,7 @@ procedure TLojaModelBoEstoqueTest.Test_NaoCriarFechamentosSaldo_DataRepetida;
 begin
   Assert.WillRaiseWithMessageRegex(
     procedure begin
-      TLojaModelBoFactory.New.Estoque
+      TLojaModelBoFactory.New(InMemory).Estoque
         .FechamentoSaldo
           .CriarNovoFechamento(
              -1,

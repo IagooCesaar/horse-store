@@ -52,11 +52,17 @@ uses
   Horse.Exception,
   System.DateUtils,
 
+  Loja.Environment.Interfaces,
   Loja.Model.Factory,
   Loja.Model.Dao.Factory,
   Loja.Model.Dto.Req.Preco.CriarPrecoVenda;
 
 { TLojaModelPrecoTest }
+
+function InMemory: ILojaEnvironmentRuler;
+begin
+  Result := TLojaModelFactory.InMemory.Ruler;
+end;
 
 function TLojaModelPrecoTest.CriarItem(ANome, ACodBarr: String): TLojaModelEntityItensItem;
 var LDTONovoItem: TLojaModelDtoReqItensCriarItem;
@@ -65,7 +71,7 @@ begin
   try
     LDTONovoItem.NomItem := ANome;
     LDTONovoItem.NumCodBarr := ACodBarr;
-    Result := TLojaModelDaoFactory.New.Itens.Item.CriarItem(LDTONovoItem);
+    Result := TLojaModelDaoFactory.New(InMemory).Itens.Item.CriarItem(LDTONovoItem);
   finally
     LDTONovoItem.Free;
   end;
@@ -73,12 +79,12 @@ end;
 
 procedure TLojaModelPrecoTest.SetupFixture;
 begin
-  TLojaModelDaoFactory.InMemory := True;
+
 end;
 
 procedure TLojaModelPrecoTest.TearDownFixture;
 begin
-  TLojaModelDaoFactory.InMemory := False;
+
 end;
 
 procedure TLojaModelPrecoTest.Test_CriarPrecoVenda;

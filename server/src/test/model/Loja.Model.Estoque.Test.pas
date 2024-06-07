@@ -96,6 +96,7 @@ uses
   Loja.Model.Dao.Interfaces,
   Loja.Model.Dao.Factory,
 
+  Loja.Environment.Interfaces,
   Loja.Model.Factory,
   Loja.Model.Dto.Req.Itens.CriarItem,
   Loja.Model.Dto.Req.Estoque.CriarMovimento,
@@ -107,6 +108,11 @@ uses
 
 { TLojaModelEstoqueTest }
 
+function InMemory: ILojaEnvironmentRuler;
+begin
+  Result := TLojaModelFactory.InMemory.Ruler;
+end;
+
 function TLojaModelEstoqueTest.CriarItem: TLojaModelEntityItensItem;
 var
   LDTONovoMovimento : TLojaModelDtoReqEstoqueCriarMovimento;
@@ -115,7 +121,7 @@ begin
   LDTONovoItem := TLojaModelDtoReqItensCriarItem.Create;
   try
     LDTONovoItem.NomItem := 'TLojaModelEstoqueTest.CriarItem';
-    Result := TLojaModelDaoFactory.New.Itens.Item.CriarItem(LDTONovoItem);
+    Result := TLojaModelDaoFactory.New(InMemory).Itens.Item.CriarItem(LDTONovoItem);
   finally
     LDTONovoItem.Free;
   end;
@@ -126,13 +132,13 @@ var
   LDTONovoMovimento : TLojaModelDtoReqEstoqueCriarMovimento;
   LDTONovoItem: TLojaModelDtoReqItensCriarItem;
 begin
-  TLojaModelDaoFactory.InMemory := True;
+
   FItem := CriarItem;
 end;
 
 procedure TLojaModelEstoqueTest.TearDownFixture;
 begin
-  TLojaModelDaoFactory.InMemory := False;
+
 
   FreeAndNil(FItem);
 end;

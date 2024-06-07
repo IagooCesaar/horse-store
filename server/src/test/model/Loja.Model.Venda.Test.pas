@@ -157,6 +157,7 @@ uses
   Horse.Exception,
   System.DateUtils,
 
+  Loja.Environment.Interfaces,
   Loja.Model.Factory,
   Loja.Model.Dao.Factory,
 
@@ -174,6 +175,11 @@ uses
   Loja.Model.Dto.Resp.Caixa.ResumoCaixa.MeioPagto;
 
 { TLojaModelVendaTest }
+
+function InMemory: ILojaEnvironmentRuler;
+begin
+  Result := TLojaModelFactory.InMemory.Ruler;
+end;
 
 procedure TLojaModelVendaTest.AbrirCaixa(
   AVrAbert: Currency);
@@ -196,7 +202,7 @@ begin
     LDTONovoItem.NomItem := ANome;
     LDTONovoItem.NumCodBarr := ACodBarr;
     LDTONovoItem.FlgTabPreco := ATabPreco;
-    Result := TLojaModelDaoFactory.New.Itens.Item.CriarItem(LDTONovoItem);
+    Result := TLojaModelDaoFactory.New(InMemory).Itens.Item.CriarItem(LDTONovoItem);
   finally
     LDTONovoItem.Free;
   end;
@@ -273,7 +279,7 @@ end;
 
 procedure TLojaModelVendaTest.SetupFixture;
 begin
-  TLojaModelDaoFactory.InMemory := True;
+
 
   FCaixa := nil;
   FecharCaixaAtual;
@@ -284,7 +290,7 @@ procedure TLojaModelVendaTest.TearDownFixture;
 begin
   FecharCaixaAtual;
 
-  TLojaModelDaoFactory.InMemory := False;
+
 end;
 
 procedure TLojaModelVendaTest.Test_AtualizarItemVenda;
