@@ -7,16 +7,24 @@ uses
   System.Classes,
   System.Generics.Collections,
 
+  Loja.Environment.Interfaces,
   Loja.Model.Interfaces,
   Loja.Model.Entity.Itens.Item;
 
 type
-  TLojaModelFactory = class(TInterfacedObject, ILojaModelFactory)
+  TLojaModelFactory = class(TInterfacedObject,
+    ILojaModelFactory, ILojaEnvironmentRuler)
   private
+    FRules: ILojaEnvironmentRules;
+
   public
     constructor Create;
 	  destructor Destroy; override;
 	  class function New: ILojaModelFactory;
+
+    { ILojaEnvironmentRuler }
+    function Rules: ILojaEnvironmentRules;
+    function Ruler: ILojaEnvironmentRuler;
 
     { ILojaModelFactory }
     function Itens: ILojaModelItens;
@@ -71,6 +79,16 @@ end;
 function TLojaModelFactory.Preco: ILojaModelPreco;
 begin
   Result := TlojaModelPreco.New;
+end;
+
+function TLojaModelFactory.Ruler: ILojaEnvironmentRuler;
+begin
+  Result := Self;
+end;
+
+function TLojaModelFactory.Rules: ILojaEnvironmentRules;
+begin
+  Result := FRules;
 end;
 
 function TLojaModelFactory.Venda: ILojaModelVenda;
