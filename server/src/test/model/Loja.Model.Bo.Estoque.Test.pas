@@ -250,18 +250,10 @@ begin
     procedure begin
       TLojaModelBoFactory.New(InMemory).Estoque
         .FechamentoSaldo
-          .CriarNovoFechamento(
-             -1,
-             EndOfTheDay(EncodeDate(2023, 05, 31)),
-             0
-          )
+          .CriarNovoFechamento(-1, EndOfTheDay(EncodeDate(2023, 05, 31)), 0)
           .&EndFechamentoSaldo
         .FechamentoSaldo
-          .CriarNovoFechamento(
-             -1,
-             EndOfTheDay(EncodeDate(2023, 05, 31)),
-             0
-          );
+          .CriarNovoFechamento(-1,EndOfTheDay(EncodeDate(2023, 05, 31)), 0);
     end,
     EHorseException,
     'Já existe um fechamento de saldo para o item'

@@ -94,6 +94,7 @@ class function TLojaModelDaoFactory.New(AEnvRules: ILojaEnvironmentRuler): ILoja
 begin
   if not Assigned(FFactory)
   then FFactory := TLojaModelDaoFactory.Create(AEnvRules);
+  FFactory.FEnvRules := AEnvRules;
 
   Result := FFactory;
 end;
