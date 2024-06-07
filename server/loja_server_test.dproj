@@ -225,6 +225,9 @@
         <DCCReference Include="src\test\controller\Loja.Controller.Venda.Test.pas"/>
         <DCCReference Include="src\test\model\Loja.Model.Venda.Test.pas"/>
         <DCCReference Include="src\model\dto\Loja.Model.Dto.Resp.Itens.Item.pas"/>
+        <DCCReference Include="src\env\Loja.Environment.Rules.pas"/>
+        <DCCReference Include="src\env\Loja.Environment.Factory.pas"/>
+        <DCCReference Include="src\env\Loja.Environment.Interfaces.pas"/>
         <RcItem Include="boss.json">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>RCDATA</ResourceType>
