@@ -341,11 +341,12 @@ begin
 
       for var LKey in LQtdItens.Keys
       do begin
-        var LSaldo := TLojaModelFactory.New.Estoque.ObterSaldoAtualItem(LKey);
+        var LSaldo := TLojaModelFactory.New(FEnvRules)
+          .Estoque.ObterSaldoAtualItem(LKey);
         try
           if LSaldo.QtdSaldoAtu < LQtdItens.Items[LKey]
           then begin
-            var LItem := TLojaModelFactory.New.Itens.ObterPorCodigo(LKey);
+            var LItem := TLojaModelFactory.New(FEnvRules).Itens.ObterPorCodigo(LKey);
             try
               if not LItem.FlgPermSaldNeg
               then raise EHorseException.New

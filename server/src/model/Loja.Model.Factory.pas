@@ -20,7 +20,8 @@ type
   public
     constructor Create(AEnvRules: ILojaEnvironmentRules);
 	  destructor Destroy; override;
-	  class function New: ILojaModelFactory;
+	  class function New: ILojaModelFactory; overload;
+    class function New(ARuler: ILojaEnvironmentRuler): ILojaModelFactory; overload;
     class function InMemory: ILojaModelFactory;
 
     { ILojaEnvironmentRuler }
@@ -76,6 +77,11 @@ end;
 function TLojaModelFactory.Itens: ILojaModelItens;
 begin
   Result := TLojaModelItens.New(Self.Ruler);
+end;
+
+class function TLojaModelFactory.New(ARuler: ILojaEnvironmentRuler): ILojaModelFactory;
+begin
+  Result := Self.Create(ARuler.Rules);
 end;
 
 class function TLojaModelFactory.New: ILojaModelFactory;
