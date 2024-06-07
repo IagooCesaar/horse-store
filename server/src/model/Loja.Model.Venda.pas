@@ -437,7 +437,7 @@ begin
       LMovEstq.DscMot := Format('Referente à Venda %d, Item Seq. %d',[
         LItem.NumVnda, LItem.NumSeqItem]);
 
-      var LMovimento := TLojaModelFactory.New
+      var LMovimento := TLojaModelFactory.New(FEnvRules)
         .Estoque
         .CriarNovoMovimento(LMovEstq);
       LMovimento.Free;

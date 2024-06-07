@@ -74,7 +74,8 @@ begin
     .&Unit(Self.UnitName)
     .Error('Não é permitido estoque negativo');
 
-  LItem := TLojaModelDaoFactory.New(FEnvRules).Itens.Item.ObterPorCodigo(AAcertoEstoque.CodItem);
+  LItem := TLojaModelDaoFactory.New(FEnvRules)
+    .Itens.Item.ObterPorCodigo(AAcertoEstoque.CodItem);
   if LItem = nil
   then raise EHorseException.New
     .Status(THTTPStatus.NotFound)
