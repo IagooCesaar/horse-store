@@ -55,7 +55,7 @@ begin
     .&Unit(Self.UnitName)
     .Error('O valor de venda deve ser maior que zero');
 
-  var LItem := TLojaModelDaoFactory.New.Itens
+  var LItem := TLojaModelDaoFactory.New(FEnvRules).Itens
     .Item
     .ObterPorCodigo(ANovoPreco.CodItem);
   if LItem = nil
@@ -65,7 +65,7 @@ begin
     .Error('Não foi possível encontrar o item pelo código informado');
   LItem.Free;
 
-  var LPrecoVigente := TLojaModelDaoFactory.New.Preco
+  var LPrecoVigente := TLojaModelDaoFactory.New(FEnvRules).Preco
     .Venda.
     ObterPrecoVendaVigente(ANovoPreco.CodItem, ANovoPreco.DatIni);
   if LPrecoVigente <> nil
@@ -79,7 +79,7 @@ begin
     LPrecoVigente.Free;
   end;
 
-  var LPreco := TLojaModelDaoFactory.New.Preco
+  var LPreco := TLojaModelDaoFactory.New(FEnvRules).Preco
     .Venda
     .CriarPrecoVendaItem(ANovoPreco);
 
@@ -103,7 +103,7 @@ function TLojaModelPreco.ObterHistoricoPrecoVendaItem(ACodItem: Integer;
 begin
   Result := nil;
 
-  var LItem := TLojaModelDaoFactory.New.Itens
+  var LItem := TLojaModelDaoFactory.New(FEnvRules).Itens
     .Item
     .ObterPorCodigo(ACodItem);
   if LItem = nil
@@ -113,7 +113,7 @@ begin
     .Error('Não foi possível encontrar o item pelo código informado');
   LItem.Free;
 
-  var LHistorico := TLojaModelDaoFactory.New.Preco
+  var LHistorico := TLojaModelDaoFactory.New(FEnvRules).Preco
     .Venda.
     ObterHistoricoPrecoVendaItem(ACodItem, ADatRef);
 
@@ -139,7 +139,7 @@ function TLojaModelPreco.ObterPrecoVendaAtual(
 begin
   Result := Nil;
 
-  var LItem := TLojaModelDaoFactory.New.Itens
+  var LItem := TLojaModelDaoFactory.New(FEnvRules).Itens
     .Item
     .ObterPorCodigo(ACodItem);
   if LItem = nil
@@ -149,7 +149,7 @@ begin
     .Error('Não foi possível encontrar o item pelo código informado');
   LItem.Free;
 
-  var LPrecoVigente := TLojaModelDaoFactory.New.Preco
+  var LPrecoVigente := TLojaModelDaoFactory.New(FEnvRules).Preco
     .Venda
     .ObterPrecoVendaAtual(ACodItem);
 

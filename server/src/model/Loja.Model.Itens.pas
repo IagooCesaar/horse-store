@@ -65,7 +65,7 @@ begin
     .&Unit(Self.UnitName)
     .Error(Format('O código de barras deverá ter no máximo %d caracteres', [ C_NOM_MAX ]));
 
-  var LItem := TLojaModelDaoFactory.New.Itens
+  var LItem := TLojaModelDaoFactory.New(FEnvRules).Itens
     .Item
     .ObterPorCodigo(AItem.CodItem);
 
@@ -78,7 +78,7 @@ begin
 
   if AItem.NumCodBarr <> ''
   then begin
-    var LItemExiteCodBarr := TLojaModelDaoFactory.New.Itens.Item.ObterPorNumCodBarr(AItem.NumCodBarr);
+    var LItemExiteCodBarr := TLojaModelDaoFactory.New(FEnvRules).Itens.Item.ObterPorNumCodBarr(AItem.NumCodBarr);
     if (LItemExiteCodBarr <> nil) and (LItemExiteCodBarr.CodItem <> AItem.CodItem)
     then try
       raise EHorseException.New
@@ -90,7 +90,7 @@ begin
     end;
   end;
 
-  var LItemAtualizado := TLojaModelDaoFactory.New.Itens
+  var LItemAtualizado := TLojaModelDaoFactory.New(FEnvRules).Itens
     .Item
     .AtualizarItem(AItem);
 
@@ -127,7 +127,7 @@ begin
 
   if ANovoItem.NumCodBarr <> ''
   then begin
-    var LItem := TLojaModelDaoFactory.New.Itens.Item.ObterPorNumCodBarr(ANovoItem.NumCodBarr);
+    var LItem := TLojaModelDaoFactory.New(FEnvRules).Itens.Item.ObterPorNumCodBarr(ANovoItem.NumCodBarr);
     if LItem <> nil
     then try
       raise EHorseException.New
@@ -139,7 +139,7 @@ begin
     end;
   end;
 
-  var LNovoItem := TLojaModelDaoFactory.New.Itens
+  var LNovoItem := TLojaModelDaoFactory.New(FEnvRules).Itens
     .Item
     .CriarItem(ANovoItem);
 
@@ -190,7 +190,7 @@ begin
 
   AFiltro.NomItem := AnsiUpperCase(AFiltro.NomItem);
 
-  var LItens := TLojaModelDaoFactory.New.Itens
+  var LItens := TLojaModelDaoFactory.New(FEnvRules).Itens
     .Item
     .ObterItens(AFiltro);
 
@@ -202,7 +202,7 @@ function TLojaModelItens.ObterPorCodigo(
   ACodItem: Integer): TLojaModelDtoRespItensItem;
 var LItem : TLojaModelEntityItensItem;
 begin
-  LItem := TLojaModelDaoFactory.New.Itens
+  LItem := TLojaModelDaoFactory.New(FEnvRules).Itens
     .Item
     .ObterPorCodigo(ACodItem);
 
@@ -219,7 +219,7 @@ end;
 function TLojaModelItens.ObterPorNumCodBarr(
   ANumCodBarr: string): TLojaModelDtoRespItensItem;
 begin
-  var LItem := TLojaModelDaoFactory.New.Itens
+  var LItem := TLojaModelDaoFactory.New(FEnvRules).Itens
     .Item
     .ObterPorNumCodBarr(ANumCodBarr);
 

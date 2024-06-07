@@ -7,6 +7,7 @@ uses
   System.Classes,
   System.Generics.Collections,
 
+  Loja.Environment.Interfaces,
   Loja.Model.Bo.Interfaces,
 
   Loja.Model.Entity.Caixa.Types,
@@ -16,10 +17,12 @@ uses
 
 type
   TLojaModelBoCaixa = class(TInterfacedObject, ILojaModelBoCaixa)
+  private
+    FEnvRules: ILojaEnvironmentRuler;
   public
-    constructor Create;
+    constructor Create(AEnvRules: ILojaEnvironmentRuler);
     destructor Destroy; override;
-    class function New: ILojaModelBoCaixa;
+    class function New(AEnvRules: ILojaEnvironmentRuler): ILojaModelBoCaixa;
 
     { ILojaModelBoCaixa }
     function ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
@@ -39,9 +42,9 @@ uses
 { TLojaModelBoCaixa }
 
 
-constructor TLojaModelBoCaixa.Create;
+constructor TLojaModelBoCaixa.Create(AEnvRules: ILojaEnvironmentRuler);
 begin
-
+  FEnvRules := AEnvRules;
 end;
 
 function TLojaModelBoCaixa.CriarMovimentoCaixa(
@@ -82,7 +85,7 @@ begin
     .&Unit(Self.UnitName)
     .Error('O valor do movimento deverá ser superior a zero');
 
-  var LCaixa := TLojaModelDaoFactory.New.Caixa
+  var LCaixa := TLojaModelDaoFactory.New(FEnvRules).Caixa
     .Caixa
     .ObterCaixaPorCodigo(AMovimento.CodCaixa);
 
@@ -109,7 +112,7 @@ begin
     then begin
       LSaldo := 0;
 
-      var LMovimentos := TLojaModelDaoFactory.New.Caixa
+      var LMovimentos := TLojaModelDaoFactory.New(FEnvRules).Caixa
         .Movimento
         .ObterMovimentoPorCaixa(LCaixa.CodCaixa);
       for var LMovimento in LMovimentos
@@ -129,7 +132,7 @@ begin
         .Error('Não há saldo disponível em dinheiro para realizar este tipo de movimento');
     end;
 
-    var LNovoMovimento := TLojaModelDaoFactory.New.Caixa
+    var LNovoMovimento := TLojaModelDaoFactory.New(FEnvRules).Caixa
       .Movimento
       .CriarNovoMovimento(AMovimento);
     Result := LNovoMovimento;
@@ -145,14 +148,14 @@ begin
   inherited;
 end;
 
-class function TLojaModelBoCaixa.New: ILojaModelBoCaixa;
+class function TLojaModelBoCaixa.New(AEnvRules: ILojaEnvironmentRuler): ILojaModelBoCaixa;
 begin
-  Result := Self.Create;
+  Result := Self.Create(AEnvRules);
 end;
 
 function TLojaModelBoCaixa.ObterCaixaAberto: TLojaModelEntityCaixaCaixa;
 begin
-  Result := TLojaModelDaoFactory.New.Caixa
+  Result := TLojaModelDaoFactory.New(FEnvRules).Caixa
     .Caixa
     .ObterCaixaAberto;
 end;
